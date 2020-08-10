@@ -54,7 +54,7 @@ class DupakController extends Controller
                 }
             }
 
-        $data = DetailSpt::where('unsur_dupak','=','spiritual')->get(); //ambil data yang tidak mungkin ditampilkan, karena masih dalam proses development
+        $data = DetailSpt::where('unsur_dupak','=','pengawasan')->get(); //ambil data yang tidak mungkin ditampilkan, karena masih dalam proses development
 
         return Datatables::of($data)
             ->addIndexColumn()
