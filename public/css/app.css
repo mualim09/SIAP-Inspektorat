@@ -11,6 +11,11 @@
   .modal.show .modal-fullscreen {
     max-width: 900px;
   }
+  div.main-content .container-fluid {
+     padding-right: 10px !important; 
+     padding-left: 10px !important;
+  }
+
 }
 
 @media (min-width: 1199px) {
@@ -203,12 +208,6 @@ table.dataTable thead, table.dataTable th{text-align: center;}
   animation: spin 2s linear infinite;
   margin-left:250px;
   margin-top:250px;
-}
-
-@media (min-width: 768px)
-div.main-content .container-fluid {
-     padding-right: 20px !important; 
-     padding-left: 20px !important;
 }
 
 /*tambahan tegar*/
