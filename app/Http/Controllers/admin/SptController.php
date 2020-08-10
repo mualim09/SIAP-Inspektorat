@@ -1098,7 +1098,7 @@ class SptController extends Controller
                                 $control .= null;
                             }
                             
-                            $control .= '<a href="#" onclick="showModalLihatSertifikat('.$ceking_button_cetak_KKA_sendiri[0]->id.')" data-toggle="tooltip" title="Lihat KKA" class="btn btn btn-outline-info btn-sm"><i class="ni ni-paper-diploma"></i></a>';
+                            $control .= '<a href="#" onclick="showModalLihatLaporanPemeriksaan('.$ceking_button_cetak_KKA_sendiri[0]->id.')" data-toggle="tooltip" title="Lihat KKA" class="btn btn btn-outline-info btn-sm"><i class="ni ni-paper-diploma"></i></a>';
                             // .'<a href="#" onclick="#" data-toggle="tooltip" title="Revisi" class="btn btn btn-outline-danger btn-sm"><i class="ni ni-collection"></i></a>'
                             // $control .= '<a href="#" onclick="showModalLihatSertifikat('.$col->spt_id.')" data-toggle="tooltip" title="Lihat KKA" class="btn btn btn-outline-info btn-sm"><i class="ni ni-paper-diploma"></i><span>Lihat KKA</span></a>';
                         // }
