@@ -415,8 +415,21 @@ class SptController extends Controller
                     <a href="#" onclick="sign('.$id.')" class="btn btn-outline-success btn-sm">Setuju</a> ';
         }
 
-        if($user->hasRole('Auditor') && $method === 'buatLaporan'){
-            $control = '<a href="'.route('input_kode_laporan',$id).'"data-toggle="tooltip" title="Upload Kode Temuan" class="btn btn-outline-success btn-sm" target="__blank"><i class="ni ni-folder-17"></i><span>Input Temuan</span></a>';
+        if($user->hasRole('Auditor') && $method === 'buatKka'){
+            $control = '<a href="'.route('input_kka',$id).'"data-toggle="tooltip" title="Upload KKA" class="btn btn-outline-success btn-sm" target="__blank"><i class="ni ni-folder-17"></i><span>Input KKA</span></a>';
+        }
+
+        if($user->hasRole('Auditor') && $method === 'buatLhp'){
+            $control = '<a href="'.route('input_lhp',$id).'"data-toggle="tooltip" title="Upload LHP" class="btn btn-outline-success btn-sm" target="__blank"><i class="ni ni-folder-17"></i><span>Input LHP</span></a>';
+        }
+
+        if($user->hasRole('Auditor') && $method === 'buatLaporan-disable'){
+            $control = '<a href="#"data-toggle="tooltip" title="Maaf untuk spt tsbt tidak bisa input kka" class="btn btn-outline-danger btn-sm disabled"><i class="ni ni-folder-17"></i><span>Input Temuan</span></a>';
+        }
+
+        if($user->hasRole('Auditor') && $method === 'Cetak_KKA'){
+            // $control = '<a href="#"data-toggle="tooltip" title="Cetak KKA" class="btn btn-outline-danger btn-sm" target="__blank"><i class="ni ni-single-copy-04"></i><span>Cetak KKA</span></a>';
+            $control = '<a href="'.route('laporan-cetak',$id).'" data-toggle="tooltip" title="Cetak KKA" class="btn btn-outline-danger btn-sm"><i class="ni ni-single-copy-04"></i><span>Lihat</span></a>';
         }
 
         if ( $user->hasAnyRole(['TU Perencanaan', 'Super Admin']) && $method == 'penomoran') {
@@ -1081,30 +1094,33 @@ class SptController extends Controller
                         }
                     }
 
-
-
                     $get_id_detail = DetailSpt::where('id',$col->id_detail)->first(); //get by id detail
                     if($get_id_detail != false){
                         $control .= $this->buildControl('pemeriksaan',$col->spt_id);
 
                         $ceking_button_cetak_KKA_sendiri = DetailSpt::where('spt_id',$col->id)->where('user_id',auth()->user()->id)->get();
-                            // dd($ceking_button_cetak_KKA_sendiri[0]->peran);
+                        
                         if ($ceking_button_cetak_KKA_sendiri[0]->id_laporan_pemeriksaan != null) {
                             $control .= $this->buildControl('Cetak_KKA',$ceking_button_cetak_KKA_sendiri[0]->id);
                         }
                             if ($ceking_button_cetak_KKA_sendiri[0]->peran == 'Ketua Tim' || $ceking_button_cetak_KKA_sendiri[0]->peran == 'Anggota Tim') {
-                                $control .= $this->buildControl('buatLaporan',$get_id_detail); //perlu diperbaiki yg dikirm id detail_spt
+                                if ($ceking_button_cetak_KKA_sendiri[0]->status != null) {
+                                    $control .= $this->buildControl('buatLhp',$get_id_detail);
+                                }else{
+                                    $control .= $this->buildControl('buatKka',$get_id_detail); //perlu diperbaiki yg dikirm id detail_spt
+                                }
+
+                            }elseif($ceking_button_cetak_KKA_sendiri[0]->peran == 'Pengendali Teknis' || $ceking_button_cetak_KKA_sendiri[0]->peran == 'Pengendali Mutu' || $ceking_button_cetak_KKA_sendiri[0]->peran == 'PenanggungJawab'){
+                                $control .= $this->buildControl('buatLaporan-disable',$get_id_detail);
                             }else{
                                 $control .= null;
                             }
                             
                             $control .= '<a href="#" onclick="showModalLihatLaporanPemeriksaan('.$ceking_button_cetak_KKA_sendiri[0]->id.')" data-toggle="tooltip" title="Lihat KKA" class="btn btn btn-outline-info btn-sm"><i class="ni ni-paper-diploma"></i></a>';
-                            // .'<a href="#" onclick="#" data-toggle="tooltip" title="Revisi" class="btn btn btn-outline-danger btn-sm"><i class="ni ni-collection"></i></a>'
-                            // $control .= '<a href="#" onclick="showModalLihatSertifikat('.$col->spt_id.')" data-toggle="tooltip" title="Lihat KKA" class="btn btn btn-outline-info btn-sm"><i class="ni ni-paper-diploma"></i><span>Lihat KKA</span></a>';
-                        // }
                     }else{
                         return 'no Action';
                     }
+
                     return $control;
                 })
                 ->escapeColumns([])
