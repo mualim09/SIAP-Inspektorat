@@ -1,0 +1,43 @@
+@import url(https://fonts.googleapis.com/css?family=Nunito);
+
+
+@media (min-width: 767px) {
+  .modal.show .modal-fullscreen {
+   max-width: 700px;
+  }
+}
+
+@media (min-width: 991px) {
+  .modal.show .modal-fullscreen {
+    max-width: 900px;
+  }
+}
+
+@media (min-width: 1199px) {
+  .modal.show .modal-fullscreen {
+    max-width: 1100px;
+  }
+}
+
+.btn-circle {
+    width: 30px;
+    height: 30px;
+    padding: 6px 0px;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.42857;
+}
+.close-modal-btn{
+    background: #000;
+    opacity: .75;
+    color:#8898aa;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .075);
+}
+
+<<<<<<< HEAD
+div.selectize-input{padding:11px 12px !important;}
+=======
+div.selectize-input{padding:11px 12px !important;}
+#list-dupak-table.table-bordered.dataTable th,#list-dupak-table.table-bordered.dataTable td{border-left-width: 1px;}
+>>>>>>> dbf3f380901b23a4ec61ad0a440fcfc2f03f301c

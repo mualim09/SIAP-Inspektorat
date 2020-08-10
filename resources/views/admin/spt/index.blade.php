@@ -1,0 +1,88 @@
+{{-- Users index page --}}
+@extends('layouts.backend')
+
+{{-- Hanya super admin, TU perencanaan dan Umum yang berhak mengakses list SPT yang akan diberikan penomoran--}}
+@hasanyrole('Super Admin|TU Perencanaan|TU Umum')
+  @include('admin.spt.penomoran')
+@endhasrole
+
+{{-- Hanya Auditor yang berhak mengakses list SPT yang akan diberikan penomoran--}}
+@hasanyrole('Auditor')
+    @include('admin.spt.tabel_auditor')
+@endhasanyrole
+
+@if(auth()->user()->hasRole('Inspektur'))
+    @include('admin.spt.tabel_inspektur')
+@endif
+
+@include('admin.spt.arsip')
+
+@section('content')
+@include('layouts.headers.cards')
+<div class="container-fluid mt--7 bg-color" style="padding-top: 120px;">
+    <breadcrumb list-classes="breadcrumb-links">
+      <breadcrumb-item><a href="{{ url('admin') }}">Beranda</a></breadcrumb-item> 
+      <breadcrumb-item>/ Dokumen</breadcrumb-item> 
+      <breadcrumb-item active>/ Data SPT</a></breadcrumb-item>
+    </breadcrumb>
+    
+    <div class="col-md-12 dashboard-bg-color">
+    <div class="card">
+        <div class="card-header">           
+          <ul class="nav nav-tabs card-header-tabs" id="spt-list" role="tablist">
+            @yield('nav_tab_penomoran')
+            @yield('nav_tab_arsip')
+            @yield('nav_table_inspektur')
+
+            <!-- if user can create SPT, use ml-auto to auto left marginize/right position -->
+            @can('Create SPT')
+            <li class="nav-item ml-auto">
+                <button id="btn-new-spt" type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#formModal">{{ __('Tambah SPT') }}</button>
+            </li>    
+            @endcan
+            <!-- end user can create -->
+
+          </ul>
+        </div>
+        <div class="card-body">
+          <div class="tab-content mt-3">
+            @yield('tab_content_penomoran')
+            @yield('tab_content_arsip')
+            @yield('content_auditor')
+            @yield('content_inspektur')
+          </div>
+        </div>
+    </div>     
+  </div>
+  <script type="text/javascript">
+    $('#spt-list a').on('click', function (e) {
+      e.preventDefault()
+      $(this).tab('show')
+    });
+    //show the first tab
+    $('.nav-tabs a:first').tab('show')
+  </script>
+  @yield('js_tabel_auditor')
+  @yield('form_penomoran')
+  @yield('js_penomoran')
+  @yield('js_arsip')
+  @yield('js_tabel_inspektur')
+
+</div>
+<!-- core spt js and form -->
+@include('admin.spt.form')
+@include('admin.spt.js')
+<!-- end core spt -->
+@include('layouts.footers.auth')
+@endsection
+@push('css')
+    <link rel="stylesheet" href="{{ asset('assets/vendor/datatables/datatables.min.css') }}">
+    <link href="{{ asset('assets/summernote-master/dist/summernote-lite.min.css') }}" rel="stylesheet">   
+@endpush
+@push('js')
+    <script src="{{ asset('assets/summernote-master/dist/summernote-lite.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery/jquery.validate.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery/jquery-validate.bootstrap-tooltip.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/datatables/handlebars.js') }}"></script>
+@endpush

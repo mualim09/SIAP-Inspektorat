@@ -1,0 +1,46 @@
+{{-- Users index page --}}
+@extends('layouts.backend')
+
+@section('content')
+@include('layouts.headers.cards')
+<div class="container-fluid mt--7">
+    <div class="row">
+        <div class="col">
+            <div class="card shadow">
+                <!-- <div class="card-header bg-transparent d-flex justify-content-between">
+                    <h1 class="text-center">{{ __('Data SPT') }}</h1>
+                    <ul class="nav nav-tabs col-md-12" id="sptTab" role="tablist">
+                      <li class="nav-item">
+                        <a class="nav-link active" id="list-tab" data-toggle="tab" href="#list-spt" role="tab" aria-controls="list" aria-selected="true">{{ __('List SPT') }}</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="signed-tab" data-toggle="tab" href="#signed-spt" role="tab" aria-controls="signed" aria-selected="false">{{ __('Signed SPT') }}</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="unsigned-tab" data-toggle="tab" href="#unsigned-spt" role="tab" aria-controls="unsigned" aria-selected="false">{{ __('Unsigned SPT') }}</a>
+                      </li>
+                    </ul>
+                </div> -->
+                <div class="card-body">
+                	<div class="tab-content">
+                        @include('admin.spt.list')
+                        @include('admin.spt.signed')
+                    </div>                    
+                </div>                
+            </div>
+        </div>
+    </div>
+</div>
+@include('admin.spt.js')
+@include('layouts.footers.auth')
+@endsection
+@push('css')
+    <link rel="stylesheet" href="{{ asset('assets/vendor/datatables/datatables.min.css') }}">    
+@endpush
+@push('js')
+    <script src="{{ asset('assets/vendor/jquery/jquery.validate.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery/jquery-validate.bootstrap-tooltip.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/datatables/handlebars.js') }}"></script>
+@endpush
+@include('elements.dtbuttons')

@@ -1,0 +1,10 @@
+* text=auto
+*.css linguist-vendored
+*.scss linguist-vendored
+*.js linguist-vendored
+CHANGELOG.md export-ignore
+routes/web.php merge=us
+# public/css/app.css merge=us
+app/User.php merge=us
+app/Http/Controllers/admin/UserController.php merge=us
+app/Http/Controllers/admin/SptController.php merge=us

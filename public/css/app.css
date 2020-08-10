@@ -1,0 +1,218 @@
+@import url(https://fonts.googleapis.com/css?family=Nunito);
+
+
+@media (min-width: 767px) {
+  .modal.show .modal-fullscreen {
+   max-width: 700px;
+  }
+}
+
+@media (min-width: 991px) {
+  .modal.show .modal-fullscreen {
+    max-width: 900px;
+  }
+}
+
+@media (min-width: 1199px) {
+  .modal.show .modal-fullscreen {
+    max-width: 1100px;
+  }
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right:0;
+    margin-left:0;
+  }
+  .col-print-1 {width:8%;  float:left;}
+  .col-print-2 {width:16%; float:left;}
+  .col-print-3 {width:25%; float:left;}
+  .col-print-4 {width:33%; float:left;}
+  .col-print-5 {width:42%; float:left;}
+  .col-print-6 {width:50%; float:left;}
+  .col-print-7 {width:58%; float:left;}
+  .col-print-8 {width:66%; float:left;}
+  .col-print-9 {width:75%; float:left;}
+  .col-print-10{width:83%; float:left;}
+  .col-print-11{width:92%; float:left;}
+  .col-print-12{width:100%; float:left;}
+  div.fc-bg table tr td.fc-day{width:62px !important; height:62px !important;}
+  #printable, #printable * {
+    visibility: visible;
+  }
+  #printable {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+}
+
+.btn-circle {
+    width: 30px;
+    height: 30px;
+    padding: 6px 0px;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.42857;
+}
+.close-modal-btn{
+    background: #000;
+    opacity: .75;
+    color:#8898aa;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .075);
+}
+
+div.selectize-input{padding:11px 12px !important;}
+#list-dupak-table.table-bordered.dataTable th,#list-dupak-table.table-bordered.dataTable td{border-left-width: 1px;}
+.fc-day.fc-sat, .fc-day.fc-sun {
+    background-color: red !important;
+}
+
+.datepicker{
+  padding: .625rem .75rem !important;
+}
+
+span#menu_id{
+      font-size: 1.2em !important;
+}
+
+i.ikon
+{
+  font-size: 1.30em ; 
+}
+
+h5.extendinfo{
+  font-size: 17px;  
+}
+
+span.extendinfonumber{
+  font-size: 18px; 
+}
+span.detailextendinfo{
+  font-size: 17px;
+}
+h3.zheading-small{
+  font-size: 1.5rem;
+}
+div.date input.mydatepicker{
+  padding: 10px !important;
+}
+
+table#list-spt-table #jenis-spt .kode-temuan #form-kode-temuan .labelclass th,tr,td,th,ul,li,span,small,input,select{
+  font-size: 1em !important;
+}
+
+nav.navbar-horizontal{
+  top: 16px !important;
+}
+
+div.default-color{
+  /*background : linear-gradient(87deg, #03ffa3 0, #047f84 100%) !important*/
+  background : linear-gradient(87deg, #03ffa3 0, #047f84 100%) !important;
+}
+
+div.fc-view, .fc-view > table{
+  z-index: 0 !important;
+}
+
+li.dropdown, .dropup, .dropright, .dropleft{
+  z-index: 0 !important;
+}
+
+button.fc-toolbar .fc-state-active, .fc-toolbar .ui-state-active{
+  z-index: 0 !important;
+}
+div.bg-color, .dasboard-bg-color{
+  background-color: #f7fafc !important;
+}
+
+ul.menu-nav-kiri{
+  margin-left: 150px !important; 
+}
+
+span.img-profile-size{
+      width: 80px;
+}
+
+span.name-user{
+  font-size: 1.5em !important;
+}
+
+h6.menu-name-user, .menu-users{
+  font-size: 1.4em !important;
+}
+
+button.default-button{
+  border-color: #0cc468 !important;
+  background-color: #0cc468 !important;
+}
+div.fc-event, .spt-umum{
+  background-color: transparent !important;
+  border:0px;
+}
+/*td.fc-today.spt-pengawasan-day, td.fc-today.spt-umum{
+  background-color: transparent !important;
+}*/
+td.spt-umum-day, .fc-unthemed td.fc-today.spt-umum{
+  background-color: #04b691;
+  z-index:-2;
+}
+td.spt-pengawasan-day, .fc-unthemed td.fc-today.spt-pengawasan-day{
+  background-color: #5385c8;
+  z-index:-2;
+}
+/*td.spt-umum-day.spt-pengawasan-day{
+  background-color: #5e72e4 !important;
+  z-index:-1;
+}*/
+td.spt-multi-pengawasan-day{
+  background-color: #3b66a1 ;
+  z-index:-2;
+}
+td.holiday{
+  background-color: #f4511e;
+  z-index: 1 !important;
+}
+.fc-other-month .fc-day-number { display:none; background-color:#fff !important;}
+.fc-row .fc-content-skeleton{}
+
+table.dataTable.table-sm > thead > tr > th{
+  padding :5px 20px 5px 5px !important;  
+}
+span.invalid-feedback{
+  display: block;
+}
+input.is-invalid{
+  border: 1px solid red;
+}
+table.dataTable thead, table.dataTable th{text-align: center;}
+.fc-basic-view .fc-body .fc-row {
+  height:90px;
+}
+#loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+  margin-left:250px;
+  margin-top:250px;
+}
+
+@media (min-width: 768px)
+div.main-content .container-fluid {
+     padding-right: 20px !important; 
+     padding-left: 20px !important;
+}
+
+/*tambahan tegar*/
+
+div.data-user{
+  width: 92%;
+}

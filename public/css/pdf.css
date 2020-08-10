@@ -1,0 +1,85 @@
+@font-face{
+			font-family: 'maiandra-gd';
+			src: url('/css/maian.ttf') format('truetype');
+		}
+
+		@font-face{
+			font-family: 'arial';
+			src: url('/css/arial.ttf') format('truetype');
+		}
+
+		.header-text{
+			color:#000;
+		}
+		h1, h2, h3, h4, h5, h6{margin-bottom: 0px;}
+		hr.double{margin: 0 0;border-style: double;}
+		.clear{clear: both;}
+		.tiny-text{font-size: 0.7em;text-align: center; margin: 0 0; padding: 0 0;}
+		ol{margin:0;}
+		.clear{
+			clear: both;
+		}
+		.bold{
+			font-weight: bold;
+		}
+		.center{
+			text-align: center;
+		}
+		#header-logo{
+			font-family: arial;
+		}
+		div#spt-container{
+			width: 100%;
+			margin: 0px auto;
+			font-size: 12pt;
+			font-family: maiandra-gd;
+			line-height: 1;
+		}
+		div.logo-banner{
+			margin: 0px auto;
+			width:95%;
+			display:block;
+		}
+		div.header-spt{display: block;margin: 5px auto; text-align: center; width: 35%;}
+		.header-spt h2, .header-spt h3{
+			margin: 0px;
+			
+		}
+		p{margin: 5px 0}
+		div.dasar-spt span, div.pegawai-spt span{
+			float: left;
+			display: block;
+			width: 10%;
+			
+		}
+		/*div.dasar-spt div.isi-dasar, div.pegawai-spt div.list-pegawai{
+			width: 90%;
+			float: right;
+			padding:0px 0px;
+			
+		}*/
+		div.isi-isi{
+			
+			float: right;
+		}
+		.dasar-spt, .pegawai-spt{
+			margin: 0px auto;
+			width: 90%;
+			display:block;
+			padding-left: 10px;
+			clear:both;
+			
+		}		
+		div.ttd-inspektur{
+			width: 44%;
+			float: right;			
+		}
+		.ttd-inspektur span{
+			display: block;
+			text-align: left;
+			/*padding : 10px;*/
+			width: 80%;
+		}
+		.ttd-inspektur span.nama-inspektur{
+			margin-top: 60px;
+		}

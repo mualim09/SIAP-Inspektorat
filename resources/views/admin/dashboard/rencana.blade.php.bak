@@ -1,0 +1,13 @@
+<div class="col-md-12">
+	<div class="card">
+	  <div class="card-header">
+	    TU Perencanaan
+	  </div>
+	  <div class="card-body">
+	    <table id="penomoran-spt" class="table table-striped table-sm ajax-table" style="border-collapse: collapse;margin: 0;padding: 0;width: 100%;table-layout: fixed;">
+	    	<thead></thead>
+	    	<tbody></tbody>
+	    </table>
+	  </div>
+	</div>
+</div>

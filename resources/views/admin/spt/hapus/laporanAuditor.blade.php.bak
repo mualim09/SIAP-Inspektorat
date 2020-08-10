@@ -1,0 +1,211 @@
+<div class="col-md-12 role-form">
+    @csrf
+        <!-- get data nomor spt -->
+        @foreach($spt as $data)
+        <div class="form-group row">
+            <label class="col-md-2 col-form-label text-md-right">{{ __('Nomor SPT') }}</label>
+                <div class="col-md-9">
+                    <input type="text" placeholder="800/{{ $data->spt->nomor }}/2019" class="form-control" disabled />
+                </div>
+        </div>
+        <!--  get data nama spt -->
+        <div class="form-group row">
+            <label class="col-md-2 col-form-label text-md-right">{{ __('judul SPT') }}</label>
+            <div class="col-md-9">
+                <input type="text" placeholder="{{ $data->spt->name }}" class="form-control" disabled />
+            </div>
+        </div>
+        @endforeach
+        <form id ="laporan-form" enctype="multipart/form-data">
+            <input name="spt_id" type="hidden" value="{{$data->spt_id}}">
+            @csrf
+        <div class="form-group row">
+            <span class="col-md-2 text-md-right">{{ __('Jenis Laporan') }}</span>
+            <div class="col-md-10 row">
+                <div class="col">
+
+                    <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" class="custom-control-input" id="Jlaporan-kkp" name="jenis_laporan" value="kkp" onclick="showresponddiv(this.id)"<?php if($cek_radiobutt != 'disableforfile'){ echo "disabled"; }?>>
+                            <label class="custom-control-label" for="Jlaporan-kkp">KKP</label>
+                    </div>
+
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" class="custom-control-input" id="Jlaporan-lhp" name="jenis_laporan" value="lhp" onclick="showresponddiv(this.id)"<?php if($cek_radiobutt != 'disableforfile'){ echo "disabled"; }?>>
+                        <label class="custom-control-label" for="Jlaporan-lhp">LHP</label>
+                    </div>
+
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" class="custom-control-input" id="Jlaporan-file" name="jenis_laporan" onclick="showresponddiv(this.id)"<?php if($cek_radiobutt != 'disableforfile'){ echo "disabled"; }?>>
+                        <label class="custom-control-label" for="Jlaporan-file">File</label>
+                    </div>
+                    <p><small>silahkan pilih jenis laporan</small></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group kkp" id="form-kkp" style="display: none;">
+            <div class="form-group row">
+                <label class="col-md-2 col-form-label text-md-right">{{ __('Data Inputan') }}</label>
+                <div class="col-md-4">
+                    <input type="text" id="kode_temuan_id" name="kode_temuan_id" class="form-control" placeholder="{{ __('Kode Temuan') }}"<?php if($cek_radiobutt != 'disableforfile'){ echo "disabled"; }?>>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-2 col-form-label text-md-right"></label>
+                <div class="col-md-6">
+                    <input type="text" id="judultemuan-file_laporan" name="file_laporan[judultemuan]" class="form-control" placeholder="{{ __('Judul Temuan') }}"<?php if($cek_radiobutt != 'disableforfile'){ echo "disabled"; }?>>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-2 col-form-label text-md-right"></label>
+                <div class="col-md-6">
+                    <input type="text" id="KegiatanKKP-file_laporan" name="file_laporan[KegiatanKKP]" class="form-control" placeholder="{{ __('KegiatanKKP') }}"<?php if($cek_radiobutt !='disableforfile'){ echo "disabled"; }?>>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-2 col-form-label text-md-right"></label>
+                <div class="col-md-6">
+                    <input type="text" id="KPA-file_laporan" name="file_laporan[KPA]" class="form-control" placeholder="{{ __('KPA') }}"<?php if($cek_radiobutt != 'disableforfile'){ echo "disabled"; }?>>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-2 col-form-label text-md-right"></label>
+                <div class="col-md-6">
+                    <input type="text" id="PPTK-file_laporan" name="file_laporan[PPTK]" class="form-control" placeholder="{{ __('PPTK') }}"<?php if($cek_radiobutt != 'disableforfile'){ echo "disabled"; }?>>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-2 col-form-label text-md-right"></label>
+                <div class="col-md-6">
+                    <input type="text" id="BPP-file_laporan" name="file_laporan[BPP]" class="form-control" placeholder="{{ __('BPP') }}"<?php if($cek_radiobutt != 'disableforfile'){ echo "disabled"; }?>>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-2 col-form-label text-md-right"></label>
+                <div class="col-md-6">
+                        <textarea type="text" id="kondisi-file_laporan" class="form-control @error('kondisi') is-invalid @enderror" name="file_laporan[kondisi]"placeholder="{{ __('Kondisi') }}"<?php if($cek_radiobutt != 'disableforfile'){ echo "disabled"; }?>></textarea>              
+                        <span class="invalid-kondisi" permission="alert"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-2 col-form-label text-md-right"></label>
+                <div class="col-md-6">
+                        <textarea type="text" id="kriteriakkp-file_laporan" class="form-control @error('kriteria') is-invalid @enderror" name="file_laporan[kriteriakkp]"placeholder="{{ __('Kriteria') }}"<?php if($cek_radiobutt != 'disableforfile'){ echo "disabled"; }?>></textarea>              
+                        <span class="invalid-kriteria" permission="alert"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group lhp" id="form-lhp" style="display: none;">
+            <div class="form-group row">
+                <label class="col-md-2 col-form-label text-md-right"></label>
+                <div class="col-md-6">
+                        <textarea type="text" id="kriteria-file_laporan" class="form-control @error('kriteria') is-invalid @enderror" name="file_laporan[kriteria]"placeholder="{{ __('Kriteria') }}" <?php if($cek_radiobutt != 'disableforfile'){ echo "disabled"; }?>></textarea>               
+                    <span class="invalid-kriteria" permission="alert"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-2 col-form-label text-md-right"></label>
+                <div class="col-md-6">
+                        <textarea type="text" id="sebab-file_laporan" class="form-control @error('sebab') is-invalid @enderror" name="file_laporan[sebab]"placeholder="{{ __('Sebab') }}" <?php if($cek_radiobutt != 'disableforfile'){ echo "disabled"; }?>></textarea>              
+                        <span class="invalid-sebab" permission="alert"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-2 col-form-label text-md-right"></label>
+                <div class="col-md-6">
+                        <textarea type="text" id="akibat-file_laporan" class="form-control @error('akibat') is-invalid @enderror" name="file_laporan[akibat]"placeholder="{{ __('Akibat') }}" <?php if($cek_radiobutt != 'disableforfile'){ echo "disabled"; }?>></textarea>               
+                    <span class="invalid-akibat" permission="alert"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-2 col-form-label text-md-right"></label>
+                <div class="col-md-6">
+                        <textarea type="text" id="komen-file_laporan" class="form-control @error('komen') is-invalid @enderror" name="file_laporan[komen]"placeholder="{{ __('Komen') }}" <?php if($cek_radiobutt != 'disableforfile'){ echo "disabled"; }?>></textarea>              
+                        <span class="invalid-komen" permission="alert"></span>
+                    
+                </div>
+            </div>
+        </div>
+            @foreach($spt as $data)
+            <!-- <center><h3 class="heading-small text-muted mb-4">{{ __('Atau') }}</h3></center> -->
+            <div class="form-group file" id="form-file" style="display: none;">
+                <!-- <input name="spt_id" type="hidden" value="{{$data->spt_id}}"> -->
+                <div class="form-group row" style="margin-top: -15px;">
+                  <label class="col-md-2 col-form-label text-md-right">Upload Temuan</label>
+                      <div class="col-md-8">
+                        <input type="file" class="form-control" name="file" id="file" aria-describedby="fileHelp">
+                        <small id="fileHelp" class="form-text text-muted">Please upload file with word ekstension. Size of word should not be more than 2MB.</small>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+            <div class="form-group">
+                <div class="col-md-8">
+                    <button type="submit" class="btn btn-primary offset-md-3">
+                        {{ __('Submit') }}
+                    </button>
+                </div>
+            </div>
+        </form>
+</div>
+
+<script type="text/javascript">
+
+    var current = null;
+
+    function showresponddiv(messagedivid){
+        var id = messagedivid.replace("Jlaporan-", "form-"),
+            div = document.getElementById(id);
+
+        // hide previous one
+        if(current && current != div) {
+            current.style.display =  'none';
+        }   
+
+        if (div.style.display=="none"){
+            div.style.display="inline";
+            current = div;
+        } 
+        else {
+            div.style.display="none";
+        }
+    }
+
+  $("#laporan-form").validate({
+        rules: {
+            kode_temuan_id : {required: true},
+            file : {required: true},
+            file_laporan :{required: true},
+            jenis_laporan : {required: true}
+
+        },
+        submitHandler: function(form){
+            save_method = (typeof save_method !== 'undefined') ? save_method : 'new';
+            /*form.preventDefault();*/
+            id = $('#id').val();
+            base_url = "{{route('laporan_auditor')}}";
+            url =  (save_method == 'new') ? base_url : base_url + '/' + id ;
+            type = (save_method == 'new') ? "POST" : "PUT";        
+
+            $.ajax({
+                url: url,
+                type: type,
+                data: $("#laporan-form").serialize(),
+                success: function($data){
+                    console.log('Success!');
+                    $("#laporan-form")[0].reset();
+                    // table.ajax.reload();
+                },
+                error: function($data){
+                    console.log('Error:', $data);
+                    $("#laporan-form")[0].reset();
+                    // table.ajax.reload();
+                }
+            });
+        }
+    });
+    // coba check $request apakah isi ada isinya ..
+    // besok mbuat menu pada header auditor yaitu menu yg berisi 1. KKP/NHP 2.LHP
+    
+</script>

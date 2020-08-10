@@ -1,0 +1,43 @@
+@extends('layouts.backend')
+
+@section('content')
+	@role('TU Umum')
+		@include('layouts.headers.umum')
+	@endrole
+	@role('TU Perencanaan')
+		@include('layouts.headers.rencana')
+	@endrole
+	@role('Auditor')
+		@include('layouts.headers.auditor')
+	@endrole
+	@role('Super Admin')
+		@include('layouts.headers.admin')
+	@endrole
+	@role('Inspektur')
+		@include('layouts.headers.inspektur')
+	@endrole
+	<div style="margin-top: -80px !important;">
+		@role('TU Umum')
+			@include('admin.dashboard.umum')
+		@endrole
+		@role('TU Perencanaan')
+			@include('admin.dashboard.rencana')
+		@endrole
+		@role('Auditor')
+			@include('admin.dashboard.auditor')
+		@endrole
+		@role('Super Admin')
+			@include('admin.dashboard.admin')
+		@endrole
+		@role('Inspektur')
+			@include('admin.dashboard.inspektur')
+		@endrole
+	</div>
+	@include('layouts.footers.auth')
+@endsection
+@push('css')
+    <link rel="stylesheet" href="{{ asset('assets/vendor/datatables/datatables.min.css') }}">    
+@endpush
+@push('js')
+    <script src="{{ asset('assets/vendor/datatables/datatables.min.js') }}"></script>
+@endpush
