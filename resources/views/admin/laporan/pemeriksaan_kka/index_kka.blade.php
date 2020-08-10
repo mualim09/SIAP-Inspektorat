@@ -6,7 +6,7 @@
 
 @section('content_auditor')
 
-    <div class="tab-pane active" id="auditor-tab" role="tabpanel" aria-labelledby="auditor-tab">
+    <!-- <div class="tab-pane active" id="auditor-tab" role="tabpanel" aria-labelledby="auditor-tab">
       <div class="card-body table-responsive">
         <div class="tab-content" id="myTabContent">
           <div class="tab-pane active" id="home-tab" role="tabpanel">
@@ -24,7 +24,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
       
 
     <div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="mySmallModalPemeriksaan" aria-hidden="true" id="modalPemeriksaan">
@@ -251,8 +251,12 @@
         // console.log(id);
 
         // url get data
-        var get_detail = "kka/getdata_detail/" +id;
-        var kka_view = "/spt/myspt/"+id;
+        // var url_prefix = (window.location.pathname == '/admin') ? 'admin/spt/' : 'spt/';\
+
+        var url_prefix = (window.location.pathname == '/admin');
+
+        var get_detail = url_prefix ? "admin/kka/getdata_detail/"+id : "/kka/getdata_detail/"+id;
+        var kka_view =  url_prefix ? "admin/spt/myspt/"+id : "/spt/myspt/"+id;
 
         // get id user_log
         var user_id = {!! auth()->user()->id !!};
@@ -347,7 +351,9 @@
                 });
             }
         });
-        var url_data = "kka/getDataTemuan_per_auditor/"+id;
+
+        // ? "admin/kka/getdata_detail/"+id : "/kka/getdata_detail/"+id;
+        var url_data = url_prefix ? "admin/kka/getDataTemuan_per_auditor/"+id : "/kka/getDataTemuan_per_auditor/"+id;
         // data table menampilkan data user yang telah menginputkan KKA 
         var table = $('#dataKKA-perAuditor').DataTable({
 

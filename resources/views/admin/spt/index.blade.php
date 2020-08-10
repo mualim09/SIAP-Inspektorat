@@ -8,11 +8,11 @@
 
 {{-- Hanya Auditor yang berhak mengakses list SPT yang akan diberikan penomoran--}}
 @hasanyrole('Auditor')
-    @include('admin.spt.tabel_auditor')
+    @include('admin.laporan.pemeriksaan_kka.index_kka')
 @endhasanyrole
 
 @if(auth()->user()->hasRole('Inspektur'))
-    @include('admin.spt.tabel_inspektur')
+    @include('admin.laporan.pemeriksaan_kka.tabel_inspektur')
 @endif
 
 @include('admin.spt.arsip')

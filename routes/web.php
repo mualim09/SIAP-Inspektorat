@@ -216,7 +216,7 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 		// Route::get('/delete/sertifikatAudito/{id}','SertifikatController@deleteSertifikat');
 	});
 
-	//laporan pemeriksaan
+	//kka
 	Route::group(['prefix' => 'kka', 'middleware'=> ['role:Super Admin|Auditor|Inspektur']], function(){
 		Route::get('input-kka/{id}','KkaController@InputKka')->name('input_kka');
 		Route::get('input-lhp/{id}','KkaController@InputLhp')->name('input_lhp');

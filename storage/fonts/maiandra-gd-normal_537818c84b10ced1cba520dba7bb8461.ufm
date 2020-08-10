@@ -1,0 +1,896 @@
+StartFontMetrics 4.1
+Notice Converted by PHP-font-lib
+Comment https://github.com/PhenX/php-font-lib
+EncodingScheme FontSpecific
+Copyright (c) Copyright 1994-1997 Galapagos Design Group, Inc.  All rights reserved.
+FontName Maiandra GD
+FontSubfamily Normal
+UniqueID Maiandra GD, Freeform
+FullName Maiandra GD
+Version Version 1.76
+PostScriptName MaiandraGD-Regular
+Manufacturer Galápagos Design Group
+Designer Dennis Pasternak
+FontVendorURL http://www.galapagosdesign.com/
+FontDesignerURL http://www.galapagosdesign.com/staff/dennis.htm
+LicenseDescription Please contact the vendor to learn more about license restrictions.
+LicenseURL http://www.galapagosdesign.com/
+Weight Medium
+ItalicAngle 0
+IsFixedPitch false
+UnderlineThickness 53
+UnderlinePosition -108
+FontHeightOffset 0
+Ascender 963
+Descender -236
+FontBBox -168 -236 1381 963
+StartCharMetrics 260
+U 32 ; WX 294 ; N space ; G 3
+U 33 ; WX 301 ; N exclam ; G 4
+U 34 ; WX 331 ; N quotedbl ; G 5
+U 35 ; WX 556 ; N numbersign ; G 6
+U 36 ; WX 569 ; N dollar ; G 7
+U 37 ; WX 993 ; N percent ; G 8
+U 38 ; WX 701 ; N ampersand ; G 9
+U 39 ; WX 180 ; N quotesingle ; G 10
+U 40 ; WX 352 ; N parenleft ; G 11
+U 41 ; WX 352 ; N parenright ; G 12
+U 42 ; WX 500 ; N asterisk ; G 13
+U 43 ; WX 673 ; N plus ; G 14
+U 44 ; WX 285 ; N comma ; G 15
+U 45 ; WX 308 ; N hyphen ; G 16
+U 46 ; WX 285 ; N period ; G 17
+U 47 ; WX 370 ; N slash ; G 18
+U 48 ; WX 588 ; N zero ; G 19
+U 49 ; WX 398 ; N one ; G 20
+U 50 ; WX 569 ; N two ; G 21
+U 51 ; WX 569 ; N three ; G 22
+U 52 ; WX 569 ; N four ; G 23
+U 53 ; WX 569 ; N five ; G 24
+U 54 ; WX 569 ; N six ; G 25
+U 55 ; WX 569 ; N seven ; G 26
+U 56 ; WX 569 ; N eight ; G 27
+U 57 ; WX 569 ; N nine ; G 28
+U 58 ; WX 308 ; N colon ; G 29
+U 59 ; WX 308 ; N semicolon ; G 30
+U 60 ; WX 833 ; N less ; G 31
+U 61 ; WX 833 ; N equal ; G 32
+U 62 ; WX 833 ; N greater ; G 33
+U 63 ; WX 396 ; N question ; G 34
+U 64 ; WX 1000 ; N at ; G 35
+U 65 ; WX 666 ; N A ; G 36
+U 66 ; WX 588 ; N B ; G 37
+U 67 ; WX 657 ; N C ; G 38
+U 68 ; WX 729 ; N D ; G 39
+U 69 ; WX 513 ; N E ; G 40
+U 70 ; WX 525 ; N F ; G 41
+U 71 ; WX 734 ; N G ; G 42
+U 72 ; WX 794 ; N H ; G 43
+U 73 ; WX 294 ; N I ; G 44
+U 74 ; WX 394 ; N J ; G 45
+U 75 ; WX 623 ; N K ; G 46
+U 76 ; WX 466 ; N L ; G 47
+U 77 ; WX 951 ; N M ; G 48
+U 78 ; WX 802 ; N N ; G 49
+U 79 ; WX 838 ; N O ; G 50
+U 80 ; WX 546 ; N P ; G 51
+U 81 ; WX 838 ; N Q ; G 52
+U 82 ; WX 639 ; N R ; G 53
+U 83 ; WX 431 ; N S ; G 54
+U 84 ; WX 597 ; N T ; G 55
+U 85 ; WX 752 ; N U ; G 56
+U 86 ; WX 657 ; N V ; G 57
+U 87 ; WX 1009 ; N W ; G 58
+U 88 ; WX 657 ; N X ; G 59
+U 89 ; WX 595 ; N Y ; G 60
+U 90 ; WX 578 ; N Z ; G 61
+U 91 ; WX 352 ; N bracketleft ; G 62
+U 92 ; WX 370 ; N backslash ; G 63
+U 93 ; WX 352 ; N bracketright ; G 64
+U 94 ; WX 1000 ; N asciicircum ; G 65
+U 95 ; WX 500 ; N underscore ; G 66
+U 96 ; WX 500 ; N grave ; G 67
+U 97 ; WX 498 ; N a ; G 68
+U 98 ; WX 558 ; N b ; G 69
+U 99 ; WX 424 ; N c ; G 70
+U 100 ; WX 579 ; N d ; G 71
+U 101 ; WX 491 ; N e ; G 72
+U 102 ; WX 310 ; N f ; G 73
+U 103 ; WX 502 ; N g ; G 74
+U 104 ; WX 551 ; N h ; G 75
+U 105 ; WX 252 ; N i ; G 76
+U 106 ; WX 264 ; N j ; G 77
+U 107 ; WX 502 ; N k ; G 78
+U 108 ; WX 259 ; N l ; G 79
+U 109 ; WX 851 ; N m ; G 80
+U 110 ; WX 562 ; N n ; G 81
+U 111 ; WX 600 ; N o ; G 82
+U 112 ; WX 581 ; N p ; G 83
+U 113 ; WX 567 ; N q ; G 84
+U 114 ; WX 361 ; N r ; G 85
+U 115 ; WX 343 ; N s ; G 86
+U 116 ; WX 331 ; N t ; G 87
+U 117 ; WX 546 ; N u ; G 88
+U 118 ; WX 539 ; N v ; G 89
+U 119 ; WX 822 ; N w ; G 90
+U 120 ; WX 507 ; N x ; G 91
+U 121 ; WX 522 ; N y ; G 92
+U 122 ; WX 449 ; N z ; G 93
+U 123 ; WX 352 ; N braceleft ; G 94
+U 124 ; WX 500 ; N bar ; G 95
+U 125 ; WX 352 ; N braceright ; G 96
+U 126 ; WX 833 ; N asciitilde ; G 97
+U 160 ; WX 588 ; N nbspace ; G 172
+U 161 ; WX 301 ; N exclamdown ; G 163
+U 162 ; WX 569 ; N cent ; G 132
+U 163 ; WX 569 ; N sterling ; G 133
+U 164 ; WX 588 ; N currency ; G 259
+U 165 ; WX 615 ; N yen ; G 150
+U 166 ; WX 500 ; N brokenbar ; G 231
+U 167 ; WX 500 ; N section ; G 134
+U 168 ; WX 500 ; N dieresis ; G 142
+U 169 ; WX 822 ; N copyright ; G 139
+U 170 ; WX 317 ; N ordfeminine ; G 157
+U 171 ; WX 370 ; N guillemotleft ; G 169
+U 172 ; WX 833 ; N logicalnot ; G 164
+U 173 ; WX 308 ; N sfthyphen ; G 257
+U 174 ; WX 822 ; N registered ; G 138
+U 175 ; WX 500 ; N macron ; G 217
+U 176 ; WX 329 ; N degree ; G 131
+U 177 ; WX 833 ; N plusminus ; G 147
+U 178 ; WX 375 ; N twosuperior ; G 241
+U 179 ; WX 375 ; N threesuperior ; G 242
+U 180 ; WX 500 ; N acute ; G 141
+U 181 ; WX 562 ; N mu ; G 151
+U 182 ; WX 619 ; N paragraph ; G 136
+U 183 ; WX 285 ; N periodcentered ; G 195
+U 184 ; WX 500 ; N cedilla ; G 221
+U 185 ; WX 375 ; N onesuperior ; G 240
+U 186 ; WX 378 ; N ordmasculine ; G 158
+U 187 ; WX 370 ; N guillemotright ; G 170
+U 188 ; WX 877 ; N onequarter ; G 243
+U 189 ; WX 877 ; N onehalf ; G 244
+U 190 ; WX 877 ; N threequarters ; G 245
+U 191 ; WX 396 ; N questiondown ; G 162
+U 192 ; WX 666 ; N Agrave ; G 173
+U 193 ; WX 666 ; N Aacute ; G 201
+U 194 ; WX 666 ; N Acircumflex ; G 199
+U 195 ; WX 666 ; N Atilde ; G 174
+U 196 ; WX 666 ; N Adieresis ; G 98
+U 197 ; WX 666 ; N Aring ; G 99
+U 198 ; WX 840 ; N AE ; G 144
+U 199 ; WX 657 ; N Ccedilla ; G 100
+U 200 ; WX 513 ; N Egrave ; G 203
+U 201 ; WX 513 ; N Eacute ; G 101
+U 202 ; WX 513 ; N Ecircumflex ; G 200
+U 203 ; WX 513 ; N Edieresis ; G 202
+U 204 ; WX 294 ; N Igrave ; G 207
+U 205 ; WX 294 ; N Iacute ; G 204
+U 206 ; WX 294 ; N Icircumflex ; G 205
+U 207 ; WX 294 ; N Idieresis ; G 206
+U 208 ; WX 735 ; N Eth ; G 232
+U 209 ; WX 802 ; N Ntilde ; G 102
+U 210 ; WX 838 ; N Ograve ; G 210
+U 211 ; WX 838 ; N Oacute ; G 208
+U 212 ; WX 838 ; N Ocircumflex ; G 209
+U 213 ; WX 838 ; N Otilde ; G 175
+U 214 ; WX 838 ; N Odieresis ; G 103
+U 215 ; WX 673 ; N multiply ; G 239
+U 216 ; WX 838 ; N Oslash ; G 145
+U 217 ; WX 752 ; N Ugrave ; G 213
+U 218 ; WX 752 ; N Uacute ; G 211
+U 219 ; WX 752 ; N Ucircumflex ; G 212
+U 220 ; WX 752 ; N Udieresis ; G 104
+U 221 ; WX 595 ; N Yacute ; G 234
+U 222 ; WX 546 ; N Thorn ; G 236
+U 223 ; WX 495 ; N germandbls ; G 137
+U 224 ; WX 498 ; N agrave ; G 106
+U 225 ; WX 498 ; N aacute ; G 105
+U 226 ; WX 498 ; N acircumflex ; G 107
+U 227 ; WX 498 ; N atilde ; G 109
+U 228 ; WX 498 ; N adieresis ; G 108
+U 229 ; WX 498 ; N aring ; G 110
+U 230 ; WX 770 ; N ae ; G 160
+U 231 ; WX 424 ; N ccedilla ; G 111
+U 232 ; WX 491 ; N egrave ; G 113
+U 233 ; WX 491 ; N eacute ; G 112
+U 234 ; WX 491 ; N ecircumflex ; G 114
+U 235 ; WX 491 ; N edieresis ; G 115
+U 236 ; WX 252 ; N igrave ; G 117
+U 237 ; WX 252 ; N iacute ; G 116
+U 238 ; WX 252 ; N icircumflex ; G 118
+U 239 ; WX 252 ; N idieresis ; G 119
+U 240 ; WX 600 ; N eth ; G 233
+U 241 ; WX 562 ; N ntilde ; G 120
+U 242 ; WX 600 ; N ograve ; G 122
+U 243 ; WX 600 ; N oacute ; G 121
+U 244 ; WX 600 ; N ocircumflex ; G 123
+U 245 ; WX 600 ; N otilde ; G 125
+U 246 ; WX 600 ; N odieresis ; G 124
+U 247 ; WX 833 ; N divide ; G 184
+U 248 ; WX 600 ; N oslash ; G 161
+U 249 ; WX 546 ; N ugrave ; G 127
+U 250 ; WX 546 ; N uacute ; G 126
+U 251 ; WX 546 ; N ucircumflex ; G 128
+U 252 ; WX 546 ; N udieresis ; G 129
+U 253 ; WX 522 ; N yacute ; G 235
+U 254 ; WX 581 ; N thorn ; G 237
+U 255 ; WX 522 ; N ydieresis ; G 186
+U 262 ; WX 657 ; N Cacute ; G 252
+U 263 ; WX 424 ; N cacute ; G 253
+U 268 ; WX 657 ; N Ccaron ; G 254
+U 269 ; WX 424 ; N ccaron ; G 255
+U 273 ; WX 586 ; N dmacron ; G 256
+U 286 ; WX 734 ; N Gbreve ; G 247
+U 287 ; WX 502 ; N gbreve ; G 248
+U 304 ; WX 294 ; N Idot ; G 249
+U 305 ; WX 252 ; N dotlessi ; G 214
+U 321 ; WX 472 ; N Lslash ; G 225
+U 322 ; WX 259 ; N lslash ; G 226
+U 338 ; WX 1102 ; N OE ; G 176
+U 339 ; WX 896 ; N oe ; G 177
+U 350 ; WX 431 ; N Scedilla ; G 250
+U 351 ; WX 343 ; N scedilla ; G 251
+U 352 ; WX 431 ; N Scaron ; G 227
+U 353 ; WX 343 ; N scaron ; G 228
+U 376 ; WX 595 ; N Ydieresis ; G 187
+U 381 ; WX 578 ; N Zcaron ; G 229
+U 382 ; WX 449 ; N zcaron ; G 230
+U 402 ; WX 569 ; N florin ; G 166
+U 710 ; WX 500 ; N circumflex ; G 215
+U 711 ; WX 500 ; N caron ; G 224
+U 713 ; WX 500 ; N macron ; G 217
+U 728 ; WX 500 ; N breve ; G 218
+U 729 ; WX 500 ; N dotaccent ; G 219
+U 730 ; WX 500 ; N ring ; G 220
+U 731 ; WX 500 ; N ogonek ; G 223
+U 732 ; WX 500 ; N tilde ; G 216
+U 733 ; WX 500 ; N hungarumlaut ; G 222
+U 960 ; WX 589 ; N pi ; G 155
+U 8211 ; WX 500 ; N endash ; G 178
+U 8212 ; WX 1000 ; N emdash ; G 179
+U 8216 ; WX 285 ; N quoteleft ; G 182
+U 8217 ; WX 285 ; N quoteright ; G 183
+U 8218 ; WX 285 ; N quotesinglbase ; G 196
+U 8220 ; WX 484 ; N quotedblleft ; G 180
+U 8221 ; WX 484 ; N quotedblright ; G 181
+U 8222 ; WX 484 ; N quotedblbase ; G 197
+U 8224 ; WX 500 ; N dagger ; G 130
+U 8225 ; WX 500 ; N daggerdbl ; G 194
+U 8226 ; WX 590 ; N bullet ; G 135
+U 8230 ; WX 1000 ; N ellipsis ; G 171
+U 8240 ; WX 1417 ; N perthousand ; G 198
+U 8249 ; WX 206 ; N guilsinglleft ; G 190
+U 8250 ; WX 206 ; N guilsinglright ; G 191
+U 8355 ; WX 886 ; N franc ; G 246
+U 8364 ; WX 588 ; N Euro ; G 189
+U 8482 ; WX 705 ; N trademark ; G 140
+U 8486 ; WX 764 ; N Omega ; G 159
+U 8706 ; WX 517 ; N partialdiff ; G 152
+U 8710 ; WX 669 ; N increment ; G 168
+U 8719 ; WX 757 ; N product ; G 154
+U 8721 ; WX 674 ; N summation ; G 153
+U 8722 ; WX 833 ; N minus ; G 238
+U 8725 ; WX 167 ; N fraction ; G 188
+U 8729 ; WX 285 ; N periodcentered ; G 258
+U 8730 ; WX 637 ; N radical ; G 165
+U 8734 ; WX 833 ; N infinity ; G 146
+U 8747 ; WX 521 ; N integral ; G 156
+U 8776 ; WX 833 ; N approxequal ; G 167
+U 8800 ; WX 833 ; N notequal ; G 143
+U 8804 ; WX 833 ; N lessequal ; G 148
+U 8805 ; WX 833 ; N greaterequal ; G 149
+U 9674 ; WX 1000 ; N lozenge ; G 185
+U 61441 ; WX 574 ; N fi ; G 192
+U 61442 ; WX 579 ; N fl ; G 193
+EndCharMetrics
+StartKernData 
+StartKernPairs 713
+
+KPX dollar dollar 75
+KPX dollar two -36
+KPX dollar four -36
+KPX dollar seven -149
+KPX dollar eight -83
+KPX dollar nine -131
+KPX dollar colon -131
+KPX dollar semicolon -45
+KPX dollar less -139
+KPX dollar F -55
+KPX dollar G -36
+KPX dollar H -45
+KPX dollar R -55
+KPX dollar T -36
+KPX dollar W -36
+KPX dollar X -45
+KPX dollar Y -73
+KPX dollar Z -73
+KPX dollar backslash -73
+KPX dollar exclamdown -55
+KPX dollar copyright -36
+KPX dollar ordfeminine -36
+KPX dollar degree -36
+KPX dollar plusminus -55
+KPX dollar acute -282
+KPX dollar mu -264
+KPX dollar paragraph -282
+KPX dollar periodcentered -264
+KPX dollar threequarters -36
+KPX dollar questiondown -36
+KPX dollar Adieresis 38
+KPX dollar Aring 38
+
+KPX percent two -55
+KPX percent six -73
+KPX percent nine -102
+KPX percent colon -92
+KPX percent less -92
+KPX percent copyright -73
+KPX percent ordfeminine -83
+KPX percent degree -55
+KPX percent acute -63
+KPX percent paragraph -63
+KPX percent threequarters -73
+KPX percent questiondown -83
+KPX percent Adieresis -149
+KPX percent Aring -149
+
+KPX ampersand dollar -36
+KPX ampersand less -63
+KPX ampersand c -36
+KPX ampersand copyright -73
+KPX ampersand ordfeminine -73
+KPX ampersand acute -36
+KPX ampersand paragraph -36
+KPX ampersand threequarters -73
+KPX ampersand questiondown -73
+KPX ampersand Adieresis -36
+KPX ampersand Aring -36
+
+KPX quotesingle dollar -45
+KPX quotesingle nine -45
+KPX quotesingle colon -45
+KPX quotesingle c -45
+KPX quotesingle Adieresis -102
+KPX quotesingle Aring -102
+
+KPX parenright dollar -149
+KPX parenright six -63
+KPX parenright D -139
+KPX parenright H -112
+KPX parenright L -83
+KPX parenright R -112
+KPX parenright U -112
+KPX parenright X -102
+KPX parenright backslash -45
+KPX parenright c -149
+KPX parenright nbspace -139
+KPX parenright exclamdown -112
+KPX parenright copyright -112
+KPX parenright ordfeminine -73
+KPX parenright plusminus -112
+KPX parenright threequarters -112
+KPX parenright questiondown -73
+KPX parenright Adieresis -415
+KPX parenright Aring -415
+
+KPX asterisk seven -92
+KPX asterisk colon -83
+KPX asterisk less -83
+KPX asterisk copyright 38
+KPX asterisk ordfeminine 57
+KPX asterisk acute -196
+KPX asterisk mu -149
+KPX asterisk paragraph -196
+KPX asterisk periodcentered -149
+KPX asterisk threequarters 38
+KPX asterisk questiondown 57
+
+
+KPX hyphen dollar -36
+KPX hyphen c -36
+KPX hyphen ordfeminine -45
+KPX hyphen questiondown -45
+KPX hyphen Adieresis -112
+KPX hyphen Aring -112
+
+KPX period dollar 47
+KPX period ampersand -36
+KPX period two -92
+KPX period seven -102
+KPX period eight -73
+KPX period colon -63
+KPX period less -73
+KPX period D 47
+KPX period backslash -102
+KPX period c 47
+KPX period nbspace 47
+KPX period copyright -36
+KPX period degree -92
+KPX period acute -102
+KPX period mu -36
+KPX period paragraph -102
+KPX period periodcentered -36
+KPX period threequarters -36
+
+KPX slash dollar 47
+KPX slash seven -120
+KPX slash eight -45
+KPX slash nine -149
+KPX slash colon -206
+KPX slash less -188
+KPX slash backslash -120
+KPX slash c 47
+KPX slash ordfeminine 38
+KPX slash acute -376
+KPX slash mu -348
+KPX slash paragraph -376
+KPX slash periodcentered -348
+KPX slash questiondown 38
+KPX slash Adieresis 38
+KPX slash Aring 38
+
+KPX two semicolon -45
+KPX two mu 38
+KPX two periodcentered 38
+KPX two Adieresis -112
+KPX two Aring -112
+
+KPX three dollar -120
+KPX three eight -36
+KPX three D -83
+KPX three H -112
+KPX three L -36
+KPX three Q -73
+KPX three R -92
+KPX three U -63
+KPX three V -102
+KPX three X -63
+KPX three c -120
+KPX three nbspace -83
+KPX three exclamdown -92
+KPX three copyright -131
+KPX three ordfeminine -92
+KPX three plusminus -92
+KPX three mu 47
+KPX three periodcentered 47
+KPX three threequarters -131
+KPX three questiondown -92
+KPX three Adieresis -415
+KPX three Aring -415
+
+KPX four Adieresis -36
+KPX four Aring -36
+
+KPX five seven -131
+KPX five nine -112
+KPX five colon -131
+KPX five less -159
+KPX five D -36
+KPX five H -63
+KPX five R -73
+KPX five X -63
+KPX five backslash -112
+KPX five nbspace -36
+KPX five exclamdown -73
+KPX five copyright -73
+KPX five ordfeminine -36
+KPX five plusminus -73
+KPX five acute -131
+KPX five mu -139
+KPX five paragraph -131
+KPX five periodcentered -139
+KPX five threequarters -73
+KPX five questiondown -36
+
+KPX six dollar -36
+KPX six six -63
+KPX six c -36
+
+KPX seven dollar -206
+KPX seven ampersand -63
+KPX seven seven 47
+KPX seven D -339
+KPX seven F -358
+KPX seven H -339
+KPX seven L -92
+KPX seven R -301
+KPX seven U -311
+KPX seven V -376
+KPX seven X -348
+KPX seven Z -339
+KPX seven backslash -358
+KPX seven c -206
+KPX seven nbspace -339
+KPX seven exclamdown -301
+KPX seven copyright -339
+KPX seven ordfeminine -339
+KPX seven plusminus -301
+KPX seven acute -36
+KPX seven mu 38
+KPX seven paragraph -36
+KPX seven periodcentered 38
+KPX seven threequarters -339
+KPX seven questiondown -339
+KPX seven Adieresis -301
+KPX seven Aring -301
+
+KPX eight dollar -63
+KPX eight hyphen -36
+KPX eight equal -63
+KPX eight c -63
+
+KPX nine dollar -112
+KPX nine D -139
+KPX nine H -131
+KPX nine L -36
+KPX nine R -139
+KPX nine X -83
+KPX nine backslash -63
+KPX nine c -112
+KPX nine nbspace -139
+KPX nine exclamdown -139
+KPX nine copyright -149
+KPX nine ordfeminine -149
+KPX nine plusminus -139
+KPX nine acute 38
+KPX nine mu 38
+KPX nine paragraph 38
+KPX nine periodcentered 38
+KPX nine threequarters -149
+KPX nine questiondown -149
+KPX nine Adieresis -329
+KPX nine Aring -329
+
+KPX colon dollar -83
+KPX colon D -120
+KPX colon H -120
+KPX colon R -83
+KPX colon U -36
+KPX colon X -55
+KPX colon c -83
+KPX colon nbspace -120
+KPX colon exclamdown -83
+KPX colon copyright -131
+KPX colon ordfeminine -112
+KPX colon plusminus -83
+KPX colon acute 57
+KPX colon mu 94
+KPX colon paragraph 57
+KPX colon periodcentered 94
+KPX colon threequarters -131
+KPX colon questiondown -112
+KPX colon Adieresis -264
+KPX colon Aring -264
+
+KPX semicolon dollar -45
+KPX semicolon two -83
+KPX semicolon seven -45
+KPX semicolon H -92
+KPX semicolon c -45
+KPX semicolon copyright -73
+KPX semicolon ordfeminine -36
+KPX semicolon degree -83
+KPX semicolon acute -73
+KPX semicolon mu -36
+KPX semicolon paragraph -73
+KPX semicolon periodcentered -36
+KPX semicolon threequarters -73
+KPX semicolon questiondown -36
+KPX semicolon Adieresis -36
+KPX semicolon Aring -36
+
+KPX less dollar -159
+KPX less ampersand -36
+KPX less two -112
+KPX less D -292
+KPX less H -272
+KPX less L -102
+KPX less R -264
+KPX less X -235
+KPX less c -159
+KPX less nbspace -292
+KPX less exclamdown -264
+KPX less copyright -301
+KPX less ordfeminine -301
+KPX less degree -112
+KPX less plusminus -264
+KPX less mu 38
+KPX less periodcentered 38
+KPX less threequarters -301
+KPX less questiondown -301
+KPX less Adieresis -292
+KPX less Aring -292
+
+KPX equal copyright -92
+KPX equal threequarters -92
+KPX equal Adieresis -36
+KPX equal Aring -36
+
+KPX H bracketleft -45
+
+KPX I backslash 38
+KPX I copyright -63
+KPX I acute 104
+KPX I mu 161
+KPX I paragraph 104
+KPX I periodcentered 161
+KPX I threequarters -63
+KPX I Adieresis -112
+KPX I Aring -112
+
+KPX N D -55
+KPX N H -63
+KPX N R -63
+KPX N X -63
+KPX N backslash -73
+KPX N nbspace -55
+KPX N exclamdown -63
+KPX N plusminus -63
+
+KPX Q acute -73
+KPX Q paragraph -73
+
+KPX R copyright 38
+KPX R ordfeminine 75
+KPX R acute -63
+KPX R mu -55
+KPX R paragraph -63
+KPX R periodcentered -55
+KPX R threequarters 38
+KPX R questiondown 75
+KPX R Adieresis -55
+KPX R Aring -55
+
+KPX U R -45
+KPX U Y 38
+KPX U Z 38
+KPX U backslash 47
+KPX U exclamdown -45
+KPX U copyright -36
+KPX U plusminus -45
+KPX U mu 47
+KPX U periodcentered 47
+KPX U threequarters -36
+KPX U Adieresis -235
+KPX U Aring -235
+
+KPX Y acute -36
+KPX Y paragraph -36
+KPX Y Adieresis -225
+KPX Y Aring -225
+
+KPX Z Adieresis -215
+KPX Z Aring -215
+
+KPX bracketleft F -36
+KPX bracketleft R -36
+KPX bracketleft exclamdown -36
+KPX bracketleft plusminus -36
+
+KPX backslash Adieresis -206
+KPX backslash Aring -206
+
+KPX c two -36
+KPX c four -36
+KPX c seven -149
+KPX c eight -83
+KPX c nine -131
+KPX c colon -131
+KPX c semicolon -45
+KPX c less -139
+KPX c F -55
+KPX c G -36
+KPX c H -45
+KPX c R -55
+KPX c T -36
+KPX c W -36
+KPX c X -45
+KPX c Y -73
+KPX c Z -73
+KPX c backslash -73
+KPX c exclamdown -55
+KPX c copyright -36
+KPX c ordfeminine -36
+KPX c degree -36
+KPX c plusminus -55
+KPX c acute -282
+KPX c mu -264
+KPX c paragraph -282
+KPX c periodcentered -264
+KPX c threequarters -36
+KPX c questiondown -36
+KPX c Adieresis 38
+KPX c Aring 38
+
+KPX nbspace bracketleft -45
+
+KPX exclamdown copyright 38
+KPX exclamdown ordfeminine 75
+KPX exclamdown acute -63
+KPX exclamdown mu -55
+KPX exclamdown paragraph -63
+KPX exclamdown periodcentered -55
+KPX exclamdown threequarters 38
+KPX exclamdown questiondown 75
+KPX exclamdown Adieresis -55
+KPX exclamdown Aring -55
+
+KPX copyright ampersand 38
+KPX copyright seven -264
+KPX copyright nine -149
+KPX copyright colon -112
+KPX copyright semicolon -73
+KPX copyright less -264
+KPX copyright Q 75
+KPX copyright R 75
+KPX copyright U 75
+KPX copyright Z 75
+KPX copyright exclamdown 75
+KPX copyright plusminus 75
+
+KPX ordfeminine ampersand 38
+KPX ordfeminine plus 38
+KPX ordfeminine hyphen 38
+KPX ordfeminine two 38
+KPX ordfeminine seven -264
+KPX ordfeminine nine -149
+KPX ordfeminine colon -112
+KPX ordfeminine semicolon -73
+KPX ordfeminine less -264
+KPX ordfeminine equal -36
+KPX ordfeminine Q 38
+KPX ordfeminine R 38
+KPX ordfeminine U 38
+KPX ordfeminine exclamdown 38
+KPX ordfeminine degree 38
+KPX ordfeminine plusminus 38
+
+KPX plusminus bracketleft -45
+
+KPX acute dollar -311
+KPX acute hyphen -235
+KPX acute seven 75
+KPX acute nine 75
+KPX acute colon 86
+KPX acute semicolon -36
+KPX acute less 75
+KPX acute I -55
+KPX acute Q 38
+KPX acute U 38
+KPX acute Z 75
+KPX acute backslash 75
+KPX acute c -311
+KPX acute Agrave -55
+KPX acute Aacute -55
+KPX acute eacute -188
+
+KPX paragraph dollar -311
+KPX paragraph hyphen -235
+KPX paragraph seven 75
+KPX paragraph nine 75
+KPX paragraph colon 86
+KPX paragraph semicolon -36
+KPX paragraph less 75
+KPX paragraph I -55
+KPX paragraph Q 38
+KPX paragraph U 38
+KPX paragraph Z 75
+KPX paragraph backslash 75
+KPX paragraph c -311
+KPX paragraph Agrave -55
+KPX paragraph Aacute -55
+KPX paragraph eacute -188
+
+KPX threequarters ampersand 38
+KPX threequarters seven -264
+KPX threequarters nine -149
+KPX threequarters colon -112
+KPX threequarters semicolon -73
+KPX threequarters less -264
+KPX threequarters Q 75
+KPX threequarters R 75
+KPX threequarters U 75
+KPX threequarters Z 75
+KPX threequarters exclamdown 75
+KPX threequarters plusminus 75
+
+KPX questiondown ampersand 38
+KPX questiondown plus 38
+KPX questiondown hyphen 38
+KPX questiondown two 38
+KPX questiondown seven -264
+KPX questiondown nine -149
+KPX questiondown colon -112
+KPX questiondown semicolon -73
+KPX questiondown less -264
+KPX questiondown equal -36
+KPX questiondown Q 38
+KPX questiondown R 38
+KPX questiondown U 38
+KPX questiondown exclamdown 38
+KPX questiondown degree 38
+KPX questiondown plusminus 38
+
+KPX Adieresis dollar 57
+KPX Adieresis ampersand -36
+KPX Adieresis plus 38
+KPX Adieresis hyphen 38
+KPX Adieresis two -36
+KPX Adieresis four -36
+KPX Adieresis seven -282
+KPX Adieresis nine -339
+KPX Adieresis colon -301
+KPX Adieresis less -319
+KPX Adieresis equal 38
+KPX Adieresis Q 38
+KPX Adieresis R 38
+KPX Adieresis U 38
+KPX Adieresis Y -149
+KPX Adieresis Z -112
+KPX Adieresis backslash -112
+KPX Adieresis c 57
+KPX Adieresis exclamdown 38
+KPX Adieresis degree -36
+KPX Adieresis plusminus 38
+
+KPX Aring dollar 57
+KPX Aring ampersand -36
+KPX Aring plus 38
+KPX Aring hyphen 38
+KPX Aring two -36
+KPX Aring four -36
+KPX Aring seven -282
+KPX Aring nine -339
+KPX Aring colon -301
+KPX Aring less -319
+KPX Aring equal 38
+KPX Aring Q 38
+KPX Aring R 38
+KPX Aring U 38
+KPX Aring Y -149
+KPX Aring Z -112
+KPX Aring backslash -112
+KPX Aring c 57
+KPX Aring exclamdown 38
+KPX Aring degree -36
+KPX Aring plusminus 38
+
+KPX aacute dollar 47
+KPX aacute seven -120
+KPX aacute eight -45
+KPX aacute nine -149
+KPX aacute colon -206
+KPX aacute less -188
+KPX aacute backslash -120
+KPX aacute c 47
+KPX aacute ordfeminine 38
+KPX aacute acute -376
+KPX aacute mu -348
+KPX aacute paragraph -376
+KPX aacute periodcentered -348
+KPX aacute questiondown 38
+KPX aacute Adieresis 38
+KPX aacute Aring 38
+
+KPX eacute Adieresis -36
+KPX eacute Aring -36
+
+KPX egrave dollar -45
+KPX egrave nine -45
+KPX egrave colon -45
+KPX egrave c -45
+KPX egrave Adieresis -102
+KPX egrave Aring -102
+
+KPX igrave ordfeminine 38
+KPX igrave acute -36
+KPX igrave mu -36
+KPX igrave paragraph -36
+KPX igrave periodcentered -36
+KPX igrave questiondown 38
+KPX igrave Adieresis -415
+KPX igrave Aring -415
+EndKernPairs
+EndKernData
+EndFontMetrics
