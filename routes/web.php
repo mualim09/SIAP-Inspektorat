@@ -17,6 +17,7 @@ Route::get('/testlama', 'admin\SptController@getLamaSpt');
 Route::get('/testkode', 'admin\TestController@kodeTemuanSelect');
 Route::post('/test/{uid}/{date_start}/{date_end}', 'admin\SptController@storeKuota');
 Route::get('/sess-anggota', 'admin\SptController@getSessionAnggota');
+Route::get('/test/dupak', 'admin\TestController@testDupak');
 
 
 

@@ -40,7 +40,7 @@ class DupakController extends Controller
     public function getData(Request $request)
     {
         if($request->ajax()):
-            $year = $request->tahun;
+            $year = ($request->tahun) ? $request->tahun : date('Y');
             if(isset($request->semester)) {
                 if($request->semester === 1) {
                     $start = date("Y-m-d H:i:s", strtotime("$year-01-01"));
@@ -50,37 +50,49 @@ class DupakController extends Controller
                     $start = date("Y-m-d H:i:s", strtotime("$year-07-01"));
                     $end = date("Y-m-d H:i:s", strtotime("$year-12-31"));
                 }else{
-                    return;
+                    return response('Pilih periode semester terlebih dahulu.', 401);
                 }
             }
 
-        $data = DetailSpt::where('unsur_dupak','=','pengawasan')->get(); //ambil data yang tidak mungkin ditampilkan, karena masih dalam proses development
+        /*$detail_spt = DetailSpt::where('unsur_dupak','=','pengawasan');
+        $dupak = ( isset($start) && isset($end) ) ? $detail_spt->whereHas('spt', function($query) use ($start,$end){
+            $query->whereBetween('tgl_mulai', [$start, $end]);
+        }) : $detail_spt;
+
+        $data = $dupak->select('info_dupak')->with('spt', function($query) use ($start,$end){
+            $query->whereBetween('tgl_mulai', [$start, $end]);
+        })
+        ->get();*/
+        $data = DetailSpt::whereHas('spt', function($q){
+            $q->whereBetween('tgl_mulai',['2020-08-11 00:00:00','2020-08-15 00:00:00']);
+        })->with('spt')->where('unsur_dupak','=','pengawasan')->get();
+        //dd($data);
 
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('tanggal_spt', function($col){
-                return;
+                return $col->spt->periode;
             })
             ->addColumn('lama_spt', function($col){
-                return;
+                return $col->spt->lama;
             })
             ->addColumn('efektif', function($col){
-                return;
+                return $col->info_dupak['efektif'];
             })
             ->addColumn('kegiatan', function($col){
                 return;
             })
             ->addColumn('koefisien', function($col){
-                return;
+                return $col->info_dupak['koefisien'];
             })
             ->addColumn('dupak', function($col){
-                return;
+                return $col->info_dupak['dupak'];
             })
             ->addColumn('peran', function($col){
-                return;
+                return $col->peran;
             })
             ->addColumn('lembur', function($col){
-                return;
+                return $col->info_dupak['lembur'];
             })                
             ->addColumn('action', function($user){                    
                 return;

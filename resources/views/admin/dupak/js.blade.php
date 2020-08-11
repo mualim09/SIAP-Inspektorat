@@ -47,7 +47,7 @@
             {data: 'dupak', name: 'dupak', 'title': "{{ __('AK') }}",  width: '5%'},
             {data: 'peran', name: 'peran', 'title': "{{ __('Peran') }}",  width: '10%'},
             {data: 'lembur', name: 'lembur', 'title': "{{ __('Lembur') }}",  width: '10%'},
-            {data: 'action', name: 'action', 'orderable': false, 'searchable': false, 'title': "{{ __('Action') }}", 'exportable' : false,'printable': false},
+            {data: 'action', name: 'action', 'orderable': false, 'searchable': false, 'title': "{{ __('') }}", 'exportable' : false,'printable': false},
         ],        
         "order": [[ 1, 'asc' ]],
     });

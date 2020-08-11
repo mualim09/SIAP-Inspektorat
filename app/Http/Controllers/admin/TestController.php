@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\models\KodeTemuan, DB;
+use App\models\DetailSpt, App\models\Spt;
 
 class TestController extends Controller
 {
@@ -27,4 +28,15 @@ class TestController extends Controller
     	return $return;
 
     }
+
+    public function testDupak(){
+        $detail = DetailSpt::whereHas('spt', function($q){
+            $q->whereBetween('tgl_mulai',['2020-08-11 00:00:00','2020-08-15 00:00:00']);
+        })->where('unsur_dupak','=','pengawasan')->get();
+       dd($detail[0]['info_dupak']);
+    }
+
+    /*$posts = App\Post::whereHas('comments', function (Builder $query) {
+    $query->where('content', 'like', 'foo%');
+    })->get();*/
 }
