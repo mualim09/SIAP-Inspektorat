@@ -1008,7 +1008,7 @@ class SptController extends Controller
                     if ($col->info_dupak) {
                         # code...
                         $info = json_decode($col->info_dupak);
-                        return $info['dupak'];
+                        return ( null !== $info->dupak ) ? $info->dupak : 0;
                     }
                     return;
                 })

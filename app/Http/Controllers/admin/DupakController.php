@@ -52,6 +52,9 @@ class DupakController extends Controller
                 }else{
                     return response('Pilih periode semester terlebih dahulu.', 401);
                 }
+            }else{
+                $start = ( date('n')<=6 ) ? date("Y-m-d H:i:s", strtotime("$year-01-01")) : date("Y-m-d H:i:s", strtotime("$year-07-01"));
+                $end = ( date('n')<=6 ) ? date("Y-m-d H:i:s", strtotime("$year-06-30")) : date("Y-m-d H:i:s", strtotime("$year-12-31"));
             }
 
         /*$detail_spt = DetailSpt::where('unsur_dupak','=','pengawasan');
@@ -63,8 +66,8 @@ class DupakController extends Controller
             $query->whereBetween('tgl_mulai', [$start, $end]);
         })
         ->get();*/
-        $data = DetailSpt::whereHas('spt', function($q){
-            $q->whereBetween('tgl_mulai',['2020-08-11 00:00:00','2020-08-15 00:00:00']);
+        $data = DetailSpt::whereHas('spt', function($q) use ($start, $end){
+            $q->whereBetween('tgl_mulai',[$start,$end]);
         })->with('spt')->where('unsur_dupak','=','pengawasan')->get();
         //dd($data);
 
