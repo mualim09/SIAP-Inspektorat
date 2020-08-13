@@ -100,6 +100,11 @@
 			font-size: 16px;
 			margin-right: 35px;
 		}
+
+		div.isi-kka{
+			/*margin-right: -20px;*/
+  			/*margin-left: 80px;*/
+		}
 		
 		div.ttd-inspektur{
 			padding-top:10px;
@@ -157,14 +162,11 @@
 	</div>
 <!-- css untuk sring style="text-align: justify; text-justify: newspaper" -->
 	<container>
-		<div class="row">
+		<div class="row isi-kka">
 			<div class="col pemeriksaan-akhir-isi">
 				
 					<P style="text-decoration: underline;">Kondisi</P>
-					<?php $decoded = base64_decode($isiLaporan[0]->kondisi, true);?>
-					<?php if(base64_encode($decoded) != $isiLaporan[0]->kondisi) {  echo json_decode($isiLaporan[0]->kondisi);?>
-							<?php ?>
-					<?php } else { echo $isiLaporan[0]->kondisi; } ?>
+					<?php echo str_replace('www/kosong', $isiLaporan[0]->url_img_laporan,$isiLaporan[0]->kondisi); ?>
 					<br>
 					<p style="text-decoration: underline;">Kriteria</p>
 					<?php $decoded = base64_decode($isiLaporan[0]->kriteria, true);?>

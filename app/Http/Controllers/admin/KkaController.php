@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Response;
 use App\models\FileMedia;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Session;
+use Intervention\Image\Facades\Image;
 
 class KkaController extends Controller
 {
@@ -127,11 +128,26 @@ class KkaController extends Controller
 
         for ($i = 0;$i <= $array_total;$i++) // ada yang kurang dalam logika, tapi hapur 50% > bisa. (updated bisa 'date:21/07/2020')
         {
-            // if($i==$i && $status_anggota[0]->status['KetuaTim'] != null && $status_anggota[0]->status != null){  /*di acc ketua*/
-            //     $query = $data_detail->where('peran','Anggota Tim');
-            //     break;
-            // }
-            // elseif($i==$i && $status_anggota[0]->status['PengendaliMutu'] == null && $status_anggota[0]->status['KetuaTim'] == null && $status_anggota[0]->status['PengendaliTeknis'] == null && $status_anggota[0]->status['PenanggungJawab'] == null && $status_anggota[0]->status != null){
+            switch ($status_anggota[0]->status)
+            {
+                case  $status_anggota[0]->status['PengendaliMutu'] == null && $status_anggota[0]->status['KetuaTim'] == null && $status_anggota[0]->status['PengendaliTeknis'] == null && $status_anggota[0]->status['PenanggungJawab'] == null && $status_anggota[0]->status != null :
+                    $query = $data_detail->where('peran','Anggota Tim');
+                    break;
+                case $status_anggota[0]->status['KetuaTim'] != null && $status_anggota[0]->status['PengendaliTeknis'] == null :
+                    $query = $data_detail->where('peran','Ketua Tim');
+                    break;
+                case $status_anggota[0]->status['PengendaliTeknis'] != null && $status_anggota[0]->status['PengendaliMutu'] == null :
+                    $query = $data_detail->where('peran','Pengendali Teknis');
+                    break;
+                case $status_anggota[0]->status['PengendaliMutu'] != null && $status_anggota[0]->status['PenanggungJawab'] == null :
+                    $query = $data_detail->where('peran','Pengendali Mutu');
+                    break;
+                case $status_anggota[0]->status['PenanggungJawab'] != null && $status_anggota[0]->status['KetuaTim'] != null && $status_anggota[0]->status['PengendaliTeknis'] != null && $status_anggota[0]->status['PengendaliMutu'] != null :
+                    $query = $data_detail->where('peran','Penanggungjawab');
+                    break;
+            }
+
+            // if($i==$i && $status_anggota[0]->status['PengendaliMutu'] == null && $status_anggota[0]->status['KetuaTim'] == null && $status_anggota[0]->status['PengendaliTeknis'] == null && $status_anggota[0]->status['PenanggungJawab'] == null && $status_anggota[0]->status != null){
             //     $query = $data_detail->where('peran','Anggota Tim');
             //     break;
             // }
@@ -152,28 +168,6 @@ class KkaController extends Controller
             //     $query = $data_detail->where('peran','Penanggungjawab');
             //     break;
             // }
-
-            if($i==$i && $status_anggota[0]->status['PengendaliMutu'] == null && $status_anggota[0]->status['KetuaTim'] == null && $status_anggota[0]->status['PengendaliTeknis'] == null && $status_anggota[0]->status['PenanggungJawab'] == null && $status_anggota[0]->status != null){
-                $query = $data_detail->where('peran','Anggota Tim');
-                break;
-            }
-            elseif ($i==$i && $status_anggota[0]->status['KetuaTim'] != null && $status_anggota[0]->status['PengendaliTeknis'] == null)
-            {
-                $query = $data_detail->where('peran','Ketua Tim');
-                break;
-            }
-            elseif($i==$i && $status_anggota[0]->status['PengendaliTeknis'] != null && $status_anggota[0]->status['PengendaliMutu'] == null){
-                $query = $data_detail->where('peran','Pengendali Teknis');
-                break;
-            }
-            elseif($i==$i && $status_anggota[0]->status['PengendaliMutu'] != null && $status_anggota[0]->status['PenanggungJawab'] == null){
-                $query = $data_detail->where('peran','Pengendali Mutu');
-                break;
-            }
-            elseif($i==$i && $status_anggota[0]->status['PenanggungJawab'] != null && $status_anggota[0]->status['KetuaTim'] != null && $status_anggota[0]->status['PengendaliTeknis'] != null && $status_anggota[0]->status['PengendaliMutu'] != null){
-                $query = $data_detail->where('peran','Penanggungjawab');
-                break;
-            }
         }
 
         $data = $query->with('pemeriksaan')->get();
@@ -210,47 +204,102 @@ class KkaController extends Controller
     }
 
     public function proses_upload(Request $request){
-        // revisi daltu dalni
-        // dd($request);
-        if ($request->edit_kka == null) {
+
+        /*get img from summernote*/ /*proses penyimpanan gambar dari base64 ke db hanya url saja*/
+        $kondisi_img=$request->file_laporan['kondisi'];
+        $dom = new \DomDocument();
+        $dom->loadHtml($kondisi_img, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);    
+        $images = $dom->getElementsByTagName('img');
+        foreach ($images as $image) {
+            $imageSrc = $image->getAttribute('src');
+            /** if image source is 'data-url' */
+            if (preg_match('/data:image/', $imageSrc)) {
+                /** etch the current image mimetype and stores in $mime */
+                preg_match('/data:image\/(?<mime>.*?)\;/', $imageSrc, $mime);
+                $mimeType = $mime['mime'];
+                /** Create new file name with random string */
+                $filename = uniqid();
+
+                /** Public path. Make sure to create the folder
+                 * public/uploads
+                 */
+                $filePath = "/laporan-img/$filename.$mimeType";
+                // dd($filePath);
+
+                /** Using Intervention package to create Image */
+                Image::make($imageSrc)
+                    /** encode file to the specified mimeType */
+                    ->encode($mimeType, 100)
+                    /** public_path - points directly to public path */
+                    ->save(public_path($filePath));
+
+                $newImageSrc = asset($filePath);
+                $image->removeAttribute('src');
+                $image->setAttribute('src', $newImageSrc);
+                // dd($newImageSrc); /*url lokasi gambar*/
+            }
+        }
+        /** Save this new message body in the database table */
+        $newMessageBody = $dom->saveHTML();
+        
+        /*mengecek img pada kondisi ada apa tidak*/
+        if (is_null($images['length'])){
+            $newImageSrc = null;
+        }else{
+            $kondisi_img_var = $request->file_laporan['kondisi'];
+            $dom_var = new \DomDocument();
+            $dom_var->loadHtml($kondisi_img, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);    
+            $images_var = $dom_var->getElementsByTagName('img');
+            foreach ($images_var as $image_var) {
+                $img_kosong = 'www/kosong';
+                $imageSrc_var = $image_var->getAttribute('src');
+                $var_hmtl = '<img style="'.$image_var->getAttribute('style').'" src='.$img_kosong.'>';
+                // dd($var_hmtl);
+                $imageSrc_var = $var_hmtl;
+            }
+            /*menghilangkan base64 pada string dengan mengantikanya dengan var $imageSrc_var */
+            $kondisi = (str_replace('&nbsp;', ' ',preg_replace('/(<img[^>]+>(?:<\/img>)?)/i', $imageSrc_var, $request->file_laporan['kondisi']))); /*NOTE:untuk img yg diubah jika kosong akan menjadi p tag kosong*/
+            // dd($kondisi);
+            $newImageSrc;
+            // dd($newImageSrc);
+        }
+        // die();
+        /*end proses kondisi*/
+
+        // if ($request->edit_kka == null) {
             $dalnis_atau_daltu = DetailSpt::where('spt_id',$request->spt_id)->where('user_id',auth()->user()->id)->get();
             $get_status_anggota = DetailSpt::where('spt_id',$request->spt_id)->where('peran','Anggota Tim')->get();
             $get_detail_id = DetailSpt::where('spt_id',$request->spt_id)->where('user_id',auth()->user()->id);
-        }elseif($request->edit_kka != null){
-            $dalnis_atau_daltu = DetailSpt::where('spt_id',$request->id)->where('user_id',auth()->user()->id)->get(); //get peran daltu & dalnis by auth
-            $get_status_anggota = DetailSpt::where('spt_id',$request->id)->where('peran','Anggota Tim')->get(); //get data status anggota by peran
-            $get_detail_id = DetailSpt::where('spt_id',$request->id)->where('user_id',auth()->user()->id);
+        // }elseif($request->edit_kka != null){
+        //     $dalnis_atau_daltu = DetailSpt::where('spt_id',$request->id)->where('user_id',auth()->user()->id)->get(); //get peran daltu & dalnis by auth
+        //     $get_status_anggota = DetailSpt::where('spt_id',$request->id)->where('peran','Anggota Tim')->get(); //get data status anggota by peran
+        //     $get_detail_id = DetailSpt::where('spt_id',$request->id)->where('user_id',auth()->user()->id);
             $data_anggota = DetailSpt::where('spt_id',$request->id)->where('peran','Anggota Tim');
-        }
+        // }
+
         $kode = $request->file_laporan['kode_temuan_id'];
         $sasaran = $request->file_laporan['sasaran_audit'];
         $judultemuan = $request->file_laporan['judultemuan'];
         $jenis_laporan = 'KKA';
         $created_at = Carbon::now()->toDateTimeString();
         $updated_at = Carbon::now()->toDateTimeString();
-        $kondisi = json_encode($request->file_laporan['kondisi']);
+        // $kondisi = json_encode($request->file_laporan['kondisi']);
         $kriteria = json_encode($request->file_laporan['kriteria']);
 
         // dd(str_replace('&nbsp;', ' ', preg_replace('/<[^>]*>|"/', '', $request->file_laporan['kondisi'])));
         // die();
 
         if ($dalnis_atau_daltu[0]->peran == 'Anggota Tim' && $get_status_anggota[0]->status == null) {
-           
-            $jenis_laporan = 'KKA';//proses insert anggota tim
+            //proses insert anggota tim
+            $jenis_laporan = 'KKA';
 
             $status_anggota['KetuaTim'] = null; //status anggota default
             $status_anggota['PengendaliTeknis'] = null;
             $status_anggota['PengendaliMutu'] = null;
             $status_anggota['PenanggungJawab'] = null;
-            
-            // $kondisi_anggota = str_replace('&nbsp;', ' ', preg_replace('/<[^>]*>|"/', '', $request->file_laporan['kondisi']));  <!--menghilangkan css dari summernote dan gambar inputan untuk pemakaian kurang recom-->
-            // $kriteria_anggota = str_replace('&nbsp;', ' ', preg_replace('/<[^>]*>|"/', '', $request->file_laporan['kriteria']));
 
             $update_anggota = $get_detail_id->update(['jenis_laporan'=>$jenis_laporan,'status'=>json_encode($status_anggota)]);
-            $kriteria = Laporan_pemeriksaan::insert(['detail_spt_id'=>$get_detail_id->get()[0]->id,'kode_temuan_id'=>$kode,'sasaran_audit'=>$sasaran,'judultemuan'=>$judultemuan,'kondisi'=>$kondisi,'kriteria'=>$kriteria,'created_at'=>$created_at,'updated_at'=>$updated_at]);
-            $find_spt_id = Spt::findOrFail($request->spt_id);
-            $get_jenis_lokasi = Lokasi::findOrFail(json_decode($find_spt_id->lokasi_id[0]));
-            $Refrensi_kka = Refrensi_kka::insert(['refrensi_lokasi'=>$get_jenis_lokasi->jenis_lokasi,'refrens_kka'=>$request->file_laporan['kondisi']]);
+            $kriteria = Laporan_pemeriksaan::insert(['detail_spt_id'=>$get_detail_id->get()[0]->id,'kode_temuan_id'=>$kode,'sasaran_audit'=>$sasaran,'judultemuan'=>$judultemuan,'kondisi'=>$kondisi,'kriteria'=>$kriteria,'url_img_laporan'=>$newImageSrc,'created_at'=>$created_at,'updated_at'=>$updated_at]);
 
             return redirect()->back()->with('alert', 'Anda telah berhasil mengubah KKA tersebut');
         }
@@ -321,7 +370,7 @@ class KkaController extends Controller
 
         $isiLaporan = Laporan_pemeriksaan::where('detail_spt_id',$Laporan->id)->get();
         $selected_kode_kka = KodeTemuan::where('id',$isiLaporan[0]->kode_temuan_id)->select('id','kode','deskripsi', 'atribut')->whereRaw('JSON_EXTRACT(atribut, "$.kelompok") <> CAST("null" AS JSON) AND JSON_EXTRACT(atribut, "$.subkelompok") <> CAST("null" AS JSON)')->orderBy('sort_id', 'ASC')->get();
-        
+        // return view('admin.laporan.kka.index',compact('Laporan','getNameUser','getPenyetujuLaporan','getSPT','isiLaporan','getdaltu','selected_kode_kka'));
         $pdf =PDF::loadView('admin.laporan.kka.index', ['Laporan'=>$Laporan,'getNameUser'=>$getNameUser,'getPenyetujuLaporan'=>$getPenyetujuLaporan,'getSPT'=>$getSPT,'isiLaporan'=>$isiLaporan,'getdaltu'=>User::findOrFail($getdaltu[0]->user_id),'kode_temuan'=>$selected_kode_kka]);
         return $pdf->stream('LaporanAuditor-'.$id.'.pdf',array('Attachment'=>1));
 
