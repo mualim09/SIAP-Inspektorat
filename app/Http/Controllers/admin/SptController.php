@@ -1098,25 +1098,32 @@ class SptController extends Controller
                     if($get_id_detail != false){
                         $control .= $this->buildControl('pemeriksaan',$col->spt_id);
 
-                        $ceking_button_cetak_KKA_sendiri = DetailSpt::where('spt_id',$col->id)->where('user_id',auth()->user()->id)->get();
+                        $ceking_data_detail_sendiri = DetailSpt::where('spt_id',$col->id)->where('user_id',auth()->user()->id)->get();
                         
-                        if ($ceking_button_cetak_KKA_sendiri[0]->id_laporan_pemeriksaan != null) {
-                            $control .= $this->buildControl('Cetak_KKA',$ceking_button_cetak_KKA_sendiri[0]->id);
+                        if ($ceking_data_detail_sendiri[0]->id_laporan_pemeriksaan != null) {
+                            $control .= $this->buildControl('Cetak_KKA',$ceking_data_detail_sendiri[0]->id);
                         }
-                            if ($ceking_button_cetak_KKA_sendiri[0]->peran == 'Ketua Tim' || $ceking_button_cetak_KKA_sendiri[0]->peran == 'Anggota Tim') {
-                                if ($ceking_button_cetak_KKA_sendiri[0]->status != null) {
+                            if ($ceking_data_detail_sendiri[0]->peran == 'Ketua Tim') {
+                                if ($ceking_data_detail_sendiri[0]->status != null) {
                                     $control .= $this->buildControl('buatLhp',$get_id_detail);
                                 }else{
-                                    $control .= $this->buildControl('buatKka',$get_id_detail); //perlu diperbaiki yg dikirm id detail_spt
+                                    $control .= $this->buildControl('buatLaporan-disable',$get_id_detail);
+                                    $control .= '<a href="#" onclick="showModalLihatLaporanPemeriksaan('.$ceking_data_detail_sendiri[0]->id.')" data-toggle="tooltip" title="Lihat KKA" class="btn btn btn-outline-info btn-sm"><i class="ni ni-paper-diploma"></i></a>';
                                 }
-
-                            }elseif($ceking_button_cetak_KKA_sendiri[0]->peran == 'Pengendali Teknis' || $ceking_button_cetak_KKA_sendiri[0]->peran == 'Pengendali Mutu' || $ceking_button_cetak_KKA_sendiri[0]->peran == 'PenanggungJawab'){
+                            }elseif($ceking_data_detail_sendiri[0]->peran == 'Anggota Tim'){
+                                    if($ceking_data_detail_sendiri[0]->status == null){
+                                        $control .= $this->buildControl('buatKka',$get_id_detail);
+                                    }elseif($ceking_data_detail_sendiri[0]->status != null){
+                                        $control .= $this->buildControl('buatLaporan-disable',$get_id_detail);
+                                    }
+                                    $control .= '<a href="#" onclick="showModalLihatLaporanPemeriksaan('.$ceking_data_detail_sendiri[0]->id.')" data-toggle="tooltip" title="Lihat KKA" class="btn btn btn-outline-info btn-sm"><i class="ni ni-paper-diploma"></i></a>';
+                            }elseif($ceking_data_detail_sendiri[0]->peran == 'Pengendali Teknis' || $ceking_data_detail_sendiri[0]->peran == 'Pengendali Mutu' || $ceking_data_detail_sendiri[0]->peran == 'PenanggungJawab'){
                                 $control .= $this->buildControl('buatLaporan-disable',$get_id_detail);
+                                $control .= '<a href="#" onclick="showModalLihatLaporanPemeriksaan('.$ceking_data_detail_sendiri[0]->id.')" data-toggle="tooltip" title="Lihat KKA" class="btn btn btn-outline-info btn-sm"><i class="ni ni-paper-diploma"></i></a>';
                             }else{
                                 $control .= null;
                             }
                             
-                            $control .= '<a href="#" onclick="showModalLihatLaporanPemeriksaan('.$ceking_button_cetak_KKA_sendiri[0]->id.')" data-toggle="tooltip" title="Lihat KKA" class="btn btn btn-outline-info btn-sm"><i class="ni ni-paper-diploma"></i></a>';
                     }else{
                         return 'no Action';
                     }

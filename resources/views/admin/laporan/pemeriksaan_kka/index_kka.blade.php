@@ -200,51 +200,51 @@
       alert(msg);
     }
 
-    function sign(user_id){
-        var id = user_id;
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
-        var status = {!! json_encode((array)auth()->user()->id) !!};      
-        $.ajax({
-            url : '/verifikasi/status',
-            type: 'POST',
-            data: {id:id, '_token' : csrf_token, status:status},
-            success : function(data){
-                console.log('success:',data);
-                $('#uploadLaporan-spt').DataTable().ajax.reload();
-            },
-            error: function(error){
-                console.log('Error:', error);
-            }
-        });
-    }
+    // function sign(user_id){
+    //     var id = user_id;
+    //     var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    //     var status = {!! json_encode((array)auth()->user()->id) !!};      
+    //     $.ajax({
+    //         url : '/verifikasi/status',
+    //         type: 'POST',
+    //         data: {id:id, '_token' : csrf_token, status:status},
+    //         success : function(data){
+    //             console.log('success:',data);
+    //             $('#uploadLaporan-spt').DataTable().ajax.reload();
+    //         },
+    //         error: function(error){
+    //             console.log('Error:', error);
+    //         }
+    //     });
+    // }
 
-    function showRejectFormModal(user_id){
-        $('#modalFormCatatanLaporan2').modal('show');
-        $('#laporan-id2').val(user_id);
-    }
+    // function showRejectFormModal(user_id){
+    //     $('#modalFormCatatanLaporan2').modal('show');
+    //     $('#laporan-id2').val(user_id);
+    // }
 
-    $('#form-note2').submit(function(event){
-        event.preventDefault();
-        var form = $(this);
-        var id = $('#laporan-id2').val();
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
-        var status = {!! json_encode((array)auth()->user()->id) !!};   
-        var note = $('#note').val();
-        $.ajax({
-            url: '/verifikasi/status',
-            type: 'post',
-            data: {id:id, status:status, '_token' : csrf_token, note:note},
-            success: function(data){                    
-                console.log('success:',data);
-                $('#modalFormCatatanLaporan2').modal('hide');
-                $('#uploadLaporan-spt').DataTable().ajax.reload();
-                form[0].reset();
-            },
-            error: function(error){
-                console.log('Error :', error);
-            }
-        });
-    });
+    // $('#form-note2').submit(function(event){
+    //     event.preventDefault();
+    //     var form = $(this);
+    //     var id = $('#laporan-id2').val();
+    //     var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    //     var status = {!! json_encode((array)auth()->user()->id) !!};   
+    //     var note = $('#note').val();
+    //     $.ajax({
+    //         url: '/verifikasi/status',
+    //         type: 'post',
+    //         data: {id:id, status:status, '_token' : csrf_token, note:note},
+    //         success: function(data){                    
+    //             console.log('success:',data);
+    //             $('#modalFormCatatanLaporan2').modal('hide');
+    //             $('#uploadLaporan-spt').DataTable().ajax.reload();
+    //             form[0].reset();
+    //         },
+    //         error: function(error){
+    //             console.log('Error :', error);
+    //         }
+    //     });
+    // });
 
     function showModalLihatLaporanPemeriksaan(id){        
         $('#modalPemeriksaan').modal('show');
@@ -402,7 +402,8 @@
                     action: function(){
                         $('#shotModalEditKKA').modal('show'); //show edit kka modal
                         $('#modalPemeriksaan').modal('hide'); //hide list kka modal
-                        var getdataEditKKA = 'kka/getdata-editKKA/'+id;
+                        var url_prefix = (window.location.pathname == '/admin');
+                        var getdataEditKKA = url_prefix ? 'admin/kka/getdata-editKKA/'+id : '/kka/getdata-editKKA/'+id;
                         $.ajax({
                                 url:getdataEditKKA,
                                 type: 'GET',

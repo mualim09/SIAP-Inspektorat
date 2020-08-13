@@ -117,11 +117,12 @@ class KkaController extends Controller
         return $data;
     }
 
+    // get data kka yang sudah terinputkan NOTE: masih menampilkan semua kka user belum spesifika
     public function getDataTemuan($id){
         // dd('jalan');
         $find_spt_id = DetailSpt::find($id);
         $data_detail = DetailSpt::where('spt_id',$find_spt_id->spt_id);
-        $status_anggota = DetailSpt::where('spt_id',$find_spt_id->spt_id)->where('peran','Anggota Tim')->get(); //parameter status dari data anggota tim per spt 
+        $status_anggota = DetailSpt::where('spt_id',$find_spt_id->spt_id)->where('peran','Anggota Tim')->get(); //parameter status dari data anggota tim per spt
         $array_total = count($data_detail->get());
         // dd($array_total);
         // dd($data_detail->where('peran','Pengendali Mutu')->get()[0]->status['PengendaliMutu'] == 'revisi');
@@ -146,31 +147,9 @@ class KkaController extends Controller
                     $query = $data_detail->where('peran','Penanggungjawab');
                     break;
             }
-
-            // if($i==$i && $status_anggota[0]->status['PengendaliMutu'] == null && $status_anggota[0]->status['KetuaTim'] == null && $status_anggota[0]->status['PengendaliTeknis'] == null && $status_anggota[0]->status['PenanggungJawab'] == null && $status_anggota[0]->status != null){
-            //     $query = $data_detail->where('peran','Anggota Tim');
-            //     break;
-            // }
-            // elseif ($i==$i && $status_anggota[0]->status['KetuaTim'] != null && $status_anggota[0]->status['PengendaliTeknis'] == null)
-            // {
-            //     $query = $data_detail->where('peran','Ketua Tim');
-            //     break;
-            // }
-            // elseif($i==$i && $status_anggota[0]->status['PengendaliTeknis'] != null && $status_anggota[0]->status['PengendaliMutu'] == null){
-            //     $query = $data_detail->where('peran','Pengendali Teknis');
-            //     break;
-            // }
-            // elseif($i==$i && $status_anggota[0]->status['PengendaliMutu'] != null && $status_anggota[0]->status['PenanggungJawab'] == null){
-            //     $query = $data_detail->where('peran','Pengendali Mutu');
-            //     break;
-            // }
-            // elseif($i==$i && $status_anggota[0]->status['PenanggungJawab'] != null && $status_anggota[0]->status['KetuaTim'] != null && $status_anggota[0]->status['PengendaliTeknis'] != null && $status_anggota[0]->status['PengendaliMutu'] != null){
-            //     $query = $data_detail->where('peran','Penanggungjawab');
-            //     break;
-            // }
         }
 
-        $data = $query->with('pemeriksaan')->get();
+        $data = $query->get();
         // dd($data);
         $dt = Datatables::of($data)
                 ->addIndexColumn()
@@ -187,16 +166,25 @@ class KkaController extends Controller
                     return $user->full_name;
                 })
                 ->addColumn('judultemuan', function($col){
+                    // dd($col);
                     return $col->pemeriksaan[0]->judultemuan;
                 })
                 ->addColumn('action', function($col){
-                    $get_value_penanggung_jawab = DetailSpt::where('spt_id',$col->spt_id)->where('peran','Anggota Tim')->get();
-                    $control = '<a href="'.route('laporan-cetak',$col->id).'" data-toggle="tooltip" title="Cetak KKA" class="btn btn-outline-danger btn-sm"><i class="ni ni-single-copy-04"></i></a>';
-                    $control .= '<a href="#" onclick="showModalEditKKA('.$col->id.')" data-toggle="tooltip" title="Ubah KKA" class="btn btn btn-outline-success btn-sm"><i class="ni ni-ruler-pencil"></i></a>';
-                    // if ($get_value_penanggung_jawab[0]->status['PenanggungJawab'] != null) {
-                        $control .= '<a href="'.route('laporan-lhp-cetak',$col->id).'" data-toggle="tooltip" title="Cetak LHP" class="btn btn btn-outline-info btn-sm"><i class="ni ni-collection"></i></a>';
-                    // }
-                    // $control .= '<a href="#" data-toggle="tooltip" title="Lihat KKA Sebelumnya" class="btn btn btn-outline-warning btn-sm"><i class="ni ni-book-bookmark"></i></a>'; //buttom lihat kka
+                    $get_value_penanggung_jawab = DetailSpt::where('spt_id',$col->spt_id);
+                    // dd($get_value_penanggung_jawab->where('user_id',auth()->user()->id)->get()[0]->peran == 'Anggota Tim');
+                    if($get_value_penanggung_jawab->where('user_id',auth()->user()->id)->get()[0]->peran == 'Anggota Tim'){
+                        $control = '<a href="'.route('laporan-cetak',$col->id).'" data-toggle="tooltip" title="Cetak KKA" class="btn btn-outline-success btn-sm"><i class="ni ni-single-copy-04"></i></a>';
+                        $control .= '<a href="#" onclick="#" data-toggle="tooltip" title="Ubah KKA" class="btn btn btn-outline-danger btn-sm disabled"><i class="ni ni-ruler-pencil"></i></a>';
+                        // if ($get_value_penanggung_jawab[0]->status['PenanggungJawab'] != null) {
+                        $control .= '<a href="#" data-toggle="tooltip" title="Cetak LHP" class="btn btn btn-outline-danger btn-sm disabled"><i class="ni ni-collection"></i></a>';
+                    }else{
+                        $control = '<a href="'.route('laporan-cetak',$col->id).'" data-toggle="tooltip" title="Cetak KKA" class="btn btn-outline-danger btn-sm"><i class="ni ni-single-copy-04"></i></a>';
+                        $control .= '<a href="#" onclick="showModalEditKKA('.$col->id.')" data-toggle="tooltip" title="Ubah KKA" class="btn btn btn-outline-success btn-sm"><i class="ni ni-ruler-pencil"></i></a>';
+                        // if ($get_value_penanggung_jawab[0]->status['PenanggungJawab'] != null) {
+                            $control .= '<a href="'.route('laporan-lhp-cetak',$col->id).'" data-toggle="tooltip" title="Cetak LHP" class="btn btn btn-outline-info btn-sm"><i class="ni ni-collection"></i></a>';
+                        // }
+                        // $control .= '<a href="#" data-toggle="tooltip" title="Lihat KKA Sebelumnya" class="btn btn btn-outline-warning btn-sm"><i class="ni ni-book-bookmark"></i></a>'; //buttom lihat kka
+                    }
                 return $control;
                 })
                 ->make(true);
@@ -283,11 +271,43 @@ class KkaController extends Controller
         $jenis_laporan = 'KKA';
         $created_at = Carbon::now()->toDateTimeString();
         $updated_at = Carbon::now()->toDateTimeString();
-        // $kondisi = json_encode($request->file_laporan['kondisi']);
         $kriteria = json_encode($request->file_laporan['kriteria']);
 
-        // dd(str_replace('&nbsp;', ' ', preg_replace('/<[^>]*>|"/', '', $request->file_laporan['kondisi'])));
-        // die();
+        //proses insert anggota tim
+        $jenis_laporan = 'KKA';
+
+        $status_anggota['KetuaTim'] = null; //status anggota default
+        $status_anggota['PengendaliTeknis'] = null;
+        $status_anggota['PengendaliMutu'] = null;
+        $status_anggota['PenanggungJawab'] = null;
+
+        $update_anggota = $get_detail_id->update(['jenis_laporan'=>$jenis_laporan,'status'=>json_encode($status_anggota)]);
+        $save = Laporan_pemeriksaan::insert(['detail_spt_id'=>$get_detail_id->get()[0]->id,'kode_temuan_id'=>$kode,'sasaran_audit'=>$sasaran,'judultemuan'=>$judultemuan,'kondisi'=>$kondisi,'kriteria'=>$kriteria,'url_img_laporan'=>$newImageSrc,'created_at'=>$created_at,'updated_at'=>$updated_at]);
+
+        return redirect()->back()->with('alert', 'Anda telah berhasil mengubah KKA tersebut');
+    }
+
+    public function editKKA(Request $request)
+    {
+        // if ($request->edit_kka == null) {
+            $dalnis_atau_daltu = DetailSpt::where('spt_id',$request->spt_id)->where('user_id',auth()->user()->id)->get();
+            $get_status_anggota = DetailSpt::where('spt_id',$request->spt_id)->where('peran','Anggota Tim')->get();
+            $get_detail_id = DetailSpt::where('spt_id',$request->spt_id)->where('user_id',auth()->user()->id);
+        // }elseif($request->edit_kka != null){
+        //     $dalnis_atau_daltu = DetailSpt::where('spt_id',$request->id)->where('user_id',auth()->user()->id)->get(); //get peran daltu & dalnis by auth
+        //     $get_status_anggota = DetailSpt::where('spt_id',$request->id)->where('peran','Anggota Tim')->get(); //get data status anggota by peran
+        //     $get_detail_id = DetailSpt::where('spt_id',$request->id)->where('user_id',auth()->user()->id);
+            $data_anggota = DetailSpt::where('spt_id',$request->id)->where('peran','Anggota Tim');
+        // }
+
+        $kode = $request->file_laporan['kode_temuan_id'];
+        $sasaran = $request->file_laporan['sasaran_audit'];
+        $judultemuan = $request->file_laporan['judultemuan'];
+        $jenis_laporan = 'KKA';
+        $created_at = Carbon::now()->toDateTimeString();
+        $updated_at = Carbon::now()->toDateTimeString();
+        // $kondisi = json_encode($request->file_laporan['kondisi']);
+        $kriteria = json_encode($request->file_laporan['kriteria']);
 
         if ($dalnis_atau_daltu[0]->peran == 'Anggota Tim' && $get_status_anggota[0]->status == null) {
             //proses insert anggota tim
