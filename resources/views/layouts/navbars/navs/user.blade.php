@@ -19,20 +19,6 @@
                 <i class="ni ni-single-02"></i>
                 <span class="menu-users">{{ __('My profile') }}</span>
             </a>
-            <a href="#" class="dropdown-item">
-                <i class="ni ni-settings-gear-65"></i>
-                <span class="menu-users">{{ __('Settings') }}</span>
-            </a>
-            <a href="#" class="dropdown-item">
-                <i class="ni ni-calendar-grid-58"></i>
-                <span class="menu-users">{{ __('Activity') }}</span>
-            </a>
-            @can('Access admin page')
-            <a href="{{ route('admin') }}" class="dropdown-item">
-                <i class="ni ni-support-16"></i>
-                <span class="menu-users">{{ __('Admin') }}</span>
-            </a>
-            @endcan
             <div class="dropdown-divider"></div>
             <a href="{{ route('logout') }}" class="dropdown-item" onclick="event.preventDefault();
             document.getElementById('logout-form').submit();">

@@ -153,7 +153,6 @@ class SertifikatController extends Controller
 
     public function storeSertifikat(Request $request) //insert multiple sertifikat image
     {
-      
         if ($request->hasFile('file_sertifikat')) {
             
             foreach ($request->file_sertifikat as $sertifikat ) {

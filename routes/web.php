@@ -29,7 +29,7 @@ Route::get('/test/dupak', 'admin\TestController@testDupak');
 Auth::routes();
 Route::post('/pic-update','ProfileController@profilePicUpdate')->name('pic.update');
 Route::get('/get-profile','ProfileController@getData')->name('api.profile');
-Route::get('/myprofile','ProfileController@edit')->name('myprofile');
+// Route::get('/myprofile','ProfileController@edit')->name('myprofile');
 Route::get('/admin/activity/useract','ProfileController@UserActivity')->name('useract');
 Route::get('/admin/activity/bindex', 'ProfileController@viewActivity')->name('viewlog');
 //Route::get('/search-user', 'admin\UserController@search')->name('search_user');
@@ -208,13 +208,13 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 
 	//Sertifikat route
 	Route::group(['prefix'=>'sertifikat'], function(){
-		// Route::get('/myprofile','ProfileController@edit')->name('myprofile');
+		// Route::get('/myprofile','ProfileController@edit')->name('myprofile'); /*pindahkan fungsi edit dari profilecontroller ke usercontroller*/
 		Route::get('/getDataPegawai','UserController@getData')->name('getDataPegawai');
 		Route::get('/getDataSertifikat','SertifikatController@getSertifikatUsers')->name('getSertifikat');
-		// Route::get('/getDataSertifikatBy/{id}','SertifikatController@dataSertifikat');
-		// Route::post('/input/sertifikat-auditor','SertifikatController@storeSertifikat')->name('save-sertifikat');
+		Route::get('/getDataSertifikatBy/{id}','SertifikatController@dataSertifikat');
+		Route::post('admin/input/sertifikat-auditor','SertifikatController@storeSertifikat')->name('input_sertifikat');
 		// Route::post('/edit/sertifikatAuditor','SertifikatController@editSertifikat')->name('save-edit-sertifikat');
-		// Route::get('/delete/sertifikatAudito/{id}','SertifikatController@deleteSertifikat');
+		Route::get('/delete/sertifikatAudito/{id}','SertifikatController@deleteSertifikat')->name('delete_sertifikat');
 	});
 
 	//kka

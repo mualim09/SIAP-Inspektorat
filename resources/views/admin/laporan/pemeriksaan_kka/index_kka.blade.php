@@ -433,7 +433,6 @@
 
                                     $("#kode_temuan").html(select);
 
-
                                     $('#kode').selectize({    
                                         /*sortField: 'text',*/
                                         allowEmptyOption: false,
