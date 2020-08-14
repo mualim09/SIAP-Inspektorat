@@ -28,22 +28,11 @@ class DetailSpt extends Model
         return $this->belongsTo('App\User');
     }
 
-    public function detail(){
-        return $this->belongsTo('App\models\DetailSpt');
-    }
-
     public function getLamaJamAttribute(){
         $lama = $this->lama;
         return $lama*6.5;
     }
 
-    public function detail_spt(){
-        return $this->belongsTo('App\models\LaporanSpt');
-    }      
-
-    public function check(){
-        return $this->belongsTo('App\models\DetailSpt');
-    }
 
     public function setLaporAttribute($value)
     {

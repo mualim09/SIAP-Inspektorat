@@ -1264,7 +1264,9 @@ class SptController extends Controller
     }
 
     public function getLastData($jenis_data){
-        $data = Spt::select($jenis_data)->latest("updated_at")->first();
+        $spt = Spt::select($jenis_data);
+        $data = ( $jenis_data === 'nomor' ) ? $spt->whereNotNull('nomor') : $spt;
+        $data = $data->latest("updated_at")->first();
         return $data;
     }
 

@@ -117,11 +117,11 @@
   <script type="text/javascript">
       function showFormModal(spt_id){
           $('#spt-id').val(spt_id);
-          $('#modalFormPenomoranSpt').modal('show');
+          $('#modalFormPenomoranSpt').modal('show');          
+          url = "{{ route('last_data', 'nomor') }}";
           $.ajax({
-              url: '{{ url("/admin/spt/last-data/nomor") }}',
-              success: function(results) {
-                  console.log(results);
+              url : url,
+              success: function(results) {                  
                   $('#nomor-spt').val(results.nomor);
               },
               error: function(error) {
