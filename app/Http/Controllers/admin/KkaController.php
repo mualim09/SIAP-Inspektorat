@@ -178,12 +178,13 @@ class KkaController extends Controller
                         // if ($get_value_penanggung_jawab[0]->status['PenanggungJawab'] != null) {
                         $control .= '<a href="#" data-toggle="tooltip" title="Cetak LHP" class="btn btn btn-outline-danger btn-sm disabled"><i class="ni ni-collection"></i></a>';
                     }else{
-                        $control = '<a href="'.route('laporan-cetak',$col->id).'" data-toggle="tooltip" title="Cetak KKA" class="btn btn-outline-danger btn-sm"><i class="ni ni-single-copy-04"></i></a>';
+                        $control = '<a href="'.route('laporan-cetak',$col->id).'" data-toggle="tooltip" title="Cetak KKA" class="btn btn-outline-default btn-sm"><i class="ni ni-single-copy-04"></i></a>';
                         $control .= '<a href="#" onclick="showModalEditKKA('.$col->id.')" data-toggle="tooltip" title="Ubah KKA" class="btn btn btn-outline-success btn-sm"><i class="ni ni-ruler-pencil"></i></a>';
                         // if ($get_value_penanggung_jawab[0]->status['PenanggungJawab'] != null) {
                             $control .= '<a href="'.route('laporan-lhp-cetak',$col->id).'" data-toggle="tooltip" title="Cetak LHP" class="btn btn btn-outline-info btn-sm"><i class="ni ni-collection"></i></a>';
                         // }
                         // $control .= '<a href="#" data-toggle="tooltip" title="Lihat KKA Sebelumnya" class="btn btn btn-outline-warning btn-sm"><i class="ni ni-book-bookmark"></i></a>'; //buttom lihat kka
+                        $control .= '<a href="#" onclick="submitComment('.$col->id.')" data-toggle="tooltip" title="Revisi" class="btn btn btn-outline-warning btn-sm"><i class="ni ni-settings"></i></a>';
                     }
                 return $control;
                 })

@@ -7,10 +7,18 @@
 @section('tab_content_arsip')
 <div class="tab-pane" id="arsip-tab" role="tabpanel" aria-labelledby="arsip-tab">
   <h4 class="text-center"> Arsip SPT </h4>
-  <table id="arsip-spt" class="table table-striped table-sm ajax-table" style="border-collapse: collapse;margin: 0;padding: 0;width: 100%;table-layout: fixed;">
-      <thead></thead>
-      <tbody></tbody>
-  </table>
+<div class="modal-body">
+  <div class="card">
+    <div class="card-body table-responsive">
+      <div class="table-responsive">
+          <table id="arsip-spt" class="table table-striped table-sm ajax-table" style="border-collapse: collapse;margin: 0;padding: 0;width: 100%;">
+              <thead></thead>
+              <tbody></tbody>
+          </table>
+      </div>
+    </div>
+  </div>
+</div>
 </div>
 @endsection
 

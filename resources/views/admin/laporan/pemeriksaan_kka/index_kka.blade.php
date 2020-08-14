@@ -200,52 +200,6 @@
       alert(msg);
     }
 
-    // function sign(user_id){
-    //     var id = user_id;
-    //     var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    //     var status = {!! json_encode((array)auth()->user()->id) !!};      
-    //     $.ajax({
-    //         url : '/verifikasi/status',
-    //         type: 'POST',
-    //         data: {id:id, '_token' : csrf_token, status:status},
-    //         success : function(data){
-    //             console.log('success:',data);
-    //             $('#uploadLaporan-spt').DataTable().ajax.reload();
-    //         },
-    //         error: function(error){
-    //             console.log('Error:', error);
-    //         }
-    //     });
-    // }
-
-    // function showRejectFormModal(user_id){
-    //     $('#modalFormCatatanLaporan2').modal('show');
-    //     $('#laporan-id2').val(user_id);
-    // }
-
-    // $('#form-note2').submit(function(event){
-    //     event.preventDefault();
-    //     var form = $(this);
-    //     var id = $('#laporan-id2').val();
-    //     var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    //     var status = {!! json_encode((array)auth()->user()->id) !!};   
-    //     var note = $('#note').val();
-    //     $.ajax({
-    //         url: '/verifikasi/status',
-    //         type: 'post',
-    //         data: {id:id, status:status, '_token' : csrf_token, note:note},
-    //         success: function(data){                    
-    //             console.log('success:',data);
-    //             $('#modalFormCatatanLaporan2').modal('hide');
-    //             $('#uploadLaporan-spt').DataTable().ajax.reload();
-    //             form[0].reset();
-    //         },
-    //         error: function(error){
-    //             console.log('Error :', error);
-    //         }
-    //     });
-    // });
-
     function showModalLihatLaporanPemeriksaan(id){        
         $('#modalPemeriksaan').modal('show');
         // console.log(id);
@@ -274,7 +228,7 @@
                     if (data[i].status == null && data[i].user_id == user_id && data[i].peran == 'Ketua Tim'){ //ketua tim telah acc kka
                         // button_unggah.style.display = 'block';
                         $('#unggah').show();
-                        $('#revisi').hide();
+                        $('#revisi').show();
                         $('#menyetujui').hide();
                     }
                     else if (data[i].status != true  && data[i].user_id == user_id && data[i].peran == 'Pengendali Teknis') { //pengendali teknis telah acc kka
@@ -331,7 +285,7 @@
                 $('#revisi').click(function(){
                     $.confirm({
                         title: "{{ __('Perhatian!') }}",
-                        content: "{{ __('Apakah anda ingin merevisi KKA tersebut?') }}",
+                        content: "{{ __('Apakah anda yakin ingin merevisi semua KKA tersebut? Jika ya maka Auditor terkait akan merevisi KKA tersebut!') }}",
                         buttons: {
                             Revisi: {
                                 btnClass: 'btn-danger',
@@ -351,6 +305,46 @@
                 });
             }
         });
+
+        window.submitComment = function(){console.log('YOLLOOO')}
+
+        // function revisi2(id) {
+        //     $.confirm({
+        //         title: "{{ __('Perhatian!') }}",
+        //         content: "{{ __('Apakah anda yakin ingin merevisi KKA tersebut? Jika ya maka Auditor terkait dalam KKA akan merevisi KKA tersebut!') }}",
+        //         buttons: {
+        //             Revisi: {
+        //                 btnClass: 'btn-danger',
+        //                 action: function(){                       
+        //                      window.location.href = '#';
+        //                 },
+        //             },
+        //             Tidak: function(){
+        //     $.alert('Dibatalkan!');
+        //             }
+        //         }
+        //     });
+        // }
+
+        // function revisi_by_id(id) {
+        //     console.log(id);
+        // //fungsi confirm sebelum mengeksekusi modal
+        //     // $.confirm({
+        //     //     title: "{{ __('Perhatian!') }}",
+        //     //     content: "{{ __('Apakah anda yakin ingin merevisi KKA tersebut? Jika ya maka Auditor terkait dalam KKA akan merevisi KKA tersebut!') }}",
+        //     //     buttons: {
+        //     //         Ya: {
+        //     //             btnClass: 'btn-danger',
+        //     //             action: function(){
+
+        //     //             },
+        //     //         },
+        //     //         Tidak: function(){
+        //     //             $.alert('Dibatalkan!');
+        //     //         }
+        //     //     }
+        //     // });
+        // }
 
         // ? "admin/kka/getdata_detail/"+id : "/kka/getdata_detail/"+id;
         var url_data = url_prefix ? "admin/kka/getDataTemuan_per_auditor/"+id : "/kka/getDataTemuan_per_auditor/"+id;
