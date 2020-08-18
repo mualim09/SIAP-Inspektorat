@@ -208,13 +208,13 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 
 	//Sertifikat route
 	Route::group(['prefix'=>'sertifikat'], function(){
-		// Route::get('/myprofile','ProfileController@edit')->name('myprofile'); /*pindahkan fungsi edit dari profilecontroller ke usercontroller*/
+		Route::get('/myprofile','SertifikatController@viewProfile')->name('myprofile'); /*pindahkan fungsi edit dari profilecontroller ke usercontroller*/
 		Route::get('/getDataPegawai','UserController@getData')->name('getDataPegawai');
 		Route::get('/getDataSertifikat','SertifikatController@getSertifikatUsers')->name('getSertifikat');
-		Route::get('/getDataSertifikatBy/{id}','SertifikatController@dataSertifikat');
+		Route::get('getDataSertifikatBy/{id}','SertifikatController@dataSertifikat');
 		Route::post('admin/input/sertifikat-auditor','SertifikatController@storeSertifikat')->name('input_sertifikat');
 		// Route::post('/edit/sertifikatAuditor','SertifikatController@editSertifikat')->name('save-edit-sertifikat');
-		Route::get('/delete/sertifikatAudito/{id}','SertifikatController@deleteSertifikat')->name('delete_sertifikat');
+		Route::get('delete/sertifikatAuditor/{id}','SertifikatController@deleteSertifikat')->name('delete_sertifikat');
 	});
 
 	//kka

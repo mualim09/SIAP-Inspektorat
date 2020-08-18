@@ -196,6 +196,7 @@
     //show sertifikat per auditor
     function showModalLihatSertifikat(id){        
         $('#modalPemeriksaan').modal('show');
+        var url_prefix = (window.location.pathname == '/admin');
         var site_url = "../";
         var url = "/getdata/sertifikat-auditor/" +id ;
 
@@ -218,6 +219,7 @@
 
                 $('#hapus-sertifkat').on('click', function(){ //ketika button delete di klik maka akan menjalan kan menghapus sertifikat
                     var id = $(this).attr("value");
+                    var url_delete = url_prefix ? "admin/sertifikat/delete/sertifikatAuditor/"+id : "/sertifikat/delete/sertifikatAuditor/"+id;
                     $.confirm({
                         title: "{{ __('Hapus data sertifikat ini?') }}",
                         content: "{{ __('Menghapus data sertifikat akan menghilangkan data sertifikat?') }}",
@@ -225,7 +227,7 @@
                             delete: {
                                 btnClass: 'btn-danger',
                                 action: function(){                       
-                                    url = "{{ url('/delete/sertifikatAudito') }}/" +id;
+                                    url = url_delete;
                                     $.ajax({
                                         url: url,
                                         type: "GET",                

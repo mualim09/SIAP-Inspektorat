@@ -94,6 +94,15 @@ class SertifikatController extends Controller
         //
     }
 
+    public function viewProfile()
+    {        
+        $profile = User::findOrFail(auth()->user()->id)->profile;
+        
+        
+        return view('profile.edit')->with('profile',$profile);
+    }
+
+
     public function getSertifikatUsers()
     {
         $sertifikat = Sertifikat::where('user_id',auth()->user()->id)->get();
