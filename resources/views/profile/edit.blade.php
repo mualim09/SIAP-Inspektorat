@@ -57,7 +57,7 @@
 
                            <div class="card-body row">
                                 <div class="mb-2 mb-md-0">                    
-                                    <a href="#" title="Lihat Sertifikat" data-id="{{auth()->user()->id}}" class="btn btn-primary" id="showFormInput"><i class="ni ni-paper-diploma"></i> Input SertifikatKu</a>
+                                    <a href="#" title="Input Sertifikat" data-id="{{auth()->user()->id}}" class="btn btn-primary" id="showFormInput"><i class="ni ni-paper-diploma"></i> Input SertifikatKu</a>
                                 </div>  
                                 <div class="table-responsive">
                                     <table class="table table-striped table-sm ajax-table" id="sertifikat-table" style="border-collapse: collapse;margin: 0;padding: 0;width: 100%;">
@@ -133,7 +133,7 @@
                                     </button>
                                   </div>
                                   <div class="modal-body">
-                                    <form action="/input/sertifikat-auditor" method="POST" class="insert-sertifikat" enctype="multipart/form-data">
+                                    <form action="{{ route('input_sertifikat') }}" method="POST" class="insert-sertifikat" enctype="multipart/form-data">
                                         <input type="hidden" name="userid" id="userid">
                                         @csrf
                                         <div class="form-group row">
@@ -282,8 +282,11 @@
     function showModalLihatSertifikatbyUser(id){        
         $('#modalPemeriksaan').modal('show');
         $('.edited-sertifikat').val(id);
+        var url_prefix = (window.location.pathname == '/admin');
+        // var get_detail = url_prefix ? "admin/kka/getdata_detail/"+id : "/kka/getdata_detail/"+id;
         var site_url = "../";
-        var url = "/get-sertifikat/profile/" +id ;
+        var url = url_prefix ? "/sertifikat/getDataSertifikatBy/"+id : "admin/sertifikat/getDataSertifikatBy/"+id;
+        // console.log(url);
 
         $.ajax({
             url:url,
@@ -306,7 +309,7 @@
                             delete: {
                                 btnClass: 'btn-danger',
                                 action: function(){                       
-                                    url = "{{ url('/delete/sertifikatAudito') }}/" +id;
+                                    url = "{{ url('sertifikat/delete/sertifikatAudito') }}/" +id;
                                     $.ajax({
                                         url: url,
                                         type: "GET",                
@@ -413,12 +416,12 @@
 @endsection
 
 @push('css')
-    <link rel="stylesheet" href="{{ asset('assets/vendor/datatables/datatables.min.css') }}">    
+    <link rel="stylesheet" href="{{ asset('assets/vendor/datatables/datatables.min.css') }}">   
 @endpush
 
 @push('js')
-<script src="{{ asset('assets/vendor/datatables/datatables.min.js') }}"></script>
-<script src="{{ asset('assets/vendor/jquery/jquery-validate.bootstrap-tooltip.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery/jquery-validate.bootstrap-tooltip.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/jquery/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/jquery/additional-methods.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/datatables/handlebars.js') }}"></script>
