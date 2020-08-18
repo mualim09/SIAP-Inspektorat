@@ -44,11 +44,11 @@ class DupakController extends Controller
         if($request->ajax()):
             $year = ($request->tahun) ? $request->tahun : date('Y');
             if(isset($request->semester)) {
-                if($request->semester === 1) {
+                if($request->semester == 1) {
                     $start = date("Y-m-d H:i:s", strtotime("$year-01-01"));
                     $end = date("Y-m-d H:i:s", strtotime("$year-06-30"));
                 }
-                elseif ($request->semester === 2) {
+                elseif ($request->semester == 2) {
                     $start = date("Y-m-d H:i:s", strtotime("$year-07-01"));
                     $end = date("Y-m-d H:i:s", strtotime("$year-12-31"));
                 }else{
@@ -78,7 +78,7 @@ class DupakController extends Controller
             $q->where('user_id','=',$user_id);
         })
         //->whereBetween('tgl_mulai',[$start,$end])->with(['detailSpt','jenisSpt'])->get(); 
-        ->whereBetween('tgl_mulai',['2020-05-11 00:00:00','2020-12-15 00:00:00'])->with(['detailSpt','jenisSpt'])->get();
+        ->whereBetween('tgl_mulai',[$start,$end])->with(['detailSpt','jenisSpt'])->get();
 
         //dd($data->detailSpt);
         
@@ -95,7 +95,7 @@ class DupakController extends Controller
                 $detail_spt = $col->detailSpt->toArray();
                 $users = array_column($detail_spt,'user_id');
                 $key = array_search($user_id, $users);
-                return $col->detailSpt[$key]->info_dupak['efektif'];
+                return $col->detailSpt[$key]->info_dupak['efektif'];                
             })
             ->addColumn('kegiatan', function($col){
                 return $col->jenisSpt->sebutan;                
@@ -104,7 +104,7 @@ class DupakController extends Controller
                 $detail_spt = $col->detailSpt->toArray();
                 $users = array_column($detail_spt,'user_id');
                 $key = array_search($user_id, $users);
-                return $col->detailSpt[$key]->info_dupak['koefisien'];
+                return $col->detailSpt[$key]->info_dupak['koefisien'];                
             })
             ->addColumn('dupak', function($col) use ($user_id){
                 $detail_spt = $col->detailSpt->toArray();

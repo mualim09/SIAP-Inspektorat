@@ -30,6 +30,11 @@ return [
     ],
 
     /*
+     * DataTables default page length.
+     */
+    'pageLength' => 50,
+
+    /*
      * DataTables internal index id response column name.
      */
     'index_column' => 'DT_RowIndex',

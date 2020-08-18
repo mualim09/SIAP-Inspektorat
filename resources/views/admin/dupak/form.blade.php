@@ -19,7 +19,7 @@
                    
                 <div class="card-body">
                     <div class="col-md-12 justify-content-between row">
-                       <div class="col-md-9">
+                       <!-- <div class="col-md-9">
                            <div class="row">
                                <span class="col-md-3">{{ __('Nama Auditor') }}</span>
                                <span class="col">
@@ -31,10 +31,10 @@
                                     @endhasanyrole
                                </span>
                            </div>
-                       </div>
+                       </div> -->
 
                        <!-- dibawah ini adalah form pencariandupak berdasarkan nama auditor, semester dan tahun -->
-                       <div class="col">                       
+                       <div class="col-md-3 mb-5">                       
                             <form id="form-cari-dupak">
                               @hasanyrole('Super Admin|TU Perencanaan|TU Umum')
                               <!-- hanya ditampilkan kepada user yang memiliki role super admin, perencanaan, dan umum. -->
@@ -72,7 +72,7 @@
 
                               <div class="form-row">
                                 <div class="col-md-6">
-                                    <select class="form-control" id="semester" >                                    
+                                    <select class="form-control" id="semester" name="semester">                                    
                                         <option value="" selected disabled>Periode Semester</option>
                                         <option value="1">Januari s.d Juni</option>
                                         <option value="2">Juli s.d Desember</option>

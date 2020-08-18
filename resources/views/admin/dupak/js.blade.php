@@ -36,6 +36,11 @@
         ajax: {
             url:'{{ route("data_dupak") }}',
             //data:{tgl_mulai:tgl_mulai, tgl_akhir:tgl_akhir}
+            data: function(d){                
+                d.user_id = ( $( "#user-id" ).length ) ? $("#user-id option:selected").val() : "{{ Auth::user()->id }}";
+                d.semester = $('#semester option:selected').val();
+                d.tahun = $('#tahun').val();
+            }
            },
         columns: [
             {'defaultContent' : '', 'data' : 'DT_RowIndex', 'name' : 'DT_RowIndex', 'title' : 'No', 'orderable' : false, 'searchable' : false, 'exportable' : true, 'printable' : true, width: '2%'},
@@ -66,32 +71,40 @@
  
 
   //form cari dupak user
-  $("#form-cari-dupak").validate({
+  /*$("#form-cari-dupak").validate({
         rules: {
             semester : {required: true},
             tahun: {required: true}
         },
 
         submitHandler: function(form){
-            var user_id = ( $( "#user_id" ).length ) ? $("#myselect option:selected").val() : "{{ Auth::user()->id }}";
-            var semester = $('#semester').val();            
+            var user_id = ( $( "#user_id" ).length ) ? $("#user-id option:selected").val() : "{{ Auth::user()->id }}";
+            var semester = $('#semester option:selected').val();
+            var tahun = $('#tahun').val();
             //url =  (save_method == 'new') ? "{{ route('spt.store') }}" : base_url + '/' + id ;
             url = "{{  route('data_dupak') }}" ;
             type = "GET";
             $.ajax({
                 url: url,
                 type: type,
-                data: {user_id:user_id, semester:semester},
+                data: {user_id:user_id, semester:semester, tahun:tahun},
                 
                 success: function(data){
                     $("#form-cari-dupak")[0].reset();
+                    //dupak_table.draw();
+                    dupak_table.destroy();
                     dupak_table.draw();
+                    console.log(data);
                 },
                 error: function(error){                    
                     console.log(error);
                 }
             });
         }
+    });*/
+  $('#form-cari-dupak').on('submit', function(e) {
+        dupak_table.draw();
+        e.preventDefault();
     });
 
 $('.datepicker').each(function() {
