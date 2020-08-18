@@ -167,14 +167,6 @@ class UserController extends Controller
         return back()->with('success', 'Your sertifikat has been successfully');
     }   
 
-    public function getdataSertifikatUsers($id)
-    {
-        $getUsers = Sertifikat::where('user_id',$id)->orderBy('created_at', 'ASC')->get();
-        // return view('admin.user.form',['getUsers'=>$getUsers]);
-        // 
-        return $getUsers;
-    }
-
     public function deleteSertifikat($id)
     {
         $sertifikat = Sertifikat::findOrFail($id);

@@ -282,11 +282,11 @@
     function showModalLihatSertifikatbyUser(id){        
         $('#modalPemeriksaan').modal('show');
         $('.edited-sertifikat').val(id);
-        var url_prefix = (window.location.pathname == '/admin');
+        //var url_prefix = (window.location.pathname == '/admin/sertifikat/myprofile');
         // var get_detail = url_prefix ? "admin/kka/getdata_detail/"+id : "/kka/getdata_detail/"+id;
-        var site_url = "../";
-        var url = url_prefix ? "admin/sertifikat/getDataSertifikatBy/"+id :  "/sertifikat/getDataSertifikatBy/"+id;
-        console.log(url);
+        var site_url = "/";
+        var url = (window.location.pathname == '/admin/sertifikat/myprofile') ? "/admin/sertifikat/myprofile/getDataSertifikatBy/"+id : "/sertifikat/myprofile/getDataSertifikatBy/"+id;
+        // console.log(window.location.pathname);
 
         $.ajax({
             url:url,
@@ -294,16 +294,15 @@
             dataType: 'JSON',
             success: function(data){
                 data.forEach(function (val,i){
-                    // console.log(val.file_sertifikat);
-                    var src = site_url;
-                    $("#img-content").attr("src", src+val.file_sertifikat);
+                    var src = site_url+val.file_sertifikat;
+                    $("#img-content").attr("src", src);
                 });
 
                 $("#img-content").css({'width': '100%'});
 
                 $('#hapus-sertifkat').on('click', function(){ //ketika button delete di klik maka akan menjalan kan menghapus sertifikat
                     var id = $(this).attr("value");
-                    var url_delete = url_prefix ? "admin/sertifikat/delete/sertifikatAuditor/"+id : "/sertifikat/delete/sertifikatAuditor/"+id;
+                    var url_delete = (window.location.pathname == '/admin/sertifikat/myprofile') ? "/admin/sertifikat/myprofile/delete/sertifikatAuditor/"+id : "/sertifikat/myprofile/delete/sertifikatAuditor/"+id;
                     $.confirm({
                         title: "{{ __('Hapus data sertifikat ini?') }}",
                         content: "{{ __('Menghapus data sertifikat akan menghilangkan data sertifikat?') }}",
@@ -356,18 +355,15 @@
         });
     }
 
-    function hapus_sertifkat(id){   /*modal belum bisa menghapus cache pada modal*/ /*error*/
-        // alert('fungsi ini jalan kok brobro');
-        var url_prefix = (window.location.pathname == '/admin');
-        var url_delete = url_prefix ? "admin/sertifikat/delete/sertifikatAuditor/"+id : "/sertifikat/delete/sertifikatAuditor/"+id;
-        console.log(url_delete);
+    function hapus_sertifkat(id){   /*modal belum bisa menghapus cache pada modal*/
         $.confirm({
             title: "{{ __('Hapus data sertifikat ini?') }}",
             content: "{{ __('Menghapus data sertifikat akan menghilangkan data sertifikat?') }}",
             buttons: {
                 delete: {
                     btnClass: 'btn-danger',
-                    action: function(){                       
+                    action: function(){
+                        var url_delete = (window.location.pathname == '/admin/sertifikat/myprofile') ? "/admin/sertifikat/myprofile/delete/sertifikatAuditor/"+id : "/sertifikat/myprofile/delete/sertifikatAuditor/"+id;
                         url = url_delete;
                         $.ajax({
                             url: url,
