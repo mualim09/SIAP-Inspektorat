@@ -124,6 +124,103 @@
             }
         });        
     }
+
+    //show sertifikat per auditor
+    function showModalLihatSertifikat(id){        
+        $('#modalPemeriksaan').modal('show');
+        var url_prefix = (window.location.pathname == '/admin/users');
+        // var url = (window.location.pathname == '/admin/sertifikat/myprofile') ? "/admin/sertifikat/myprofile/getDataSertifikatBy/"+id : "/sertifikat/myprofile/getDataSertifikatBy/"+id;
+        var url = (window.location.pathname == '/admin/users') ? "/admin/users/getdata/sertifikat-auditor/" +id : "/users/getdata/sertifikat-auditor/" +id;
+        var sertifikat_url = url.replace("users", "sertifikat");
+        // var site_url = "/";
+
+        $.ajax({
+            url:sertifikat_url,
+            type: 'GET',
+            dataType: 'JSON',
+            success: function(data){
+
+                data.forEach(function (val,i){
+                    // console.log('value :'+val.id+' /i :'+i);
+                    $('.carousel').carousel('pause');
+                    var img = val.file_sertifikat;
+                    // console.log(img);
+                    var id_img = val.id;
+                    var active = (i==0) ? 'active' : '';
+                    var html = $('<div class="carousel-item '+active+'"><img class="center-block" src="'+img+'" style="width: 80%; margin-left: 150px;"/><br><center><button href=# class="btn btn-success">Ubah Sertifikat</button><button href=# class="btn btn-danger" onclick="deleteDataSertifikat('+id_img+')">Hapus Sertifikat</button></center></div>');
+                    html.appendTo('#carousel-container');
+
+                });
+            }
+        });
+
+        // onclick akan mereset show sertifikat auditors
+        $('#close-view-sertifikat').on('click', function(){
+                document.getElementById("carousel-container").innerHTML = "";
+        });
+    }
+
+    // $('#hapus-sertifkat').on('click', function(){ //ketika button delete di klik maka akan menjalan kan menghapus sertifikat
+        //     var id = $(this).attr("value");
+        //     var url_delete = url_prefix ? "admin/sertifikat/delete/sertifikatAuditor/"+id : "/sertifikat/delete/sertifikatAuditor/"+id;
+        //     $.confirm({
+        //         title: "{{ __('Hapus data sertifikat ini?') }}",
+        //         content: "{{ __('Menghapus data sertifikat akan menghilangkan data sertifikat?') }}",
+        //         buttons: {
+        //             delete: {
+        //                 btnClass: 'btn-danger',
+        //                 action: function(){                       
+        //                     url = url_delete;
+        //                     $.ajax({
+        //                         url: url,
+        //                         type: "GET",                
+        //                         data: { id },
+        //                         success: function(data){
+        //                             console.log(data);
+        //                             // document.getElementById("image_preview").innerHTML = "";
+        //                         }
+        //                     });
+        //                 },
+        //             },
+        //             cancel: function(){
+        //                 $.alert('Dibatalkan!');
+        //             }
+        //         }
+        //     });    
+        // });'/admin/sertifikat/myprofile'
+
+    function deleteDataSertifikat(id_img){
+        var id = id_img;
+        var url_delete = (window.location.pathname == '/admin/users') ? "/admin/sertifikat/delete/sertifikatAuditor/"+id : "/sertifikat/delete/sertifikatAuditor/"+id;
+        $.confirm({
+            title: "{{ __('Hapus data sertifikat ini?') }}",
+            content: "{{ __('Menghapus data sertifikat akan menghilangkan data sertifikat?') }}",
+            buttons: {
+                delete: {
+                    btnClass: 'btn-danger',
+                    action: function(){                       
+                        url = url_delete;
+                        $.ajax({
+                            url: url,
+                            type: "GET",                
+                            data: { id },
+                            success: function(data){
+                                console.log(data);
+                                // document.getElementById("image_preview").innerHTML = "";
+                                $('#modalPemeriksaan').modal('toggle');
+                                $('#sertifikat-table').DataTable().ajax.reload();
+                                document.getElementById("image_preview").innerHTML = "";
+                            }
+                        });
+                    },
+                },
+                cancel: function(){
+                    $.alert('Dibatalkan!');
+                }
+            }
+        });
+    }
+
     $(".ajax-form").validate({
         rules: {
             first_name : {required: true, minlength: 3},
@@ -192,70 +289,6 @@
     $('#close_sertifikat').on('click', function(){
             document.getElementById("image_preview").innerHTML = "";
     });
-
-    //show sertifikat per auditor
-    function showModalLihatSertifikat(id){        
-        $('#modalPemeriksaan').modal('show');
-        var url_prefix = (window.location.pathname == '/admin/users');
-        // var url = (window.location.pathname == '/admin/sertifikat/myprofile') ? "/admin/sertifikat/myprofile/getDataSertifikatBy/"+id : "/sertifikat/myprofile/getDataSertifikatBy/"+id;
-        var url = (window.location.pathname == '/admin/users') ? "/admin/users/getdata/sertifikat-auditor/" +id : "/users/getdata/sertifikat-auditor/" +id;
-        var sertifikat_url = url.replace("users", "sertifikat");
-        var site_url = "/";
-
-        $.ajax({
-            url:sertifikat_url,
-            type: 'GET',
-            dataType: 'JSON',
-            success: function(data){
-
-                data.forEach(function (val,i){
-                    // console.log('value :'+val.id+' /i :'+i);
-                    $('.carousel').carousel('pause');
-                    var img = site_url+val.file_sertifikat;
-                    // console.log(img);
-                    var id_img = val.id;
-                    var active = (i==0) ? 'active' : '';
-                    var html = $('<div class="carousel-item '+active+'"><img class="center-block" src="'+img+'" style="width: 80%; margin-left: 150px;"/><br><center><button href=# class="btn btn-success">Ubah Sertifikat</button><button href=# class="btn btn-danger" id="hapus-sertifikat" value='+id_img+'>Hapus Sertifikat</button></center></div>');
-                    html.appendTo('#carousel-container');
-
-                });
-
-                $('#hapus-sertifkat').on('click', function(){ //ketika button delete di klik maka akan menjalan kan menghapus sertifikat
-                    var id = $(this).attr("value");
-                    var url_delete = url_prefix ? "admin/sertifikat/delete/sertifikatAuditor/"+id : "/sertifikat/delete/sertifikatAuditor/"+id;
-                    $.confirm({
-                        title: "{{ __('Hapus data sertifikat ini?') }}",
-                        content: "{{ __('Menghapus data sertifikat akan menghilangkan data sertifikat?') }}",
-                        buttons: {
-                            delete: {
-                                btnClass: 'btn-danger',
-                                action: function(){                       
-                                    url = url_delete;
-                                    $.ajax({
-                                        url: url,
-                                        type: "GET",                
-                                        data: { id },
-                                        success: function(data){
-                                            console.log(data);
-                                            // document.getElementById("image_preview").innerHTML = "";
-                                        }
-                                    });
-                                },
-                            },
-                            cancel: function(){
-                                $.alert('Dibatalkan!');
-                            }
-                        }
-                    });    
-                });
-            }
-        });
-
-        // onclick akan mereset show sertifikat auditors
-        $('#close-view-sertifikat').on('click', function(){
-                document.getElementById("carousel-container").innerHTML = "";
-        });
-    }
     
     $('#delete-sertifikat').on('click', function(){
         document.getElementById("carousel-container").innerHTML = "";
