@@ -78,9 +78,9 @@
     'normal' => $rootDir . '/lib/fonts/DejaVuSerif',
   ),
   'maiandra-gd' => array(
-    'normal' => $fontDir . '/maiandra-gd-normal_537818c84b10ced1cba520dba7bb8461',
+    'normal' => $fontDir . '/maiandra-gd-normal_6687dc7fc76be2d094ceb11be30f4f93',
   ),
   'arial' => array(
-    'normal' => $fontDir . '/arial-normal_4580bc52205a29d718a50be26534fdb1',
+    'normal' => $fontDir . '/arial-normal_ef76cc7a53bc1e79046995a6fda64fb7',
   ),
 ) ?>
