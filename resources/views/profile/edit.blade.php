@@ -228,7 +228,7 @@
             {'defaultContent' : '', 'data' : 'DT_RowIndex', 'name' : 'DT_RowIndex', 'title' : 'No', 'orderable' : false, 'searchable' : false
             },
             {data: 'nama_sertifikat', name: 'nama_sertifikat', 'title': "{{ __('Nama File Sertifikat') }}"},
-            {data: 'created_at', name: 'created_at', 'title': "{{ __('Tanggal Upload') }}"},
+            // {data: 'created_at', name: 'created_at', 'title': "{{ __('Tanggal Upload') }}"},
             {data: 'name', name: 'name', 'title': "{{ __('Nama Pengupload') }}"},
             {data: 'action', name: 'action', 'orderable': false, 'searchable': false, 'title': "{{ __('Aksi') }}"},
         ],
@@ -267,7 +267,7 @@
                 {data: 'full_name', name: 'full_name', 'title': "{{ __('Nama Lengkap') }}"},
                 {data: 'phone', name: 'phone', 'title': "{{ __('Telp') }}"},
                 {data: 'jabatan', name: 'jabatan', 'title': "{{ __('Jabatan') }}"},
-                {data: 'ruang', name: 'ruang', 'title': "{{ __('Ruang') }}"},
+                // {data: 'ruang', name: 'ruang', 'title': "{{ __('Ruang') }}"},
                 // {data: 'jabatan_ruang', name: 'jabatan_ruang', 'title': "{{ __('Jabatan') }}"},
             ],
             columnDefs: [             
@@ -284,7 +284,7 @@
         $('.edited-sertifikat').val(id);
         //var url_prefix = (window.location.pathname == '/admin/sertifikat/myprofile');
         // var get_detail = url_prefix ? "admin/kka/getdata_detail/"+id : "/kka/getdata_detail/"+id;
-        var site_url = "/";
+        // var site_url = "/";
         var url = (window.location.pathname == '/admin/sertifikat/myprofile') ? "/admin/sertifikat/myprofile/getDataSertifikatBy/"+id : "/sertifikat/myprofile/getDataSertifikatBy/"+id;
         // console.log(window.location.pathname);
 
@@ -294,40 +294,15 @@
             dataType: 'JSON',
             success: function(data){
                 data.forEach(function (val,i){
-                    var src = site_url+val.file_sertifikat;
+                    var src = val.file_sertifikat;
+                    console.log(src);
                     $("#img-content").attr("src", src);
                 });
 
                 $("#img-content").css({'width': '100%'});
 
-                $('#hapus-sertifkat').on('click', function(){ //ketika button delete di klik maka akan menjalan kan menghapus sertifikat
-                    var id = $(this).attr("value");
-                    var url_delete = (window.location.pathname == '/admin/sertifikat/myprofile') ? "/admin/sertifikat/myprofile/delete/sertifikatAuditor/"+id : "/sertifikat/myprofile/delete/sertifikatAuditor/"+id;
-                    $.confirm({
-                        title: "{{ __('Hapus data sertifikat ini?') }}",
-                        content: "{{ __('Menghapus data sertifikat akan menghilangkan data sertifikat?') }}",
-                        buttons: {
-                            delete: {
-                                btnClass: 'btn-danger',
-                                action: function(){                       
-                                    url = url_delete;
-                                    $.ajax({
-                                        url: url,
-                                        type: "GET",                
-                                        data: { id },
-                                        success: function(data){
-                                            console.log(data);
-                                            // document.getElementById("img-content").innerHTML = "";
-                                            $('#modalPemeriksaan').modal('toggle');
-                                        }
-                                    });
-                                },
-                            },
-                            cancel: function(){
-                                $.alert('Dibatalkan!');
-                            }
-                        }
-                    });    
+                $('#close-view-sertifikat').on('click', function(){
+                        document.getElementById("image_preview3").innerHTML = "";
                 });
 
                 $('.edited-sertifikat').on('click', function(){
@@ -363,7 +338,10 @@
                 delete: {
                     btnClass: 'btn-danger',
                     action: function(){
-                        var url_delete = (window.location.pathname == '/admin/sertifikat/myprofile') ? "/admin/sertifikat/myprofile/delete/sertifikatAuditor/"+id : "/sertifikat/myprofile/delete/sertifikatAuditor/"+id;
+                        var url_prefix_split = window.location.pathname.split('myprofile');
+                        // console.log(url_prefix_split[0] == '/admin/sertifikat/');
+                        var url_delete = (url_prefix_split[0] == '/admin/sertifikat/') ? "/admin/sertifikat/delete/sertifikatAuditor/"+id : "/sertifikat/delete/sertifikatAuditor/"+id;
+
                         url = url_delete;
                         $.ajax({
                             url: url,
@@ -374,9 +352,6 @@
                                 // table.ajax.reload();
                                 $('#sertifikat-table').DataTable().ajax.reload();
                                 document.getElementById("image_preview").innerHTML = "";
-                                // $('#modalwindow').modal('hide');
-                                 //note masih belum bisa menghapus cache pada modal
-                                // $('#modalPemeriksaan .modal-content').empty();
                             }
                         });
                     },

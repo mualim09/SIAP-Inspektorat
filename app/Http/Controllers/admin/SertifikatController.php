@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Illuminate\Support\Facades\View;
 use App\User, App\models\Sertifikat;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\File; 
 
 class SertifikatController extends Controller
 {
@@ -156,13 +157,15 @@ class SertifikatController extends Controller
     public function dataSertifikat($id)
     {
         $dataSertifikat = Sertifikat::where('id', $id)->get();
-        // dd($dataSertifikat);
+        // dd($dataSertifikat[0]->file_sertifikat);
+        // $files = Storage::disk('sertifikat_user');
+        // dd($file);
         return $dataSertifikat;
     }
 
     public function storeSertifikat(Request $request) //insert multiple sertifikat image
     {
-        // foreach ($request->file_sertifikat as $sertifikat ) { coba diubah simpan ke storage bukan public
+        // foreach ($request->file_sertifikat as $sertifikat ) { /*coba diubah simpan ke storage bukan public*/
         //     $file = $sertifikat;
         //     $filename = $sertifikat->getClientOriginalName();
         //     // generate a new filename. getClientOriginalExtension() for the file extension
@@ -190,12 +193,12 @@ class SertifikatController extends Controller
 
                 $filename = $sertifikat->getClientOriginalName(); /*dirubah ke store seharusnya*/
 
-                $urlSertifikat = $sertifikat->store('sertifikat_auditor'); //save ke folder public\sertifikat_auditor 
+                $path = $sertifikat->move(public_path('storage\sertifikat_auditor') , $filename);
 
                 $data = new sertifikat(); //save file sertifikat to database
                 $data->user_id = $request->userid;
                 $data->nama_sertifikat = $filename;
-                $data->file_sertifikat = $urlSertifikat;
+                $data->file_sertifikat = ($filename !== null ) ? url('storage/sertifikat_auditor/'.$filename) : null;
                 $data->uploaded_by = auth()->user()->id;
                 $data->save();
             }
@@ -245,8 +248,8 @@ class SertifikatController extends Controller
     public function deleteSertifikat($id)
     {
         $sertifikat = Sertifikat::findOrFail($id);
-        
-        $delete = unlink($sertifikat->file_sertifikat);
+        $delete = File::delete($sertifikat->file_sertifikat);
+        // $delete = unlink($sertifikat->file_sertifikat);
         return ($sertifikat->delete()) ? 'deleted' :'no data';
 
     }

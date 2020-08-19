@@ -10,6 +10,7 @@ npm-debug.log
 yarn-error.log
 .env
 /public/sertifikat_auditor
+public/sertifikat_auditor/
 
 #ignore test controller
 /app/Http/Controllers/admin/TestController.php
