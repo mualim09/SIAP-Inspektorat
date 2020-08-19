@@ -147,7 +147,7 @@
                     // console.log(img);
                     var id_img = val.id;
                     var active = (i==0) ? 'active' : '';
-                    var html = $('<div class="carousel-item '+active+'"><img class="center-block" src="'+img+'" style="width: 80%; margin-left: 150px;"/><br><center><button href=# class="btn btn-success">Ubah Sertifikat</button><button href=# class="btn btn-danger" onclick="deleteDataSertifikat('+id_img+')">Hapus Sertifikat</button></center></div>');
+                    var html = $('<div class="carousel-item '+active+'"><img class="center-block" src="'+img+'" style="width: 80%; margin-left: 150px;"/><br><center><button href=# class="btn btn-success" onclick="edit_sertifikat_kepeg('+id_img+')">Ubah Sertifikat</button><button href=# class="btn btn-danger" onclick="deleteDataSertifikat('+id_img+')">Hapus Sertifikat</button></center></div>');
                     html.appendTo('#carousel-container');
 
                 });
@@ -160,34 +160,47 @@
         });
     }
 
-    // $('#hapus-sertifkat').on('click', function(){ //ketika button delete di klik maka akan menjalan kan menghapus sertifikat
-        //     var id = $(this).attr("value");
-        //     var url_delete = url_prefix ? "admin/sertifikat/delete/sertifikatAuditor/"+id : "/sertifikat/delete/sertifikatAuditor/"+id;
-        //     $.confirm({
-        //         title: "{{ __('Hapus data sertifikat ini?') }}",
-        //         content: "{{ __('Menghapus data sertifikat akan menghilangkan data sertifikat?') }}",
-        //         buttons: {
-        //             delete: {
-        //                 btnClass: 'btn-danger',
-        //                 action: function(){                       
-        //                     url = url_delete;
-        //                     $.ajax({
-        //                         url: url,
-        //                         type: "GET",                
-        //                         data: { id },
-        //                         success: function(data){
-        //                             console.log(data);
-        //                             // document.getElementById("image_preview").innerHTML = "";
-        //                         }
-        //                     });
-        //                 },
-        //             },
-        //             cancel: function(){
-        //                 $.alert('Dibatalkan!');
-        //             }
-        //         }
-        //     });    
-        // });'/admin/sertifikat/myprofile'
+    function edit_sertifikat_kepeg(id_img){
+        var id = id_img;
+        $('#modalPemeriksaan').modal("hide");
+        $('#modalFormEditSertifikat').modal('show');
+        $('#id_sertifikat').val(id);
+    }
+
+    $("#file_sertifikat2").change(function(){
+       $('#image_preview2').html("");
+       var total_file=document.getElementById("file_sertifikat2").files.length;
+       for(var i=0;i<total_file;i++)
+       {
+        $('#image_preview2').append("<img src='"+URL.createObjectURL(event.target.files[i])+"'>");
+       }
+    });
+
+    $('#close_input_edit_sertifikat').on('click', function(){
+            document.getElementById("image_preview2").innerHTML = "";
+    });
+
+    // $('.edited-sertifikat').on('click', function(){
+    //     var id = $(this).attr("value");
+    //     $('#modalPemeriksaan').modal("hide");
+    //     $('#modalFormEditSertifikatbyUser').modal('show');
+    //     $('#id_sertifikat').val(id);
+    //     // popup modal
+    //     // console.log(id);
+    // })
+
+    // $("#file_sertifikat2").change(function(){
+    //    $('#image_preview3').html("");
+    //    var total_file=document.getElementById("file_sertifikat2").files.length;
+    //    for(var i=0;i<total_file;i++)
+    //    {
+    //     $('#image_preview3').append("<img src='"+URL.createObjectURL(event.target.files[i])+"'>");
+    //    }
+    // });
+
+    // $('#close_input_edit_sertifikat').on('click', function(){
+    //         document.getElementById("image_preview3").innerHTML = "";
+    // });
 
     function deleteDataSertifikat(id_img){
         var id = id_img;

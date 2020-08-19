@@ -6,7 +6,29 @@
         'description' => __('This is your profile page. You can see the progress you\'ve made with your work and manage your projects or assigned tasks'),
         'class' => 'col-lg-7'
     ])
+<style type="text/css">
+    input[type=file]{
+      display: inline;
+    }
+    #image_preview{
+      border: 1px solid black;
+      padding: 10px;
+    }
+    #image_preview img{
+      width: 200px;
+      padding: 5px;
+    }
 
+    #image_preview3{
+      border: 1px solid black;
+      padding: 10px;
+    }
+    #image_preview3 img{
+      width: 200px;
+      padding: 5px;
+    }
+    
+</style>
     <div class="container-fluid mt--7 bg-color" style="padding-top: 45px;">
         <breadcrumb list-classes="breadcrumb-links">
           <breadcrumb-item><a href="{{ url('admin') }}">Beranda</a></breadcrumb-item> 
@@ -102,11 +124,11 @@
                                     </button>
                                   </div>
                                   <div class="modal-body">
-                                    <form action="/edit/sertifikatAuditor" method="POST" enctype="multipart/form-data">
+                                    <form action="{{route('save_edit_sertifikat')}}" method="POST" enctype="multipart/form-data">
                                         <input type="hidden" name="id_sertifikat" id="id_sertifikat">
                                         @csrf
                                         <div class="form-group row">
-                                            <input type="file" class="form-control" name="file_sertifikat2" id="file_sertifikat2">
+                                            <input type="file" class="form-control" name="file_sertifikat2" id="file_sertifikat2" accept='image/*'>
                                             <small class="form-text text-muted" style="font-size: 16px;">Silahkan masukkan sertifikat auditor, hanya bisa menginputkan 1 file gambar. Max sertifikat file 2MB dengan format (jpg,png,jpeg)</small>
                                         </div>
                                         <br/>
@@ -137,7 +159,7 @@
                                         <input type="hidden" name="userid" id="userid">
                                         @csrf
                                         <div class="form-group row">
-                                            <input type="file" class="form-control" name="file_sertifikat[]" id="file_sertifikat" multiple required="">
+                                            <input type="file" class="form-control" name="file_sertifikat[]" id="file_sertifikat" multiple required="" accept='image/*'>
                                             <small class="form-text text-muted" style="font-size: 16px;">Silahkan masukkan sertifikat auditor, bisa menerima banyak sertifikat dalam sekali input. Max sertifikat file 2MB dengan format (jpg,png,jpeg)</small>
                                         </div>
                                         <br/>
@@ -311,7 +333,7 @@
                     $('#modalFormEditSertifikatbyUser').modal('show');
                     $('#id_sertifikat').val(id);
                     // popup modal
-                    console.log(id);
+                    // console.log(id);
                 })
 
                 $("#file_sertifikat2").change(function(){

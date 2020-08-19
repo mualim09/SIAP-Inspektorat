@@ -344,17 +344,33 @@
         <div class="modal-content">
           <div class="modal-header">
             <h4 class="col-10 modal-title text-center" id="myModalEditSertifikat" style="font-size: 35px;">Form Edit Sertifikat Tiap Auditor</h4>
-            <button type="button" class="close" id="close_sertifikat2" data-dismiss="modal" aria-label="Close">
+            <button type="button" class="close" id="close_input_edit_sertifikat" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
           </div>
           <div class="modal-body">
-            <form id="edit-sertifikat-form" class="ajax-form" enctype="multipart/form-data">
+            <form action="{{route('save_edit_sertifikat')}}" method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="id_sertifikat" id="id_sertifikat">
                 @csrf
                 <div class="form-group row">
-                    <input type="file" class="form-control" name="file_sertifikat2[]" id="file_sertifikat2" multiple>
-                    <small class="form-text text-muted" style="font-size: 16px;">Silahkan masukkan sertifikat auditor, bisa menerima banyak sertifikat dalam sekali input. Max sertifikat file 2MB dengan format (jpg,png,jpeg)</small>
+                    <input type="file" class="form-control" name="file_sertifikat2" id="file_sertifikat2" accept='image/*'>
+                    <small class="form-text text-muted" style="font-size: 16px;">Silahkan masukkan sertifikat auditor, hanya bisa menginputkan 1 file gambar. Max sertifikat file 2MB dengan format (jpg,png,jpeg)</small>
+                </div>
+                <br/>
+                <div class="preview_img">
+                    <h5 style="font-size: 16px;">Preview Sertifikat yg akan di inputkan :</h5>
+                    <div id="image_preview2"></div>
+                    <br/>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-sm preview_img"><i class="fa fa-save"></i><span>Simpan</span></button>
+            </form>
+            <!-- <form action="{{route('save_edit_sertifikat')}}" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="id_sertifikat" id="id_sertifikat">
+                @csrf
+                <div class="form-group row">
+                    <input type="file" class="form-control" name="file_sertifikat2" id="file_sertifikat2" accept='image/*'>
+                    <small class="form-text text-muted" style="font-size: 16px;">Silahkan masukkan sertifikat auditor, hanya bisa menginputkan 1 file gambar. Max sertifikat file 2MB dengan format (jpg,png,jpeg)</small>
                 </div>
                 <br/>
 
@@ -363,7 +379,7 @@
                 <br/>
 
                 <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-save"></i><span>Simpan</span></button>
-            </form>
+            </form> -->
           </div>
         </div>
       </div>

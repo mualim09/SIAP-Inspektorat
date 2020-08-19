@@ -214,7 +214,7 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 		Route::get('getdata/sertifikat-auditor/{id}', 'SertifikatController@getdataSertifikatUsers')->name('sertifikat_kepegawaian');
 		Route::get('myprofile/getDataSertifikatBy/{id}','SertifikatController@dataSertifikat')->name('sertifikat_by_id');
 		Route::post('/input/sertifikat-auditor','SertifikatController@storeSertifikat')->name('input_sertifikat');
-		// Route::post('/edit/sertifikatAuditor','SertifikatController@editSertifikat')->name('save-edit-sertifikat');
+		Route::post('/edit/sertifikatAuditor','SertifikatController@editSertifikat')->name('save_edit_sertifikat');
 		Route::get('/delete/sertifikatAuditor/{id}','SertifikatController@deleteSertifikat')->name('delete_sertifikat');
 	});
 

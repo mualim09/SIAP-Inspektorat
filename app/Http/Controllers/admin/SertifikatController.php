@@ -210,37 +210,15 @@ class SertifikatController extends Controller
 
     public function editSertifikat(Request $request) //insert multiple sertifikat image
     {   
-        // dd($request->file_sertifikat2);
         $id_Auditor = Sertifikat::findOrFail($request->id_sertifikat);
-        // return $request;
-        // die();
-        // foreach ($request->file_sertifikat2 as $sertifikatEdited) {
-        // $data['user_id'] = $id_Auditor[0]->user_id;
-        $delete = unlink($id_Auditor->file_sertifikat);
-            $id_Auditor['nama_sertifikat'] = $request->file_sertifikat2->getClientOriginalName();
-            $id_Auditor['file_sertifikat'] = $request->file_sertifikat2->store('sertifikat_auditor');
-            $id_Auditor->save();
-            
-        // }
+        // dd($request->file_sertifikat2);
+        $filename = $request->file_sertifikat2->getClientOriginalName();
+        $path = $request->file_sertifikat2->move(public_path('storage\sertifikat_auditor') , $filename);
+        $delete = File::delete($id_Auditor->file_sertifikat);
 
-
-        // $data['file_sertifikat2'] = $request->file_sertifikat2->store('sertifikat_auditor');
-        // $save = DetailSpt::where('id',$request->id)->update(['status'=>json_encode($status),'note'=>json_encode($note)]);
-        // if ($request->hasFile('file_sertifikat')) {
-            
-        //     foreach ($request->file_sertifikat as $sertifikat ) {
-
-        //         $filename = $sertifikat->getClientOriginalName();
-
-
-        //         $data = new sertifikat(); //save file sertifikat to database
-        //         $data->user_id = $request->userid;
-        //         $data->nama_sertifikat = $filename;
-        //         $data->file_sertifikat = $urlSertifikat;
-        //         $data->save();
-        //     }
-
-        // }
+        $id_Auditor['nama_sertifikat'] = $filename;
+        $id_Auditor['file_sertifikat'] = ($filename !== null ) ? url('storage/sertifikat_auditor/'.$filename) : null;
+        $id_Auditor->save();
 
         return back()->with('success', 'Your sertifikat has been successfully');
     }
