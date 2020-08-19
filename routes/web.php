@@ -211,10 +211,11 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 		Route::get('/myprofile','SertifikatController@viewProfile')->name('myprofile'); /*pindahkan fungsi edit dari profilecontroller ke usercontroller*/
 		Route::get('/getDataPegawai','UserController@getData')->name('getDataPegawai');
 		Route::get('/getDataSertifikat','SertifikatController@getSertifikatUsers')->name('getSertifikat');
-		Route::get('getDataSertifikatBy/{id}','SertifikatController@dataSertifikat');
-		Route::post('admin/input/sertifikat-auditor','SertifikatController@storeSertifikat')->name('input_sertifikat');
+		Route::get('getdata/sertifikat-auditor/{id}', 'SertifikatController@getdataSertifikatUsers')->name('sertifikat_kepegawaian');
+		Route::get('myprofile/getDataSertifikatBy/{id}','SertifikatController@dataSertifikat')->name('sertifikat_by_id');
+		Route::post('/input/sertifikat-auditor','SertifikatController@storeSertifikat')->name('input_sertifikat');
 		// Route::post('/edit/sertifikatAuditor','SertifikatController@editSertifikat')->name('save-edit-sertifikat');
-		Route::get('delete/sertifikatAuditor/{id}','SertifikatController@deleteSertifikat')->name('delete_sertifikat');
+		Route::get('myprofile/delete/sertifikatAuditor/{id}','SertifikatController@deleteSertifikat')->name('delete_sertifikat');
 	});
 
 	//kka
@@ -266,13 +267,13 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 		
 
 	//fungsi resiko
-	Route::group(['prefix' => 'resiko'], function(){
-		Route::get('','ResikoController@index')->name('resikoindex');
-		Route::get('getdata','ResikoController@getDataResiko');
-		Route::post('insertDataResiko','ResikoController@insertResiko');
-		Route::get('delete/{id}','ResikoController@deleteResiko')->name('deleteDataResiko');
-		Route::get('getdata/resiko/{id}','ResikoController@resikoPdf')->name('resikoPDF');
-	});
+	// Route::group(['prefix' => 'resiko'], function(){
+	// 	Route::get('','ResikoController@index')->name('resikoindex');
+	// 	Route::get('getdata','ResikoController@getDataResiko');
+	// 	Route::post('insertDataResiko','ResikoController@insertResiko');
+	// 	Route::get('delete/{id}','ResikoController@deleteResiko')->name('deleteDataResiko');
+	// 	Route::get('getdata/resiko/{id}','ResikoController@resikoPdf')->name('resikoPDF');
+	// });
 
     //route Kode temuan
     Route::group(['prefix' => 'kode'], function(){

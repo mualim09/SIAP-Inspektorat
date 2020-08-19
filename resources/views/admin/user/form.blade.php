@@ -284,7 +284,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <form action="/input/sertifikat-auditor" method="POST" class="insert-sertifikat" enctype="multipart/form-data">
+            <form action="{{ route('input_sertifikat') }}" method="POST" class="insert-sertifikat" enctype="multipart/form-data">
                 <input type="hidden" name="userid" id="userid">
                 @csrf
                 <div class="form-group row">
