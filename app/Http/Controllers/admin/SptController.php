@@ -432,7 +432,7 @@ class SptController extends Controller
             $control = '<a href="'.route('laporan-cetak',$id).'" data-toggle="tooltip" title="Cetak KKA" class="btn btn-outline-danger btn-sm"><i class="ni ni-single-copy-04"></i><span>Lihat</span></a>';
         }
 
-        if ( $user->hasAnyRole(['TU Perencanaan', 'Super Admin']) && $method == 'penomoran') {
+        if ( $user->hasAnyRole(['TU Umum', 'Super Admin']) && $method == 'penomoran') {
                     $control = '<a href="#" onclick="showFormModal('.$id.')" class="btn btn-outline-primary btn-sm" title="Penomoran SPT"><i class="fa fa-list-ol"></i></a>';
                     return $control;
                     }
