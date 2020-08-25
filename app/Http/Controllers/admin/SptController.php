@@ -566,9 +566,9 @@ class SptController extends Controller
         $filename = ($request->file_spt) ? 'SPT-' . $id . '-' . $request->file_spt->getClientOriginalName() : null ;
         if($filename !== null ){
             if (! File::exists(public_path()."storage/files")) {
-                File::makeDirectory(public_path()."storage/files");
-                $request->file_spt->move(public_path().'storage/files' , $filename);
+                File::makeDirectory(public_path()."storage/files", 0777, true);                
             }
+            $request->file_spt->move(public_path().'storage/files' , $filename);
         } 
         $spt->file = ($filename !== null ) ? url('storage/files/'.$filename) : null;
         $spt->nomor = $request->nomor;
