@@ -564,7 +564,7 @@ class SptController extends Controller
         $id = $request->spt_id;
         $spt = Spt::findOrFail($id);
         $filename = ($request->file_spt) ? 'SPT-' . $id . '-' . $request->file_spt->getClientOriginalName() : null ;
-        if($filename !== null ) $request->file_spt->move(public_path('storage\files') , $filename);
+        if($filename !== null ) $request->file_spt->move(public_path('storage/files') , $filename);
         $spt->file = ($filename !== null ) ? url('storage/files/'.$filename) : null;
         $spt->nomor = $request->nomor;
         $spt->tgl_register = date('Y-m-d H:i:s',strtotime($request->tgl_register));
