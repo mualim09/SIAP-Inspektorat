@@ -756,8 +756,14 @@ class SptController extends Controller
         $spt = Spt::findOrFail($id);
 
         $filename = ($request->file_spt) ? 'SPT-' . $id . '-' . $request->file_spt->getClientOriginalName() : null ;        
-        if($filename !== null ) $request->file_spt->move(public_path('storage\files') , $filename);
-        $spt->file = ($filename !== null ) ? url('storage/files/'.$filename) : null;
+        //if($filename !== null ) $request->file_spt->move(public_path('storage\files') , $filename);
+        if($filename !== null ){
+            if (! File::exists(public_path()."/storage/spt")) {
+                File::makeDirectory(public_path()."/storage/spt", 0755, true);
+            }
+            $request->file_spt->move(public_path()."/storage/spt" , $filename);
+        } 
+        $spt->file = ($filename !== null ) ? url('/storage/spt/'.$filename) : null;
         $spt->save();
         return 'Updated';
     }
