@@ -231,6 +231,7 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
     	Route::get('/unggah-KKA/{id}','KkaController@uploadKKA');
     	Route::get('menyetujui/{id}','KkaController@Penyetujuan_daltu_dalnis');
     	Route::get('menyetujui_penanggungjawab/{id}','KkaController@Penyetujuan_penanggungjawab');
+    	Route::get('tolak-kka/{id}','KkaController@tolakKKA');
 
     	//cetak kka & lhp
     	Route::get('/cetak/kka/{id}','KkaController@cetakLaporan')->name('laporan-cetak');
