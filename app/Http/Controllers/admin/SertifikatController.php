@@ -214,7 +214,7 @@ class SertifikatController extends Controller
                 File::makeDirectory(public_path()."/storage/sertifikat_auditor", 0755, true);
             }
             $delete = File::delete($id_Auditor->file_sertifikat);
-            $path = $sertifikat->move(public_path()."/storage/sertifikat_auditor" , $filename);
+            $path = $request->file_sertifikat2->move(public_path()."/storage/sertifikat_auditor" , $filename);
         }
 
         $id_Auditor['nama_sertifikat'] = $filename;
