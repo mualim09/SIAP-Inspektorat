@@ -206,11 +206,19 @@ class SertifikatController extends Controller
         $id_Auditor = Sertifikat::findOrFail($request->id_sertifikat);
         // dd($request->file_sertifikat2);
         $filename = $request->file_sertifikat2->getClientOriginalName();
-        $path = $request->file_sertifikat2->move(public_path('storage\sertifikat_auditor') , $filename);
-        $delete = File::delete($id_Auditor->file_sertifikat);
+        //$path = $request->file_sertifikat2->move(public_path('storage\sertifikat_auditor') , $filename);
+        //$delete = File::delete($id_Auditor->file_sertifikat);
+
+        if($filename !== null ){
+            if (! File::exists(public_path()."/storage/sertifikat_auditor")) {
+                File::makeDirectory(public_path()."/storage/sertifikat_auditor", 0755, true);
+            }
+            $delete = File::delete($id_Auditor->file_sertifikat);
+            $path = $request->file_sertifikat2->move(public_path()."/storage/sertifikat_auditor" , $filename);
+        }
 
         $id_Auditor['nama_sertifikat'] = $filename;
-        $id_Auditor['file_sertifikat'] = ($filename !== null ) ? url('storage/sertifikat_auditor/'.$filename) : null;
+        $id_Auditor['file_sertifikat'] = ($filename !== null ) ? url('/storage/sertifikat_auditor/'.$filename) : null;
         $id_Auditor->save();
 
         return back()->with('success', 'Your sertifikat has been successfully');
