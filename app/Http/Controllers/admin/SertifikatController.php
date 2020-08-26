@@ -165,40 +165,33 @@ class SertifikatController extends Controller
 
     public function storeSertifikat(Request $request) //insert multiple sertifikat image
     {
-        // foreach ($request->file_sertifikat as $sertifikat ) { /*coba diubah simpan ke storage bukan public*/
-        //     $file = $sertifikat;
-        //     $filename = $sertifikat->getClientOriginalName();
-        //     // generate a new filename. getClientOriginalExtension() for the file extension
-        //     $filename = 'sertifikat-'. $filename;
-
-        //     // save to storage/app/photos as the new $filename
-        //     $path = $file->storeAs('sertifikat', $filename);
-
-        //     $sertifikat->move(public_path('storage\sertifikat'),$path);
-
-        //     $data = new sertifikat(); //save file sertifikat to database
-        //     $data->user_id = $request->userid;
-        //     $data->file_sertifikat = ($filename !== null ) ? url('storage/sertifikat/'.$filename) : null;
-        //     $data->nama_sertifikat = $filename;
-        //     // $data->file_sertifikat = $path;
-        //     $data->uploaded_by = auth()->user()->id;
-        //     // dd($data);
-        //     $data->save();
-        //     die();
-        // }
-
         if ($request->hasFile('file_sertifikat')) {
             
+           /* if($filename !== null ){
+            if (! File::exists(public_path()."/storage/spt")) {
+                File::makeDirectory(public_path()."/storage/spt", 0755, true);
+            }
+            $request->file_spt->move(public_path()."/storage/spt" , $filename);
+        } 
+        $spt->file = ($filename !== null ) ? url('/storage/spt/'.$filename) : null;*/
+
+
             foreach ($request->file_sertifikat as $sertifikat ) {
 
                 $filename = $sertifikat->getClientOriginalName(); /*dirubah ke store seharusnya*/
+                if($filename !== null ){
+                    if (! File::exists(public_path()."/storage/sertifikat_auditor")) {
+                        File::makeDirectory(public_path()."/storage/sertifikat_auditor", 0755, true);
+                    }
+                    $path = $sertifikat->move(public_path()."/storage/sertifikat_auditor" , $filename);
+                }
 
-                $path = $sertifikat->move(public_path('storage\sertifikat_auditor') , $filename);
+                //$path = $sertifikat->move(public_path('storage/sertifikat_auditor') , $filename);
 
                 $data = new sertifikat(); //save file sertifikat to database
                 $data->user_id = $request->userid;
                 $data->nama_sertifikat = $filename;
-                $data->file_sertifikat = ($filename !== null ) ? url('storage/sertifikat_auditor/'.$filename) : null;
+                $data->file_sertifikat = ($filename !== null ) ? url('/storage/sertifikat_auditor/'.$filename) : null;
                 $data->uploaded_by = auth()->user()->id;
                 $data->save();
             }
