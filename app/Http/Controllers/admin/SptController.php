@@ -1116,8 +1116,10 @@ class SptController extends Controller
                             $control .= $this->buildControl('Cetak_KKA',$ceking_data_detail_sendiri[0]->id);
                         }
                             if ($ceking_data_detail_sendiri[0]->peran == 'Ketua Tim') {
+                                // dd($ceking_data_detail_sendiri[0]->status);
                                 if ($ceking_data_detail_sendiri[0]->status != null) {
                                     $control .= $this->buildControl('buatLhp',$get_id_detail);
+                                    $control .= '<a href="#" onclick="showModalLihatLaporanPemeriksaan('.$ceking_data_detail_sendiri[0]->id.')" data-toggle="tooltip" title="Lihat KKA" class="btn btn btn-outline-info btn-sm"><i class="ni ni-paper-diploma"></i></a>';
                                 }else{
                                     $control .= $this->buildControl('buatLaporan-disable',$get_id_detail);
                                     $control .= '<a href="#" onclick="showModalLihatLaporanPemeriksaan('.$ceking_data_detail_sendiri[0]->id.')" data-toggle="tooltip" title="Lihat KKA" class="btn btn btn-outline-info btn-sm"><i class="ni ni-paper-diploma"></i></a>';

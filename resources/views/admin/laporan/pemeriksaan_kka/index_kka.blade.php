@@ -41,8 +41,8 @@
               <div class="card-body table-responsive">
                 <div class="text">
                     <a href="#" class="btn btn-success btn-xs" style="display: none;" id="unggah">Unggah</a>
-                    <a href="#" class="btn btn-primary btn-xs cetak" style="display: none;" id="nhp">Cetak NHP</a>
-                    <a href="#" class="btn btn-warning btn-xs" id="revisi" style="display: none;">Revisi</a>
+                    <a href="#" class="btn btn-primary btn-xs cetak" style="display: none;" id="proses_lhp">LHP</a>
+                    <a href="#" class="btn btn-danger btn-xs" id="revisi" style="display: none;">Revisi</a>
                     <a href="#" class="btn btn-success btn-xs" id="menyetujui" style="display: none;">Menyetujui</a>
                 </div>
                 <div class="table-responsive">
@@ -207,10 +207,11 @@
         // url get data
         // var url_prefix = (window.location.pathname == '/admin') ? 'admin/spt/' : 'spt/';\
 
-        var url_prefix = (window.location.pathname == '/admin');
+        var url_prefix = (window.location.pathname == '/admin/spt');
+        // console.log(window.location.pathname);
 
-        var get_detail = url_prefix ? "admin/kka/getdata_detail/"+id : "/kka/getdata_detail/"+id;
-        var kka_view =  url_prefix ? "admin/spt/myspt/"+id : "/spt/myspt/"+id;
+        var get_detail = url_prefix ? "/kka/getdata_detail/"+id : "admin/kka/getdata_detail/"+id;
+        var kka_view =  url_prefix ? "/kka/input-lhp/"+id : "admin/kka/input-lhp/"+id;
 
         // get id user_log
         var user_id = {!! auth()->user()->id !!};
@@ -229,7 +230,7 @@
                         // button_unggah.style.display = 'block';
                         $('#unggah').show();
                         $('#revisi').show();
-                        $('#menyetujui').hide();
+                        $('#proses_lhp').show();
                     }
                     else if (data[i].status != true  && data[i].user_id == user_id && data[i].peran == 'Pengendali Teknis') { //pengendali teknis telah acc kka
                         // $('#menyetujui').show();// jika dalnis merevisi kka & berstatus revisi maka button menyetuji akan hide
@@ -282,15 +283,33 @@
                     });
                 });
 
+                $('#proses_lhp').click(function(){
+                    $.confirm({
+                        title: "{{ __('Perhatian!') }}",
+                        // content: "{{ __('Apakah anda yakin ingin merevisi semua KKA tersebut? Jika ya maka Auditor terkait akan merevisi KKA tersebut!') }}",
+                        content: "{{ __('Apakah anda yakin akan melanjutkan Input LHP?') }}",
+                        buttons: {
+                            Revisi: {
+                                btnClass: 'btn-success',
+                                action: function(){                       
+                                     window.location.href = kka_view;
+                                },
+                            },
+                            Tidak: function(){
+                    $.alert('Dibatalkan!');
+                            }
+                        }
+                    });
+                });
                 $('#revisi').click(function(){
                     $.confirm({
                         title: "{{ __('Perhatian!') }}",
                         content: "{{ __('Apakah anda yakin ingin merevisi semua KKA tersebut? Jika ya maka Auditor terkait akan merevisi KKA tersebut!') }}",
                         buttons: {
                             Revisi: {
-                                btnClass: 'btn-danger',
+                                btnClass: 'btn-success',
                                 action: function(){                       
-                                     window.location.href = kka_view;
+                                     window.location.href = (window.location.pathname == '/admin/spt') ? "kka/tolak-kka/"+id : "admin/kka/tolak-kka/"+id;
                                 },
                             },
                             Tidak: function(){
@@ -306,7 +325,7 @@
             }
         });
 
-        window.submitComment = function(){console.log('YOLLOOO')}
+        // window.submitComment = function(){console.log('YOLLOOO')}
 
         // function revisi2(id) {
         //     $.confirm({
@@ -347,7 +366,7 @@
         // }
 
         // ? "admin/kka/getdata_detail/"+id : "/kka/getdata_detail/"+id;
-        var url_data = url_prefix ? "admin/kka/getDataTemuan_per_auditor/"+id : "/kka/getDataTemuan_per_auditor/"+id;
+        var url_data = url_prefix ? "/kka/getDataTemuan_per_auditor/"+id : "admin/kka/getDataTemuan_per_auditor/"+id;
         // data table menampilkan data user yang telah menginputkan KKA 
         var table = $('#dataKKA-perAuditor').DataTable({
 
