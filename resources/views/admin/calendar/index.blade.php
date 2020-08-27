@@ -12,9 +12,21 @@
           <breadcrumb-item active>/ Kalender</a></breadcrumb-item>
         </breadcrumb>
       </div>        
-      <div class="col text-right">
+      <div class="col d-flex justify-content-end text-right">
+        <button class="btn btn-sm btn-secondary" id="btn-smt-1"><span>Januari - Juni {{date('Y')}}</span></button>
+        <button class="btn btn-sm btn-secondary" id="btn-smt-2"><span>Juli - Desember {{date('Y')}}</span></button>
         <button class="btn btn-sm btn-secondary" id="print-btn"><i class="fas fa-print"></i><span>Print Calendar</span></button>
       </div>
+      <script type="text/javascript">
+        $('#btn-smt-1').on('click', function(){
+          document.getElementById("printable-1").style.display = "none";
+          document.getElementById("printable").style.display = "block";
+        });
+        $('#btn-smt-2').on('click', function(){
+          document.getElementById("printable").style.display = "none";
+          document.getElementById("printable-1").style.display = "block";
+        });
+      </script>
     </div>
 
     <div class="row" id="printable">
@@ -36,12 +48,34 @@
             </div>
         </div>
     </div>
+
+    <!-- semester 2 -->
+    <div class="row" id="printable-1" style="display:none">
+        <div class="col col-print-12">
+            <div class="card shadow" id="print-select">              
+               <div class="row">
+                 <div id='calendar6' class="col-md-6 col-print-6 calendar"></div>
+                 <div id='calendar7' class="col-md-6 col-print-6 calendar"></div>
+               </div>
+               <div class="row">
+                 <div id='calendar8' class="col-md-6 col-print-6 calendar"></div>
+                 <div id='calendar9' class="col-md-6 col-print-6 calendar"></div>
+               </div>
+               <div class="row">
+                 <div id='calendar10' class="col-md-6 col-print-6 calendar"></div>
+                 <div id='calendar11' class="col-md-6 col-print-6 calendar"></div>
+               </div>
+               
+            </div>
+        </div>
+    </div>
   </div>
   <script type="text/javascript">
     $('#print-btn').on('click', function(){
-      
-    var HTML_Width = $("#printable").width();
-    var HTML_Height = $("#printable").height();
+    var elem = document.getElementById("printable");
+    var printable = (window.getComputedStyle(elem).display === "none") ? "#printable-1" : "#printable" ;
+    var HTML_Width = $(printable).width();
+    var HTML_Height = $(printable).height();
     var top_left_margin = 15;
     var PDF_Width = HTML_Width + (top_left_margin * 2);
     var PDF_Height = (PDF_Width * 1.5) + (top_left_margin * 2);
@@ -50,7 +84,7 @@
 
     var totalPDFPages = Math.ceil(HTML_Height / PDF_Height) - 1;
 
-    html2canvas($("#printable")[0]).then(function (canvas) {
+    html2canvas($(printable)[0]).then(function (canvas) {
         var imgData = canvas.toDataURL("image/jpeg", 1.0);
         var pdf = new jsPDF('p', 'pt', [PDF_Width, PDF_Height]);
         pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin, canvas_image_width, canvas_image_height);
@@ -101,7 +135,7 @@
   <link href="{{ asset('assets/vendor/bsdatepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet" />
 @endpush
 @push('js')
-  <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
+  <!-- <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script> -->
   <script src="{{ asset('assets/vendor/jquery/moment.min.js') }}"></script>
 	<script src="{{ asset('assets/vendor/fullcalendar/fullcalendar.js') }}"></script>
 	<script src="{{ asset('assets/vendor/fullcalendar/id.js') }}"></script>

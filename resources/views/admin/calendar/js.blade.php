@@ -28,7 +28,7 @@
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
     });
-for (i = 0; i <= 5; i++) {
+for (i = 0; i <= 11; i++) {
     
     var x = new Date();   
    x.setMonth(0 + i);
