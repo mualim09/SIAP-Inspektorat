@@ -16,7 +16,7 @@
         },
         processing: true,
         serverSide: true,
-        ajax: '{{ url("admin/getdata-lokasi") }}',
+        ajax: "{{ route('get_data_lokasi') }}",
         /*deferRender: true,*/
         columns: [
             {'defaultContent' : '', 'data' : 'DT_RowIndex', 'name' : 'DT_RowIndex', 'title' : 'No', 'orderable' : false, 'searchable' : false, 'exportable' : true, 'printable' : true
@@ -69,5 +69,36 @@
             });
         }
     });
+
+    function editLokasi(id){
+        // kondisi untuk menghide kecamatan
+        if ($("#id_kecamatan").is(":checked") == false) {
+            $("#id_kecamatan").hide();
+        }if($("#id_kecamatan").prop("checked") == true){
+            $("#id_kecamatan").show();
+        }
+        save_method = 'edit';
+        var url = "/admin/getDataLokasi/" +id ;
+            $.ajax({
+                url: url,
+                type: "GET",
+                dataType: "JSON",
+                success: function(data){
+                    // console.log(data);
+                    var item = data[0];
+                    console.log(item);
+                    $('.ajax-form')[0].reset();
+                    $('#id').val(item.id);
+                    $('.nama_lokasi').val(item.nama_lokasi);
+                    $('.sebutan_pimpinan').val(item.sebutan_pimpinan);
+                    if (item.kecamatan != null) {
+                        $('.kecamatan')[0].selectize.setValue(item.kecamatan);
+                    }
+                    $('#kateg_lokasi-'+item.jenis_lokasi).prop('checked',true);
+                }
+            });
+
+
+    }
 
 </script>

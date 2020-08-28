@@ -40,8 +40,8 @@
             <div class="card">
               <div class="card-body table-responsive">
                 <div class="text">
-                    <a href="#" class="btn btn-success btn-xs" style="display: none;" id="unggah">Unggah</a>
-                    <a href="#" class="btn btn-primary btn-xs cetak" style="display: none;" id="proses_lhp">LHP</a>
+                    <!-- <a href="#" class="btn btn-success btn-xs" style="display: none;" id="unggah">Unggah</a> --> <!-- dipindahkan fungsi button jadi di lhp insert + unggah -->
+                    <a href="#" class="btn btn-primary btn-xs cetak" style="display: none;" id="paparan">Paparan</a>
                     <a href="#" class="btn btn-danger btn-xs" id="revisi" style="display: none;">Revisi</a>
                     <a href="#" class="btn btn-success btn-xs" id="menyetujui" style="display: none;">Menyetujui</a>
                 </div>
@@ -209,9 +209,7 @@
 
         var url_prefix = (window.location.pathname == '/admin/spt');
         // console.log(window.location.pathname);
-
         var get_detail = url_prefix ? "/kka/getdata_detail/"+id : "admin/kka/getdata_detail/"+id;
-        var kka_view =  url_prefix ? "/kka/input-lhp/"+id : "admin/kka/input-lhp/"+id;
 
         // get id user_log
         var user_id = {!! auth()->user()->id !!};
@@ -230,7 +228,7 @@
                         // button_unggah.style.display = 'block';
                         $('#unggah').show();
                         $('#revisi').show();
-                        $('#proses_lhp').show();
+                        $('#paparan').show();
                     }
                     else if (data[i].status != true  && data[i].user_id == user_id && data[i].peran == 'Pengendali Teknis') { //pengendali teknis telah acc kka
                         // $('#menyetujui').show();// jika dalnis merevisi kka & berstatus revisi maka button menyetuji akan hide
@@ -247,23 +245,23 @@
                     }
                 }
 
-                $('#unggah').click(function(){
-                    $.confirm({
-                        title: "{{ __('Perhatian!') }}",
-                        content: "{{ __('Apakah anda ingin mengunggah KKA tersebut?') }}",
-                        buttons: {
-                            Ya: {
-                                btnClass: 'btn-success',
-                                action: function(){                       
-                                    window.location.href = "/kka/unggah-KKA/"+id;
-                                },
-                            },
-                            Tidak: function(){
-                    $.alert('Dibatalkan!');
-                            }
-                        }
-                    });
-                });
+                // $('#unggah').click(function(){
+                //     $.confirm({
+                //         title: "{{ __('Perhatian!') }}",
+                //         content: "{{ __('Apakah anda ingin mengunggah KKA tersebut?') }}",
+                //         buttons: {
+                //             Ya: {
+                //                 btnClass: 'btn-success',
+                //                 action: function(){                       
+                //                     window.location.href = "/kka/unggah-KKA/"+id;
+                //                 },
+                //             },
+                //             Tidak: function(){
+                //     $.alert('Dibatalkan!');
+                //             }
+                //         }
+                //     });
+                // });
 
                 $('#menyetujui').click(function(){
                     $.confirm({
@@ -283,24 +281,26 @@
                     });
                 });
 
-                $('#proses_lhp').click(function(){
-                    $.confirm({
-                        title: "{{ __('Perhatian!') }}",
-                        // content: "{{ __('Apakah anda yakin ingin merevisi semua KKA tersebut? Jika ya maka Auditor terkait akan merevisi KKA tersebut!') }}",
-                        content: "{{ __('Apakah anda yakin akan melanjutkan Input LHP?') }}",
-                        buttons: {
-                            Revisi: {
-                                btnClass: 'btn-success',
-                                action: function(){                       
-                                     window.location.href = kka_view;
-                                },
-                            },
-                            Tidak: function(){
-                    $.alert('Dibatalkan!');
-                            }
-                        }
-                    });
+                // url_prefix ? "/kka/input-lhp/"+id : "admin/kka/input-lhp/"+id
+                $('#paparan').click(function(){
+                    window.location.href = url_prefix ? "/kka/paparan/"+id : "admin/kka/paparan/"+id;
+                    // $.confirm({
+                    //     title: "{{ __('Perhatian!') }}",
+                    //     // content: "{{ __('Apakah anda yakin ingin merevisi semua KKA tersebut? Jika ya maka Auditor terkait akan merevisi KKA tersebut!') }}",
+                    //     content: "{{ __('Apakah anda yakin akan melanjutkan Input LHP?') }}",
+                    //     buttons: {
+                    //         Revisi: {
+                    //             btnClass: 'btn-success',
+                    //             action: function(){                       
+                    //             },
+                    //         },
+                    //         Tidak: function(){
+                    // $.alert('Dibatalkan!');
+                    //         }
+                    //     }
+                    // });
                 });
+                
                 $('#revisi').click(function(){
                     $.confirm({
                         title: "{{ __('Perhatian!') }}",

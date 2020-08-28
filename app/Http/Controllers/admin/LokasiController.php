@@ -144,6 +144,8 @@ class LokasiController extends Controller
                     return $data->jenis_lokasi;
                 })
                 ->addColumn('action', function($data){
+                    $return = '<a href="javascript:void(0);" onclick="editLokasi('. $data->id .')" outline type="primary" title="Edit Lokasi"><i class="ni ni-ruler-pencil"></i></a>';
+                    return $return;
                     // $return = $this->buildControl('viewAnggota',$col->id);
                     // $return .= $this->buildControl('cetakPdf',$col->id);
                     // if($col->approval_status == 'processing'){

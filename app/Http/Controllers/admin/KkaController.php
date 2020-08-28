@@ -508,6 +508,7 @@ class KkaController extends Controller
         $data['PengendaliTeknis'] = null;
         $data['PengendaliMutu'] = null;
         $data['PenanggungJawab'] = null;
+        // dd($data);
         if ($id_ketua_tim == "null") {
             $update = $cekKKA->update(['status'=>json_encode($data),'jenis_laporan'=>'KKA']);
             return redirect('admin');
@@ -614,49 +615,48 @@ class KkaController extends Controller
 
         $refrensi = Refrensi_kka::where('refrensi_lokasi',$get_lokasi[0]->jenis_lokasi)->get();
         $kode = KodeTemuan::select('id','kode','deskripsi', 'atribut')->whereRaw('JSON_EXTRACT(atribut, "$.kelompok") <> CAST("null" AS JSON) AND JSON_EXTRACT(atribut, "$.subkelompok") <> CAST("null" AS JSON)')->orderBy('sort_id', 'ASC')->get();
-        $spt = DetailSpt::where('id',$id)->get();
-        return view('admin.spt.form_input_kka',['spt'=>$spt,'cek_radiobutts'=>$cek_radiobutts,'kode'=>$kode,'refrensi'=>$refrensi]);
+        $spt = DetailSpt::where('id',$id)->with('spt')->get();
+        $lokasi_pemeriksaan = Lokasi::find($spt[0]->spt['lokasi_id'][0]);
+        // dd($lokasi_pemeriksaan);
+        return view('admin.laporan.pemeriksaan_kka.form_input_kka',['spt'=>$spt,'lokasi_pemeriksaan'=>$lokasi_pemeriksaan,'cek_radiobutts'=>$cek_radiobutts,'kode'=>$kode,'refrensi'=>$refrensi]);
     }
 
-    // public function InputTemuan($id)
-    // {
-    //     $userid = auth()->user()->id;
-    //     //berfungsi mengecek tb detail spt kolom file laporan kosong atau tidak
-    //     $cek_radiobutt = DetailSpt::findOrFail($id);
-    //     if($cek_radiobutt->file_laporan == null){
-    //         $cek_radiobutts = 'disabledleforfile';
-    //     }
-
-    //     $id_lokasi_in_spt = Spt::where('id',$cek_radiobutt->spt_id)->get();
-    //     $get_lokasi = Lokasi::where('id',$id_lokasi_in_spt[0]->lokasi_id)->get();
-
-    //     //$refrensi = Refrensi_kka::where('refrensi_lokasi',$get_lokasi[0]->jenis_lokasi)->get();
-    //     $kode = KodeTemuan::select('id','kode','deskripsi', 'atribut')->whereRaw('JSON_EXTRACT(atribut, "$.kelompok") <> CAST("null" AS JSON) AND JSON_EXTRACT(atribut, "$.subkelompok") <> CAST("null" AS JSON)')->orderBy('sort_id', 'ASC')->get();
-    //     $spt = DetailSpt::where('id',$id)->get();
-    //     return view('admin.spt.auditor',['spt'=>$spt,'cek_radiobutts'=>$cek_radiobutts,'kode'=>$kode]);
-    // } 
-
-    public function InputLhp($id)
+    public function paparanKKA($id)
     {
-        // dd($id); id berisikan id detail spt
-        $userid = auth()->user()->id;
-        $get_spt_id = DetailSpt::findOrFail($id);
-        $kode = KodeTemuan::select('id','kode','deskripsi', 'atribut')->whereRaw('JSON_EXTRACT(atribut, "$.kelompok") <> CAST("null" AS JSON) AND JSON_EXTRACT(atribut, "$.subkelompok") <> CAST("null" AS JSON)')->orderBy('sort_id', 'ASC')->get();
-        $get_laporan_all_by_spt_id = DetailSpt::where('spt_id',$get_spt_id->spt_id)->with('user')->get();
-        // dd($get_laporan_all_by_spt_id);
-        $spt = Spt::where('id',$get_spt_id->spt_id)->get();
-        $get_jenis_spt = JenisSpt::findOrFail($spt[0]->jenis_spt_id);
-        // dd($get_jenis_spt);
-        $lokasi = Lokasi::where('id',json_decode($spt[0]->lokasi_id[0]))->get();
-        $data_Laporan = DB::table('detail_spt')
-                        ->where('spt_id','=',$get_spt_id->spt_id)
-                        ->join('laporan_pemeriksaan','detail_spt.id','=','laporan_pemeriksaan.detail_spt_id')
-                        ->where('peran','=','Anggota Tim')
-                        // ->select('')
-                        ->get();
+        // dd('fungsi berjalan dan menampilkan '.$id);
+        $getdata = DetailSpt::where('id',$id)->with('pemeriksaan','spt')->get();
+        $data_detail = $getdata[0];
+        $data_pemeriksaan = DetailSpt::where('spt_id',$getdata[0]->spt_id)->where('peran','Anggota Tim')->with('pemeriksaan')->get();
+        // dd($data_pemeriksaan);
+        $data_spt = $getdata[0]->spt;
+        $data_lokasi = Lokasi::find($data_spt['lokasi_id'][0]);
+        $data_jenis_spt = JenisSpt::findOrFail($getdata[0]->spt->jenis_spt_id);
+        $year = date('Y');
 
-        return view('admin.laporan.pemeriksaan_lhp.form_input_lhp',['kode'=>$kode,'spt'=>$spt,'lokasi'=>$lokasi,'data_pemeriksaan'=>$data_Laporan,'data_jenis_spt'=>$get_jenis_spt/*,'data_ttd'=>$get_laporan_all_by_spt_id*/]);
-    }
+        return view('admin.laporan.pemeriksaan_kka.paparan_kka',['data_pemeriksaan'=>$data_pemeriksaan,'data_detail'=>$data_detail,'data_spt'=>$data_spt,'data_jenis_spt'=>$data_jenis_spt,'data_lokasi'=>$data_lokasi,'tahun'=>$year]);
+    } 
+
+    // public function InputLhp($id)
+    // {
+    //     // dd($id); id berisikan id detail spt
+    //     $userid = auth()->user()->id;
+    //     $get_spt_id = DetailSpt::findOrFail($id);
+    //     $kode = KodeTemuan::select('id','kode','deskripsi', 'atribut')->whereRaw('JSON_EXTRACT(atribut, "$.kelompok") <> CAST("null" AS JSON) AND JSON_EXTRACT(atribut, "$.subkelompok") <> CAST("null" AS JSON)')->orderBy('sort_id', 'ASC')->get();
+    //     $get_laporan_all_by_spt_id = DetailSpt::where('spt_id',$get_spt_id->spt_id)->with('user')->get();
+    //     // dd($get_laporan_all_by_spt_id);
+    //     $spt = Spt::where('id',$get_spt_id->spt_id)->get();
+    //     $get_jenis_spt = JenisSpt::findOrFail($spt[0]->jenis_spt_id);
+    //     // dd($get_jenis_spt);
+    //     $lokasi = Lokasi::where('id',json_decode($spt[0]->lokasi_id[0]))->get();
+    //     $data_Laporan = DB::table('detail_spt')
+    //                     ->where('spt_id','=',$get_spt_id->spt_id)
+    //                     ->join('laporan_pemeriksaan','detail_spt.id','=','laporan_pemeriksaan.detail_spt_id')
+    //                     ->where('peran','=','Anggota Tim')
+    //                     // ->select('')
+    //                     ->get();
+
+    //     return view('admin.laporan.pemeriksaan_lhp.form_input_lhp',['kode'=>$kode,'spt'=>$spt,'lokasi'=>$lokasi,'data_pemeriksaan'=>$data_Laporan,'data_jenis_spt'=>$get_jenis_spt/*,'data_ttd'=>$get_laporan_all_by_spt_id*/,'id'=>$id]);
+    // }
 
     // public function memberi_revisi_kka($id)
     // {
@@ -699,5 +699,37 @@ class KkaController extends Controller
         // $nilai = Array(2,4,1,12,20,14,45,62,90,12,16,17,16,34,32,31,10);
         // max($nilai);
         return $data;
+    }
+
+    public function inputPaparanKKA(Request $request)
+    {
+        foreach ($request->point_komentar as $i => $v) {
+            $get_data_kka = Laporan_pemeriksaan::where('id',$i); /*belum bisa mengecek apakah sudah ada komentarnya*/
+            // dd($get_data_kka->get());
+            $data = $get_data_kka->update(['komentar'=>$v]);
+        }
+
+        if ($data) {
+            // dd('berlanjut ke lhp');
+            // proses input lhp
+            $userid = auth()->user()->id;
+            $get_spt_id = DetailSpt::findOrFail($request->id_detail);
+            $kode = KodeTemuan::select('id','kode','deskripsi', 'atribut')->whereRaw('JSON_EXTRACT(atribut, "$.kelompok") <> CAST("null" AS JSON) AND JSON_EXTRACT(atribut, "$.subkelompok") <> CAST("null" AS JSON)')->orderBy('sort_id', 'ASC')->get();
+            $get_laporan_all_by_spt_id = DetailSpt::where('spt_id',$get_spt_id->spt_id)->with('user')->get();
+            // dd($get_laporan_all_by_spt_id);
+            $spt = Spt::where('id',$get_spt_id->spt_id)->get();
+            $get_jenis_spt = JenisSpt::findOrFail($spt[0]->jenis_spt_id);
+            // dd($get_jenis_spt);
+            $lokasi = Lokasi::where('id',json_decode($spt[0]->lokasi_id[0]))->get();
+            $data_Laporan = DB::table('detail_spt')
+                            ->where('spt_id','=',$get_spt_id->spt_id)
+                            ->join('laporan_pemeriksaan','detail_spt.id','=','laporan_pemeriksaan.detail_spt_id')
+                            ->where('peran','=','Anggota Tim')
+                            // ->select('')
+                            ->get();
+
+            return view('admin.laporan.pemeriksaan_lhp.form_input_lhp',['kode'=>$kode,'spt'=>$spt,'lokasi'=>$lokasi,'data_pemeriksaan'=>$data_Laporan,'data_jenis_spt'=>$get_jenis_spt/*,'data_ttd'=>$get_laporan_all_by_spt_id*/,'id'=>$request->id_detail]);
+        }
+
     }
 }

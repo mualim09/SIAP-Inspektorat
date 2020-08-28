@@ -222,20 +222,23 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 	Route::group(['prefix' => 'kka', 'middleware'=> ['role:Super Admin|Auditor|Inspektur']], function(){
 		Route::get('input-kka/{id}','KkaController@InputKka')->name('input_kka');
 		Route::get('input-lhp/{id}','KkaController@InputLhp')->name('input_lhp');
+		Route::get('paparan/{id}','KkaController@paparanKKA');
+		Route::post('input-paparan','KkaController@inputPaparanKKA')->name('input-paparan');
+
 		Route::get('getdata_detail/{id}','KkaController@ProsesButtonKAA');
 		Route::get('getDataTemuan_per_auditor/{id}','KkaController@getDataTemuan');
 		Route::get('getdata-editKKA/{id}','KkaController@getEditKodeTemuanKKA');
     	Route::post('/laporan-auditor', 'KkaController@proses_upload')->name('laporan_auditor');
 
     	//unggah kka oleh ketua tim & menyejui kka oleh daltu,dalnis,penanggungjawab
-    	Route::get('/unggah-KKA/{id}','KkaController@uploadKKA');
+    	Route::get('/unggah-KKA/{id}','KkaController@uploadKKA')->name('unggah');
     	Route::get('menyetujui/{id}','KkaController@Penyetujuan_daltu_dalnis');
     	Route::get('menyetujui_penanggungjawab/{id}','KkaController@Penyetujuan_penanggungjawab');
     	Route::get('tolak-kka/{id}','KkaController@tolakKKA');
 
     	//cetak kka & lhp
     	Route::get('/cetak/kka/{id}','KkaController@cetakLaporan')->name('laporan-cetak');
-    	Route::get('/cetak/lhp/{id}','KkaController@cetakLhp')->name('laporan-lhp-cetak');
+    	Route::get('/cetak/lhp/{id}','KkaController@cetakLhp')->name('laporan-lhp-cetak'); //
     });
 
 	//lhp
@@ -264,6 +267,12 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 		Route::get('getdata', 'DupakController@getData')->name('data_dupak');
 		Route::get('user/{id}', 'DupakController@dupakUser')->name('get_dupak_user');
 		Route::post('store/penunjang', 'DupakController@storePenunjang')->name('store_dupak_penunjang');		
+	});
+
+	Route::group(['prefix'=>'lokasi', 'middleware'=> ['role:Super Admin']],function(){
+		Route::get('lokasi','LokasiController@index')->name('index_lokasi');
+		Route::post('save-lokasi','LokasiController@store')->name('store_lokasi');
+		Route::get('getdata-lokasi','LokasiController@getLokasiPemeriksaan')->name('get_data_lokasi');
 	});
 		
 
