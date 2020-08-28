@@ -90,6 +90,7 @@ class SptController extends Controller
        $user = auth()->user();
         /*$request->tgl_mulai = Carbon::createFromLocaleIsoFormat('Y-m-d H:i:s', config('app.locale'), $request['tgl_mulai']);
         $request->tgl_akhir = Carbon::createFromLocaleIsoFormat('Y-m-d H:i:s', config('app.locale'), $request['tgl_akhir']);*/
+        //['jenis_spt_id', 'lokasi_id', 'nomor', 'tgl_mulai', 'tgl_akhir', 'lama','tambahan','info'];
         $this->validate($request, [
             'jenis_spt_id' => 'required|integer',
             'tgl_mulai'=>'required|date_format:"d-m-Y"',
@@ -101,13 +102,13 @@ class SptController extends Controller
             ]
         );
          $data = [
-            'jenis_spt_id' => $request['jenis_spt_id'],
-            'name' => $request['name'],
+            'jenis_spt_id' => strip_tags($request['jenis_spt_id']),
+            'name' => strip_tags($request['name']),
             'tgl_mulai' => date('Y-m-d H:i:s',strtotime($request['tgl_mulai'])),
             'tgl_akhir' => date('Y-m-d H:i:s',strtotime($request['tgl_akhir'])),
             'lama' => $request['lama'],
             'lokasi_id' => $request['lokasi_id'],
-            'tambahan' => $request['tambahan'],
+            'tambahan' => strip_tags($request['tambahan']),
             'info' => $request['info'],
         ];
         
@@ -248,7 +249,7 @@ class SptController extends Controller
             'tgl_akhir' => date('Y-m-d H:i:s',strtotime($request['tgl_akhir'])),
             'lama'=> $request->lama,
             'lokasi_id' => $request['lokasi_id'],
-            'tambahan' => $request['tambahan'],
+            'tambahan' => strip_tags($request['tambahan']),
             'info' => $request['info'],
         ];
 
@@ -259,7 +260,7 @@ class SptController extends Controller
         $spt->tgl_akhir = $data['tgl_akhir'];
         $spt->lama = $data['lama'];
         $spt->lokasi_id = $data['lokasi_id'];
-        $spt->tambahan = $data['tambahan'];
+        $spt->tambahan = strip_tags($data['tambahan']);
         $spt->info = $data['info'];
         $spt = $spt->save();
         if($spt){
