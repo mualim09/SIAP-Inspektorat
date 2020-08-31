@@ -60,20 +60,21 @@ class JenisSptController extends Controller
             'dasar' => 'required|string|min:10',
             //'isi' => 'required|string|min:10',
             //'kategori' => 'required|string|min:5',
-            'kode_kelompok' => 'required|string|min:3',
+            'kode_kelompok' => 'required|string|min:3|max:20',
             'input' => 'nullable',
             'radio' => 'nullable'
 
         ]);
 
         $user = auth()->user();
+        //$kategori = ( $user->hasAnyRole(['TU Perencanaan','Super Admin']) ) ? 'pengawasan' : ( $user->hasAnyRole(['TU Umum']) ) ? 'umum' : null; //aktifkan jika ingin menggunakan fitur spt bag umum
         $kategori = ( $user->hasAnyRole(['TU Perencanaan','Super Admin']) ) ? 'pengawasan' : null;
 
         $data = [
-            'name' => $request->name,
-            'sebutan' => $request->sebutan,
-            'dasar' => $request->dasar,
-            'kode_kelompok' => $request->kode_kelompok,
+            'name' => Common::cleanInput($request->name),
+            'sebutan' => Common::cleanInput($request->sebutan),
+            'dasar' => Common::cleanInput($request->dasar),
+            'kode_kelompok' => Common::cleanInput($request->kode_kelompok),
             'input' => $request->input,
             'radio' => $request->radio,
             'kategori' => $kategori
@@ -125,10 +126,10 @@ class JenisSptController extends Controller
             'input' => 'nullable',
             'radio' => 'nullable'
         ]);
-        $jenis_spt->name = $request->name;
-        $jenis_spt->sebutan = $request->sebutan;
-        $jenis_spt->dasar = $request->dasar;
-        $jenis_spt->kode_kelompok = $request->kode_kelompok;
+        $jenis_spt->name = Common::cleanInput($request->name);
+        $jenis_spt->sebutan = Common::cleanInput($request->sebutan);
+        $jenis_spt->dasar = Common::cleanInput($request->dasar);
+        $jenis_spt->kode_kelompok = Common::cleanInput($request->kode_kelompok);
         $jenis_spt->input = $request->input;
         $jenis_spt->radio = $request->radio;
 

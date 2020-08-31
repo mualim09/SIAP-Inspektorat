@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\models\KodeTemuan;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Common;
 
 class KodeTemuanController extends Controller
 {
@@ -45,11 +46,16 @@ class KodeTemuanController extends Controller
     {
         
         $this->validate($request,[
-            'kode' => 'required|string|max:255|min:1',
+            'kode' => 'required|string|max:5|min:1',
             'deskripsi' => 'required|string|min:10'
-        ]);        
+        ]);
+        //['kode', 'deskripsi', 'atribut'];
+        $data =[
+            'kode' => Common::cleanInput($request->kode),
+            'deskripsi' => Common::cleanInput($request->deskripsi)
+        ];
 
-        $kode = KodeTemuan::create($request->all());        
+        $kode = KodeTemuan::create($data);        
         
         if($kode){
             $msg = 'Kode Temuan tersimpan';

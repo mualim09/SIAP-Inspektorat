@@ -54,7 +54,7 @@ $.ajaxSetup({
 
     $("#form-kode-temuan").validate({
         rules: {
-            kode : {required: true, minlength: 1},
+            kode : {required: true, minlength: 1, maxlength: 5},
             deskripsi: {required: true, minlength: 10}
         },
 
@@ -76,8 +76,7 @@ $.ajaxSetup({
                 /*data: $('#spt-form').serialize(),*/
                 success: function(data){                                        
                     $("#form-kode-temuan")[0].reset();
-                   // console.log('success:', data);
-                    alert(data);
+                   // console.log('success:', data);                    
                     select_sub.clear();
                     select_kelompok.clear();
                 },

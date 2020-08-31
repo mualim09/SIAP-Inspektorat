@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\models\Lokasi;
 use Yajra\DataTables\DataTables;
+use App\Common;
 
 class LokasiController extends Controller
 {
@@ -81,9 +82,9 @@ class LokasiController extends Controller
         }
 
         $data = new Lokasi;
-        $data->nama_lokasi  = $hasil;
-        $data->jenis_lokasi = $req['kateg_lokasi'];
-        $data->sebutan_pimpinan = $req['sebutan_pimpinan'];
+        $data->nama_lokasi  = Common::cleanInput($hasil);
+        $data->jenis_lokasi = Common::cleanInput($req['kateg_lokasi']);
+        $data->sebutan_pimpinan = Common::cleanInput($req['sebutan_pimpinan']);
         $data->save();
     }
 
@@ -144,8 +145,9 @@ class LokasiController extends Controller
                     return $data->jenis_lokasi;
                 })
                 ->addColumn('action', function($data){
-                    $return = '<a href="javascript:void(0);" onclick="editLokasi('. $data->id .')" outline type="primary" title="Edit Lokasi"><i class="ni ni-ruler-pencil"></i></a>';
-                    return $return;
+                    //$return = '<a href="javascript:void(0);" onclick="editLokasi('. $data->id .')" outline type="primary" title="Edit Lokasi"><i class="ni ni-single-copy-04"></i></a>';
+                    //return $return;
+                    return;
                     // $return = $this->buildControl('viewAnggota',$col->id);
                     // $return .= $this->buildControl('cetakPdf',$col->id);
                     // if($col->approval_status == 'processing'){

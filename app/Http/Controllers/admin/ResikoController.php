@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Yajra\DataTables\DataTables;
 use App\models\Resiko;
 use Carbon\Carbon;
+use App\Common;
 use Config;
 use DB, PDF;
 
@@ -36,13 +37,13 @@ class ResikoController extends Controller
             ]);
         
         $dataResiko = [
-            'opd' => $request['opd'],
-            'nama_kegiatan' => $request['nama_kegiatan'],
-            'tujuan_kegiatan' => $request['tujuan_kegiatan'],
-            'sasaran_pd' => $request['sasaran_pd'],
-            'tujuan_pd' => $request['tujuan_pd'],
-            'capaian' => $request['capaian'],
-            'tujuan' => $request['tujuan']
+            'opd' => Common::cleanInput($request['opd']),
+            'nama_kegiatan' => Common::cleanInput($request['nama_kegiatan']),
+            'tujuan_kegiatan' => Common::cleanInput($request['tujuan_kegiatan']),
+            'sasaran_pd' => Common::cleanInput($request['sasaran_pd']),
+            'tujuan_pd' => Common::cleanInput($request['tujuan_pd']),
+            'capaian' => Common::cleanInput($request['capaian']),
+            'tujuan' => Common::cleanInput($request['tujuan'])
         ];
 
         $data = Resiko::create($dataResiko);

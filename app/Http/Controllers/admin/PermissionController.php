@@ -45,7 +45,7 @@ class PermissionController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name'=>'required|max:40',
+            'name'=>'required|max:40|regex:[A-Za-z1-9 ]',
             ]
         );
         $data = [
@@ -54,7 +54,7 @@ class PermissionController extends Controller
 
         $name = $request['name'];
         $permission = new Permission();
-        $permission->name = $name;
+        $permission->name = Common::cleanInput($name);
         
         //$roles = $request['roles'];
 
@@ -106,7 +106,7 @@ class PermissionController extends Controller
     {
         $permission = Permission::findOrFail($id);
         $this->validate($request, [
-            'name'=>'required|max:40',
+            'name'=>'required|max:40|regex:[A-Za-z1-9 ]',
         ]);
         $input = $request->all();
         if ($permission->fill($input)->save()){

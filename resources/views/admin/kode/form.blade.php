@@ -3,13 +3,13 @@
     <div class="form-group row">
       <span class="col-lg-4 col-form-label text-md-right">{{ __('Kode')}} </span>
       <div class="col-md-4">
-        <input type="text" name="kode" class="form-control" placeholder="Masukkan Kode" id="kode" required>
+        <input type="text" name="kode" class="form-control" placeholder="Masukkan Kode" id="kode" required pattern="[A-Za-z1-9 ]">
       </div>
     </div>
     <div class="form-group row">
         <span class="col-lg-4 col-form-label text-md-right">{{ __('Deskripsi')}} </span>
         <div class="col">
-          <input type="text" name="deskripsi" class="form-control" placeholder="Masukkan Deskripsi Kode Temuan" id="deskripsi" required>
+          <input type="text" name="deskripsi" class="form-control" placeholder="Masukkan Deskripsi Kode Temuan" id="deskripsi" required pattern="[A-Za-z1-9 ]">
         </div>
     </div>
     <div class="form-group row">

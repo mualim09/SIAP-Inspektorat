@@ -102,13 +102,13 @@ class SptController extends Controller
             ]
         );
          $data = [
-            'jenis_spt_id' => strip_tags($request['jenis_spt_id']),
-            'name' => strip_tags($request['name']),
+            'jenis_spt_id' => $request['jenis_spt_id'],
+            'name' => Common::cleanInput($request['name']),
             'tgl_mulai' => date('Y-m-d H:i:s',strtotime($request['tgl_mulai'])),
             'tgl_akhir' => date('Y-m-d H:i:s',strtotime($request['tgl_akhir'])),
             'lama' => $request['lama'],
             'lokasi_id' => $request['lokasi_id'],
-            'tambahan' => strip_tags($request['tambahan']),
+            'tambahan' => Common::cleanInput($request['tambahan']),
             'info' => $request['info'],
         ];
         
@@ -156,7 +156,7 @@ class SptController extends Controller
         $anggota_spt = DB::table('detail_spt')->insertGetId([
             'spt_id' => $request['spt_id'],
             'user_id' => $request['user_id'],
-            'peran' => $request['peran'],
+            'peran' => Common::cleanInput($request['peran']),
             'unsur_dupak' => $unsur_dupak,
             //'dupak' => $this->hitungDupak($request['user_id'],$request['peran'],$lama, $isLembur)
         ]);
@@ -182,7 +182,7 @@ class SptController extends Controller
                 DB::table('detail_spt')->insertGetId([
                 'spt_id' => $spt_id,
                 'user_id' => $anggota['user_id'],
-                'peran' => $anggota['peran'],
+                'peran' => Common::cleanInput($anggota['peran']),
                 'unsur_dupak' => $unsur_dupak,
                 //'dupak' => $this->hitungDupak($anggota['user_id'],$anggota['peran'],$lama,$isLembur)
             ]);
@@ -249,7 +249,7 @@ class SptController extends Controller
             'tgl_akhir' => date('Y-m-d H:i:s',strtotime($request['tgl_akhir'])),
             'lama'=> $request->lama,
             'lokasi_id' => $request['lokasi_id'],
-            'tambahan' => strip_tags($request['tambahan']),
+            'tambahan' => Common::cleanInput($request['tambahan']),
             'info' => $request['info'],
         ];
 
@@ -260,7 +260,7 @@ class SptController extends Controller
         $spt->tgl_akhir = $data['tgl_akhir'];
         $spt->lama = $data['lama'];
         $spt->lokasi_id = $data['lokasi_id'];
-        $spt->tambahan = strip_tags($data['tambahan']);
+        $spt->tambahan = Common::cleanInput($data['tambahan']);
         $spt->info = $data['info'];
         $spt = $spt->save();
         if($spt){
@@ -387,7 +387,7 @@ class SptController extends Controller
                     }
                     return $return;
                 })
-                ->escapeColumns([])
+                ->rawColumns(['ringkasan', 'action'])
                 ->make(true);
         return $dt;
     }

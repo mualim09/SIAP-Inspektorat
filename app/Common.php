@@ -140,6 +140,11 @@ class Common
         return $available;
     
     }
+
+    static function cleanInput($input){
+        $allowed_html = '<br><p><div><span><img><a>';
+        return strip_tags($input, $allowed_html);
+    }
     
 
     function find_key_value($array, $key, $val)

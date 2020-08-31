@@ -8,6 +8,7 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Yajra\DataTables\DataTables;
 use Redirect,Response;
+use App\Common;
 
 
 class RoleController extends Controller
@@ -47,14 +48,14 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name'=>'required|unique:roles|max:40',
+            'name'=>'required|unique:roles|max:40|regex:[A-Za-z1-9 ]',
             'permissions' =>'required',
             ]
         );
 
         $name = $request['name'];
         $role = new Role();
-        $role->name = $name;
+        $role->name = Common::cleanInput($name);
 
         $permissions = $request['permissions'];
 
@@ -109,7 +110,7 @@ class RoleController extends Controller
         $role = Role::findOrFail($id);//Get role with the given id
     //Validate name and permission fields
         $this->validate($request, [
-            'name'=>'required|max:40|unique:roles,name,'.$id,
+            'name'=>'required|max:40|regex:[A-Za-z1-9 ]|unique:roles,name,'.$id,
             'permissions' =>'required',
         ]);
 

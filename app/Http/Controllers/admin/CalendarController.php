@@ -5,7 +5,7 @@ namespace App\Http\Controllers\admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Event, App\models\Spt, App\models\DetailSpt;
-use Redirect,Response,DB;
+use Redirect, Response, DB, App\Common;
 
 class CalendarController extends Controller
 {
@@ -99,7 +99,7 @@ class CalendarController extends Controller
             'start' => 'required|date',
             'end' => 'required|date|after_or_equal:start'
         ]);  
-        $insertArr = [ 'title' => $request->title,
+        $insertArr = [ 'title' => Common::cleanInput($request->title),
                        'start' => $request->start,
                        'end' => $request->end,
                        'info' => null //set to null to add holiday (libur hari besar)
@@ -198,7 +198,7 @@ class CalendarController extends Controller
         $info['jenis'] = $request->jenis;
 
         $event = Event::findOrFail($request->event_id);
-        $event->title = $request->title;
+        $event->title = Common::cleanInput($request->title);
         $event->start = date('Y-m-d H:i:s',strtotime($request['start']));
         $event->end = date('Y-m-d H:i:s',strtotime($request['end']));
         $event->info = $info;
