@@ -6,27 +6,6 @@
 
 @section('content_auditor')
 
-    <!-- <div class="tab-pane active" id="auditor-tab" role="tabpanel" aria-labelledby="auditor-tab">
-      <div class="card-body table-responsive">
-        <div class="tab-content" id="myTabContent">
-          <div class="tab-pane active" id="home-tab" role="tabpanel">
-            <div class="table-responsive">
-                <table id="tabel_kka" class="table table-striped table-sm ajax-table" style="border-collapse: collapse;margin: 0;padding: 0;width: 100%;">
-                    <thead></thead>
-                    <tbody></tbody>
-                </table>
-            <div class="table-responsive">
-                <div class="tab-pane" id="semua-tab" role="tabpanel" aria-labelledby="semua-tab">
-                  
-                </div>
-            </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> -->
-      
-
     <div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="mySmallModalPemeriksaan" aria-hidden="true" id="modalPemeriksaan">
       <div class="modal-dialog modal-xl" style="max-width: 75%;">
         <div class="modal-content">
@@ -42,7 +21,7 @@
                 <div class="text">
                     <!-- <a href="#" class="btn btn-success btn-xs" style="display: none;" id="unggah">Unggah</a> --> <!-- dipindahkan fungsi button jadi di lhp insert + unggah -->
                     <a href="#" class="btn btn-primary btn-xs cetak" style="display: none;" id="paparan">Paparan</a>
-                    <a href="#" class="btn btn-danger btn-xs" id="revisi" style="display: none;">Revisi</a>
+                    <!-- <a href="#" class="btn btn-danger btn-xs" id="revisi" style="display: none;">Revisi</a> -->
                     <a href="#" class="btn btn-success btn-xs" id="menyetujui" style="display: none;">Menyetujui</a>
                 </div>
                 <div class="table-responsive">
@@ -281,7 +260,7 @@
                     });
                 });
 
-                // url_prefix ? "/kka/input-lhp/"+id : "admin/kka/input-lhp/"+id
+                // (window.location.pathname == '/admin/kka') ? "/kka/input-lhp/"+id : "admin/kka/input-lhp/"+id
                 $('#paparan').click(function(){
                     window.location.href = url_prefix ? "/kka/paparan/"+id : "admin/kka/paparan/"+id;
                     // $.confirm({

@@ -28,6 +28,7 @@ use App\models\FileMedia;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Session;
 use Intervention\Image\Facades\Image;
+use Redirect;
 
 class KkaController extends Controller
 {
@@ -225,13 +226,13 @@ class KkaController extends Controller
                     // dd($get_value_penanggung_jawab->where('user_id',auth()->user()->id)->get()[0]->peran == 'Anggota Tim');
                     if($get_value_penanggung_jawab->where('user_id',auth()->user()->id)->get()[0]->peran == 'Anggota Tim'){
                         $control = '<a href="'.route('laporan-cetak',$col->id).'" data-toggle="tooltip" title="Cetak KKA" class="btn btn-outline-info btn-sm"><i class="ni ni-single-copy-04"></i></a>';
-                        $control .= '<a href="#" data-toggle="tooltip" title="Cetak LHP" class="btn btn btn-outline-danger btn-sm disabled"><i class="ni ni-collection"></i></a>';
-                        $control .= '<a href="#" onclick="#" data-toggle="tooltip" title="Ubah KKA" class="btn btn btn-outline-danger btn-sm disabled"><i class="ni ni-ruler-pencil"></i></a>';
+                        // $control .= '<a href="#" data-toggle="tooltip" title="Cetak LHP" class="btn btn btn-outline-danger btn-sm disabled"><i class="ni ni-collection"></i></a>';
+                        // $control .= '<a href="#" onclick="#" data-toggle="tooltip" title="Ubah KKA" class="btn btn btn-outline-danger btn-sm disabled"><i class="ni ni-ruler-pencil"></i></a>';
                         // if ($get_value_penanggung_jawab[0]->status['PenanggungJawab'] != null) {
                     }else{
                         $control = '<a href="'.route('laporan-cetak',$col->id).'" data-toggle="tooltip" title="Cetak KKA" class="btn btn-outline-info btn-sm"><i class="ni ni-single-copy-04"></i></a>';
-                        $control .= '<a href="'.route('laporan-lhp-cetak',$col->id).'" data-toggle="tooltip" title="Cetak LHP" class="btn btn btn-outline-info btn-sm"><i class="ni ni-collection"></i></a>';
-                        $control .= '<a href="#" onclick="showModalEditKKA('.$col->id.')" data-toggle="tooltip" title="Ubah KKA" class="btn btn btn-outline-warning btn-sm"><i class="ni ni-ruler-pencil"></i></a>';
+                        // $control .= '<a href="'.route('laporan-lhp-cetak',$col->id).'" data-toggle="tooltip" title="Cetak LHP" class="btn btn btn-outline-info btn-sm"><i class="ni ni-collection"></i></a>';
+                        // $control .= '<a href="#" onclick="showModalEditKKA('.$col->id.')" data-toggle="tooltip" title="Ubah KKA" class="btn btn btn-outline-warning btn-sm"><i class="ni ni-ruler-pencil"></i></a>';
                         // if ($get_value_penanggung_jawab[0]->status['PenanggungJawab'] != null) {
                         // }
                         // $control .= '<a href="#" data-toggle="tooltip" title="Lihat KKA Sebelumnya" class="btn btn btn-outline-warning btn-sm"><i class="ni ni-book-bookmark"></i></a>'; //buttom lihat kka
@@ -242,13 +243,11 @@ class KkaController extends Controller
                 ->make(true);
         return $dt;
     }
-// if($filename !== null ){
-//             if (! File::exists(public_path()."/storage/spt")) {
-//                 File::makeDirectory(public_path()."/storage/spt", 0755, true);
-//             }
-//             $request->file_spt->move(public_path()."/storage/spt" , $filename);
-//         } 
+
     public function proses_upload(Request $request){
+        // Common::cleanInput()
+        // $kondisi = Common::cleanInput($request->file_laporan['kondisi']);
+        // $kriteria = Common::cleanInput($request->file_laporan['kriteria']);
 
         /*get img from summernote*/ /*proses penyimpanan gambar dari base64 ke db hanya url saja*/
         $kondisi_img=$request->file_laporan['kondisi'];
@@ -295,13 +294,11 @@ class KkaController extends Controller
         
         /*mengecek img pada kondisi ada apa tidak*/
         if (is_null($images['length'])){
+            // $kondisi_anggota = str_replace('&nbsp;', ' ', preg_replace('/<[^>]*>|"/', '', $request->file_laporan['kondisi']));
+            $kondisi = stripslashes($request->file_laporan['kondisi']);
             $newImageSrc = null;
         }else{
-            $kondisi_img_var = $request->file_laporan['kondisi'];
-            $dom_var = new \DomDocument();
-            $dom_var->loadHtml($kondisi_img, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);    
-            $images_var = $dom_var->getElementsByTagName('img');
-            foreach ($images_var as $image_var) {
+            foreach ($images as $image_var) {
                 $img_kosong = 'www/kosong';
                 $imageSrc_var = $image_var->getAttribute('src');
                 $var_hmtl = '<img style="'.$image_var->getAttribute('style').'" src='.$img_kosong.'>';
@@ -310,23 +307,17 @@ class KkaController extends Controller
             }
             /*menghilangkan base64 pada string dengan mengantikanya dengan var $imageSrc_var */
             $kondisi = (str_replace('&nbsp;', ' ',preg_replace('/(<img[^>]+>(?:<\/img>)?)/i', $imageSrc_var, $request->file_laporan['kondisi']))); /*NOTE:untuk img yg diubah jika kosong akan menjadi p tag kosong*/
-            // dd($kondisi);
             $newImageSrc;
             // dd($newImageSrc);
         }
+        // dd($kondisi);
         // die();
         /*end proses kondisi*/
 
-        // if ($request->edit_kka == null) {
-            $dalnis_atau_daltu = DetailSpt::where('spt_id',$request->spt_id)->where('user_id',auth()->user()->id)->get();
-            $get_status_anggota = DetailSpt::where('spt_id',$request->spt_id)->where('peran','Anggota Tim')->get();
-            $get_detail_id = DetailSpt::where('spt_id',$request->spt_id)->where('user_id',auth()->user()->id);
-        // }elseif($request->edit_kka != null){
-        //     $dalnis_atau_daltu = DetailSpt::where('spt_id',$request->id)->where('user_id',auth()->user()->id)->get(); //get peran daltu & dalnis by auth
-        //     $get_status_anggota = DetailSpt::where('spt_id',$request->id)->where('peran','Anggota Tim')->get(); //get data status anggota by peran
-        //     $get_detail_id = DetailSpt::where('spt_id',$request->id)->where('user_id',auth()->user()->id);
-            $data_anggota = DetailSpt::where('spt_id',$request->id)->where('peran','Anggota Tim');
-        // }
+        $dalnis_atau_daltu = DetailSpt::where('spt_id',$request->spt_id)->where('user_id',auth()->user()->id)->get();
+        $get_status_anggota = DetailSpt::where('spt_id',$request->spt_id)->where('peran','Anggota Tim')->get();
+        $get_detail_id = DetailSpt::where('spt_id',$request->spt_id)->where('user_id',auth()->user()->id);
+        $data_anggota = DetailSpt::where('spt_id',$request->id)->where('peran','Anggota Tim');
 
         $kode = $request->file_laporan['kode_temuan_id'];
         $sasaran = $request->file_laporan['sasaran_audit'];
@@ -334,7 +325,7 @@ class KkaController extends Controller
         $jenis_laporan = 'KKA';
         $created_at = Carbon::now()->toDateTimeString();
         $updated_at = Carbon::now()->toDateTimeString();
-        $kriteria = json_encode($request->file_laporan['kriteria']);
+        $kriteria = json_encode(Common::cleanInput($request->file_laporan['kriteria']));
 
         //proses insert anggota tim
         $jenis_laporan = 'KKA';
@@ -345,11 +336,12 @@ class KkaController extends Controller
         $status_anggota['PenanggungJawab'] = null;
 
         $update_anggota = $get_detail_id->update(['jenis_laporan'=>$jenis_laporan,'status'=>json_encode($status_anggota)]);
-        $save = Laporan_pemeriksaan::insert(['detail_spt_id'=>$get_detail_id->get()[0]->id,'kode_temuan_id'=>$kode,'sasaran_audit'=>$sasaran,'judultemuan'=>$judultemuan,'kondisi'=>$kondisi,'kriteria'=>$kriteria,'url_img_laporan'=>$newImageSrc,'created_at'=>$created_at,'updated_at'=>$updated_at]);
+        $save = Laporan_pemeriksaan::insert(['detail_spt_id'=>$get_detail_id->get()[0]->id,'kode_temuan_id'=>$kode,'sasaran_audit'=>$sasaran,'judultemuan'=>$judultemuan,'kondisi'=>Common::cleanInput($kondisi),'kriteria'=>$kriteria,'url_img_laporan'=>$newImageSrc,'created_at'=>$created_at,'updated_at'=>$updated_at]);
 
         return redirect()->back()->with('alert', 'Anda telah berhasil mengubah KKA tersebut');
     }
 
+    // edit belum di review
     public function editKKA(Request $request)
     {
         // if ($request->edit_kka == null) {
@@ -626,37 +618,44 @@ class KkaController extends Controller
         // dd('fungsi berjalan dan menampilkan '.$id);
         $getdata = DetailSpt::where('id',$id)->with('pemeriksaan','spt')->get();
         $data_detail = $getdata[0];
-        $data_pemeriksaan = DetailSpt::where('spt_id',$getdata[0]->spt_id)->where('peran','Anggota Tim')->with('pemeriksaan')->get();
+        // $data_pemeriksaan = DetailSpt::where('spt_id',$getdata[0]->spt_id)->where('peran','Anggota Tim')->with('pemeriksaan')->get();
         // dd($data_pemeriksaan);
         $data_spt = $getdata[0]->spt;
         $data_lokasi = Lokasi::find($data_spt['lokasi_id'][0]);
         $data_jenis_spt = JenisSpt::findOrFail($getdata[0]->spt->jenis_spt_id);
         $year = date('Y');
+        $data_Laporan = DB::table('detail_spt')
+                            ->where('spt_id','=',$getdata[0]->spt_id)
+                            ->join('laporan_pemeriksaan','detail_spt.id','=','laporan_pemeriksaan.detail_spt_id')
+                            ->where('peran','=','Anggota Tim')
+                            // ->select('')
+                            ->get();
 
-        return view('admin.laporan.pemeriksaan_kka.paparan_kka',['data_pemeriksaan'=>$data_pemeriksaan,'data_detail'=>$data_detail,'data_spt'=>$data_spt,'data_jenis_spt'=>$data_jenis_spt,'data_lokasi'=>$data_lokasi,'tahun'=>$year]);
+        return view('admin.laporan.pemeriksaan_kka.paparan_kka',['data_pemeriksaan'=>$data_Laporan,'data_detail'=>$data_detail,'data_spt'=>$data_spt,'data_jenis_spt'=>$data_jenis_spt,'data_lokasi'=>$data_lokasi,'tahun'=>$year]);
     } 
 
-    // public function InputLhp($id)
-    // {
-    //     // dd($id); id berisikan id detail spt
-    //     $userid = auth()->user()->id;
-    //     $get_spt_id = DetailSpt::findOrFail($id);
-    //     $kode = KodeTemuan::select('id','kode','deskripsi', 'atribut')->whereRaw('JSON_EXTRACT(atribut, "$.kelompok") <> CAST("null" AS JSON) AND JSON_EXTRACT(atribut, "$.subkelompok") <> CAST("null" AS JSON)')->orderBy('sort_id', 'ASC')->get();
-    //     $get_laporan_all_by_spt_id = DetailSpt::where('spt_id',$get_spt_id->spt_id)->with('user')->get();
-    //     // dd($get_laporan_all_by_spt_id);
-    //     $spt = Spt::where('id',$get_spt_id->spt_id)->get();
-    //     $get_jenis_spt = JenisSpt::findOrFail($spt[0]->jenis_spt_id);
-    //     // dd($get_jenis_spt);
-    //     $lokasi = Lokasi::where('id',json_decode($spt[0]->lokasi_id[0]))->get();
-    //     $data_Laporan = DB::table('detail_spt')
-    //                     ->where('spt_id','=',$get_spt_id->spt_id)
-    //                     ->join('laporan_pemeriksaan','detail_spt.id','=','laporan_pemeriksaan.detail_spt_id')
-    //                     ->where('peran','=','Anggota Tim')
-    //                     // ->select('')
-    //                     ->get();
+    public function InputLhp($id)
+    {
+        // dd($id);
+        // dd($id); id berisikan id detail spt
+        $userid = auth()->user()->id;
+        $get_spt_id = DetailSpt::findOrFail($id);
+        $kode = KodeTemuan::select('id','kode','deskripsi', 'atribut')->whereRaw('JSON_EXTRACT(atribut, "$.kelompok") <> CAST("null" AS JSON) AND JSON_EXTRACT(atribut, "$.subkelompok") <> CAST("null" AS JSON)')->orderBy('sort_id', 'ASC')->get();
+        $get_laporan_all_by_spt_id = DetailSpt::where('spt_id',$get_spt_id->spt_id)->with('user')->get();
+        // dd($get_laporan_all_by_spt_id);
+        $spt = Spt::where('id',$get_spt_id->spt_id)->get();
+        $get_jenis_spt = JenisSpt::findOrFail($spt[0]->jenis_spt_id);
+        // dd($get_jenis_spt);
+        $lokasi = Lokasi::where('id',json_decode($spt[0]->lokasi_id[0]))->get();
+        $data_Laporan = DB::table('detail_spt')
+                        ->where('spt_id','=',$get_spt_id->spt_id)
+                        ->join('laporan_pemeriksaan','detail_spt.id','=','laporan_pemeriksaan.detail_spt_id')
+                        ->where('peran','=','Anggota Tim')
+                        // ->select('')
+                        ->get();
 
-    //     return view('admin.laporan.pemeriksaan_lhp.form_input_lhp',['kode'=>$kode,'spt'=>$spt,'lokasi'=>$lokasi,'data_pemeriksaan'=>$data_Laporan,'data_jenis_spt'=>$get_jenis_spt/*,'data_ttd'=>$get_laporan_all_by_spt_id*/,'id'=>$id]);
-    // }
+        return view('admin.laporan.pemeriksaan_lhp.form_input_lhp',['kode'=>$kode,'spt'=>$spt,'lokasi'=>$lokasi,'data_pemeriksaan'=>$data_Laporan,'data_jenis_spt'=>$get_jenis_spt/*,'data_ttd'=>$get_laporan_all_by_spt_id*/,'id'=>$id]);
+    }
 
     // public function memberi_revisi_kka($id)
     // {
@@ -674,22 +673,22 @@ class KkaController extends Controller
     //     $save = info_rev_kka::insert(['id_detail_spt'=>$data->id_detail_spt,'tanggal'=>$data->tanggal,'revisi'=>$data->revisi]);
     // }
 
-    public function input_pdf_kka(Request $request)
-    {
-        // dd('fungsi jalan');
-        // dd($request);
-        // die();
-            // $filename = $request->file_kka->getClientOriginalName();
+    // public function input_pdf_kka(Request $request)
+    // {
+    //     // dd('fungsi jalan');
+    //     // dd($request);
+    //     // die();
+    //         // $filename = $request->file_kka->getClientOriginalName();
 
-            // $path = $request->file_kka->move(public_path('storage\info-revisi-kka') , $filename);
-            // $data = new info_rev_kka(); //save file sertifikat to database
-            // $data->id_detail_spt = $request->id_detail_spt;
-            // $data->nama_file = $filename;
-            // $data->kka = ($filename !== null ) ? url('storage/info-revisi-kka/'.$filename) : null;
-            // dd($data);
-            // $data->uploaded_by = auth()->user()->id;
-            // $data->save();
-    }
+    //         // $path = $request->file_kka->move(public_path('storage\info-revisi-kka') , $filename);
+    //         // $data = new info_rev_kka(); //save file sertifikat to database
+    //         // $data->id_detail_spt = $request->id_detail_spt;
+    //         // $data->nama_file = $filename;
+    //         // $data->kka = ($filename !== null ) ? url('storage/info-revisi-kka/'.$filename) : null;
+    //         // dd($data);
+    //         // $data->uploaded_by = auth()->user()->id;
+    //         // $data->save();
+    // }
 
     public function cek_rev_kka($id)
     {
@@ -703,33 +702,16 @@ class KkaController extends Controller
 
     public function inputPaparanKKA(Request $request)
     {
+        // Common::cleanInput()
         foreach ($request->point_komentar as $i => $v) {
+            // dd($request);
             $get_data_kka = Laporan_pemeriksaan::where('id',$i); /*belum bisa mengecek apakah sudah ada komentarnya*/
-            // dd($get_data_kka->get());
-            $data = $get_data_kka->update(['komentar'=>$v]);
+            $komentar = Common::cleanInput($v);
+            $data = $get_data_kka->update(['komentar'=>$komentar]);
         }
 
-        if ($data) {
-            // dd('berlanjut ke lhp');
-            // proses input lhp
-            $userid = auth()->user()->id;
-            $get_spt_id = DetailSpt::findOrFail($request->id_detail);
-            $kode = KodeTemuan::select('id','kode','deskripsi', 'atribut')->whereRaw('JSON_EXTRACT(atribut, "$.kelompok") <> CAST("null" AS JSON) AND JSON_EXTRACT(atribut, "$.subkelompok") <> CAST("null" AS JSON)')->orderBy('sort_id', 'ASC')->get();
-            $get_laporan_all_by_spt_id = DetailSpt::where('spt_id',$get_spt_id->spt_id)->with('user')->get();
-            // dd($get_laporan_all_by_spt_id);
-            $spt = Spt::where('id',$get_spt_id->spt_id)->get();
-            $get_jenis_spt = JenisSpt::findOrFail($spt[0]->jenis_spt_id);
-            // dd($get_jenis_spt);
-            $lokasi = Lokasi::where('id',json_decode($spt[0]->lokasi_id[0]))->get();
-            $data_Laporan = DB::table('detail_spt')
-                            ->where('spt_id','=',$get_spt_id->spt_id)
-                            ->join('laporan_pemeriksaan','detail_spt.id','=','laporan_pemeriksaan.detail_spt_id')
-                            ->where('peran','=','Anggota Tim')
-                            // ->select('')
-                            ->get();
-
-            return view('admin.laporan.pemeriksaan_lhp.form_input_lhp',['kode'=>$kode,'spt'=>$spt,'lokasi'=>$lokasi,'data_pemeriksaan'=>$data_Laporan,'data_jenis_spt'=>$get_jenis_spt/*,'data_ttd'=>$get_laporan_all_by_spt_id*/,'id'=>$request->id_detail]);
-        }
-
+        $id = $request->id_detail;
+        // return $this->InputLhp($id);
+        return redirect()->route('input_lhp',$id);
     }
 }
