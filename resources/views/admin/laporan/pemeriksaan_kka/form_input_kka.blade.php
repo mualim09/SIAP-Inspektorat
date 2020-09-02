@@ -277,14 +277,14 @@
 @push('css')
     <link href="{{ asset('assets/vendor/selectize/css/selectize.bootstrap3.css') }}" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/datatables/datatables.min.css') }}">
-    <link href="{{ asset('assets/summernote-master/dist/summernote-lite.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/vendor/summernote/summernote-lite.min.css') }}" rel="stylesheet">
     
 @endpush
 @push('js')
     <script src="{{ asset('assets/vendor/jquery/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/datatables/datatables.min.js') }}"></script>
-    <script src="{{ asset('assets/summernote-master/dist/summernote-lite.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/summernote/summernote-lite.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/selectize/js/standalone/selectize.min.js') }}"></script>
 @endpush
-
+vendor\summernote
 
