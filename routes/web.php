@@ -222,6 +222,8 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 	Route::group(['prefix' => 'kka', 'middleware'=> ['role:Super Admin|Auditor|Inspektur']], function(){
 		Route::get('input-kka/{id}','KkaController@InputKka')->name('input_kka');
 		Route::get('input-lhp/{id}','KkaController@InputLhp')->name('input_lhp');
+
+		Route::post('upload_lhp','KkaController@upload_lhp')->name('insert_lhp');
 		Route::get('paparan/{id}','KkaController@paparanKKA');
 		Route::post('input-paparan','KkaController@inputPaparanKKA')->name('input-paparan');
 
@@ -242,9 +244,9 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
     });
 
 	//lhp
-    Route::group(['prefix' => 'LHP', 'middleware'=> ['role:Super Admin|Auditor|Inspektur']], function(){
-    	Route::post('/upload-lhp', 'LhpController@upload_lhp')->name('laporan_lhp');
-    });
+    // Route::group(['prefix' => 'LHP', 'middleware'=> ['role:Super Admin|Auditor|Inspektur']], function(){
+    // 	Route::post('/upload-lhp', 'LhpController@upload_lhp')->name('laporan_lhp');
+    // });
 
 	//calendar route
 	Route::group(['prefix'=> 'calendar'], function(){

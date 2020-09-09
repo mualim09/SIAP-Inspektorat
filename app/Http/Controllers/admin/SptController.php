@@ -421,7 +421,7 @@ class SptController extends Controller
         }
 
         if($user->hasRole('Auditor') && $method === 'buatLhp'){
-            $control = '<a href="'.route('input_lhp',$id).'"data-toggle="tooltip" title="Upload LHP" class="btn btn-outline-success btn-sm" target="__blank"><i class="ni ni-folder-17"></i><span>Input LHP</span></a>';
+            $control = '<a href="'.route('laporan-lhp-cetak',$id).'"data-toggle="tooltip" title="Lihat LHP" class="btn btn-outline-primary btn-sm" target="__blank"><i class="ni ni-folder-17"></i><span>Cetak LHP</span></a>';
         }
 
         if($user->hasRole('Auditor') && $method === 'buatLaporan-disable'){

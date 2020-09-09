@@ -89,7 +89,7 @@
                                         
                                         <div class="col">
                                             <div class="custom-control custom-checkbox mb-3">
-                                                <input type="checkbox" name="roles[]" value="role" id="role-1" class="custom-control-input" disabled="">
+                                                <input type="checkbox" name="roles[]" value="role" id="role-1" class="custom-control-input">
                                                 <label for="role-1" class="custom-control-label">Tambahan</label>
                                             </div>
                                             <h6>Jika dibutuhkan</h6>
@@ -102,31 +102,30 @@
                                     //#role-5 is role id for auditor. see role table
                                     $('#role-1').change(function() {
                                         if(this.checked) {
-                                            $('#jenis-auditor').show('fast');
-                                            $('#ruang-auditor').show('fast');
+                                            $('#lain-lain').show('fast');
                                         }else{
-                                            $('#jenis-auditor').hide('fast');
-                                            $('input[name=jenis_auditor]').prop('checked', false);
-                                            $('#ruang-auditor').hide('fast');
+                                            $('#lain-lain').hide('fast');
+                                            $('textarea[class=form-control]').prop('checked', false);
                                         }
                                       });
                                 </script>
 
-                                <div class="form-group row" id="jenis-auditor" style="display:none">
-                                    <span class="col-md-2 text-md-right">{{ __('Jenis Auditor') }}</span>
-                                    <div class="col-md-10 row">
-                                        <div class="col-md-3">
-                                            <div class="custom-control custom-checkbox mb-3">
-                                                <input type="radio" name="jenis_auditor" value="terampil" id="auditor-terampil" class="custom-control-input">
-                                                <label for="auditor-terampil" class="custom-control-label">Auditor Terampil</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="custom-control custom-checkbox mb-3">
-                                                <input type="radio" name="jenis_auditor" value="ahli" id="auditor-ahli" class="custom-control-input">
-                                                <label for="auditor-ahli" class="custom-control-label">Auditor Ahli</label>
-                                            </div>
-                                        </div>
+                                <div class="form-group row" id="lain-lain" style="display:none">
+                                    <label class="col-md-2 col-form-label text-md-right"></label>
+                                    <div class="col-md-10">
+                                        <textarea name="file_laporan[komentar]" class="form-control" style="width: 90%" placeholder="Komentar Yang diperiksa"></textarea><br>
+                                    </div>
+                                    <label class="col-md-2 col-form-label text-md-right"></label>
+                                    <div class="col-md-10">
+                                        <textarea name="file_laporan[sebab]" class="form-control" style="width: 90%" placeholder="Sebab"></textarea><br>
+                                    </div>
+                                    <label class="col-md-2 col-form-label text-md-right"></label>
+                                    <div class="col-md-10">
+                                        <textarea name="file_laporan[akibat]" class="form-control" style="width: 90%" placeholder="Akibat"></textarea><br>
+                                    </div>
+                                    <label class="col-md-2 col-form-label text-md-right"></label>
+                                    <div class="col-md-10">
+                                        <textarea name="file_laporan[rekomendasi]" class="form-control" style="width: 90%" placeholder="Rekomendasi"></textarea><br>
                                     </div>
                                 </div>
 
@@ -258,8 +257,11 @@
                 data: $('#laporan-kka-form').serialize(),
                 dataType: 'text',
                 success: function(data){
-                    console.log(data);
-                    window.location.reload();
+                    // var url = '{{ route("input_lhp", ":id") }}';
+                    // url = url.replace(':id', id_detail);
+                    // document.location = url;
+                    // console.log(data);
+                    window.location = '{{ url("/") }}';
                 },
                 error: function(error){
                     console.log('Error :', error);
@@ -286,5 +288,4 @@
     <script src="{{ asset('assets/vendor/summernote/summernote-lite.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/selectize/js/standalone/selectize.min.js') }}"></script>
 @endpush
-vendor\summernote
 

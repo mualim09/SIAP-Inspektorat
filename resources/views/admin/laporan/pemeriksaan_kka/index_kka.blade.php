@@ -37,7 +37,7 @@
       </div>
     </div>
 
-    <div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="mySmallModalPemeriksaan" aria-hidden="true" id="shotModalEditKKA">
+    <!-- <div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="mySmallModalPemeriksaan" aria-hidden="true" id="shotModalEditKKA">
       <div class="modal-dialog modal-xl" style="max-width: 50%;">
         <div class="modal-content">
           <div class="modal-header text-center">
@@ -58,8 +58,6 @@
                             <input type="hidden" name="id" id="id">
                             <input type="hidden" name="edit_kka" value="edit_kka">
                             <input type="hidden" name="detail_spt_id" id=detail_id>
-                            <!-- nav_auditor_submit
-                            get -->
                             <div class="row">
                                 <div class="col-md-6">
                                 <label class="col-4 col-form-label">{{ __('Nama SPT') }}</label>
@@ -76,19 +74,16 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
-                                <!-- <label class="col-4 col-form-label">{{ __('Kode Temuan') }}</label> -->
                                     <div class="form-group">
-                                        <!-- <input type="text" class="form-control" id="kode_temuan" name="file_laporan[kode_temuan_id]" placeholder="Kode Temuan"> -->
-                                        <!-- <select class="form-control selectize" id="kode" name="file_laporan[kode_temuan_id]">
+                                        <select class="form-control selectize" id="kode" name="file_laporan[kode_temuan_id]">
                                             <option value="">{{ __('Pilih Kode Temuan') }}</option>
                                                     <option id="id_option" class="form-control" value="" ></option>
-                                        </select> -->
-                                        <div id="kode_temuan"></div> <!-- cara pertama -->
+                                        </select>
+                                        <div id="kode_temuan"></div>
                                         <h6> sementara get data masih di placeholder tetapi tetap bisa di edit</h6>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                <!-- <label class="col-4 col-form-label">{{ __('Sasaran Audit') }}</label> -->
                                     <div class="form-group">
                                         <input type="text" class="form-control" id="sasaran_audit" name="file_laporan[sasaran_audit]" placeholder="Sasaran Audit" />
                                     </div>
@@ -96,7 +91,6 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                <!-- <label class="col-4 col-form-label">{{ __('Judul Temuan') }}</label> -->
                                     <div class="form-group">
                                         <input type="text" class="form-control" id="judultemuan" name="file_laporan[judultemuan]" placeholder="Judul Temuan">
                                     </div>
@@ -104,13 +98,11 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                <!-- <label class="col-4 col-form-label">{{ __('Kondisi') }}</label> -->
                                     <div class="form-group">
                                         <textarea type="textarea" class="form-control" id="summernote-kondisi" name="file_laporan[kondisi]" placeholder="Kondisi"></textarea>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
-                                <!-- <label class="col-4 col-form-label">{{ __('Kriteria') }}</label> -->
                                     <div class="form-group">
                                         <textarea type="textarea" class="form-control" id="summernote-kriteria" name="file_laporan[kriteria]" placeholder="Kriteria"></textarea> 
                                     </div>
@@ -131,46 +123,46 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
     @endsection
 
     @section('js_tabel_auditor')
 <script type="text/javascript">
     //summernote
-    $('#summernote-kondisi').summernote({
-        placeholder: 'Kondisi',
-        tabsize: 2,
-        height: 120,
-        toolbar: [
-            ['style', ['style']],
-            ['font', ['bold', 'italic', 'underline', 'clear']],
-            ['fontname', ['fontname']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['height', ['height']],
-            ['table', ['table']],
-            ['insert', ['picture', 'hr']],
-            ['view', ['fullscreen']]
-        ]
-    });
+    // $('#summernote-kondisi').summernote({
+    //     placeholder: 'Kondisi',
+    //     tabsize: 2,
+    //     height: 120,
+    //     toolbar: [
+    //         ['style', ['style']],
+    //         ['font', ['bold', 'italic', 'underline', 'clear']],
+    //         ['fontname', ['fontname']],
+    //         ['color', ['color']],
+    //         ['para', ['ul', 'ol', 'paragraph']],
+    //         ['height', ['height']],
+    //         ['table', ['table']],
+    //         ['insert', ['picture', 'hr']],
+    //         ['view', ['fullscreen']]
+    //     ]
+    // });
 
-    $('#summernote-kriteria').summernote({
-        placeholder: 'Kriteria',
-        tabsize: 2,
-        height: 120,
-        toolbar: [
-            ['style', ['style']],
-            ['font', ['bold', 'italic', 'underline', 'clear']],
-            ['fontname', ['fontname']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['height', ['height']],
-            ['table', ['table']],
-            ['insert', ['picture', 'hr']],
-            ['view', ['fullscreen']]
-        ]
-    });
+    // $('#summernote-kriteria').summernote({
+    //     placeholder: 'Kriteria',
+    //     tabsize: 2,
+    //     height: 120,
+    //     toolbar: [
+    //         ['style', ['style']],
+    //         ['font', ['bold', 'italic', 'underline', 'clear']],
+    //         ['fontname', ['fontname']],
+    //         ['color', ['color']],
+    //         ['para', ['ul', 'ol', 'paragraph']],
+    //         ['height', ['height']],
+    //         ['table', ['table']],
+    //         ['insert', ['picture', 'hr']],
+    //         ['view', ['fullscreen']]
+    //     ]
+    // });
 
     //jika message ini muncul maka logika kondisi pada button error atau salah
     var msg = '{{Session::get('alert')}}';
@@ -381,123 +373,123 @@
         });
     }
 
-    function showModalEditKKA(id) {
+    // function showModalEditKKA(id) {
 
-        // console.log(id)
-        //fungsi confirm sebelum mengeksekusi modal
-        $.confirm({
-            title: "{{ __('Perhatian!') }}",
-            content: "{{ __('Apakah anda ingin mengedit KKA tersebut?') }}",
-            buttons: {
-                Ya: {
-                    btnClass: 'btn-danger',
-                    action: function(){
-                        $('#shotModalEditKKA').modal('show'); //show edit kka modal
-                        $('#modalPemeriksaan').modal('hide'); //hide list kka modal
-                        var url_prefix = (window.location.pathname == '/admin');
-                        var getdataEditKKA = url_prefix ? 'admin/kka/getdata-editKKA/'+id : '/kka/getdata-editKKA/'+id;
-                        $.ajax({
-                                url:getdataEditKKA,
-                                type: 'GET',
-                                dataType: 'JSON',
-                                success: function(data){
-                                // console.log(data);
+    //     // console.log(id)
+    //     //fungsi confirm sebelum mengeksekusi modal
+    //     $.confirm({
+    //         title: "{{ __('Perhatian!') }}",
+    //         content: "{{ __('Apakah anda ingin mengedit KKA tersebut?') }}",
+    //         buttons: {
+    //             Ya: {
+    //                 btnClass: 'btn-danger',
+    //                 action: function(){
+    //                     $('#shotModalEditKKA').modal('show'); //show edit kka modal
+    //                     $('#modalPemeriksaan').modal('hide'); //hide list kka modal
+    //                     var url_prefix = (window.location.pathname == '/admin');
+    //                     var getdataEditKKA = url_prefix ? 'admin/kka/getdata-editKKA/'+id : '/kka/getdata-editKKA/'+id;
+    //                     $.ajax({
+    //                             url:getdataEditKKA,
+    //                             type: 'GET',
+    //                             dataType: 'JSON',
+    //                             success: function(data){
+    //                             // console.log(data);
 
-                                $.each(data['data_kka'], function( index, value ) { //foreach jquery for data kka except kode temuan
-                                    var d = new Date();
-                                    var n = d.getFullYear();
-                                    var nomor_spt = value.kode_kelompok +"/"+ value.nomor+"/"+"438.4"+"/"+n;
-                                    $('#nama_spt').val(value.sebutan);
-                                    $('#nomor_spt').val(nomor_spt);
-                                    $('#sasaran_audit').val(value.sasaran_audit);
-                                    $('#judultemuan').val(value.judultemuan);
-                                    // console.log(jQuery.parseJSON(value.kondisi));
+    //                             $.each(data['data_kka'], function( index, value ) { //foreach jquery for data kka except kode temuan
+    //                                 var d = new Date();
+    //                                 var n = d.getFullYear();
+    //                                 var nomor_spt = value.kode_kelompok +"/"+ value.nomor+"/"+"438.4"+"/"+n;
+    //                                 $('#nama_spt').val(value.sebutan);
+    //                                 $('#nomor_spt').val(nomor_spt);
+    //                                 $('#sasaran_audit').val(value.sasaran_audit);
+    //                                 $('#judultemuan').val(value.judultemuan);
+    //                                 // console.log(jQuery.parseJSON(value.kondisi));
                                     
-                                    // data value  summernote
-                                    $('#summernote-kondisi').summernote('pasteHTML', jQuery.parseJSON(value.kondisi));
-                                    $('#summernote-kriteria').summernote('pasteHTML', jQuery.parseJSON(value.kriteria));
-                                    // console.log(value.spt_id);
-                                    $('#id').val(value.spt_id);
-                                    $('#detail_id').val(value.id_detail);
-                                    // console.log(value.spt_id)
-                                });
+    //                                 // data value  summernote
+    //                                 $('#summernote-kondisi').summernote('pasteHTML', jQuery.parseJSON(value.kondisi));
+    //                                 $('#summernote-kriteria').summernote('pasteHTML', jQuery.parseJSON(value.kriteria));
+    //                                 // console.log(value.spt_id);
+    //                                 $('#id').val(value.spt_id);
+    //                                 $('#detail_id').val(value.id_detail);
+    //                                 // console.log(value.spt_id)
+    //                             });
                                 
-                                    var kode = 'kode';
-                                    var select = $("<select id=\"kode\" name=\"file_laporan[kode_temuan_id]\" /></select>");
+    //                                 var kode = 'kode';
+    //                                 var select = $("<select id=\"kode\" name=\"file_laporan[kode_temuan_id]\" /></select>");
                                     
-                                    $.each(data['get_kode_temuan'], function( index, value ) {
-                                        select.append($("<option></option>").attr("value", value.id).text(value.select_supersub_kode +' '+ value.deskripsi));
-                                    });
+    //                                 $.each(data['get_kode_temuan'], function( index, value ) {
+    //                                     select.append($("<option></option>").attr("value", value.id).text(value.select_supersub_kode +' '+ value.deskripsi));
+    //                                 });
 
-                                    $("#kode_temuan").html(select);
+    //                                 $("#kode_temuan").html(select);
 
-                                    $('#kode').selectize({    
-                                        /*sortField: 'text',*/
-                                        allowEmptyOption: false,
-                                        placeholder: data['selected_kode_kka'][0].select_supersub_kode +' '+data['selected_kode_kka'][0].deskripsi,
-                                        create: false,
-                                        onchange: function(value){
+    //                                 $('#kode').selectize({    
+    //                                     /*sortField: 'text',*/
+    //                                     allowEmptyOption: false,
+    //                                     placeholder: data['selected_kode_kka'][0].select_supersub_kode +' '+data['selected_kode_kka'][0].deskripsi,
+    //                                     create: false,
+    //                                     onchange: function(value){
                                          
-                                        },
-                                    });
+    //                                     },
+    //                                 });
 
-                                    var $select = $('#kode').selectize();
-                                    $select[0].selectize.setValue("Pilih Kode Temuan");
-                            }
-                        });
-                    },
-                },
-                Tidak: function(){
-                    $.alert('Dibatalkan!');
-                }
-            }
-        });
+    //                                 var $select = $('#kode').selectize();
+    //                                 $select[0].selectize.setValue("Pilih Kode Temuan");
+    //                         }
+    //                     });
+    //                 },
+    //             },
+    //             Tidak: function(){
+    //                 $.alert('Dibatalkan!');
+    //             }
+    //         }
+    //     });
 
-        $("#edit-kka-form").validate({
-            rules: {
-                detai_spt_id : {required: true},
-                edit_kka : {required: true},
-                nama_spt : {required: true},
-                nomor_spt : {required: true},
-                file_laporan : {required: true}
+    //     $("#edit-kka-form").validate({
+    //         rules: {
+    //             detai_spt_id : {required: true},
+    //             edit_kka : {required: true},
+    //             nama_spt : {required: true},
+    //             nomor_spt : {required: true},
+    //             file_laporan : {required: true}
 
-            },
-            submitHandler: function(form){
-                save_method = (typeof save_method !== 'undefined') ? save_method : 'new';
-                /*form.preventDefault();*/
-                var id = $('#id').val();
+    //         },
+    //         submitHandler: function(form){
+    //             save_method = (typeof save_method !== 'undefined') ? save_method : 'new';
+    //             /*form.preventDefault();*/
+    //             var id = $('#id').val();
 
-                base_url = "{{ route('laporan_auditor') }}";
-                // console.log(base_url)
-                url =  (save_method == 'new') ? base_url : base_url + '/' + id ;
-                type = (save_method == 'new') ? "POST" : "PUT";        
-                $.ajax({
-                    url: url,
-                    type: type,
-                    data: $('#edit-kka-form').serialize(),
-                    dataType: 'text',
-                    success: function(data){
-                        //str = res.responseText;
-                        console.log(data)
-                        $("#edit-kka-form")[0].reset();
-                        $('#shotModalEditKKA').modal('hide'); //show edit kka modal
-                        setTimeout(function(){// wait for 2 secs
-                             location.reload(); // then reload the page
-                        }, 2000);
-                    },
-                    error: function(error){
-                        console.log('Error :', error);
-                    }
-                });
-            }
-        });
-    }
+    //             base_url = "{{ route('laporan_auditor') }}";
+    //             // console.log(base_url)
+    //             url =  (save_method == 'new') ? base_url : base_url + '/' + id ;
+    //             type = (save_method == 'new') ? "POST" : "PUT";        
+    //             $.ajax({
+    //                 url: url,
+    //                 type: type,
+    //                 data: $('#edit-kka-form').serialize(),
+    //                 dataType: 'text',
+    //                 success: function(data){
+    //                     //str = res.responseText;
+    //                     console.log(data)
+    //                     $("#edit-kka-form")[0].reset();
+    //                     $('#shotModalEditKKA').modal('hide'); //show edit kka modal
+    //                     setTimeout(function(){// wait for 2 secs
+    //                          location.reload(); // then reload the page
+    //                     }, 2000);
+    //                 },
+    //                 error: function(error){
+    //                     console.log('Error :', error);
+    //                 }
+    //             });
+    //         }
+    //     });
+    // }
 
-    $('body').on('hidden.bs.modal', '#shotModalEditKKA', function () {
-        $('#summernote-kondisi').summernote('reset');
-        $('#summernote-kriteria').summernote('reset');
-        $("#edit-kka-form")[0].reset();
-    });
+    // $('body').on('hidden.bs.modal', '#shotModalEditKKA', function () {
+    //     $('#summernote-kondisi').summernote('reset');
+    //     $('#summernote-kriteria').summernote('reset');
+    //     $("#edit-kka-form")[0].reset();
+    // });
 
 
 </script>

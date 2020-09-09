@@ -60,7 +60,8 @@
                         
                     <?php
                         $nomor_spt = '____';
-                        $nomor_lhp = ""." / ".$nomor_spt." / 438.4 / ".now()->year.""; 
+                        $jenis_lhp_by_spt = ($data_pemeriksaan[0]->sebutan == 'Audit Operasional') ? '700' : '_____'; 
+                        $nomor_lhp = $jenis_lhp_by_spt." / ".$nomor_spt." / 438.4 / ".now()->year.""; 
                     ?>
                     <div class="toolbar toolbar-top" role="toolbar" style="text-align: right;"></div><div class="tab-content" style="height: 205.438px;">
                         <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1" style="position: static; left: auto; max-width: 100%;">
@@ -78,8 +79,8 @@
                                             <p>Tahun Anggaran<br></p>
                                         </td>
                                         <td class="laporan info-nama" style="padding-left: 75px !important;">
-                                            <p>:  ____{!!$nomor_lhp!!} </p> <!-- sudah mengikuti ketentuan kode jenis lhp apa data masih blm ada -->
-                                            <p>:  __{{now()->format('-M-Y')}} <input type="text" class="form-control datepick" style="width: 25%;display: inline;" name="custom_date" id="custom_date" autocomplete="off" placeholder="{{ __('Custom Date')}}" data-date-format="dd-mm-yyyy"></p> 
+                                            <p>:  {!!$nomor_lhp!!} </p> <!-- sudah mengikuti ketentuan kode jenis lhp apa data masih blm ada -->
+                                            <p>:  ____{{now()->format('-M-Y')}} <!-- <input type="text" class="form-control datepick" style="width: 25%;display: inline;" name="custom_date" id="custom_date" autocomplete="off" placeholder="{{ __('Custom Date')}}" data-date-format="dd-mm-yyyy"> --></p> 
                                             <p>:  Satu Bendel</p>
                                             <p>:  {{$lokasi[0]->nama_lokasi}} Kabupaten Sidoarjo</p>
                                             <p>:  {{now()->year}}</p>
@@ -179,16 +180,16 @@
                                                         echo "<td>".$number.". ".$value->judultemuan.json_decode($value->kriteria).json_decode($value->kondisi)."</td>"; // penomoran masih belum bisa auto
                                                         echo "</tr>";
                                                         echo "<tr>";
-                                                        echo "<td>".'Sebab<br><div class="point isi-hasil-pemeriksaan" style="width: 97%;margin-left: 20px;margin-top: 0px;"><textarea type="textarea" class="form-control" name="point_kka_lhp['.$key.']">'.$value->sebab.'</textarea></div>'."</td>"; // isi
+                                                        echo "<td>".'Sebab<br><div class="point isi-hasil-pemeriksaan" style="width: 97%;margin-left: 20px;margin-top: 0px;"><textarea type="textarea" class="form-control" name="sebab['.$value->detail_spt_id.']">'.$value->sebab.'</textarea></div>'."</td>"; // isi
                                                         echo "</tr>";
                                                         echo "<tr>";
-                                                        echo "<td>".'Akibatnya<br><div class="point isi-hasil-pemeriksaan" style="width: 97%;margin-left: 20px;margin-top: 0px;"><textarea type="textarea" class="form-control" name="point_kka_lhp['.$key.']">'.$value->akibat.'</textarea></div>'."</td>"; // isi
+                                                        echo "<td>".'Akibatnya<br><div class="point isi-hasil-pemeriksaan" style="width: 97%;margin-left: 20px;margin-top: 0px;"><textarea type="textarea" class="form-control" name="akibat['.$value->detail_spt_id.']">'.$value->akibat.'</textarea></div>'."</td>"; // isi
                                                         echo "</tr>";
                                                         echo "<tr>";
-                                                        echo "<td>".'Komentar yang diperiksa<br><div class="point isi-hasil-pemeriksaan" style="width: 97%;margin-left: 20px;margin-top: 0px;"><textarea type="textarea" class="form-control" name="point_kka_lhp['.$key.']">'.$value->komentar.'</textarea></div>'."</td>"; // isi
+                                                        echo "<td>".'Komentar yang diperiksa<br><div class="point isi-hasil-pemeriksaan" style="width: 97%;margin-left: 20px;margin-top: 0px;"><textarea type="textarea" class="form-control" name="komentar['.$value->detail_spt_id.']">'.$value->komentar.'</textarea></div>'."</td>"; // isi
                                                         echo "</tr>";
                                                         echo "<tr>";
-                                                        echo "<td>".'Rekomendasi<br><div class="point isi-hasil-pemeriksaan" style="width: 97%;margin-left: 20px;margin-top: 0px;"><textarea type="textarea" class="form-control" name="point_kka_lhp['.$key.']">'.$value->rekomendasi.'</textarea></div>'."</td>"; // isi
+                                                        echo "<td>".'Rekomendasi<br><div class="point isi-hasil-pemeriksaan" style="width: 97%;margin-left: 20px;margin-top: 0px;"><textarea type="textarea" class="form-control" name="rekomendasi['.$value->detail_spt_id.']">'.$value->rekomendasi.'</textarea></div>'."</td>"; // isi
                                                         echo "</tr>";
                                                     }
                                                 ?>
@@ -284,25 +285,25 @@
               return true;
           });
 
-          $('.finish').click(function(){
-                var id = $("#id_ketua").val();
-                // alert();
-                $.confirm({
-                    title: "{{ __('Perhatian!') }}",
-                    content: "{{ __('Apakah anda sudah yakin dengan data yang anda inputkan ?') }}",
-                    buttons: {
-                        Simpan: {
-                            btnClass: 'btn-success',
-                            action: function(){                       
-                                 window.location.href = (window.location.pathname == '/admin/kka/input-lhp/'+id) ? "{{route('unggah',$id)}}" : "{{route('unggah',$id)}}";
-                            },
-                        },
-                        Kembali: function(){
-                $.alert('Dibatalkan!');
-                        }
-                    }
-                });
-          });
+          // $('.finish').click(function(){
+          //       var id = $("#id_ketua").val();
+          //       // alert();
+          //       $.confirm({
+          //           title: "{{ __('Perhatian!') }}",
+          //           content: "{{ __('Apakah anda sudah yakin dengan data yang anda inputkan ?') }}",
+          //           buttons: {
+          //               Simpan: {
+          //                   btnClass: 'btn-success',
+          //                   action: function(){                       
+          //                        window.location.href = (window.location.pathname == '/admin/kka/input-lhp/'+id) ? "{{route('unggah',$id)}}" : "{{route('unggah',$id)}}";
+          //                   },
+          //               },
+          //               Kembali: function(){
+          //       $.alert('Dibatalkan!');
+          //               }
+          //           }
+          //       });
+          // });
 
           $("#animation").on("change", function() {
               // Change theme
@@ -347,7 +348,7 @@
     });
     
     $('#summernote-batasan-pemeriksaan').summernote({
-        placeholder: 'Ruang Lingkup Pemeriksaan',
+        placeholder: 'Batasan Pemeriksaan',
         tabsize: 2,
         height: 120,
         toolbar: [
@@ -361,7 +362,7 @@
     });
     
     $('#summernote-pendekatan-pemeriksaan').summernote({
-        placeholder: 'Ruang Lingkup Pemeriksaan',
+        placeholder: 'Pendekatan Pemeriksaan',
         tabsize: 2,
         height: 120,
         toolbar: [
@@ -390,146 +391,6 @@
 
     /*end bab II*/
 
-
-    $('#summernote-lhp-kriteria').summernote({
-        placeholder: 'Kriteria LHP',
-        tabsize: 2,
-        height: 120,
-        toolbar: [
-            ['style', ['style']],
-            ['font', ['bold', 'italic', 'underline', 'clear']],
-            ['fontname', ['fontname']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['height', ['height']],
-            ['table', ['table']],
-            ['insert', ['picture', 'hr']],
-            ['view', ['fullscreen']]
-        ]
-    });
-
-    $('#summernote-lhp-sebab').summernote({
-        placeholder: 'Sebab LHP',
-        tabsize: 2,
-        height: 120,
-        toolbar: [
-            ['style', ['style']],
-            ['font', ['bold', 'italic', 'underline', 'clear']],
-            ['fontname', ['fontname']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['height', ['height']],
-            ['table', ['table']],
-            ['insert', ['picture', 'hr']],
-            ['view', ['fullscreen']]
-        ]
-    });
-
-    $('#summernote-lhp-akibat').summernote({
-        placeholder: 'Akibat LHP',
-        tabsize: 2,
-        height: 120,
-        toolbar: [
-            ['style', ['style']],
-            ['font', ['bold', 'italic', 'underline', 'clear']],
-            ['fontname', ['fontname']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['height', ['height']],
-            ['table', ['table']],
-            ['insert', ['picture', 'hr']],
-            ['view', ['fullscreen']]
-        ]
-    });
-
-    $('#summernote-lhp-komen').summernote({
-        placeholder: 'Komen LHP',
-        tabsize: 2,
-        height: 120,
-        toolbar: [
-            ['style', ['style']],
-            ['font', ['bold', 'italic', 'underline', 'clear']],
-            ['fontname', ['fontname']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['height', ['height']],
-            ['table', ['table']],
-            ['insert', ['picture', 'hr']],
-            ['view', ['fullscreen']]
-        ]
-    });
-
-    $('#summernote-kondisi').summernote({
-        placeholder: 'Kondisi',
-        tabsize: 2,
-        height: 120,
-        toolbar: [
-            ['style', ['style']],
-            ['font', ['bold', 'italic', 'underline', 'clear']],
-            ['fontname', ['fontname']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['height', ['height']],
-            ['table', ['table']],
-            ['insert', ['picture', 'hr']],
-            ['view', ['fullscreen']]
-        ]
-    });
-
-    $('#summernote-kriteria').summernote({
-        placeholder: 'Kriteria',
-        tabsize: 2,
-        height: 120,
-        toolbar: [
-            ['style', ['style']],
-            ['font', ['bold', 'italic', 'underline', 'clear']],
-            ['fontname', ['fontname']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['height', ['height']],
-            ['table', ['table']],
-            ['insert', ['picture', 'hr']],
-            ['view', ['fullscreen']]
-        ]
-    });
-
-     $('#kode').selectize({    
-        /*sortField: 'text',*/
-        allowEmptyOption: false,
-        placeholder: 'Pilih Kode Temuan',
-        create: false,
-        onchange: function(value){
-         
-        },
-    });
-
-    $('#ref').selectize({    
-            /*sortField: 'text',*/
-            allowEmptyOption: false,
-            placeholder: 'Pilih Refrensi',
-            create: false,
-            onchange: function(value){
-             
-        },
-    });
-
-    var current = null;
-    function showresponddiv(messagedivid){
-        var id = messagedivid.replace("Jlaporan-", "form-"),
-            div = document.getElementById(id);
-        // hide previous one
-        if(current && current != div) {
-            current.style.display =  'none';
-        }   
-        if (div.style.display=="none"){
-            div.style.display="inline";
-            current = div;
-        } 
-        else {
-            div.style.display="none";
-        }
-    }
-
     $("#input-lhp").validate({
         rules: {
             id : {required: true},
@@ -537,7 +398,7 @@
             kode_lhp : {required: true},
             custom_date : {required: true},
             sub_bab : {required: true},
-            point_kka_lhp : {required: true}
+            laporan_lhp : {required: true}
 
         },
         submitHandler: function(form){
@@ -545,7 +406,7 @@
             /*form.preventDefault();*/
             var id = $('#id').val();
 
-            base_url = "{{ route('laporan_lhp') }}";
+            base_url = "{{ route('insert_lhp') }}";
             // console.log(base_url)
             url =  (save_method == 'new') ? base_url : base_url + '/' + id ;
             type = (save_method == 'new') ? "POST" : "PUT";        
@@ -555,13 +416,10 @@
                 data: $('#input-lhp').serialize(),
                 dataType: 'text',
                 success: function(data){
-                    //str = res.responseText;
-                    console.log(data);
+                    // console.log(data);
                     // $("#edit-kka-form")[0].reset();
                     // $('#shotModalEditKKA').modal('hide'); //show edit kka modal
-                    // setTimeout(function(){// wait for 2 secs
-                    //      location.reload(); // then reload the page
-                    // }, 2000);
+                    window.location = '{{ url("/") }}';
                 },
                 error: function(error){
                     console.log('Error :', error);

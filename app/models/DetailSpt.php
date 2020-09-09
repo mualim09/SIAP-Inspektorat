@@ -9,7 +9,7 @@ use Carbon\Carbon;
 class DetailSpt extends Model
 {
     protected $primaryKey = 'id';
-    protected $fillable = ['spt_id', 'user_id', 'peran', 'status','status_dupak','unsur_dupak','isi_laporan_pemeriksaan','kode_temuan_id','jenis_laporan','file_laporan','filename','info_dupak'];
+    protected $fillable = ['spt_id', 'user_id', 'peran', 'status','status_dupak','unsur_dupak','kode_temuan_id','jenis_laporan','info_dupak','info_laporan_pemeriksaan'];
     protected $table = 'detail_spt';
     public $timestamps = false;
     protected $appends = ['kode_file_laporan'];

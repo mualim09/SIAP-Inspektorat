@@ -48,7 +48,7 @@
                                         echo "<td>".$number.". ".$value->judultemuan."<br>".'<p style="">Kondisi</p>'.str_replace('www/kosong', $value->url_img_laporan,$value->kondisi)."<br>".'<p style="">Kriteria</p>'.json_decode($value->kriteria)."</td>";
                                         echo "</tr>";
                                         echo "<tr>";
-                                        echo "<td>".'Komentar yang diperiksa<br><div class="point isi-hasil-pemeriksaan" style="width: 97%;margin-left: 20px;margin-top: 0px;"><textarea type="textarea" class="form-control" name="point_komentar['.$value->id.']"></textarea></div>'."<br><br></td>";
+                                        echo "<td>".'Komentar yang diperiksa<br><div class="point isi-hasil-pemeriksaan" style="width: 97%;margin-left: 20px;margin-top: 0px;"><textarea type="textarea" class="form-control" name="point_komentar['.$value->id.']">'.$value->komentar.'</textarea></div>'."<br><br></td>";
                                         echo "</tr>";
                                     }
                                 ?>
@@ -109,7 +109,6 @@
 @push('css')
     <link href="{{ asset('assets/vendor/selectize/css/selectize.bootstrap3.css') }}" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/datatables/datatables.min.css') }}">
-    <link href="{{ asset('assets/summernote-master/dist/summernote-lite.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/jquery-smartwizard-master/dist/css/smart_wizard_all.min.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('assets/vendor/bsdatepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet" />
     
@@ -117,7 +116,6 @@
 @push('js')
     <script src="{{ asset('assets/vendor/jquery/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/datatables/datatables.min.js') }}"></script>
-    <script src="{{ asset('assets/summernote-master/dist/summernote-lite.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/selectize/js/standalone/selectize.min.js') }}"></script>
     <script src="{{ asset('assets/jquery-smartwizard-master/dist/js/jquery.smartWizard.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/bsdatepicker/js/bootstrap-datepicker.min.js') }}"></script>

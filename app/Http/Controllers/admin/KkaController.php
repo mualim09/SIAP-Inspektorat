@@ -326,6 +326,10 @@ class KkaController extends Controller
         $created_at = Carbon::now()->toDateTimeString();
         $updated_at = Carbon::now()->toDateTimeString();
         $kriteria = json_encode(Common::cleanInput($request->file_laporan['kriteria']));
+        $komentar = Common::cleanInput($request->file_laporan['komentar']);
+        $sebab = Common::cleanInput($request->file_laporan['sebab']);
+        $akibat = Common::cleanInput($request->file_laporan['akibat']);
+        $rekomendasi = Common::cleanInput($request->file_laporan['rekomendasi']);
 
         //proses insert anggota tim
         $jenis_laporan = 'KKA';
@@ -336,99 +340,99 @@ class KkaController extends Controller
         $status_anggota['PenanggungJawab'] = null;
 
         $update_anggota = $get_detail_id->update(['jenis_laporan'=>$jenis_laporan,'status'=>json_encode($status_anggota)]);
-        $save = Laporan_pemeriksaan::insert(['detail_spt_id'=>$get_detail_id->get()[0]->id,'kode_temuan_id'=>$kode,'sasaran_audit'=>$sasaran,'judultemuan'=>$judultemuan,'kondisi'=>Common::cleanInput($kondisi),'kriteria'=>$kriteria,'url_img_laporan'=>$newImageSrc,'created_at'=>$created_at,'updated_at'=>$updated_at]);
+        $save = Laporan_pemeriksaan::insert(['detail_spt_id'=>$get_detail_id->get()[0]->id,'kode_temuan_id'=>$kode,'sasaran_audit'=>$sasaran,'judultemuan'=>$judultemuan,'kondisi'=>Common::cleanInput($kondisi),'kriteria'=>$kriteria,'url_img_laporan'=>$newImageSrc,'komentar'=>$komentar,'sebab'=>$sebab,'akibat'=>$akibat,'rekomendasi'=>$rekomendasi,'created_at'=>$created_at,'updated_at'=>$updated_at]);
 
-        return redirect()->back()->with('alert', 'Anda telah berhasil mengubah KKA tersebut');
+        return redirect('admin')->with('alert', 'Anda telah berhasil mengubah KKA tersebut');
     }
 
-    // edit belum di review
-    public function editKKA(Request $request)
-    {
-        // if ($request->edit_kka == null) {
-            $dalnis_atau_daltu = DetailSpt::where('spt_id',$request->spt_id)->where('user_id',auth()->user()->id)->get();
-            $get_status_anggota = DetailSpt::where('spt_id',$request->spt_id)->where('peran','Anggota Tim')->get();
-            $get_detail_id = DetailSpt::where('spt_id',$request->spt_id)->where('user_id',auth()->user()->id);
-        // }elseif($request->edit_kka != null){
-        //     $dalnis_atau_daltu = DetailSpt::where('spt_id',$request->id)->where('user_id',auth()->user()->id)->get(); //get peran daltu & dalnis by auth
-        //     $get_status_anggota = DetailSpt::where('spt_id',$request->id)->where('peran','Anggota Tim')->get(); //get data status anggota by peran
-        //     $get_detail_id = DetailSpt::where('spt_id',$request->id)->where('user_id',auth()->user()->id);
-            $data_anggota = DetailSpt::where('spt_id',$request->id)->where('peran','Anggota Tim');
-        // }
+    // // edit belum di review
+    // public function editKKA(Request $request)
+    // {
+    //     // if ($request->edit_kka == null) {
+    //         $dalnis_atau_daltu = DetailSpt::where('spt_id',$request->spt_id)->where('user_id',auth()->user()->id)->get();
+    //         $get_status_anggota = DetailSpt::where('spt_id',$request->spt_id)->where('peran','Anggota Tim')->get();
+    //         $get_detail_id = DetailSpt::where('spt_id',$request->spt_id)->where('user_id',auth()->user()->id);
+    //     // }elseif($request->edit_kka != null){
+    //     //     $dalnis_atau_daltu = DetailSpt::where('spt_id',$request->id)->where('user_id',auth()->user()->id)->get(); //get peran daltu & dalnis by auth
+    //     //     $get_status_anggota = DetailSpt::where('spt_id',$request->id)->where('peran','Anggota Tim')->get(); //get data status anggota by peran
+    //     //     $get_detail_id = DetailSpt::where('spt_id',$request->id)->where('user_id',auth()->user()->id);
+    //         $data_anggota = DetailSpt::where('spt_id',$request->id)->where('peran','Anggota Tim');
+    //     // }
 
-        $kode = $request->file_laporan['kode_temuan_id'];
-        $sasaran = $request->file_laporan['sasaran_audit'];
-        $judultemuan = $request->file_laporan['judultemuan'];
-        $jenis_laporan = 'KKA';
-        $created_at = Carbon::now()->toDateTimeString();
-        $updated_at = Carbon::now()->toDateTimeString();
-        // $kondisi = json_encode($request->file_laporan['kondisi']);
-        $kriteria = json_encode($request->file_laporan['kriteria']);
+    //     $kode = $request->file_laporan['kode_temuan_id'];
+    //     $sasaran = $request->file_laporan['sasaran_audit'];
+    //     $judultemuan = $request->file_laporan['judultemuan'];
+    //     $jenis_laporan = 'KKA';
+    //     $created_at = Carbon::now()->toDateTimeString();
+    //     $updated_at = Carbon::now()->toDateTimeString();
+    //     // $kondisi = json_encode($request->file_laporan['kondisi']);
+    //     $kriteria = json_encode($request->file_laporan['kriteria']);
 
-        if ($dalnis_atau_daltu[0]->peran == 'Anggota Tim' && $get_status_anggota[0]->status == null) {
-            //proses insert anggota tim
-            $jenis_laporan = 'KKA';
+    //     if ($dalnis_atau_daltu[0]->peran == 'Anggota Tim' && $get_status_anggota[0]->status == null) {
+    //         //proses insert anggota tim
+    //         $jenis_laporan = 'KKA';
 
-            $status_anggota['KetuaTim'] = null; //status anggota default
-            $status_anggota['PengendaliTeknis'] = null;
-            $status_anggota['PengendaliMutu'] = null;
-            $status_anggota['PenanggungJawab'] = null;
+    //         $status_anggota['KetuaTim'] = null; //status anggota default
+    //         $status_anggota['PengendaliTeknis'] = null;
+    //         $status_anggota['PengendaliMutu'] = null;
+    //         $status_anggota['PenanggungJawab'] = null;
 
-            $update_anggota = $get_detail_id->update(['jenis_laporan'=>$jenis_laporan,'status'=>json_encode($status_anggota)]);
-            $kriteria = Laporan_pemeriksaan::insert(['detail_spt_id'=>$get_detail_id->get()[0]->id,'kode_temuan_id'=>$kode,'sasaran_audit'=>$sasaran,'judultemuan'=>$judultemuan,'kondisi'=>$kondisi,'kriteria'=>$kriteria,'url_img_laporan'=>$newImageSrc,'created_at'=>$created_at,'updated_at'=>$updated_at]);
+    //         $update_anggota = $get_detail_id->update(['jenis_laporan'=>$jenis_laporan,'status'=>json_encode($status_anggota)]);
+    //         $kriteria = Laporan_pemeriksaan::insert(['detail_spt_id'=>$get_detail_id->get()[0]->id,'kode_temuan_id'=>$kode,'sasaran_audit'=>$sasaran,'judultemuan'=>$judultemuan,'kondisi'=>$kondisi,'kriteria'=>$kriteria,'url_img_laporan'=>$newImageSrc,'created_at'=>$created_at,'updated_at'=>$updated_at]);
 
-            return redirect()->back()->with('alert', 'Anda telah berhasil mengubah KKA tersebut');
-        }
-        elseif($dalnis_atau_daltu[0]->peran == 'Ketua Tim' && $get_status_anggota[0]->status['KetuaTim'] == null){
-            $status['KetuaTim']= 'revisi';//proses revisi ketua tim
+    //         return redirect()->back()->with('alert', 'Anda telah berhasil mengubah KKA tersebut');
+    //     }
+    //     elseif($dalnis_atau_daltu[0]->peran == 'Ketua Tim' && $get_status_anggota[0]->status['KetuaTim'] == null){
+    //         $status['KetuaTim']= 'revisi';//proses revisi ketua tim
             
-            $status_anggota['KetuaTim'] = auth()->user()->id; //nilai status yg melakukan revisi bedasarkan auth id
-            $status_anggota['PengendaliTeknis'] = null;
-            $status_anggota['PengendaliMutu'] = null;
-            $status_anggota['PenanggungJawab'] = null;
+    //         $status_anggota['KetuaTim'] = auth()->user()->id; //nilai status yg melakukan revisi bedasarkan auth id
+    //         $status_anggota['PengendaliTeknis'] = null;
+    //         $status_anggota['PengendaliMutu'] = null;
+    //         $status_anggota['PenanggungJawab'] = null;
 
-            $update_ketua = $get_detail_id->update(['jenis_laporan'=>$jenis_laporan,'status'=>json_encode($status)]); //update ketua tim yg sedang merevisi/mengedit di detail tabel
-            $update_anggota = $data_anggota->where('peran','Anggota Tim')->update(['status'=>json_encode($status_anggota)]);//update status anggota
-            $insert_ketua = Laporan_pemeriksaan::insert(['detail_spt_id'=>$get_detail_id->get()[0]->id,'kode_temuan_id'=>$kode,'sasaran_audit'=>$sasaran,'judultemuan'=>$judultemuan,'kondisi'=>$kondisi,'kriteria'=>$kriteria,'created_at'=>$created_at,'updated_at'=>$updated_at]);//insert laraporan bedasarkan id detail
-            return redirect()->back()->with('alert', 'Anda telah berhasil mengubah KKA tersebut');
-        }
-        elseif ($get_status_anggota[0]->status['PengendaliTeknis'] == null && $dalnis_atau_daltu[0]->peran == 'Pengendali Teknis') { //proses revisi dalnis
-            $status['PengendaliTeknis']= 'revisi';
+    //         $update_ketua = $get_detail_id->update(['jenis_laporan'=>$jenis_laporan,'status'=>json_encode($status)]); //update ketua tim yg sedang merevisi/mengedit di detail tabel
+    //         $update_anggota = $data_anggota->where('peran','Anggota Tim')->update(['status'=>json_encode($status_anggota)]);//update status anggota
+    //         $insert_ketua = Laporan_pemeriksaan::insert(['detail_spt_id'=>$get_detail_id->get()[0]->id,'kode_temuan_id'=>$kode,'sasaran_audit'=>$sasaran,'judultemuan'=>$judultemuan,'kondisi'=>$kondisi,'kriteria'=>$kriteria,'created_at'=>$created_at,'updated_at'=>$updated_at]);//insert laraporan bedasarkan id detail
+    //         return redirect()->back()->with('alert', 'Anda telah berhasil mengubah KKA tersebut');
+    //     }
+    //     elseif ($get_status_anggota[0]->status['PengendaliTeknis'] == null && $dalnis_atau_daltu[0]->peran == 'Pengendali Teknis') { //proses revisi dalnis
+    //         $status['PengendaliTeknis']= 'revisi';
 
-            $status_anggota['KetuaTim'] = $get_status_anggota[0]->status['KetuaTim']; //nilai status yg melakukan revisi bedasarkan auth id
-            $status_anggota['PengendaliTeknis'] = auth()->user()->id;
-            $status_anggota['PengendaliMutu'] = null;
-            $status_anggota['PenanggungJawab'] = null;
+    //         $status_anggota['KetuaTim'] = $get_status_anggota[0]->status['KetuaTim']; //nilai status yg melakukan revisi bedasarkan auth id
+    //         $status_anggota['PengendaliTeknis'] = auth()->user()->id;
+    //         $status_anggota['PengendaliMutu'] = null;
+    //         $status_anggota['PenanggungJawab'] = null;
 
-            $update_dalnis = $get_detail_id->update(['jenis_laporan'=>$jenis_laporan,'status'=>json_encode($status)]);//update dalnis yg sedang merevisi/mengedit di detail tabel
-            $update_anggota = $data_anggota->where('peran','Anggota Tim')->update(['status'=>json_encode($status_anggota)]);//update status anggota
-            $insert_dalnis = Laporan_pemeriksaan::insert(['detail_spt_id'=>$get_detail_id->get()[0]->id,'kode_temuan_id'=>$kode,'sasaran_audit'=>$sasaran,'judultemuan'=>$judultemuan,'kondisi'=>$kondisi,'kriteria'=>$kriteria,'created_at'=>$created_at,'updated_at'=>$updated_at]);  
-        }
-        elseif ($get_status_anggota[0]->status['PengendaliTeknis'] != null && $get_status_anggota[0]->status['PengendaliMutu'] == null && $dalnis_atau_daltu[0]->peran == 'Pengendali Mutu') { //proses revisi dalnis
-            $status['PengendaliMutu']= 'revisi';//proses revisi Pengendali Mutu
+    //         $update_dalnis = $get_detail_id->update(['jenis_laporan'=>$jenis_laporan,'status'=>json_encode($status)]);//update dalnis yg sedang merevisi/mengedit di detail tabel
+    //         $update_anggota = $data_anggota->where('peran','Anggota Tim')->update(['status'=>json_encode($status_anggota)]);//update status anggota
+    //         $insert_dalnis = Laporan_pemeriksaan::insert(['detail_spt_id'=>$get_detail_id->get()[0]->id,'kode_temuan_id'=>$kode,'sasaran_audit'=>$sasaran,'judultemuan'=>$judultemuan,'kondisi'=>$kondisi,'kriteria'=>$kriteria,'created_at'=>$created_at,'updated_at'=>$updated_at]);  
+    //     }
+    //     elseif ($get_status_anggota[0]->status['PengendaliTeknis'] != null && $get_status_anggota[0]->status['PengendaliMutu'] == null && $dalnis_atau_daltu[0]->peran == 'Pengendali Mutu') { //proses revisi dalnis
+    //         $status['PengendaliMutu']= 'revisi';//proses revisi Pengendali Mutu
 
-            $status_anggota['KetuaTim'] = $get_status_anggota[0]->status['KetuaTim']; 
-            $status_anggota['PengendaliTeknis'] = $get_status_anggota[0]->status['PengendaliTeknis'];
-            $status_anggota['PengendaliMutu'] = auth()->user()->id; //nilai status yg melakukan revisi bedasarkan auth id
-            $status_anggota['PenanggungJawab'] = null;
+    //         $status_anggota['KetuaTim'] = $get_status_anggota[0]->status['KetuaTim']; 
+    //         $status_anggota['PengendaliTeknis'] = $get_status_anggota[0]->status['PengendaliTeknis'];
+    //         $status_anggota['PengendaliMutu'] = auth()->user()->id; //nilai status yg melakukan revisi bedasarkan auth id
+    //         $status_anggota['PenanggungJawab'] = null;
 
-            $update_daltu = $get_detail_id->update(['jenis_laporan'=>$jenis_laporan,'status'=>json_encode($status)]);//update daltu yg sedang merevisi/mengedit di detail tabel
-            $update_anggota = $data_anggota->where('peran','Anggota Tim')->update(['status'=>json_encode($status_anggota)]);//update status anggota
-            $insert_daltu = Laporan_pemeriksaan::insert(['detail_spt_id'=>$get_detail_id->get()[0]->id,'kode_temuan_id'=>$kode,'sasaran_audit'=>$sasaran,'judultemuan'=>$judultemuan,'kondisi'=>$kondisi,'kriteria'=>$kriteria,'created_at'=>$created_at,'updated_at'=>$updated_at]);  
-        }
-        elseif ($get_status_anggota[0]->status['PengendaliTeknis'] != null && $get_status_anggota[0]->status['PengendaliMutu'] != null && $get_status_anggota[0]->status['PenanggungJawab'] == null && $dalnis_atau_daltu[0]->peran == 'Penanggungjawab') { //proses revisi Penanggung jawab
-            // dd('berhasil');
-            $status['PenanggungJawab']= 'revisi';
+    //         $update_daltu = $get_detail_id->update(['jenis_laporan'=>$jenis_laporan,'status'=>json_encode($status)]);//update daltu yg sedang merevisi/mengedit di detail tabel
+    //         $update_anggota = $data_anggota->where('peran','Anggota Tim')->update(['status'=>json_encode($status_anggota)]);//update status anggota
+    //         $insert_daltu = Laporan_pemeriksaan::insert(['detail_spt_id'=>$get_detail_id->get()[0]->id,'kode_temuan_id'=>$kode,'sasaran_audit'=>$sasaran,'judultemuan'=>$judultemuan,'kondisi'=>$kondisi,'kriteria'=>$kriteria,'created_at'=>$created_at,'updated_at'=>$updated_at]);  
+    //     }
+    //     elseif ($get_status_anggota[0]->status['PengendaliTeknis'] != null && $get_status_anggota[0]->status['PengendaliMutu'] != null && $get_status_anggota[0]->status['PenanggungJawab'] == null && $dalnis_atau_daltu[0]->peran == 'Penanggungjawab') { //proses revisi Penanggung jawab
+    //         // dd('berhasil');
+    //         $status['PenanggungJawab']= 'revisi';
 
-            $status_anggota['KetuaTim'] = $get_status_anggota[0]->status['KetuaTim']; 
-            $status_anggota['PengendaliTeknis'] = $get_status_anggota[0]->status['PengendaliTeknis'];
-            $status_anggota['PengendaliMutu'] = $get_status_anggota[0]->status['PengendaliMutu']; //nilai status yg melakukan revisi bedasarkan auth id
-            $status_anggota['PenanggungJawab'] = auth()->user()->id;
+    //         $status_anggota['KetuaTim'] = $get_status_anggota[0]->status['KetuaTim']; 
+    //         $status_anggota['PengendaliTeknis'] = $get_status_anggota[0]->status['PengendaliTeknis'];
+    //         $status_anggota['PengendaliMutu'] = $get_status_anggota[0]->status['PengendaliMutu']; //nilai status yg melakukan revisi bedasarkan auth id
+    //         $status_anggota['PenanggungJawab'] = auth()->user()->id;
 
-            $update_penanggung_jawab = $get_detail_id->update(['jenis_laporan'=>$jenis_laporan,'status'=>json_encode($status)]);
-            $update_anggota = $data_anggota->where('peran','Anggota Tim')->update(['status'=>json_encode($status_anggota)]);
-            $insert_penanggung_jawab = Laporan_pemeriksaan::insert(['detail_spt_id'=>$get_detail_id->get()[0]->id,'kode_temuan_id'=>$kode,'sasaran_audit'=>$sasaran,'judultemuan'=>$judultemuan,'kondisi'=>$kondisi,'kriteria'=>$kriteria,'created_at'=>$created_at,'updated_at'=>$updated_at]);  
-        }
-    }
+    //         $update_penanggung_jawab = $get_detail_id->update(['jenis_laporan'=>$jenis_laporan,'status'=>json_encode($status)]);
+    //         $update_anggota = $data_anggota->where('peran','Anggota Tim')->update(['status'=>json_encode($status_anggota)]);
+    //         $insert_penanggung_jawab = Laporan_pemeriksaan::insert(['detail_spt_id'=>$get_detail_id->get()[0]->id,'kode_temuan_id'=>$kode,'sasaran_audit'=>$sasaran,'judultemuan'=>$judultemuan,'kondisi'=>$kondisi,'kriteria'=>$kriteria,'created_at'=>$created_at,'updated_at'=>$updated_at]);  
+    //     }
+    // }
 
     public function cetakLaporan($id) /*cetak kka*/
     {
@@ -650,8 +654,9 @@ class KkaController extends Controller
         $data_Laporan = DB::table('detail_spt')
                         ->where('spt_id','=',$get_spt_id->spt_id)
                         ->join('laporan_pemeriksaan','detail_spt.id','=','laporan_pemeriksaan.detail_spt_id')
+                        ->join('spt','detail_spt.spt_id','=','spt.id')
+                        ->join('jenis_spt','spt.jenis_spt_id','=','jenis_spt.id')
                         ->where('peran','=','Anggota Tim')
-                        // ->select('')
                         ->get();
 
         return view('admin.laporan.pemeriksaan_lhp.form_input_lhp',['kode'=>$kode,'spt'=>$spt,'lokasi'=>$lokasi,'data_pemeriksaan'=>$data_Laporan,'data_jenis_spt'=>$get_jenis_spt/*,'data_ttd'=>$get_laporan_all_by_spt_id*/,'id'=>$id]);
@@ -704,14 +709,86 @@ class KkaController extends Controller
     {
         // Common::cleanInput()
         foreach ($request->point_komentar as $i => $v) {
-            // dd($request);
+            dd($i);
             $get_data_kka = Laporan_pemeriksaan::where('id',$i); /*belum bisa mengecek apakah sudah ada komentarnya*/
             $komentar = Common::cleanInput($v);
             $data = $get_data_kka->update(['komentar'=>$komentar]);
         }
 
-        $id = $request->id_detail;
-        // return $this->InputLhp($id);
-        return redirect()->route('input_lhp',$id);
+        // $id = $request->id_detail;
+        // // return $this->InputLhp($id);
+        // return redirect()->route('input_lhp',$id);
+    }
+
+    public function upload_lhp(Request $request)
+    {
+        // $data_array = [
+        //     'sebab'=>$request->sebab,
+        //     'akibat'=>$request->akibat,
+        //     'komentar'=>$request->komentar,
+        //     'rekomendasi'=>$request->rekomendasi
+        // ];
+        // dd($data_array);
+        // foreach ($data_array as $k_s => $v_s) {
+        //     dd
+        // }
+
+        $select_data_by_spt_id = DetailSpt::where('spt_id',$request->spt_id);
+        $ketua = $select_data_by_spt_id->where('peran','Ketua Tim');
+        $anggota = $select_data_by_spt_id->where('peran','Anggota Tim');
+        
+        $status['KetuaTim'] = auth()->user()->id;
+
+        $status_anggota['KetuaTim'] = auth()->user()->id;
+        $status_anggota['PengendaliTeknis'] = null;
+        $status_anggota['PengendaliMutu'] = null;
+        $status_anggota['PenanggungJawab'] = null;
+
+        $jenis_laporan = 'LHP';
+
+        $info_laporan_pemeriksaan['tujuan-pemeriksaan'] = Common::cleanInput($request->sub_bab['tujuan-pemeriksaan']);
+        $info_laporan_pemeriksaan['ruang-lingkup-pemeriksaan'] = Common::cleanInput($request->sub_bab['ruang-lingkup-pemeriksaan']);
+        $info_laporan_pemeriksaan['batasan-pemeriksaan'] = Common::cleanInput($request->sub_bab['batasan-pemeriksaan']);
+        $info_laporan_pemeriksaan['pendekatan-pemeriksaan'] = Common::cleanInput($request->sub_bab['pendekatan-pemeriksaan']);
+        $info_laporan_pemeriksaan['hasil-pemeriksaan'] = Common::cleanInput($request->sub_bab['hasil-pemeriksaan']);
+        // dd($ketua->get()[0]->status);
+        
+        // if($ketua->get()->status == null){
+            $update_ketua = $ketua->update(['info_laporan_pemeriksaan'=>json_encode($info_laporan_pemeriksaan),'status'=>json_encode($status),'jenis_laporan'=>$jenis_laporan]);
+            $update_anggota = $anggota->update(['jenis_laporan'=>$jenis_laporan,'status'=>json_encode($status_anggota)]);
+        // }else{
+            // return redirect()->back()->with('alert', 'Anda sudah mengupload KKA tersebut');
+        // }
+
+        // update kolom sebab
+        foreach ($request->sebab as $k_sebab => $v_sebab) {
+            $get_data_by_detail_id = Laporan_pemeriksaan::where('detail_spt_id',$k_sebab);
+            $sebab = Common::cleanInput($v_sebab);
+            $update_sebab = $get_data_by_detail_id->update(['sebab'=>$sebab]);
+        }
+        
+        // update kolom akibat
+        foreach ($request->akibat as $k_akibat => $v_akibat) {
+            $get_data_by_detail_id = Laporan_pemeriksaan::where('detail_spt_id',$k_akibat);
+            $akibat = Common::cleanInput($v_akibat);
+            $update_akibat = $get_data_by_detail_id->update(['akibat'=>$akibat]);
+        }
+
+        // update kolom komentar
+        foreach ($request->komentar as $k_komentar => $v_komentar) {
+            $get_data_by_detail_id = Laporan_pemeriksaan::where('detail_spt_id',$k_komentar);
+            $komentar = Common::cleanInput($v_komentar);
+            $update_komentar = $get_data_by_detail_id->update(['komentar'=>$akibat]);
+        }
+
+        // update kolom rekomendasi
+        foreach ($request->rekomendasi as $k_rekomendasi => $v_rekomendasi) {
+            $get_data_by_detail_id = Laporan_pemeriksaan::where('detail_spt_id',$k_rekomendasi);
+            $rekomendasi = Common::cleanInput($v_rekomendasi);
+            $update_rekomendasi = $get_data_by_detail_id->update(['rekomendasi'=>$rekomendasi]);
+        }
+        
+        // return redirect('admin');
+        // dipisahkan kka(laporan pemeriksaan [sebab,akibat ,dll]) dengan lhp(detail_spt[info_laporan_pemeriksaan json per ketua tim->inspektur]) 
     }
 }
