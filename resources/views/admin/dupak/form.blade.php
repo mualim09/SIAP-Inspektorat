@@ -12,9 +12,9 @@
     <div class="row">
         <div class="col">
             <div class="card shadow">
-                <div class="card-header bg-transparent d-flex">
+                <!-- <div class="card-header bg-transparent d-flex">
                    <h1 class="col-md-12">{{ __('Angka Kredit Pengawasan') }}</h1>
-                </div>
+                </div> -->
                                          
                    
                 <div class="card-body">
@@ -88,10 +88,37 @@
                             </form>
                        </div>
                     </div>
-                    <div class="table-responsive">
+                    <!-- <div class="table-responsive">
                         <table class="table table-striped table-sm table-bordered ajax-table" id="list-dupak-table">                           
                         </table>
+                    </div> -->
+
+                    <ul class="nav nav-tabs justify-content-end">
+                      <li class="nav-item"><a data-toggle="tab" class="nav-link active" href="#pengawasan">Pengawasan</a></li>
+                      <li class="nav-item"><a data-toggle="tab" class="nav-link" href="#pendidikan">Pendidikan</a></li>
+                      <li class="nav-item"><a data-toggle="tab" class="nav-link" href="#penunjang">Penunjang</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+                      <div id="pengawasan" class="tab-pane fade show active">
+                        <h3>Angka Kredit Pengawasan</h3>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-sm table-bordered ajax-table" id="dupak-pengawasan-table">                                   
+                            </table>
+                        </div>
+                      </div>
+                      <div id="pendidikan" class="tab-pane fade">
+                        <h3>Angka Kredit Pendidikan</h3>
+                        <p>Some content in menu 1.</p>
+                      </div>
+                      <div id="penunjang" class="tab-pane fade">
+                        <h3>Menu 2</h3>
+                        <p>Some content in menu 2.</p>
+                      </div>
                     </div>
+
+
+
                 </div>
             </div>
         </div>

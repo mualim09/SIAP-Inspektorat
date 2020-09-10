@@ -34,35 +34,31 @@
                    
                 <div class="card-body">
                     @include('admin.dupak.form_isi_dupak')
-                    <div class="table-responsive">
-                        <table class="table table-striped table-sm table-bordered ajax-table" id="list-dupak-table">
-                            <thead>
-                            <tr>
-                                <th rowspan="3" width="1" valign="middle" class="text-center">{{ __('No') }}</th> 
-                                <th rowspan="3" valign="middle" class="text-center">{{ __('Nama') }}</th>
-                                <th rowspan="3" valign="middle" class="text-center">{{ __('NIP') }}</th>
-                                <th colspan="6" class="text-center">{{ __('Dupak') }}</th>
-                                <th rowspan="3" valign="middle" class="text-center">{{ __('Action') }}</th> 
-                            </tr>
-                            <tr>
-                                <th colspan="2" class="text-center">{{ __('Pendidikan') }}</th>
-                                <th colspan="2" class="text-center">{{ __('Utama') }} </th>
-                                <th colspan="2" class="text-center">{{ __('Penunjang') }} </th>
-                            </tr>
-                            <tr>
-                                <th>{{ __('Lama') }}</th>
-                                <th>{{ __('Baru') }} </th>
-                                <th>{{ __('Lama') }} </th>
-                                <th>{{ __('Baru') }} </th>
-                                <th>{{ __('Lama') }} </th>
-                                <th>{{ __('Baru') }} </th>
-                            </tr>
-                            
-                            </thead>
-                            <tbody></tbody>
-                          
-                        </table>
-                    </div>
+                    
+                    <ul class="nav nav-tabs">
+                      <li class="active"><a data-toggle="tab" href="#pengawasan">Pengawasan</a></li>
+                      <li><a data-toggle="tab" href="#pendidikan">Pendidikan</a></li>
+                      <li><a data-toggle="tab" href="#penunjang">Penunjang</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+                      <div id="pengawasan" class="tab-pane fade in active">
+                        <h3>Angka Kredit Pengawasan</h3>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-sm table-bordered ajax-table" id="dupak-pengawasan-table">                                   
+                            </table>
+                        </div>
+                      </div>
+                      <div id="pendidikan" class="tab-pane fade">
+                        <h3>Angka Kredit Pendidikan</h3>
+                        <p>Some content in menu 1.</p>
+                      </div>
+                      <div id="penunjang" class="tab-pane fade">
+                        <h3>Menu 2</h3>
+                        <p>Some content in menu 2.</p>
+                      </div>
+                    </div>                 
+                                        
                 </div>
             </div>
         </div>

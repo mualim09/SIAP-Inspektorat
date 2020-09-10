@@ -34,13 +34,16 @@
             @yield('nav_tab_arsip')
             @yield('nav_table_inspektur')
 
-            <!-- if user can create SPT, use ml-auto to auto left marginize/right position -->
-            @can('Create SPT')
+            <!-- tombol tambah spt berdasarkan role -->
             <li class="nav-item ml-auto">
-                <button id="btn-new-spt" type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#formModal">{{ __('Tambah SPT') }}</button>
-            </li>    
-            @endcan
-            <!-- end user can create -->
+            @hasanyrole('Super Admin|TU Perencanaan')            
+                <button id="btn-new-spt" type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#formModal">{{ __('Tambah SPT') }}</button>             
+            @endhasrole
+            @hasanyrole('Super Admin|TU Umum')
+                <button id="btn-new-spt-umum" type="button" class="btn btn-outline-success btn-sm" data-toggle="modal" data-target="#formSptUmum">{{ __('Tambah SPT Umum') }}</button>
+            @endhasrole
+            </li>            
+            <!-- end tombol tambah spt -->
 
           </ul>
         </div>
