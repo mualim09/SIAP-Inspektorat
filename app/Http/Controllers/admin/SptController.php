@@ -420,8 +420,12 @@ class SptController extends Controller
             $control = '<a href="'.route('input_kka',$id).'"data-toggle="tooltip" title="Upload KKA" class="btn btn-outline-success btn-sm" target="__blank"><i class="ni ni-folder-17"></i><span>Input KKA</span></a>';
         }
 
-        if($user->hasRole('Auditor') && $method === 'buatLhp'){
+        if($user->hasRole('Auditor') && $method === 'cetakLhp'){
             $control = '<a href="'.route('laporan-lhp-cetak',$id).'"data-toggle="tooltip" title="Lihat LHP" class="btn btn-outline-primary btn-sm" target="__blank"><i class="ni ni-folder-17"></i><span>Cetak LHP</span></a>';
+        }
+
+        if($user->hasRole('Auditor') && $method === 'cetakLhp-disable'){
+            $control = '<a href="#"data-toggle="tooltip" title="" class="btn btn-outline-danger btn-sm disabled"><i class="ni ni-folder-17"></i><span>LHP</span></a>';
         }
 
         if($user->hasRole('Auditor') && $method === 'buatLaporan-disable'){
@@ -1116,10 +1120,21 @@ class SptController extends Controller
                         if ($ceking_data_detail_sendiri[0]->id_laporan_pemeriksaan != null) {
                             $control .= $this->buildControl('Cetak_KKA',$ceking_data_detail_sendiri[0]->id);
                         }
-                            if ($ceking_data_detail_sendiri[0]->peran == 'Ketua Tim') {
-                                // dd($ceking_data_detail_sendiri[0]->status);
-                                if ($ceking_data_detail_sendiri[0]->status != null) {
-                                    $control .= $this->buildControl('buatLhp',$get_id_detail);
+                            if ($ceking_data_detail_sendiri[0]->peran == 'Ketua Tim' || $ceking_data_detail_sendiri[0]->peran == 'Pengendali Teknis' || $ceking_data_detail_sendiri[0]->peran == 'Pengendali Mutu' || $ceking_data_detail_sendiri[0]->peran == 'PenanggungJawab') {
+
+                                if ($ceking_data_detail_sendiri[0]->peran == 'Ketua Tim' && $ceking_data_detail_sendiri[0]->status != null) {
+                                    $control .= $this->buildControl('buatLhp',$get_id_detail); //fitur button ketua tim
+                                    $control .= '<a href="#" onclick="showModalLihatLaporanPemeriksaan('.$ceking_data_detail_sendiri[0]->id.')" data-toggle="tooltip" title="Lihat KKA" class="btn btn btn-outline-info btn-sm"><i class="ni ni-paper-diploma"></i></a>';
+                                }elseif($ceking_data_detail_sendiri[0]->peran == 'Pengendali Teknis' || $ceking_data_detail_sendiri[0]->peran == 'Pengendali Mutu' || $ceking_data_detail_sendiri[0]->peran == 'PenanggungJawab' && $ceking_data_detail_sendiri[0]->status != null){ //fitur button daltu & dalnis
+                                    $get_info_ketua = DetailSpt::where('spt_id',$col->id)->where('peran','Ketua Tim')->get();
+                                    // dd($get_info_ketua[0]->info_laporan_pemeriksaan);
+                                    if($get_info_ketua[0]->info_laporan_pemeriksaan == null){
+                                        $control .= $this->buildControl('cetakLhp-disable',$get_id_detail);
+                                    }else{
+                                        // $control .= $this->buildControl('cetakLhp',$get_id_detail);
+                                        $control .= '<a href="#" onclick="confirm_lhp('.$ceking_data_detail_sendiri[0]->id.')" data-toggle="tooltip" title="Lihat LHP" class="btn btn-outline-primary btn-sm"><i class="ni ni-folder-17"></i><span>LHP</span></a>';
+                                        // $control .= '<a href="#" onclick="confirm('.$ceking_data_detail_sendiri[0]->id.')" data-toggle="tooltip" title="Lihat KKA" class="btn btn btn-outline-info btn-sm"><i class="ni ni-paper-diploma"></i></a>';
+                                    }
                                     $control .= '<a href="#" onclick="showModalLihatLaporanPemeriksaan('.$ceking_data_detail_sendiri[0]->id.')" data-toggle="tooltip" title="Lihat KKA" class="btn btn btn-outline-info btn-sm"><i class="ni ni-paper-diploma"></i></a>';
                                 }else{
                                     $control .= $this->buildControl('buatLaporan-disable',$get_id_detail);
@@ -1132,9 +1147,6 @@ class SptController extends Controller
                                         $control .= $this->buildControl('buatLaporan-disable',$get_id_detail);
                                     }
                                     $control .= '<a href="#" onclick="showModalLihatLaporanPemeriksaan('.$ceking_data_detail_sendiri[0]->id.')" data-toggle="tooltip" title="Lihat KKA" class="btn btn btn-outline-info btn-sm"><i class="ni ni-paper-diploma"></i></a>';
-                            }elseif($ceking_data_detail_sendiri[0]->peran == 'Pengendali Teknis' || $ceking_data_detail_sendiri[0]->peran == 'Pengendali Mutu' || $ceking_data_detail_sendiri[0]->peran == 'PenanggungJawab'){
-                                $control .= $this->buildControl('buatLaporan-disable',$get_id_detail);
-                                $control .= '<a href="#" onclick="showModalLihatLaporanPemeriksaan('.$ceking_data_detail_sendiri[0]->id.')" data-toggle="tooltip" title="Lihat KKA" class="btn btn btn-outline-info btn-sm"><i class="ni ni-paper-diploma"></i></a>';
                             }else{
                                 $control .= null;
                             }

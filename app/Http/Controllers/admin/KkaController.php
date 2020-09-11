@@ -457,37 +457,54 @@ class KkaController extends Controller
 
     public function cetakLhp($id)
     {// belum bisa mengambil semua kka
-        $getdata = DetailSpt::where('id',$id)->with('pemeriksaan','spt')->get();
+        // dd($id);
+        $get_detail_by_spt = DetailSpt::findOrFail($id);
+        $data = DetailSpt::where('spt_id',$get_detail_by_spt->spt_id);
+        if ($get_detail_by_spt->peran == 'Pengendali Teknis') {
+            $getdata = $data->where('peran','Ketua Tim')->with('pemeriksaan','spt')->get();
+        }elseif($get_detail_by_spt->peran == 'Pengendali Mutu'){
+            $getdata = $data->where('peran','Pengendali Teknis')->with('pemeriksaan','spt')->get();
+        }elseif($get_detail_by_spt->peran == 'Penanggungjawab'){
+            $getdata = $data->where('peran','Pengendali Mutu')->with('pemeriksaan','spt')->get();
+        }
+        
         $data_detail = $getdata[0];
         $data_pemeriksaan = $getdata[0]->pemeriksaan;
         $data_spt = $getdata[0]->spt;
         $data_lokasi = Lokasi::find($data_spt['lokasi_id'][0]);
         $data_jenis_spt = JenisSpt::findOrFail($getdata[0]->spt->jenis_spt_id);
         // dd($data_spt->created_at);
+        $data_Laporan = DB::table('detail_spt')
+                        ->where('spt_id','=',$getdata[0]->spt_id)
+                        ->join('laporan_pemeriksaan','detail_spt.id','=','laporan_pemeriksaan.detail_spt_id')
+                        ->join('spt','detail_spt.spt_id','=','spt.id')
+                        ->join('jenis_spt','spt.jenis_spt_id','=','jenis_spt.id')
+                        ->where('peran','=','Anggota Tim')
+                        ->get();
 
-        // return view('admin.laporan.lhp.index',compact('data_pemeriksaan','data_detail','data_spt','data_jenis_spt','data_lokasi'));
-        $pdf =PDF::loadView('admin.laporan.lhp.index',['data_pemeriksaan'=>$data_pemeriksaan,'data_detail'=>$data_detail,'data_spt'=>$data_spt,'data_jenis_spt'=>$data_jenis_spt,'data_lokasi'=>$data_lokasi]);
+        // return view('admin.laporan.lhp.index',compact('data_Laporan','data_detail','data_spt','data_jenis_spt','data_lokasi'));
+        $pdf =PDF::loadView('admin.laporan.lhp.index',['data_Laporan'=>$data_Laporan,'data_detail'=>$data_detail,'data_spt'=>$data_spt,'data_jenis_spt'=>$data_jenis_spt,'data_lokasi'=>$data_lokasi]);
         return $pdf->stream('LHP-'.$id.'.pdf',array('Attachment'=>1));
     }
 
-    public function tolakKKA($id)
-    {
-        $get_dataKetua = DetailSpt::findOrFail($id);
-        $data_anggota = DetailSpt::where('spt_id',$get_dataKetua->spt_id)->where('peran','Anggota Tim');
-        $get_detail_id = DetailSpt::where('spt_id',$get_dataKetua->spt_id)->where('user_id',auth()->user()->id);
-        $jenis_laporan = 'KKA';
+    // public function tolakKKA($id)
+    // {
+    //     $get_dataKetua = DetailSpt::findOrFail($id);
+    //     $data_anggota = DetailSpt::where('spt_id',$get_dataKetua->spt_id)->where('peran','Anggota Tim');
+    //     $get_detail_id = DetailSpt::where('spt_id',$get_dataKetua->spt_id)->where('user_id',auth()->user()->id);
+    //     $jenis_laporan = 'KKA';
 
-        $status['KetuaTim'] = 'revisi';//proses revisi ketua tim
-        $status_anggota['KetuaTim'] = auth()->user()->id; //nilai status yg melakukan revisi bedasarkan auth id
-        $status_anggota['PengendaliTeknis'] = null;
-        $status_anggota['PengendaliMutu'] = null;
-        $status_anggota['PenanggungJawab'] = null;
+    //     $status['KetuaTim'] = 'revisi';//proses revisi ketua tim
+    //     $status_anggota['KetuaTim'] = auth()->user()->id; //nilai status yg melakukan revisi bedasarkan auth id
+    //     $status_anggota['PengendaliTeknis'] = null;
+    //     $status_anggota['PengendaliMutu'] = null;
+    //     $status_anggota['PenanggungJawab'] = null;
 
-        $update_ketua = $get_detail_id->update(['jenis_laporan'=>$jenis_laporan,'status'=>json_encode($status)]); //update ketua tim yg sedang merevisi/mengedit di detail tabel
-        $update_anggota = $data_anggota->where('peran','Anggota Tim')->update(['status'=>json_encode($status_anggota)]);//update status anggota
+    //     $update_ketua = $get_detail_id->update(['jenis_laporan'=>$jenis_laporan,'status'=>json_encode($status)]); //update ketua tim yg sedang merevisi/mengedit di detail tabel
+    //     $update_anggota = $data_anggota->where('peran','Anggota Tim')->update(['status'=>json_encode($status_anggota)]);//update status anggota
 
-        // dd($get_dataKetua);
-    }
+    //     // dd($get_dataKetua);
+    // }
 
     public function uploadKKA($id)//proses unggah ketua tim
     {

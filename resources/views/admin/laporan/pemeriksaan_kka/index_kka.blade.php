@@ -129,6 +129,39 @@
 
     @section('js_tabel_auditor')
 <script type="text/javascript">
+
+    function confirm_lhp(id){
+        // alert(id);
+        $.confirm({
+            columnClass: '.col-md-offset-3',
+            title: 'LHP',
+            content: 'Apakah anda ingin ',
+            buttons: {
+                Setujui: {
+                    btnClass: 'btn-success',
+                    action: function(){                       
+                        window.location.href = "admin/kka/menyetujui/"+id;
+                    },
+                },
+                CetakLHP: {
+                    btnClass: 'btn-success',
+                    action: function(){                       
+                        window.location.href = "admin/kka/cetak/lhp/"+id;
+                    },
+                },
+                UbahLHP: {
+                    btnClass: 'btn-success',
+                    action: function(){                       
+                        window.location.href = "admin/kka/input-lhp/"+id;
+                    },
+                },
+                Tidak: function(){
+                    $.alert('Dibatalkan!');
+                }
+            }
+        });
+    }
+
     //summernote
     // $('#summernote-kondisi').summernote({
     //     placeholder: 'Kondisi',
@@ -171,7 +204,7 @@
       alert(msg);
     }
 
-    function showModalLihatLaporanPemeriksaan(id){        
+    function showModalLihatLaporanPemeriksaan(id){
         $('#modalPemeriksaan').modal('show');
         // console.log(id);
 
@@ -206,7 +239,7 @@
                         if(data[i].status != null){
                             $('#menyetujui').hide(); 
                         }else{
-                            $('#menyetujui').show();
+                            // $('#menyetujui').show();
                         }
                     }
                     else if (data[i].status != true  && data[i].user_id == user_id && data[i].peran == 'Pengendali Mutu') { //pengendali mutu telah acc kka
