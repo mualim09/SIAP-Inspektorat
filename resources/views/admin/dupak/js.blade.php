@@ -1,7 +1,7 @@
 <script type="text/javascript">    
     /*datatable setup*/
     
-    var dupak_table = $('#list-dupak-table').DataTable({        
+    var dupak_pengawasan_table = $('#dupak-pengawasan-table').DataTable({        
         'pageLength': 50,
         'searching': false,
         dom: '<"col-md-12 row"<"col-md-6"B><"col"f>>rtlp',
@@ -68,42 +68,9 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
- 
-
-  //form cari dupak user
-  /*$("#form-cari-dupak").validate({
-        rules: {
-            semester : {required: true},
-            tahun: {required: true}
-        },
-
-        submitHandler: function(form){
-            var user_id = ( $( "#user_id" ).length ) ? $("#user-id option:selected").val() : "{{ Auth::user()->id }}";
-            var semester = $('#semester option:selected').val();
-            var tahun = $('#tahun').val();
-            //url =  (save_method == 'new') ? "{{ route('spt.store') }}" : base_url + '/' + id ;
-            url = "{{  route('data_dupak') }}" ;
-            type = "GET";
-            $.ajax({
-                url: url,
-                type: type,
-                data: {user_id:user_id, semester:semester, tahun:tahun},
-                
-                success: function(data){
-                    $("#form-cari-dupak")[0].reset();
-                    //dupak_table.draw();
-                    dupak_table.destroy();
-                    dupak_table.draw();
-                    console.log(data);
-                },
-                error: function(error){                    
-                    console.log(error);
-                }
-            });
-        }
-    });*/
+  
   $('#form-cari-dupak').on('submit', function(e) {
-        dupak_table.draw();
+        dupak_pengawasan_table.draw();
         e.preventDefault();
     });
 

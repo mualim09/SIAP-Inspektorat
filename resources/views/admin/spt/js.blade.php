@@ -141,12 +141,17 @@
         }
     });
 
+    $.validator.methods.teks = function( value, element ) {
+      return this.optional( element ) || /^[a-zA-Z]+$/.test( value );
+    }
+
 
     $("#spt-form").validate({
         rules: {
             jenis_spt_id : {required: true},
             tgl_mulai: {required: true},
             tgl_akhir: {required: true},
+            input_tambahan : {teks: true},
         },
 
         submitHandler: function(form){
