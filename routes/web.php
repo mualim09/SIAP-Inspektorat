@@ -196,6 +196,8 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 		Route::group(['middleware'=>['auth', 'role:Super Admin|TU Umum']], function(){
 			Route::post('update-nomor/{id}','SptController@updateNomorSpt')->name('update_nomor_spt');
 			Route::post('upload-scan/{id}','SptController@uploadScanSpt')->name('upload_scan_spt');
+			Route::post('umum/store', 'SptController@storeUmum')->name('store_spt_umum');
+			Route::post('umum/edit/{id}', 'SptController@updateUmum')->name('update_spt_umum');
 		});
 	});
 

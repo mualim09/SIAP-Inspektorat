@@ -19,7 +19,7 @@
 			            <label for="dasar" class="col-md-2 col-form-label ">{{ __('Dasar') }}</label>
 			            <div class="col-md-10">
 			                 <textarea rows="5" id="info-dasar" class="form-control form-control-alternative @error('dasar') is-invalid @enderror" name="info_dasar" ></textarea>
-			                 <small id="infoDasarHelp" class="form-text text-muted">Masukkan dasar-dasar jenis SPT.</small>
+			                 <small id="infoDasarHelp" class="form-text text-muted">Masukkan dasar-dasar jenis SPT. Tekan <span style="color:red;">ENTER</span> untuk ganti baris.</small>
 			            </div>
 			        </div>
 
@@ -119,10 +119,9 @@
             var info_kegiatan = ( typeof $('.info-lanjutan:checked').val() !== 'undefined' ) ? '"lanjutan":"'+$('.info-lanjutan:checked').val()+'"' : '"lanjutan":'+null;            
             var id = $('#id').val();
             save_method = (id == '') ? 'new' : save_method;
-            base_url = "spt";
             var url_prefix = (window.location.pathname == '/admin') ? 'admin/spt/' : 'spt/';
             //url =  (save_method == 'new') ? "{{ route('spt.store') }}" : base_url + '/' + id ;
-            url = (save_method == 'new') ? "{{ route('spt.store') }}" :url_prefix + id ;
+            url = (save_method == 'new') ? "{{ route('store_spt_umum') }}" : url_prefix + 'umum/edit/' +id ;
             method = (save_method == 'new') ? "POST" : "PUT";
             type = "POST";            
             

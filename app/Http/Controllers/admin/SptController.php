@@ -192,6 +192,14 @@ class SptController extends Controller
         return;
     }
 
+    public function storeUmum(Request $request){
+        //masukkan kode store SPT bagian umum
+    }
+
+    public function updateUmum(Request $request, $id){
+        //masukkan kode untuk update SPT bagian umum
+    }
+
     public function updateDetail(Request $request){
 
     }

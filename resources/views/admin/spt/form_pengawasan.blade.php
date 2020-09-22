@@ -117,7 +117,7 @@
 				    <label for="tambahan" class="col-md-2 col-form-label">{{ __('Tambahan') }} </label>
 					<div class="col">
 						<textarea name="tambahan" id="tambahan" class="form-control" ></textarea>
-						<small id="tambahanHelp" class="form-text text-muted">Masukkan informasi tambahan mengenai SPT yang akan dibuat. tekan <span style="color:red;">ENTER</span> untuk ganti baris.</small>
+						<small id="tambahanHelp" class="form-text text-muted">Masukkan informasi tambahan mengenai SPT yang akan dibuat. Tekan <span style="color:red;">ENTER</span> untuk ganti baris.</small>
 					</div>
 				</div>
 
