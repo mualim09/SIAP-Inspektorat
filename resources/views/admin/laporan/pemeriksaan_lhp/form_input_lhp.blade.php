@@ -177,7 +177,7 @@
                                                         // dd($data_pemeriksaan);
                                                         $number = $key + 1;
                                                         echo "<tr>";/*"<p style='text-indent: 0.6cm;'>judultemuan ini masih kosong</p>"*/
-                                                        echo "<td>".$number.". ".$value->judultemuan.json_decode($value->kriteria).json_decode($value->kondisi)."</td>"; // penomoran masih belum bisa auto
+                                                        echo "<td>".$number.". ".$value->judultemuan."<br><br>"."Kondisi<br>".$value->kondisi."Kriteria<br>".json_decode($value->kriteria)."</td>"; // penomoran masih belum bisa auto
                                                         echo "</tr>";
                                                         echo "<tr>";
                                                         echo "<td>".'Sebab<br><div class="point isi-hasil-pemeriksaan" style="width: 97%;margin-left: 20px;margin-top: 0px;"><textarea type="textarea" class="form-control" name="sebab['.$value->detail_spt_id.']">'.$value->sebab.'</textarea></div>'."</td>"; // isi

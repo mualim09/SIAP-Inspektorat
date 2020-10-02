@@ -61,12 +61,6 @@
             margin: 0px;
             
         }
-        p{margin: 5px 0}
-        div.dasar-spt span, div.pegawai-spt span{
-            float: left;
-            display: block;
-            width: 10%;
-        }
 
         table.info{
             margin: 0px 30px 0px 30px;
@@ -180,8 +174,9 @@
             <p>Tahun Anggaran<br></p>
         </td>
         <td class="laporan info-nama" style="padding-left: 75px !important;">
-            <p>:  {{$data_spt->nomor}}/{{$data_jenis_spt->kode_kelompok}}/404.4/{{now()->year}}</p>
-            <p>:  __{{$data_spt->updated_at->format('-M-Y')}}</p>
+            <?php $nomor = ($data_jenis_spt->sebutan == 'Audit Operasional') ? '700' : '_____';?>
+            <p>:  {{$nomor}} / _____ / 404.4 / {{now()->year}}</p>
+            <p>:  ____{{$data_spt->updated_at->format('-M-Y')}}</p>
             <p>:  Satu Bendel</p>
             <p>:  {{$data_lokasi->nama_lokasi}}</p>
             <p>:  {{now()->year}}</p>
@@ -195,17 +190,17 @@
         
         <table class="tabel simpulan">
             <?php
-                for($i=1;$i<=count($data_pemeriksaan);$i++)
+                for($i=0;$i<count($data_Laporan);$i++) //judultemuan yang ditampilkan hanya data dari anggota tim
                 {
-                    echo "<tr>";
-                    for ($j=1;$j<=count($data_pemeriksaan);$j++)
-                    {
-                        echo "<td>".$i.". ".$data_pemeriksaan[0]->judultemuan."<br>"."<p style='text-indent: 0.6cm;'>judultemuan ini masih kosong</p>"."</td>"; // isi
-                    }
+                    $number = $i + 1;
+                    // dd($data_pemeriksaan);
+                    echo "<tr>";/*"<p style='text-indent: 0.6cm;'>judultemuan ini masih kosong</p>"*/
+                    echo "<td>".$number.". ".$data_Laporan[$i]->judultemuan."<br>".json_decode($data_Laporan[$i]->kriteria)."</td>"; // isi
                     echo "</tr>";
                 }
             ?>
         </table>
+
     </div>
     <div class="Bab-dua">
         <div class="no-bab"> BAB II  <u>URAIAN HASIL PEMERIKSAAN</u></div>
@@ -220,25 +215,30 @@
                         </tr>
                     </table>
                 </div>
+                
                 <div class="isi point-2 data_umum">
                     <p style="margin-left: 30px;text-indent: 1.3cm;">2. Tujuan Pemeriksaan :</p><br>
                     <div class="point-2-isi">
-                        <p>a.  Menilai efisiensi dan efektivitas penggunaan sumber daya.<br></p>
-                        <p>b.  Menilai kepatuhan terhadap peraturan perundang-undangan.<br></p>
-                        <p>c.  Memberikan rekomendasi atas permasalahan yang ditemukan dalam pemeriksaan.<br></p>
+                        <?php echo json_decode($data_detail->info_laporan_pemeriksaan)->tujuan_pemeriksaan; ?>
                     </div>
                 </div>
                 <div class="isi point-3 data_umum">
                     <p style="margin-left: 30px;text-indent: 1.3cm;">3. Ruang Lingkup Pemeriksaan :</p><br>
-                    
+                    <div class="point-2-isi">
+                        <?php echo json_decode($data_detail->info_laporan_pemeriksaan)->ruang_lingkup_pemeriksaan; ?>
+                    </div>
                 </div>
                 <div class="isi point-4 data_umum">
                     <p style="margin-left: 30px;text-indent: 1.3cm;">4. Batasan Pemeriksaan :</p><br>
-                    
+                    <div class="point-2-isi">
+                        <?php echo json_decode($data_detail->info_laporan_pemeriksaan)->batasan_pemeriksaan; ?>
+                    </div>
                 </div>
                 <div class="isi point-5 data_umum">
                     <p style="margin-left: 30px;text-indent: 1.3cm;">5. Pendekatan Pemeriksaan :</p><br>
-                    
+                    <div class="point-2-isi">
+                        <?php echo json_decode($data_detail->info_laporan_pemeriksaan)->pendekatan_pemeriksaan; ?>
+                    </div>
                 </div>
                 <div class="isi point-6 data_umum">
                     <p style="margin-left: 30px;text-indent: 1.3cm;">6. Strategi Pelaporan :</p><br>
@@ -249,18 +249,44 @@
                         <p>Bab III  Penutup</p>
                     </div>
                 </div>
-            <p class="nama-bab" style="text-indent: 1.5em;">B.  HASIL PEMERIKSAAN</p>
+            <p class="nama-bab" style="text-indent: 1.5em;">C.  TEMUAN DAN REKOMENDASI</p>
             <div class="isi point-1 data_umum">
-                    <p style="margin-left: 30px;text-indent: 1.3cm;">B.1. Aspek Organisasi dan Tata Kerja :</p>
-                    <div class="isi-B1">
-                        <p style="text-indent: 0.8cm;">1.  Pelaksanaan Tugas dan Fungsi. Tidak ada kekosongan jabatan Struktural di Badan Perencanaan Pembangunan Daerah Kabupaten Sidoarjo.</p><br>
+                    <div class="isi point-1 temuan_rekomendasi">
+                        <div class="point isi-hasil-pemeriksaan" style="margin: 40px;margin-top: 0px;">
+                            <table class="tabel simpulan">
+                            <?php
+                                // for($i=0;$i<count($data_pemeriksaan);$i++) //judultemuan yang ditampilkan hanya data dari anggota tim
+                                foreach ($data_Laporan as $key => $value) {
+                                    // dd($data_pemeriksaan);
+                                    $number = $key + 1;
+                                    echo "<tr>";
+                                    echo "<td>".$number.". ".$value->judultemuan.'<br>kondisi'.$value->kondisi.'kriteria'.json_decode($value->kriteria)."</td>"; // penomoran masih belum bisa auto
+                                    echo "</tr>";
+                                    echo "<tr>";
+                                    echo "<td>".'Sebab<br><div class="point isi-hasil-pemeriksaan" style="width: 97%;margin-left: 20px;margin-top: 0px;">'.$value->sebab.''."</td>";
+                                    echo "</tr>";
+                                    echo "<tr>";
+                                    echo "<td>".'Akibat<br><div class="point isi-hasil-pemeriksaan" style="width: 97%;margin-left: 20px;margin-top: 0px;">'.$value->akibat.''."</td>"; // isi
+                                    echo "</tr>";
+                                    echo "<tr>";
+                                    echo "<td>".'Komentar<br><div class="point isi-hasil-pemeriksaan" style="width: 97%;margin-left: 20px;margin-top: 0px;">'.$value->komentar.''."</td>"; // isi
+                                    echo "</tr>";
+                                    echo "<tr>";
+                                    echo "<td>".'Rekomendasi<br><div class="point isi-hasil-pemeriksaan" style="width: 97%;margin-left: 20px;margin-top: 0px;">'.$value->rekomendasi.''."</td>"; // isi
+                                    echo "</tr>";
+                                }
+                            ?>
+                        </table>
+                        </div>
                     </div>
             </div>
         <!-- point ke dua masih belum tau datanya. -->
         
     </div>
     <div class="Bab-tiga">
-        <div class="no-bab"> BAB III  <u>PENUTUP</u><!-- <p class="nama-bab" style="text-indent: 1.5em;">1.  DATA UMUM</p> --></div>
+        <div class="no-bab"> BAB III  <u>PENUTUP</u><!-- <p class="nama-bab" style="text-indent: 1.5em;">1.  DATA UMUM</p> -->
+            <p style="text-indent: 1cm;text-align: justify;margin-top: 15px;font-weight: normal;">Demikian Laporan Hasil Pemeriksaan pada {{$data_lokasi->nama_lokasi}} Kabupaten Sidoarjo untuk segera ditindak lanjuti selambat - lambatnya "TOTAL HARI TINDAK LANJUT LHP belum diketahui nilainya dari mana !!! (sebutan hari tindak lanjut)" hari kerja setelah diterimanya Laporan Hasil Pemeriksaan</p>
+        </div>
     </div>
 
     <container>
@@ -268,7 +294,7 @@
     </container>
 
     <footer>
-        <!-- <div class="row">
+        <div class="row">
             <div class="footer komentar">
                 <p style="font-weight: bold;font-style: italic;">Komentar Pejabat Yang Diperiksa :</p>
                 ..........................................................................................................................................<br>
@@ -283,7 +309,7 @@
                 <br><br>
                 ........................................................
             </div>
-        </div> -->
+        </div>
     </footer>
 
     <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
