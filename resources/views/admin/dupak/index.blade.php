@@ -45,13 +45,39 @@
                       <div id="pengawasan" class="tab-pane fade in active">
                         <h3>Angka Kredit Pengawasan</h3>
                         <div class="table-responsive">
-                            <table class="table table-striped table-sm table-bordered ajax-table" id="dupak-pengawasan-table">                                   
-                            </table>
+                            <table class="table table-striped table-sm table-bordered ajax-table" id="dupak-pengawasan-table"></table>
                         </div>
                       </div>
                       <div id="pendidikan" class="tab-pane fade">
-                        <h3>Angka Kredit Pendidikan</h3>
-                        <p>Some content in menu 1.</p>
+                        <h3>AK Pendidikan</h3>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-sm table-bordered ajax-table" id="dupak-pendidikan-table">
+                              <thead>
+                                <tr>
+                                  <th>Name</th>
+                                  <th>Notes</th>
+                                </tr>
+                              </thead>
+
+                              <tfoot>
+                                <tr>
+                                  <th>Name</th>
+                                  <th>Notes</th>
+                                </tr>
+                              </tfoot>
+
+                              <tbody>
+                                <tr>
+                                  <td>Big Column Test 1</td>
+                                  <td>Notes 1</td>
+                                </tr>
+                                <tr>
+                                  <td>Test 2</td>
+                                  <td>Notes 2</td>
+                                </tr>
+                             </tbody>
+                            </table>
+                        </div>
                       </div>
                       <div id="penunjang" class="tab-pane fade">
                         <h3>Menu 2</h3>

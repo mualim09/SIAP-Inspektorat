@@ -420,7 +420,8 @@ $( "#formModal" ).on('shown.bs.modal', function(){
     	select_jenis_spt[0].selectize.clear();
     }
 
-	url = (id_spt != '') ? "{{url('/admin/spt/get-anggota')}}"+"/"+id_spt : "{{ url('/admin/spt/get-anggota') }}/0";
+    var url_prefix = (window.location.pathname == '/admin') ? 'admin/spt/get-anggota/' : 'spt/get-anggota/';
+	url = (id_spt != '') ? url_prefix+id_spt : url_prefix+'0';
 
 
 	/*datatable setup*/    

@@ -68,11 +68,11 @@
 						</div>					
 					</div>
 					<!-- anggota spt -->
-					<div class="form-group row" id="input-anggota" >
+					<div class="form-group row" id="input-anggota-umum" >
 					    <div class="col-md-2 col-form-label">{{ __('Anggota') }} </div>
 						<div class="col">
-							<table id="list-anggota-session" class="col"></table>
-							<button id="add-anggota" class="btn btn-outline-primary btn-sm" type="button" data-toggle="modal" data-target="#anggotaSptModal"> <i class="fa fa-plus"></i> <span>Tambah Anggota</span></button>
+							<table id="list-anggota-umum-session" class="col"></table>
+							<button id="add-anggota-umum" class="btn btn-outline-primary btn-sm" type="button" data-toggle="modal" data-target="#anggotaSptUmumModal"> <i class="fa fa-plus"></i> <span>Tambah Anggota</span></button>
 						</div>
 					</div>
 

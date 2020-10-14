@@ -5,20 +5,29 @@
         'pageLength': 50,
         'searching': false,
         dom: '<"col-md-12 row"<"col-md-6"B><"col"f>>rtlp',
-        buttons:[ {
-            extend:'excel',
-            title:'Daftar Perolehan Angka Kredit',
-            exportOptions: {
-                columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ]
-            }
-        },
-        {
-            extend:'pdf',
-            title:'Daftar Perolehan Angka Kredit',
-            exportOptions: {
-                columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ]
-            }
-        } ],
+        buttons:[ 
+            {
+                extend:'excelHtml5',
+                text: 'Excel',
+                title:'Daftar Perolehan Angka Kredit',
+                exportOptions: {
+                    columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ]
+                },
+                customize: function( xlsx ) {                  
+                  setSheetName(xlsx, 'Pengawasan');
+                  exportText('pengawasan');
+                  addSheet(xlsx, '#dupak-pendidikan-table', 'Pendidikan', 'Pendidikan', '2');
+                },
+
+            },
+            /*{
+                extend:'pdf',
+                title:'Daftar Perolehan Angka Kredit',
+                exportOptions: {
+                    columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ]
+                }
+            } */
+        ],
        
   
         language: {
@@ -56,6 +65,8 @@
         ],        
         "order": [[ 1, 'asc' ]],
     });
+
+    var dupak_pendidikan_table = $('#dupak-pendidikan-table').DataTable();
     
 
     function isiDupakUser(user_id){
@@ -92,3 +103,4 @@ $('.datepicker').each(function() {
     });
   
 </script>
+@include('admin.dupak.export_tool')

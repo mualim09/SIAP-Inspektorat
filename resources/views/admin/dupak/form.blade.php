@@ -109,7 +109,34 @@
                       </div>
                       <div id="pendidikan" class="tab-pane fade">
                         <h3>Angka Kredit Pendidikan</h3>
-                        <p>Some content in menu 1.</p>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-sm table-bordered ajax-table" id="dupak-pendidikan-table">
+                              <thead>
+                                <tr>
+                                  <th>No</th>
+                                  <th>Uraian Sub Unsur</th>
+                                  <th>Butir Kegiatan</th>
+                                  <th>Angka Kredit</th>
+                                  <th>Keterangan</th>
+                                </tr>
+                              </thead>
+
+                              <tbody>
+                                <tr>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                </tr>
+                                <tr>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                </tr>
+                             </tbody>
+                            </table>
+                        </div>
                       </div>
                       <div id="penunjang" class="tab-pane fade">
                         <h3>Menu 2</h3>
