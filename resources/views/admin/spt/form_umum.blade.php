@@ -4,6 +4,7 @@
     	<div class="modal-content">
     		<div class="modal-header">
 	    		<h3>{{ __('Pengajuan SPT Bagian Umum') }}</h3>
+
 	    		<button type="button" class="btn btn-icon btn-3 btn-outline-secondary" data-dismiss="modal" aria-label="Close" id="close-spt-form">
 		        	<span class="btn-inner--icon"><i class="fa fa-times"></i></span>
 		        	<span class="btn-inner--text">{{ __('Close') }}</span>
@@ -12,8 +13,29 @@
 	    	<div class="modal-body">
 	    		<form id="spt-umum-form">
 	    			<input type="hidden" name="id" id="id">
-	    			<input type="hidden" name="jenis_spt_id" id="jenis-spt-id" value="0">
+	    			<input type="hidden" name="jenis_spt_id" id="jenis-spt-id">
 					@csrf
+
+					<!-- jenis spt bag umum -->
+					<div class="form-group row">
+						<label for="dasar" class="col-md-2 col-form-label ">{{ __('Jenis Spt') }}</label>
+						<div class="col-md-10">
+							<div class="custom-control custom-radio custom-control-inline">
+								<input type="radio" class="custom-control-input" id="jenis-spt-umum-SPT1" name="jenis_laporan" value="SPT1" onclick="showresponddiv(this.id)">
+		                        <label class="custom-control-label" for="jenis-spt-umum-SPT1">SPT 1</label>
+							</div>
+							<div class="custom-control custom-radio custom-control-inline">
+								<input type="radio" class="custom-control-input" id="jenis-spt-umum-SPT2" name="jenis_laporan" value="SPT2" onclick="showresponddiv(this.id)">
+		                        <label class="custom-control-label" for="jenis-spt-umum-SPT2">SPT 2</label>
+							</div>
+							<div class="custom-control custom-radio custom-control-inline">
+								<input type="radio" class="custom-control-input" id="jenis-spt-umum-SPT3" name="jenis_laporan" value="SPT3" onclick="showresponddiv(this.id)">
+		                    	<label class="custom-control-label" for="jenis-spt-umum-SPT3">SPT 3</label>
+		                	</div>
+		                	<small id="infoDasarHelp" class="form-text text-muted">Silahkan pilih Jenis Spt yang akan dibuat.</small>
+		                </div>
+	                </div>
+
 					<!-- dasar spt bag umum -->
 					<div class="form-group row">
 			            <label for="dasar" class="col-md-2 col-form-label ">{{ __('Dasar') }}</label>
@@ -100,6 +122,15 @@
 </div>
 <!-- end form pengajuan spt umum -->
 <script type="text/javascript">
+
+		var current = null;
+	    function showresponddiv(messagedivid){
+	        var id = messagedivid.replace("jenis-spt-umum-", ""),
+	            div = document.getElementById(id);
+	        // console.log(id);
+	        $('#jenis-spt-id[type=hidden]').attr('value',id);
+	    }
+
 	    $("#spt-umum-form").validate({
         rules: {
             jenis_spt_id : {required: true},
