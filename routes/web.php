@@ -270,7 +270,8 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 		Route::get('reviu', 'DupakController@reviuDupak')->name('reviu_dupak');
 		Route::get('getdata', 'DupakController@getData')->name('data_dupak');
 		Route::get('user/{id}', 'DupakController@dupakUser')->name('get_dupak_user');
-		Route::post('store/penunjang', 'DupakController@storePenunjang')->name('store_dupak_penunjang');		
+		Route::post('store/penunjang', 'DupakController@storePenunjang')->name('store_dupak_penunjang');
+		Route::get('getdupakpendidikan', 'DupakController@getDupakPendidikan')->name('data_dupak_pendidikan');
 	});
 
 	Route::group(['prefix'=>'lokasi', 'middleware'=> ['role:Super Admin']],function(){

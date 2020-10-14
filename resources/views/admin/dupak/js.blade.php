@@ -15,7 +15,7 @@
                 },
                 customize: function( xlsx ) {                  
                   setSheetName(xlsx, 'Pengawasan');
-                  exportText('pengawasan');
+                  //exportText('pengawasan');
                   addSheet(xlsx, '#dupak-pendidikan-table', 'Pendidikan', 'Pendidikan', '2');
                 },
 
@@ -66,7 +66,58 @@
         "order": [[ 1, 'asc' ]],
     });
 
-    var dupak_pendidikan_table = $('#dupak-pendidikan-table').DataTable();
+    var dupak_pendidikan_table = $('#dupak-pendidikan-table').DataTable({
+        'pageLength': 50,
+        'searching': false,
+        dom: '<"col-md-12 row"<"col-md-6"B><"col"f>>rtlp',
+        buttons:[ 
+            {
+                extend:'excelHtml5',
+                text: 'Excel',
+                title:'Angka Kredit Pendidikan',
+                exportOptions: {
+                    columns: [ 0, 1, 2, 3 ]
+                },
+                customize: function( xlsx ) {                  
+                  setSheetName(xlsx, 'Pendidikan');
+                  //exportText('pengawasan');
+                  addSheet(xlsx, '#dupak-pengawasan-table', 'Pengawasan', 'Pengawasan', '1');
+                },
+
+            },
+        ],
+       
+  
+        language: {
+            paginate: {
+              next: '&gt;', 
+              previous: '&lt;' 
+            }
+        },
+        "opts": {
+          "theme": "bootstrap",
+        },
+        processing: true,
+        serverSide: true,
+        /*ajax: '{{ route("data_dupak") }}',*/
+        ajax: {
+            url:'{{ route("data_dupak_pendidikan") }}',
+            //data:{tgl_mulai:tgl_mulai, tgl_akhir:tgl_akhir}
+            data: function(d){                
+                d.user_id = ( $( "#user-id" ).length ) ? $("#user-id option:selected").val() : "{{ Auth::user()->id }}";
+                d.semester = $('#semester option:selected').val();
+                d.tahun = $('#tahun').val();
+            }
+           },
+        columns: [
+            {'defaultContent' : '', 'data' : 'DT_RowIndex', 'name' : 'DT_RowIndex', 'title' : 'No', 'orderable' : false, 'searchable' : false, 'exportable' : true, 'printable' : true, width: '2%'},
+            {data: 'sub_unsur', name: 'tanggal_spt', 'title': "{{ __('Sub Unsur') }}"},
+            {data: 'butir_kegiatan', name: 'butir_kegiatan', 'title': "{{ __('Butir Kegiatan') }}"},
+            {data: 'dupak', name: 'dupak', 'title': "{{ __('Angka Kredit') }}"},
+            {data: 'action', name: 'action', 'orderable': false, 'searchable': false, 'title': "{{ __('') }}", 'exportable' : false,'printable': false},
+        ],        
+        "order": [[ 1, 'asc' ]],
+    });
     
 
     function isiDupakUser(user_id){
@@ -82,6 +133,7 @@
   
   $('#form-cari-dupak').on('submit', function(e) {
         dupak_pengawasan_table.draw();
+        dupak_pendidikan_table.draw();
         e.preventDefault();
     });
 

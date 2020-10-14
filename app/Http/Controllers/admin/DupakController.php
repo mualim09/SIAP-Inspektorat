@@ -210,5 +210,39 @@ class DupakController extends Controller
         return view('admin.calendar.user.index');
     }
 
+    public function getDupakPendidikan(Request $request){
+        $user_id = ($request->user_id) ? $request->user_id : auth()->user()->id;
+        if($request->ajax()):            
+            $q = Dupak::where('user_id', $user_id)->where('unsur_dupak','pendidikan');
+            if($q->count()>1){
+                $dupak = $q->where('status','baru')->get();
+            }else{
+                $dupak = $q->get();
+            }
+
+            //set datatable column
+            return Datatables::of($dupak)
+            ->addIndexColumn()
+            ->addColumn('sub_unsur', function($col) use ($user_id){
+                $q = User::where('id', $user_id)->select('pendidikan')->first();
+                $data = json_decode($q,true);
+                //return $data[0]['tingkat'].' '.$data[0]['jurusan'];
+                return $data['pendidikan']['tingkat'].' '.$data['pendidikan']['jurusan'];
+            })
+            ->addColumn('butir_kegiatan', function($col){
+                return '';
+            })
+            ->addColumn('dupak', function($col){
+                return $col->dupak;
+            })
+            ->addColumn('action', function($user){                    
+                return;
+            })
+            ->make(true);
+            //end datatable
+
+        endif;
+    }
+
     
 }
