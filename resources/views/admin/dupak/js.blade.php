@@ -1,11 +1,11 @@
-<script type="text/javascript">    
+<script type="text/javascript">
     /*datatable setup*/
-    
-    var dupak_pengawasan_table = $('#dupak-pengawasan-table').DataTable({        
+
+    var dupak_pengawasan_table = $('#dupak-pengawasan-table').DataTable({
         'pageLength': 50,
         'searching': false,
         dom: '<"col-md-12 row"<"col-md-6"B><"col"f>>rtlp',
-        buttons:[ 
+        buttons:[
             {
                 extend:'excelHtml5',
                 text: 'Excel',
@@ -13,10 +13,10 @@
                 exportOptions: {
                     columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ]
                 },
-                customize: function( xlsx ) {                  
+                customize: function( xlsx ) {
                   setSheetName(xlsx, 'Pengawasan');
                   //exportText('pengawasan');
-                  addSheet(xlsx, '#dupak-pendidikan-table', 'Pendidikan', 'Pendidikan', '2');
+                  //addSheet(xlsx, '#dupak-pendidikan-table', 'Pendidikan', 'Pendidikan', '2');
                 },
 
             },
@@ -28,12 +28,12 @@
                 }
             } */
         ],
-       
-  
+
+
         language: {
             paginate: {
-              next: '&gt;', 
-              previous: '&lt;' 
+              next: '&gt;',
+              previous: '&lt;'
             }
         },
         "opts": {
@@ -45,7 +45,7 @@
         ajax: {
             url:'{{ route("data_dupak") }}',
             //data:{tgl_mulai:tgl_mulai, tgl_akhir:tgl_akhir}
-            data: function(d){                
+            data: function(d){
                 d.user_id = ( $( "#user-id" ).length ) ? $("#user-id option:selected").val() : "{{ Auth::user()->id }}";
                 d.semester = $('#semester option:selected').val();
                 d.tahun = $('#tahun').val();
@@ -62,7 +62,7 @@
             {data: 'peran', name: 'peran', 'title': "{{ __('Peran') }}",  width: '10%'},
             {data: 'lembur', name: 'lembur', 'title': "{{ __('Lembur') }}",  width: '10%'},
             {data: 'action', name: 'action', 'orderable': false, 'searchable': false, 'title': "{{ __('') }}", 'exportable' : false,'printable': false},
-        ],        
+        ],
         "order": [[ 1, 'asc' ]],
     });
 
@@ -70,7 +70,7 @@
         'pageLength': 50,
         'searching': false,
         dom: '<"col-md-12 row"<"col-md-6"B><"col"f>>rtlp',
-        buttons:[ 
+        buttons:[
             {
                 extend:'excelHtml5',
                 text: 'Excel',
@@ -78,20 +78,20 @@
                 exportOptions: {
                     columns: [ 0, 1, 2, 3 ]
                 },
-                customize: function( xlsx ) {                  
+                customize: function( xlsx ) {
                   setSheetName(xlsx, 'Pendidikan');
                   //exportText('pengawasan');
-                  addSheet(xlsx, '#dupak-pengawasan-table', 'Pengawasan', 'Pengawasan', '1');
+                  //addSheet(xlsx, '#dupak-pengawasan-table', 'Pengawasan', 'Pengawasan', '1');
                 },
 
             },
         ],
-       
-  
+
+
         language: {
             paginate: {
-              next: '&gt;', 
-              previous: '&lt;' 
+              next: '&gt;',
+              previous: '&lt;'
             }
         },
         "opts": {
@@ -103,10 +103,8 @@
         ajax: {
             url:'{{ route("data_dupak_pendidikan") }}',
             //data:{tgl_mulai:tgl_mulai, tgl_akhir:tgl_akhir}
-            data: function(d){                
+            data: function(d){
                 d.user_id = ( $( "#user-id" ).length ) ? $("#user-id option:selected").val() : "{{ Auth::user()->id }}";
-                d.semester = $('#semester option:selected').val();
-                d.tahun = $('#tahun').val();
             }
            },
         columns: [
@@ -115,10 +113,10 @@
             {data: 'butir_kegiatan', name: 'butir_kegiatan', 'title': "{{ __('Butir Kegiatan') }}"},
             {data: 'dupak', name: 'dupak', 'title': "{{ __('Angka Kredit') }}"},
             {data: 'action', name: 'action', 'orderable': false, 'searchable': false, 'title': "{{ __('') }}", 'exportable' : false,'printable': false},
-        ],        
+        ],
         "order": [[ 1, 'asc' ]],
     });
-    
+
 
     function isiDupakUser(user_id){
         $('#user-id').val(user_id);
@@ -130,7 +128,7 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-  
+
   $('#form-cari-dupak').on('submit', function(e) {
         dupak_pengawasan_table.draw();
         dupak_pendidikan_table.draw();
@@ -143,7 +141,7 @@ $('.datepicker').each(function() {
             format: 'dd-mm-yyyy',
             autoclose: true,
             todayHighlight: true,
-        });     
+        });
     });
     $("#tgl-mulai").on('changeDate', function(selected) {
         var startDate = new Date(selected.date.valueOf());
@@ -153,6 +151,8 @@ $('.datepicker').each(function() {
         }
         $(this).closest('div').next().find('input').focus();
     });
-  
+
+
 </script>
 @include('admin.dupak.export_tool')
+@include('admin.dupak.export')

@@ -5,8 +5,8 @@
 @include('layouts.headers.cards')
 <div class="container-fluid mt--7 bg-color" style="margin-top: 20px !important;">
     <breadcrumb list-classes="breadcrumb-links">
-      <breadcrumb-item><a href="{{ url('admin') }}">Beranda</a></breadcrumb-item> 
-      <breadcrumb-item>/ Dupak</breadcrumb-item> 
+      <breadcrumb-item><a href="{{ url('admin') }}">Beranda</a></breadcrumb-item>
+      <breadcrumb-item>/ Dupak</breadcrumb-item>
       <breadcrumb-item active>/ Data Dupak</a></breadcrumb-item>
     </breadcrumb>
     <div class="row">
@@ -15,8 +15,8 @@
                 <!-- <div class="card-header bg-transparent d-flex">
                    <h1 class="col-md-12">{{ __('Angka Kredit Pengawasan') }}</h1>
                 </div> -->
-                                         
-                   
+
+
                 <div class="card-body">
                     <div class="col-md-12 justify-content-between row">
                        <!-- <div class="col-md-9">
@@ -27,31 +27,31 @@
                                       {{ Auth::user()->full_name }}
                                     @endrole
                                     @hasanyrole('TU Umum|Super Admin|Tim Dupak|TU Perencanaan')
-                                        {{ __('<< Nama auditor dari process request >>') }}                                    
+                                        {{ __('<< Nama auditor dari process request >>') }}
                                     @endhasanyrole
                                </span>
                            </div>
                        </div> -->
 
                        <!-- dibawah ini adalah form pencariandupak berdasarkan nama auditor, semester dan tahun -->
-                       <div class="col-md-3 mb-5">                       
+                       <div class="col-md-6 mb-3">
                             <form id="form-cari-dupak">
                               @hasanyrole('Super Admin|TU Perencanaan|TU Umum')
                               <!-- hanya ditampilkan kepada user yang memiliki role super admin, perencanaan, dan umum. -->
                               <div class="form-row mb-2">
-                                  <div class="col-md-9">                               
+                                  <div class="col-md-9">
                                     <select class="form-control selectize" id="user-id" name="user_id" placeholder="Nama Auditor"></select>
                                   </div>
                               </div>
-                              <script type="text/javascript">                            
+                              <script type="text/javascript">
                                 $('#user-id').selectize({
                                     valueField: 'id',
                                     labelField: 'name',
                                     searchField: 'name',
                                     options: [],
                                     create: false,
-                                    load: function(query, callback){                                  
-                                      if (!query.length) return callback();                                  
+                                    load: function(query, callback){
+                                      if (!query.length) return callback();
                                       $.ajax({
                                           url: "{{ route('get_auditor') }}",
                                           type: 'GET',
@@ -61,7 +61,7 @@
                                           error: function(err) {
                                             callback();
                                           },
-                                          success: function(result) {                                        
+                                          success: function(result) {
                                             callback(result);
                                            }
                                         });
@@ -72,11 +72,11 @@
 
                               <div class="form-row">
                                 <div class="col-md-6">
-                                    <select class="form-control" id="semester" name="semester">                                    
+                                    <select class="form-control selectize" id="semester" name="semester">
                                         <option value="" selected disabled>Periode Semester</option>
                                         <option value="1">Januari s.d Juni</option>
                                         <option value="2">Juli s.d Desember</option>
-                                    </select>                               
+                                    </select>
                                 </div>
                                 <div class="col-md-3">
                                   <input type="text" class="form-control" name="tahun" id="tahun" autocomplete="off" placeholder="{{ __('Tahun')}}" value="{{date('Y')}}">
@@ -89,34 +89,43 @@
                        </div>
                     </div>
                     <!-- <div class="table-responsive">
-                        <table class="table table-striped table-sm table-bordered ajax-table" id="list-dupak-table">                           
+                        <table class="table table-striped table-sm table-bordered ajax-table" id="list-dupak-table">
                         </table>
                     </div> -->
+                    <div id="btn-show-dupak" class="row">
+                      <a href="#dupak-pengawasan" class="btn btn-default" > Pengawasan </a>
+                      <a href="#dupak-pendidikan" class="btn btn-default" > Pendidikan </a>
+                      <a onclick="exports();" href="#" class="btn btn-default" > Export js </a>
+                      <a href="{{ route('export_dupak') }}" class="btn btn-default" > Export </a>
+                    </div>
 
-                    <ul class="nav nav-tabs justify-content-end">
+                    <!-- <ul class="nav nav-tabs justify-content-end">
                       <li class="nav-item"><a data-toggle="tab" class="nav-link active" href="#pengawasan">Pengawasan</a></li>
                       <li class="nav-item"><a data-toggle="tab" class="nav-link" href="#pendidikan">Pendidikan</a></li>
                       <li class="nav-item"><a data-toggle="tab" class="nav-link" href="#penunjang">Penunjang</a></li>
-                    </ul>
+                    </ul> -->
 
-                    <div class="tab-content">
-                      <div id="pengawasan" class="tab-pane fade show active">
+                    <div class="dupak-content">
+                      <div id="dupak-pengawasan" class="mb-20" style="margin-bottom: 20px;">
                         <h3>Angka Kredit Pengawasan</h3>
                         <div class="table-responsive">
-                            <table class="table table-striped table-sm table-bordered ajax-table" id="dupak-pengawasan-table">                                   
+                            <table class="table table-striped table-sm table-bordered ajax-table" id="dupak-pengawasan-table">
                             </table>
                         </div>
                       </div>
-                      <div id="pendidikan" class="tab-pane fade">
+                      <div id="dupak-pendidikan" class="mb-20" style="margin-bottom: 20px;">
                         <h3>Angka Kredit Pendidikan</h3>
                         <div class="table-responsive">
-                            <table class="table table-striped table-sm table-bordered ajax-table" id="dupak-pendidikan-table">                             
+                            <table class="table table-striped table-sm table-bordered ajax-table" id="dupak-pendidikan-table">
                             </table>
                         </div>
                       </div>
-                      <div id="penunjang" class="tab-pane fade">
-                        <h3>Menu 2</h3>
-                        <p>Some content in menu 2.</p>
+                      <div id="dupak-penunjang" class="mb-20" style="margin-bottom: 20px;">
+                        <h3>Angka Kredit Penunjang</h3>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-sm table-bordered ajax-table" id="dupak-penunjang-table">
+                            </table>
+                        </div>
                       </div>
                     </div>
 
@@ -141,4 +150,6 @@
     <script src="{{ asset('assets/vendor/bsdatepicker/js/bootstrap-datepicker.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/bsdatepicker/locales/bootstrap-datepicker.'.config("app.locale").'.min.js') }}" charset="UTF-8"></script>
     <script src="{{ asset('assets/vendor/selectize/js/standalone/selectize.min.js') }}"></script>
+    <script lang="javascript" src="{{ asset('assets/vendor/datatables/xlsx.full.min.js') }}"></script>
+    <script lang="javascript" src="{{ asset('assets/vendor/datatables/FileSaver.min.js') }}"></script>
 @endpush

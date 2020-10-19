@@ -7,6 +7,9 @@ use App\Http\Controllers\Controller;
 use App\models\Spt, App\models\DetailSpt, App\models\Dupak, App\User;
 use DB, Yajra\DataTables\DataTables, PDF;
 use Redirect,Response;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Config, File;
 
 class DupakController extends Controller
 {
@@ -31,6 +34,38 @@ class DupakController extends Controller
             return response('Fitur sementara sedang dalam perbaikan', 401);
         }*/
         return view('admin.dupak.form');
+    }
+
+    public function testExport(){
+      //return Excel::download(new DupakExport, 'test_dupak.xlsx');
+      //return Excel::export(new DupakExport, 'users.xlsx');
+      //return (new DupakExport)->export('dupak.xlsx');
+      $filepath = public_path()."/storage/export";
+      //dd($filepath);
+      if (! File::exists($filepath)) {
+          File::makeDirectory(public_path()."/storage/export", 0755, true);
+      }
+
+      $spreadsheet = new Spreadsheet();
+      $sheet = $spreadsheet->getActiveSheet();
+      $sheet->setCellValue('A1', 'Hello World !');
+
+      $writer = new Xlsx($spreadsheet);
+      ob_end_clean();
+      $writer->save($filepath.'/dupak.xlsx');
+      // header('Content-Type: application/vnd.ms-excel');
+      // header('Content-Disposition: attachment; filename="file.xlsx"');
+      //ob_end_clean(); // this is solution
+      //header('Content-Description: File Transfer');
+      header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      //header("Content-Transfer-Encoding: Binary");
+      header("Content-disposition: attachment; filename=\"" . basename($filepath.'/dupak.xlsx') . "\"");
+      //header('Content-Transfer-Encoding: binary');
+      //header('Expires: 0');
+      //header('Cache-Control: must-revalidate');
+      //header('Pragma: public');
+      readfile($filepath.'/dupak.xlsx');
+
     }
 
     public function reviuDupak()
@@ -77,11 +112,12 @@ class DupakController extends Controller
         $data = Spt::whereHas('detailSpt', function($q) use ($user_id){
             $q->where('user_id','=',$user_id);
         })
-        //->whereBetween('tgl_mulai',[$start,$end])->with(['detailSpt','jenisSpt'])->get(); 
+        ->whereNotNull('nomor') // nomor spt ga boleh null kalo buat dupak cuy
+        //->whereBetween('tgl_mulai',[$start,$end])->with(['detailSpt','jenisSpt'])->get();
         ->whereBetween('tgl_mulai',[$start,$end])->with(['detailSpt','jenisSpt'])->get();
 
         //dd($data->detailSpt);
-        
+
 
         return Datatables::of($data)
             ->addIndexColumn()
@@ -95,16 +131,16 @@ class DupakController extends Controller
                 $detail_spt = $col->detailSpt->toArray();
                 $users = array_column($detail_spt,'user_id');
                 $key = array_search($user_id, $users);
-                return $col->detailSpt[$key]->info_dupak['efektif'];                
+                return $col->detailSpt[$key]->info_dupak['efektif'];
             })
             ->addColumn('kegiatan', function($col){
-                return $col->jenisSpt->sebutan;                
+                return $col->jenisSpt->sebutan;
             })
             ->addColumn('koefisien', function($col) use ($user_id){
                 $detail_spt = $col->detailSpt->toArray();
                 $users = array_column($detail_spt,'user_id');
                 $key = array_search($user_id, $users);
-                return $col->detailSpt[$key]->info_dupak['koefisien'];                
+                return $col->detailSpt[$key]->info_dupak['koefisien'];
             })
             ->addColumn('dupak', function($col) use ($user_id){
                 $detail_spt = $col->detailSpt->toArray();
@@ -123,8 +159,8 @@ class DupakController extends Controller
                 $users = array_column($detail_spt,'user_id');
                 $key = array_search($user_id, $users);
                 return $col->detailSpt[$key]->info_dupak['lembur'];
-            })                
-            ->addColumn('action', function($user){                    
+            })
+            ->addColumn('action', function($user){
                 return;
             })
             ->make(true);
@@ -137,8 +173,8 @@ class DupakController extends Controller
         $dupak_pengawasan_lama = Dupak::where('user_id',$user->id)->where('unsur_dupak','pengawasan')->where('status', 'lama')->sum('dupak');
         $dupak_pengawasan_baru = Dupak::where('user_id',$user->id)->where('unsur_dupak','pengawasan')->where('status', 'baru')->sum('dupak');
         $dupak_pendidikan = Dupak::select('dupak')->where('unsur_dupak','pendidikan')->orderByRaw(DB::raw("FIELD(status,'baru','lama')"))->first();
-        $dupak_pengawasan_spt = DetailSpt::where('user_id',$user_id)->where('unsur_dupak','pengawasan')->where('status_dupak','aktif')->with('spt')->get();      
-        $pdf = PDF::loadView('admin.laporan.dupak.index', 
+        $dupak_pengawasan_spt = DetailSpt::where('user_id',$user_id)->where('unsur_dupak','pengawasan')->where('status_dupak','aktif')->with('spt')->get();
+        $pdf = PDF::loadView('admin.laporan.dupak.index',
             [
                 'user'=>$user,
                 'dupak_pengawasan_lama'=>$dupak_pengawasan_lama,
@@ -172,7 +208,7 @@ class DupakController extends Controller
         if($recent_dupak_penunjang->count() > 0){
             //update dupak penunjang yang sudah ada menjadi dupak penunjang lama
             $recent_dupak_penunjang_lama = Dupak::where('user_id', $user_id)->where('unsur_dupak','penunjang')->where('status','lama');
-            
+
             $dupak_penunjang_lama = ($recent_dupak_penunjang_lama->count() > 0) ? $recent_dupak_penunjang->pluck('dupak')[0] + $recent_dupak_penunjang_lama->pluck('dupak')[0] : $recent_dupak_penunjang->pluck('dupak')[0];
             $update_dupak_penunjang = $recent_dupak_penunjang->update(['dupak' => $dupak_penunjang_lama]);
             if($recent_dupak_penunjang_lama->count()>0 && $update_dupak_penunjang){
@@ -190,21 +226,21 @@ class DupakController extends Controller
         $dupak = Dupak::create($data);
         return $dupak;
 
-        
+
     }
 
     public function dupakAuditor(){
         //processed only on ajax request
-        if(request()->ajax()) 
+        if(request()->ajax())
         {
- 
+
          $start = (!empty($_GET["start"])) ? ($_GET["start"]) : ('');
          $end = (!empty($_GET["end"])) ? ($_GET["end"]) : ('');
          $user = auth()->user();
- 
+
          //query db between date
          $data = Dupak::whereDate('info_spt->tgl_mulai', '>=', $start)->whereDate('info_spt->tgl_akhir',   '<=', $end)->where('user_id',$user->id)->get(['id', 'info_spt->tgl_mulai as start', 'info_spt->tgl_akhir as end', 'info_spt->jenis_spt as title', 'info_spt as info']);
-         
+
          return Response::json($data);
         }
         return view('admin.calendar.user.index');
@@ -212,7 +248,7 @@ class DupakController extends Controller
 
     public function getDupakPendidikan(Request $request){
         $user_id = ($request->user_id) ? $request->user_id : auth()->user()->id;
-        if($request->ajax()):            
+        if($request->ajax()):
             $q = Dupak::where('user_id', $user_id)->where('unsur_dupak','pendidikan');
             if($q->count()>1){
                 $dupak = $q->where('status','baru')->get();
@@ -235,7 +271,7 @@ class DupakController extends Controller
             ->addColumn('dupak', function($col){
                 return $col->dupak;
             })
-            ->addColumn('action', function($user){                    
+            ->addColumn('action', function($user){
                 return;
             })
             ->make(true);
@@ -244,5 +280,5 @@ class DupakController extends Controller
         endif;
     }
 
-    
+
 }
