@@ -198,6 +198,10 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 			Route::post('upload-scan/{id}','SptController@uploadScanSpt')->name('upload_scan_spt');
 			Route::post('umum/store', 'SptController@storeUmum')->name('store_spt_umum');
 			Route::post('umum/edit/{id}', 'SptController@updateUmum')->name('update_spt_umum');
+
+			Route::post('umum/session/store','SptController@storeSessionAnggotaUmum')->name('store_session_anggota_umum');
+			Route::post('umum/store-detail-anggota','SptController@storeDetailAnggotaUmum')->name('store_detail_anggota_umum');
+			Route::get('get-anggota/umum/{id}','SptController@getAnggotaUmum')->name('get_anggota_umum_spt');
 		});
 	});
 
@@ -270,8 +274,7 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 		Route::get('reviu', 'DupakController@reviuDupak')->name('reviu_dupak');
 		Route::get('getdata', 'DupakController@getData')->name('data_dupak');
 		Route::get('user/{id}', 'DupakController@dupakUser')->name('get_dupak_user');
-		Route::post('store/penunjang', 'DupakController@storePenunjang')->name('store_dupak_penunjang');
-		Route::get('getdupakpendidikan', 'DupakController@getDupakPendidikan')->name('data_dupak_pendidikan');
+		Route::post('store/penunjang', 'DupakController@storePenunjang')->name('store_dupak_penunjang');		
 	});
 
 	Route::group(['prefix'=>'lokasi', 'middleware'=> ['role:Super Admin']],function(){

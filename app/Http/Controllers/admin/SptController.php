@@ -163,6 +163,20 @@ class SptController extends Controller
         return $request;
     }
 
+    public function storeDetailAnggotaUmum(Request $request)
+    {
+        return 'insert di detail tentang spt umum dari tu';
+        // $this->validate($request,[
+        //     'user_id' => 'required|integer',
+        //     'peran' => 'required|string|min:5'
+        // ]);
+        // $spt = Spt::find($request->spt_id);
+        // $unsur_dupak = $spt->jenisSpt->kategori;
+        // $start =$spt->tgl_mulai;
+        // $end = $spt->tgl_akhir;
+        // $lama = $spt->lama;
+    }
+
     public function storeDetail($spt_id,$lama){
         $spt = Spt::find($spt_id);
         $unsur_dupak = $spt->jenisSpt->kategori;
@@ -486,7 +500,7 @@ class SptController extends Controller
         //setup tabel anggota spt, jika ada data di detail_spt maka mengambil data anggota dari tabel, jika tidak, cek apakah ada data session, selebihnya set empty data untuk menghindari pesan error
 
         //cek data di tabel
-        $cek_data = ( $id == 0 ) ? 0 : DetailSpt::where('spt_id', $id)->count();        
+        $cek_data = ( $id == 0 ) ? 0 : DetailSpt::where('spt_id', $id)->count();
 
         if($cek_data > 0){
 
@@ -532,6 +546,55 @@ class SptController extends Controller
             }
         }
         return $dt;
+    }
+
+    public function getAnggotaUmum($id=null)
+    {
+        $cek_data = ( $id == 0 ) ? 0 : DetailSpt::where('spt_id', $id)->count();
+
+        if($cek_data > 0){
+
+            $cols = DetailSpt::where('spt_id','=',$id)->with(['user','spt'])->get();
+            $dtt = Datatables::of($cols)
+                ->addIndexColumn()
+                ->addColumn('full_name', function($col){
+                    return ($col->user) ? $col->user->full_name_gelar : 'User tidak ditemukan';
+                })
+                ->addColumn('nama_anggota', function($col){
+                    return $col->user->full_name_gelar;
+                })
+                ->editColumn('lama', function($col){
+                    return $col->spt->lama.' hari';
+                })
+                ->addColumn('action', function($col){                
+                    return $this->buildControl('deleteAnggota',$col->id);
+                })->make(true);
+                //return $dt;
+
+        }else{
+            //cek apakah ada session anggota
+            if(Session::has('anggota_umum')){
+                $data = Session::get('anggota_umum');
+                //setup data anggota
+                $dtt = Datatables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('nama_anggota', function($col){
+                        $user = User::findOrFail($col['user_id']);
+                        return $user->full_name_gelar;
+                    })
+                    ->addColumn('action', function($col){
+                        //hapus session by user_id
+                        return '<a href="#" class="btn btn-sm btn-outline-danger" onclick="unset('.$col['user_id'].')">Hapus</a>';
+                    })
+                    ->make(true);
+                
+            }else{
+                //eksekusi empty data karena tidak ditemukan data pada tabel ataupun session
+                $data = [0=>['DT_RowIndex'=> '', 'nama_anggota'=>'', 'peran'=>'', 'action' => '']];
+                $dtt = Datatables::of($data)->toJson();
+            }
+        }
+        return $dtt;
     }
 
     //penomoran spt datatable
@@ -1223,6 +1286,42 @@ class SptController extends Controller
             return "Session anggota created";
         }
           
+    }
+
+    public function storeSessionAnggotaUmum(Request $request)
+    {
+        // dd($request->session()->all());
+        // die();
+        $uid = $request->user_id;
+        $tgl_mulai = date($request->tgl_mulai);
+        $tgl_akhir = date($request->tgl_akhir);
+        
+        if(Session::has('anggota_umum')){
+            //'Penanggungjawab', 'Pembantu Penanggungjawab', 'Pengendali Mutu', 'Pengendali Teknis', 'Ketua Tim', 'Anggota Tim'
+            $listAnggota = Session::get('anggota_umum');
+
+            $anggota_uid = [];
+            foreach( $listAnggota as $a){
+                array_push($anggota_uid, $a['user_id']);
+            }
+            
+            if(in_array($uid,$anggota_uid)){
+                return "User sudah ada dalam list anggota";
+            }else{
+                $session = Session::push('anggota_umum', [
+                    'user_id'    => $request->user_id,
+                    'peran'   => 'Peserta'
+                ]);
+                return "Session anggota updated";
+            }
+            
+        }else{
+            $session = Session::push('anggota_umum', [
+                'user_id'    => $request->user_id,
+                'peran'   => 'Peserta'
+            ]);
+            return "Session anggota created";
+        }
     }
 
     public function getSessionAnggota(){
