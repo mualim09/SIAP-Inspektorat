@@ -1,7 +1,7 @@
 <script type="text/javascript">
     /*datatable setup*/
 
-    var dupak_pengawasan_table = $('#dupak-pengawasan-table').DataTable({
+    var dupak_pengawasan_table = $('#dupak-pengawasan-tablez').DataTable({
         'pageLength': 50,
         'searching': false,
         dom: '<"col-md-12 row"<"col-md-6"B><"col"f>>rtlp',
@@ -86,8 +86,6 @@
 
             },
         ],
-
-
         language: {
             paginate: {
               next: '&gt;',
@@ -130,10 +128,58 @@
     });
 
   $('#form-cari-dupak').on('submit', function(e) {
-        dupak_pengawasan_table.draw();
-        dupak_pendidikan_table.draw();
+        //dupak_pengawasan_table.draw();//versi datatable
+        //dupak_pendidikan_table.draw();//versi datatable
+        //e.preventDefault();
+
+        //coba versi html biasa
+        generate_tabel_pengawasan();
+        //generate_tabel_pendidikan();
         e.preventDefault();
     });
+
+  function generate_tabel_pengawasan(){
+    //url:'{{ route("data_dupak") }}'
+    var user_id = ( $( "#user-id" ).length ) ? $("#user-id option:selected").val() : "{{ Auth::user()->id }}";
+    var semester = $('#semester option:selected').val();
+    var tahun = $('#tahun').val();
+    var periode = (semester == 1) ? '1 Januari - 30 Juni' : '1 Juli - 31 Desember';
+    $.ajax({
+    url: '{{ route("data_dupak") }}',
+    type: 'GET',
+    // data: function(d){
+    //     d.user_id = ( $( "#user-id" ).length ) ? $("#user-id option:selected").val() : "{{ Auth::user()->id }}";
+    //     d.semester = $('#semester option:selected').val();
+    //     d.tahun = $('#tahun').val();
+    // },
+    data: {user_id: user_id, semester: semester, tahun: tahun},
+    success: function (response) {
+      //console.log(response);
+      //No.	Tanggal SPT			Hari SPT	hari Efektif	Kegiatan	Output		Koefisien	AK	PERAN	Lembur
+      //info_dupak: {dupak: 0.26, lembur: 0, efektif: 4, lama_jam: 26, koefisien: 0.01}
+        var trHTML = '<tr><td colspan="10" align="center">KETERANGAN</td></tr>'
+            +'<tr><td colspan="10" align="center">PENGAWASAN Periode '+periode+' '+tahun+' (penumpukan 1 SPT diperhitungkan lembur 1 hari)'
+            +'<tr><td colspan="10">Jumlah jam = 6.5 jam</td></tr>'
+            +'<tr><td colspan="10">Jumlah hari efektif pertahun= 245 hari</td></tr>';
+        $.each(response, function (i, item) {
+          //console.log(item);
+          var n = i+1;
+            trHTML += '<tr>'
+              +'<td>' + n + '</td>'
+              +'<td>' + item.spt.periode + '</td>'
+              +'<td>' + item.spt.lama + '</td>'
+              +'<td>'+ item.info_dupak.efektif +'</td>'
+              +'<td>'+ item.spt.kegiatan.sebutan +'</td>'
+              +'<td>'+ item.info_dupak.koefisien +'</td>'
+              +'<td>'+ item.info_dupak.dupak +'</td>'
+              +'<td>'+ item.peran +'</td>'
+              +'<td>'+ item.info_dupak.lembur +'</td>'
+              '</tr>';
+        });
+        $('#dupak-pengawasan-table').html(trHTML);
+    }
+});
+  }
 
 $('.datepicker').each(function() {
         $(this).datepicker({

@@ -68,12 +68,44 @@ class DupakController extends Controller
 
     }
 
-    public function reviuDupak()
+    public function getData(Request $request) //tradisional
     {
-        # code...
+        $user_id = ($request->user_id) ? $request->user_id : auth()->user()->id;
+        $year = ($request->tahun) ? $request->tahun : date('Y');
+        if(isset($request->semester)) {
+            if($request->semester == 1) {
+                $start = date("Y-m-d H:i:s", strtotime("$year-01-01"));
+                $end = date("Y-m-d H:i:s", strtotime("$year-06-30"));
+            }
+            elseif ($request->semester == 2) {
+                $start = date("Y-m-d H:i:s", strtotime("$year-07-01"));
+                $end = date("Y-m-d H:i:s", strtotime("$year-12-31"));
+            }else{
+                return response('Pilih periode semester terlebih dahulu.', 401);
+            }
+        }else{
+            $start = ( date('n')<=6 ) ? date("Y-m-d H:i:s", strtotime("$year-01-01")) : date("Y-m-d H:i:s", strtotime("$year-07-01"));
+            $end = ( date('n')<=6 ) ? date("Y-m-d H:i:s", strtotime("$year-06-30")) : date("Y-m-d H:i:s", strtotime("$year-12-31"));
+        }
+
+        //query dari model Spt
+        /*$data = Spt::whereHas('detailSpt', function($q) use ($user_id){
+            $q->where('user_id','=',$user_id);
+        })
+        ->whereNotNull('nomor') // nomor spt ga boleh null kalo buat dupak cuy
+        //->whereBetween('tgl_mulai',[$start,$end])->with(['detailSpt','jenisSpt'])->get();
+        ->whereBetween('tgl_mulai',[$start,$end])->with(['detailSpt','jenisSpt'])->get();*/
+
+        //query dari model DetailSpt
+        $data = DetailSpt::whereHas('spt', function($q) use ($start, $end){
+            $q->whereBetween('tgl_mulai',[$start,$end])->whereNotNull('nomor');
+        })->with('spt')
+        ->where('unsur_dupak','=','pengawasan')->where('user_id','=',$user_id)->get();
+
+        return $data;
     }
 
-    public function getData(Request $request)
+    public function getDataz(Request $request) //datatable
     {
         $user_id = ($request->user_id) ? $request->user_id : auth()->user()->id;
         if($request->ajax()):

@@ -37,7 +37,7 @@ Route::resource('/profile','ProfileController')->except('destroy');
 
 Route::namespace('admin')->group(function () {
     // Controllers Within The "App\Http\Controllers\Admin" Namespace
-    	
+
     /*// fungsi resiko
     Route::get('/admin/resiko','ResikoController@index')->name('resikoindex');
     Route::get('/admin/resiko/getdata','ResikoController@getDataResiko');
@@ -45,10 +45,10 @@ Route::namespace('admin')->group(function () {
     Route::get('/delete/{id}','ResikoController@deleteResiko')->name('deleteDataResiko');
     Route::get('/getdata/resiko/{id}','ResikoController@resikoPdf')->name('resikoPDF');*/
 
-	
+
     //Kode temuan
     //Route::get('/admin/kode/select', 'KodeTemuanController@kodeTemuanSelect')->name('select_kode');
-    
+
     /*//users/role/permission route
     Route::get('/admin/users/getdata','UserController@getData');
 	Route::get('/admin/roles/getdata','RoleController@getData');
@@ -66,7 +66,7 @@ Route::namespace('admin')->group(function () {
 	Route::get('/spt/durasi/{start}/{end}', 'SptController@getDurasi')->name('durasi_spt');*/
 
 	Route::get('/admin/dupak/update-dupak/pendidikan/{user_id}', 'DupakController@updateDupakPendidikan')->name('update_dupak_pendidikan');
-	
+
 	//Route::resource('/admin/roles','RoleController');
 	/*Route::resource('/admin/permissions', 'PermissionController');
 	Route::resource('/admin/users', 'UserController');
@@ -99,7 +99,7 @@ Route::namespace('admin')->group(function () {
 	Route::get('/admin/getdata-lokasi','LokasiController@getLokasiPemeriksaan')->name('get_data_lokasi');
 });
 Route::group(['middleware' => ['auth','permission:Access admin page']], function (){
-	
+
 	Route::get('/', function () {
     //return view('welcome');
 	    return redirect()->route('admin');
@@ -109,7 +109,7 @@ Route::group(['middleware' => ['auth','permission:Access admin page']], function
 	//Route::get('/admin','admin\DashboardController@index')->name('admin'); //sementara dimatikan, dialihkan ke index sptController
 	/*Route::get('/spt/penomoran','admin\SptController@getPenomoranSpt')->name('get-penomoran');
 	Route::get('/admin','admin\SptController@index')->name('admin');
-	Route::post('/insert-detail-spt','admin\SptController@storeDetail')->name('store_detail_spt');	
+	Route::post('/insert-detail-spt','admin\SptController@storeDetail')->name('store_detail_spt');
 	Route::post('/insert-detail-spt','admin\SptController@storeDetail')->name('store_detail_spt');
 	Route::post('/store-session-anggota','admin\SptController@storeSessionAnggota')->name('store_session_anggota');
 	Route::post('/store-detail-anggota','admin\SptController@storeDetailAnggota')->name('store_detail_anggota');*/
@@ -120,7 +120,7 @@ Route::group(['middleware' => ['auth','permission:Access admin page']], function
 	Route::get('/admin/dupak/user/{id}', 'admin\DupakController@dupakUser')->name('get_dupak_user');
 	Route::post('/admin/dupak/store/penunjang', 'admin\DupakController@storePenunjang')->name('store_dupak_penunjang');
 	Route::get('/admin/kode/get-sub-kelompok/{id}', 'admin\KodeTemuanController@getSubKelompok')->name('api.kode_sub_kel');*/
-	
+
 	/*Route::get('/admin/jenis-spt/cari', 'admin\JenisSptController@cariJenisSpt')->name('cari_jenis_spt');
 	Route::get('/admin/jenis-spt/get-radio-value/{id}', 'admin\JenisSptController@getRadioValue')->name('jenis_spt_radio');*/
 
@@ -149,14 +149,14 @@ Route::group(['middleware' => ['auth']], function(){
 });
 
 /***
- *                             _          
- *                            | |         
- *      _ __    ___    _   _  | |_    ___ 
+ *                             _
+ *                            | |
+ *      _ __    ___    _   _  | |_    ___
  *     | '__|  / _ \  | | | | | __|  / _ \
  *     | |    | (_) | | |_| | | |_  |  __/
  *     |_|     \___/   \__,_|  \__|  \___|
- *                                        
- *                                        
+ *
+ *
  */
 
 
@@ -179,7 +179,7 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 
 		//Role TU Perencanaan
 		Route::group(['middleware'=>['auth', 'role:Super Admin|TU Perencanaan']], function(){
-			Route::get('penomoran','SptController@getPenomoranSpt')->name('get-penomoran');	
+			Route::get('penomoran','SptController@getPenomoranSpt')->name('get-penomoran');
 			Route::post('insert-detail-spt','SptController@storeDetail')->name('store_detail_spt');
 			Route::post('session/store','SptController@storeSessionAnggota')->name('store_session_anggota');
 			Route::post('store-detail-anggota','SptController@storeDetailAnggota')->name('store_detail_anggota');
@@ -273,8 +273,9 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 		Route::get('list', 'DupakController@index')->name('list_dupak');
 		Route::get('reviu', 'DupakController@reviuDupak')->name('reviu_dupak');
 		Route::get('getdata', 'DupakController@getData')->name('data_dupak');
+    Route::get('getDupakPendidikan', 'DupakController@getDupakPendidikan')->name('data_dupak_pendidikan');
 		Route::get('user/{id}', 'DupakController@dupakUser')->name('get_dupak_user');
-		Route::post('store/penunjang', 'DupakController@storePenunjang')->name('store_dupak_penunjang');		
+		Route::post('store/penunjang', 'DupakController@storePenunjang')->name('store_dupak_penunjang');
 	});
 
 	Route::group(['prefix'=>'lokasi', 'middleware'=> ['role:Super Admin']],function(){
@@ -282,7 +283,7 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 		Route::post('save-lokasi','LokasiController@store')->name('store_lokasi');
 		Route::get('getdata-lokasi','LokasiController@getLokasiPemeriksaan')->name('get_data_lokasi');
 	});
-		
+
 
 	//fungsi resiko
 	// Route::group(['prefix' => 'resiko'], function(){
@@ -295,7 +296,7 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 
     //route Kode temuan
     Route::group(['prefix' => 'kode'], function(){
-    	Route::get('select', 'KodeTemuanController@kodeTemuanSelect')->name('select_kode');	    
+    	Route::get('select', 'KodeTemuanController@kodeTemuanSelect')->name('select_kode');
 	    Route::get('get-sub-kelompok/{id}', 'KodeTemuanController@getSubKelompok')->name('api.kode_sub_kel');
     });
 
@@ -304,14 +305,14 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
     	Route::get('getdata','UserController@getData');
     	Route::get('search-user', 'UserController@search')->name('search_user');
     });
-    
+
     Route::group(['prefix' => 'roles'], function(){
     	Route::get('getdata','RoleController@getData');
     	Route::put('{id}','RoleController@update');
     	Route::get('role-details/{id}', 'RoleController@getMasterDetailsSingleData')->name('api.role_single_details');
 		Route::get('role-details', 'RoleController@getMasterDetailsData')->name('api.role_details');
     });
-    
+
     Route::group(['prefix' => 'permissions'], function(){
     	Route::get('getdata','PermissionController@getData');
     });
@@ -323,7 +324,7 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 
     //administering role and permission route
     Route::group(['middleware'=>'permission:Administer roles & permissions'], function(){
-    	
+
     });
 
     //route resource (only resource)
@@ -334,8 +335,8 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 	Route::resource('spt', 'SptController');
 	Route::resource('kode', 'KodeTemuanController');
     //Route::get('/admin/users/getdata','UserController@getData');
-	
-	
-    
+
+
+
 
 });

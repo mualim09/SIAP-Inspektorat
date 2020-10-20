@@ -96,7 +96,6 @@
                       <a href="#dupak-pengawasan" class="btn btn-default" > Pengawasan </a>
                       <a href="#dupak-pendidikan" class="btn btn-default" > Pendidikan </a>
                       <a onclick="exports();" href="#" class="btn btn-default" > Export js </a>
-                      <a href="{{ route('export_dupak') }}" class="btn btn-default" > Export </a>
                     </div>
 
                     <!-- <ul class="nav nav-tabs justify-content-end">

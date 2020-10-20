@@ -8,6 +8,7 @@ use Carbon\CarbonPeriod;
 use DateTime;
 use App\Common;
 use App\Event;
+use App\models\JenisSpt;
 use Code16\CarbonBusiness\BusinessDays;
 use App\models\Lokasi;
 /*use Spatie\MediaLibrary\Models\Media;
@@ -17,13 +18,19 @@ use Spatie\MediaLibrary\HasMedia\HasMediaTrait;*/
 class Spt extends Model
 {
     //use HasMediaTrait;
-    protected $fillable = ['jenis_spt_id', 'lokasi_id', 'nomor', 'tgl_mulai', 'tgl_akhir', 'lama','tambahan','info'];    
+    protected $fillable = ['jenis_spt_id', 'lokasi_id', 'nomor', 'tgl_mulai', 'tgl_akhir', 'lama','tambahan','info'];
     protected $table = 'spt';
-    protected $appends = ['periode','lama_hari','lokasi_spt','info_lanjutan','periodekka'];
+    protected $appends = ['periode','lama_hari','lokasi_spt','info_lanjutan','periodekka','kegiatan'];
     protected $casts = [
         'lokasi_id' => 'array',
         'info' => 'array',
     ];
+
+    public function getKegiatanAttribute(){
+      $keg_id = $this->jenis_spt_id;
+      $keg = JenisSpt::select('sebutan')->where('id', $keg_id)->first();
+      return $keg;
+    }
 
     public function getTanggalMulaiAttribute(){
         $tanggal = Carbon::parse($this->tgl_mulai);
@@ -59,7 +66,7 @@ class Spt extends Model
         if( $lokasi_id != null ){
             $nama_lokasi = '';
             $lokasi = Lokasi::findOrFail($lokasi_id);
-            for($i=0;$i<count($lokasi_id);$i++){            
+            for($i=0;$i<count($lokasi_id);$i++){
                 $separator = ($i === (count($lokasi_id)-2) ) ? ' dan ' : ', ';
                 $nama_lokasi .= $lokasi[$i]->nama_lokasi . $separator;
             }
@@ -69,7 +76,7 @@ class Spt extends Model
     }
 
     public function getInfoLanjutanAttribute(){
-        
+
         return (isset($this->info['lanjutan'])) ? $this->info['lanjutan'] : 'undefined';
     }
 
@@ -94,5 +101,5 @@ class Spt extends Model
     public function lokasi(){
         return $this->hasMany('App\models\Lokasi');
     }
-    
+
 }
