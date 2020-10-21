@@ -105,22 +105,21 @@
                     </ul> -->
 
                     <div class="dupak-content">
-                      <div id="dupak-pengawasan" class="mb-20" style="margin-bottom: 20px;">
+                      <div id="dupak-pengawasan" class="mb-20" style="margin-bottom: 30px;">
                         <div class="table-responsive" id="dupak-pengawasan-wrapper">
-                            <table class="table table-striped table-sm table-bordered ajax-table" id="dupak-pengawasan-table">
+                            <table class="table table-sm table-bordered ajax-table" id="dupak-pengawasan-table">
                             </table>
                         </div>
                       </div>
-                      <div id="dupak-pendidikan" class="mb-20" style="margin-bottom: 20px;">
+                      <div id="dupak-pendidikan" class="mb-20" style="margin-bottom: 30px;">
                         <div class="table-responsive">
-                            <table class="table table-striped table-sm table-bordered ajax-table" id="dupak-pendidikan-table">
+                            <table class="table table-sm table-bordered ajax-table" id="dupak-pendidikan-table">
                             </table>
                         </div>
                       </div>
-                      <div id="dupak-penunjang" class="mb-20" style="margin-bottom: 20px;">
-                        <h3>Angka Kredit Penunjang</h3>
+                      <div id="dupak-penunjang" class="mb-20" style="margin-bottom: 30px;">
                         <div class="table-responsive">
-                            <table class="table table-striped table-sm table-bordered ajax-table" id="dupak-penunjang-table">
+                            <table class="table table-sm table-bordered ajax-table" id="dupak-penunjang-table">
                             </table>
                         </div>
                       </div>

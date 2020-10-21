@@ -9,8 +9,10 @@ function exports(){
   /* create new workbook */
   var wb = XLSX.utils.book_new();
 
+  var styling = '"A1": {v: "Top left", s: { border: { top: { style: "medium", color: { rgb: "FFFFAA00"}}, left: { style: "medium", color: { rgb: "FFFFAA00"}} }}}';
+
   /* convert table 'table1' to worksheet named "Sheet1" */
-  var ws1 = XLSX.utils.table_to_sheet(document.getElementById('dupak-pengawasan-table'));
+  var ws1 = XLSX.utils.table_to_sheet(document.getElementById('dupak-pengawasan-table'), styling);
   XLSX.utils.book_append_sheet(wb, ws1, "Pengawasan");
 
   /* convert table 'table2' to worksheet named "Sheet2" */
@@ -21,7 +23,7 @@ function exports(){
   //XLSX.writeFile('sheetjs-new.xlsx', wb);
 
   var wbout = XLSX.write(wb, {bookType:'xlsx',  type: 'binary'});
-  saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), 'test.xlsx');
+  saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), 'export_dupak.xlsx');
 }
 
 
