@@ -4,6 +4,7 @@
 {{-- Hanya super admin, TU perencanaan dan Umum yang berhak mengakses list SPT yang akan diberikan penomoran--}}
 @hasanyrole('Super Admin|TU Perencanaan|TU Umum')
   @include('admin.spt.penomoran')
+  @include('admin.spt.umum')
 @endhasrole
 
 {{-- Hanya Auditor yang berhak mengakses list SPT yang akan diberikan penomoran--}}
@@ -31,6 +32,7 @@
         <div class="card-header">           
           <ul class="nav nav-tabs card-header-tabs" id="spt-list" role="tablist">
             @yield('nav_tab_penomoran')
+            @yield('nav_tab_spt_umum')
             @yield('nav_tab_arsip')
             @yield('nav_table_inspektur')
 
@@ -50,6 +52,7 @@
         <div class="card-body">
           <div class="tab-content mt-3">
             @yield('tab_content_penomoran')
+            @yield('tab_content_spt_umum')
             @yield('tab_content_arsip')
             @yield('content_auditor')
             @yield('content_inspektur')
@@ -68,6 +71,7 @@
   @yield('js_tabel_auditor')
   @yield('form_penomoran')
   @yield('js_penomoran')
+  @yield('js_umum')
   @yield('js_arsip')
   @yield('js_tabel_inspektur')
 

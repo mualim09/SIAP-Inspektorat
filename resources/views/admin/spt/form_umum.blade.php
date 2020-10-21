@@ -13,11 +13,11 @@
 	    	<div class="modal-body">
 	    		<form id="spt-umum-form">
 	    			<input type="hidden" name="id" id="id">
-	    			<input type="hidden" name="jenis_spt_id" id="jenis-spt-id">
+	    			<input type="hidden" name="jenis_spt_id" id="jenis-spt-id" value="Spt Umum">
 					@csrf
 
 					<!-- jenis spt bag umum -->
-					<div class="form-group row">
+					<!-- <div class="form-group row">
 						<label for="dasar" class="col-md-2 col-form-label ">{{ __('Jenis Spt') }}</label>
 						<div class="col-md-10">
 							<div class="custom-control custom-radio custom-control-inline">
@@ -34,16 +34,41 @@
 		                	</div>
 		                	<small id="infoDasarHelp" class="form-text text-muted">Silahkan pilih Jenis Spt yang akan dibuat.</small>
 		                </div>
-	                </div>
+	                </div> -->
 
 					<!-- dasar spt bag umum -->
 					<div class="form-group row">
 			            <label for="dasar" class="col-md-2 col-form-label ">{{ __('Dasar') }}</label>
 			            <div class="col-md-10">
-			                 <textarea rows="5" id="info-dasar" class="form-control form-control-alternative @error('dasar') is-invalid @enderror" name="info_dasar" ></textarea>
+			                 <textarea rows="5" id="info-dasar-umum" class="form-control form-control-alternative @error('dasar') is-invalid @enderror" name="info_dasar_umum" ></textarea>
 			                 <small id="infoDasarHelp" class="form-text text-muted">Masukkan dasar-dasar jenis SPT. Tekan <span style="color:red;">ENTER</span> untuk ganti baris.</small>
 			            </div>
 			        </div>
+
+			        <div class="form-group row" id="input-lokasi-container">
+					    <label for="lokasi" class="col-md-2 col-form-label">{{ __('Lokasi') }} </label>
+						<div class="col">
+							<select class="form-control selectize" id="lokasi-id-umum" name="lokasi_id_umum" placeholder="Pilih Lokasi">
+								<option value="">{{ __('Pilih Lokasi') }}</option>
+								@foreach($listLokasi as $lokasi)
+								<option id="lokasi-{{$lokasi->id}}" class="form-control" value="{{$lokasi->id}}" >{{ $lokasi->nama_lokasi }}</option>
+								@endforeach
+							</select>
+						</div>
+					</div>
+					<script type="text/javascript">
+						var select_lokasi = $('#lokasi-id-umum').selectize({	   
+						   /*sortField: 'text',*/
+						   allowEmptyOption: false,
+						   placeholder: 'Pilih Lokasi',
+						   closeAfterSelect: true,
+						   create: false,
+						   maxItems:10,
+						   onchange: function(value){
+						   	
+						   },
+						});
+					</script>
 
 			        <!-- tanggal spt -->
 					<div class="form-group row">		            
@@ -102,7 +127,7 @@
 					<div class="form-group row">
 			            <label for="dasar" class="col-md-2 col-form-label ">{{ __('Untuk') }}</label>
 			            <div class="col-md-10">
-			                 <textarea rows="5" id="info-kegiatan" class="form-control form-control-alternative @error('dasar') is-invalid @enderror" name="info_kegiatan" ></textarea>
+			                 <textarea rows="5" id="info-untuk-kegiatan-umum" class="form-control form-control-alternative @error('dasar') is-invalid @enderror" name="info_untuk_umum" ></textarea>
 			                 <small id="infoKegiatanHelp" class="form-text text-muted">Tujuan kegiatan terkait SPT.</small>
 			            </div>
 			        </div>
@@ -225,6 +250,26 @@
 
 <!-- end form pengajuan spt umum -->
 <script type="text/javascript">
+
+		var select_lokasi = $('#lokasi-id-umum').selectize({	   
+		   /*sortField: 'text',*/
+		   allowEmptyOption: false,
+		   placeholder: 'Pilih Lokasi',
+		   closeAfterSelect: true,
+		   create: false,
+		   maxItems:10,
+		   onchange: function(value){
+		   	
+		   },
+		});
+
+		var select_anggota = $('#session-anggota-umum').selectize({	   
+		   persist: false,
+		   sortField: 'text',
+		   allowEmptyOption: false,
+		   placeholder: 'Anggota SPT',	  
+	  	});
+
 		$( "#formSptUmum" ).on('shown.bs.modal', function(){
 
 			var id_spt = $('#id').val();
@@ -265,51 +310,26 @@
 			});
 		});
 
-
-		$('#formSptUmum').on('hidden.bs.modal', function () {
-			// $('#spt-form')[0].reset();
-			// $('#id').val('');
-			// $('#tambahan').val('');
-			// select_lokasi[0].selectize.clear();
-			// save_method = null;
-			$('#list-anggota-umum-session').DataTable().clear().destroy();
-			// $('#input-tambahan-container').hide();
-			// $('#input-lokasi-container').hide();
-		});
-
-		function clearOptions(){            
-	        // var optPeran = $('#session-peran').selectize();
-	        var optAnggota = $('#session-anggota-umum').selectize();            
-	        var controlPeran = optPeran[0].selectize;
-	        var controlAnggota = optAnggota[0].selectize;
-	        controlPeran.clear();
-	        controlAnggota.clear();
-	    }
-		var current = null;
-	    function showresponddiv(messagedivid){
-	        var id = messagedivid.replace("jenis-spt-umum-", ""),
-	            div = document.getElementById(id);
-	        // console.log(id);
-	        $('#jenis-spt-id[type=hidden]').attr('value',id);
-	    }
-
 	    $("#spt-umum-form").validate({
         rules: {
-            jenis_spt_id : {required: true},
+            jenis_spt_umum : {required: true},
             tgl_mulai_umum: {required: true},
             tgl_akhir_umum: {required: true},
-            info_dasar : {teks: true},
-            info_kegiatan : {teks: true},
+            lokasi_id_umum : {required: true},
+            // info_kegiatan : {teks: true},
 
         },
 
         submitHandler: function(form){
-            var jenis_spt_id = $('#jenis-spt-id').val();
+            var jenis_spt_umum = $('#jenis-spt-id').val();
             var tgl_mulai_umum = $('#tgl-mulai-umum').val();
             var tgl_akhir_umum = $('#tgl-akhir-umum').val();
-            var lama = $('#lama-spt-umum').val();            
-            var info_dasar = $('#tambahan').val();
-            var info_kegiatan = ( typeof $('.info-lanjutan:checked').val() !== 'undefined' ) ? '"lanjutan":"'+$('.info-lanjutan:checked').val()+'"' : '"lanjutan":'+null;            
+            var lama_umum = $('#lama-spt-umum').val();
+            var lokasi_umum_id = $('#lokasi-id-umum').val();
+            var info_dasar_umum = $('#info-dasar-umum').val();
+            var info_untuk_umum = $('#info-untuk-kegiatan-umum').val();
+            // var info_dasar = $('#tambahan').val();
+            // var info_kegiatan = ( typeof $('.info-lanjutan:checked').val() !== 'undefined' ) ? '"lanjutan":"'+$('.info-lanjutan:checked').val()+'"' : '"lanjutan":'+null;            
             var id = $('#id').val();
             save_method = (id == '') ? 'new' : save_method;
             var url_prefix = (window.location.pathname == '/admin') ? 'admin/spt/' : 'spt/';
@@ -322,40 +342,58 @@
             $.ajax({
                 url: url,
                 type: type,
-                data: {jenis_spt_id:jenis_spt_id, lokasi_id:lokasi_id, tgl_mulai:tgl_mulai, tgl_akhir:tgl_akhir, lama:lama, tambahan:tambahan, info:info, _method: method},
+                data: {info_dasar_umum:info_dasar_umum, info_untuk_umum:info_untuk_umum, jenis_spt_umum:jenis_spt_umum, lokasi_umum_id:lokasi_umum_id, tgl_mulai_umum:tgl_mulai_umum, tgl_akhir_umum:tgl_akhir_umum, lama_umum:lama_umum,  _method: method},
                 //data: $('#spt-form').serialize(),
                 //dataType: 'json',
 
                 /*data: $('#spt-form').serialize(),*/
                 success: function(data){
-                    $("#spt-form")[0].reset();
-                    $('#formModal').modal('hide');
-                    if(save_method == 'new') clearSessionAnggota();
-                    //table.ajax.reload();
-                    $('#penomoran-spt').DataTable().ajax.reload(null, false );
+                	console.log(data);
+                    // $("#spt-form")[0].reset();
+                    // $('#formModal').modal('hide');
+                    // if(save_method == 'new') clearSessionAnggota();
+                    // //table.ajax.reload();
+                    // $('#penomoran-spt').DataTable().ajax.reload(null, false );
                 },
                 error: function(error){
-                    err_list = '';
-                    $.each(error.responseJSON, function(i,v){
-                        //console.log(v);
-                        if(i == 'errors'){
-                            $.each(v, function(a,b){
-                                //err_arr.push([a.charAt(0).toUpperCase() + a.slice(1)+' '+b.toString().replace('validation.','')+'\n']);
-                                err_list += '<li style="text-align:left;">'+a.charAt(0).toUpperCase() + a.slice(1)+' '+b.toString().replace('validation.','')+'</li>';
-                            });
-                        }
-                    });
                     console.log(error);
-                    $.alert({
-                        content: '<ul id="error-list">'+err_list+'</ul>' , 
-                        title: 'Error!',
-                        theme: 'modern',
-                        type: 'red'
-                    });
-                    /*$('.ajax-form')[0].reset();*/
-                    /*table.ajax.reload();*/
                 }
             });
         }
     });
+
+	function unset_anggota(user_id){
+		save_method = 'delete';
+	        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	        var tgl_mulai = $('#tgl-mulai').val();
+	        var tgl_akhir = $('#tgl-akhir').val();
+	        $.confirm({
+	            title: "{{ __('Delete Confirmation') }}",
+	            content: "{{ __('Are you sure to delete ?') }}",
+	            buttons: {
+	                delete: {
+	                    btnClass: 'btn-danger',
+	                    action: function(){
+	                    	url = (window.location.pathname == '/admin') ? "admin/spt/session/anggota/umum/delete/"+user_id : "spt/session/anggota/umum/delete/"+user_id;
+	                        //url = "session/anggota/delete/"+user_id;
+	                        $.ajax({
+	                            url: url,
+	                            type: "POST",                
+	                            data: {_method: 'delete', '_token' : csrf_token, tgl_mulai:tgl_mulai, tgl_akhir:tgl_akhir, user_id:user_id },
+	                            success: function(data){
+	                                $('#list-anggota-umum-session').DataTable().ajax.reload();
+	                                console.log(data);                        
+	                            },
+	                            error: function(err){
+	                            	console.log(err);
+	                            }
+	                        });
+	                    },
+	                },
+	                cancel: function(){
+	                    $.alert('Canceled!');
+	                }
+	            }
+	    });
+	}
 </script>

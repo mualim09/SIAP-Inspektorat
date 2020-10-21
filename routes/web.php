@@ -194,6 +194,8 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 
 		//role TU Umum
 		Route::group(['middleware'=>['auth', 'role:Super Admin|TU Umum']], function(){
+			Route::get('get-penomoran-umum','SptController@getPenomoranSptUmum')->name('penomoran_umum');
+			Route::get('get-arsio-umum','SptController@getArsipUmum')->name('spt_umum');
 			Route::post('update-nomor/{id}','SptController@updateNomorSpt')->name('update_nomor_spt');
 			Route::post('upload-scan/{id}','SptController@uploadScanSpt')->name('upload_scan_spt');
 			Route::post('umum/store', 'SptController@storeUmum')->name('store_spt_umum');
@@ -202,6 +204,9 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 			Route::post('umum/session/store','SptController@storeSessionAnggotaUmum')->name('store_session_anggota_umum');
 			Route::post('umum/store-detail-anggota','SptController@storeDetailAnggotaUmum')->name('store_detail_anggota_umum');
 			Route::get('get-anggota/umum/{id}','SptController@getAnggotaUmum')->name('get_anggota_umum_spt');
+			Route::delete('session/anggota/umum/delete/{user_id}', 'SptController@deleteSessionAnggotaUmumItem')->name('delete_session_anggota_umum_by_id');
+			Route::delete('delete-anggota-umum/{id}','SptController@deleteAnggotaUmum')->name('delete_anggota_umum');
+
 		});
 	});
 
