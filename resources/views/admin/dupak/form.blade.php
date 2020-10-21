@@ -106,14 +106,12 @@
 
                     <div class="dupak-content">
                       <div id="dupak-pengawasan" class="mb-20" style="margin-bottom: 20px;">
-                        <h3>Angka Kredit Pengawasan</h3>
-                        <div class="table-responsive">
+                        <div class="table-responsive" id="dupak-pengawasan-wrapper">
                             <table class="table table-striped table-sm table-bordered ajax-table" id="dupak-pengawasan-table">
                             </table>
                         </div>
                       </div>
                       <div id="dupak-pendidikan" class="mb-20" style="margin-bottom: 20px;">
-                        <h3>Angka Kredit Pendidikan</h3>
                         <div class="table-responsive">
                             <table class="table table-striped table-sm table-bordered ajax-table" id="dupak-pendidikan-table">
                             </table>

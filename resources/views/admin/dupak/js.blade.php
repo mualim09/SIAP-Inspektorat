@@ -66,7 +66,7 @@
         "order": [[ 1, 'asc' ]],
     });
 
-    var dupak_pendidikan_table = $('#dupak-pendidikan-table').DataTable({
+    var dupak_pendidikan_table = $('#dupak-pendidikan-tablez').DataTable({
         'pageLength': 50,
         'searching': false,
         dom: '<"col-md-12 row"<"col-md-6"B><"col"f>>rtlp',
@@ -134,7 +134,7 @@
 
         //coba versi html biasa
         generate_tabel_pengawasan();
-        //generate_tabel_pendidikan();
+        generate_tabel_pendidikan();
         e.preventDefault();
     });
 
@@ -157,10 +157,24 @@
       //console.log(response);
       //No.	Tanggal SPT			Hari SPT	hari Efektif	Kegiatan	Output		Koefisien	AK	PERAN	Lembur
       //info_dupak: {dupak: 0.26, lembur: 0, efektif: 4, lama_jam: 26, koefisien: 0.01}
-        var trHTML = '<tr><td colspan="10" align="center">KETERANGAN</td></tr>'
-            +'<tr><td colspan="10" align="center">PENGAWASAN Periode '+periode+' '+tahun+' (penumpukan 1 SPT diperhitungkan lembur 1 hari)'
-            +'<tr><td colspan="10">Jumlah jam = 6.5 jam</td></tr>'
-            +'<tr><td colspan="10">Jumlah hari efektif pertahun= 245 hari</td></tr>';
+
+        var trHTML = '<tr class=".bg-light"><td colspan="10" align="center">KETERANGAN</td></tr>'
+            +'<tr class=".bg-light"><td colspan="10" align="center">PENGAWASAN Periode '+periode+' '+tahun+' (penumpukan 1 SPT diperhitungkan lembur 1 hari)'
+            +'<tr class=".bg-light"><td colspan="10">Jumlah jam = 6.5 jam</td></tr>'
+            +'<tr class=".bg-light"><td colspan="10">Jumlah hari efektif pertahun= 245 hari</td></tr>';
+
+            trHTML += '<tr></tr>'
+              +'<tr>'
+              +'<th>No.</th>'
+              +'<th>Tanggal SPT</th>'
+              +'<th>Lama SPT</th>'
+              +'<th>Efektif</th>'
+              +'<th>Kegiatan</th>'
+              +'<th>Koefisien</th>'
+              +'<th>Dupak</th>'
+              +'<th>Peran</th>'
+              +'<th>Lembur</th>'
+              +'</tr>';
         $.each(response, function (i, item) {
           //console.log(item);
           var n = i+1;
@@ -176,10 +190,85 @@
               +'<td>'+ item.info_dupak.lembur +'</td>'
               '</tr>';
         });
+        $( "#dupak-pengawasan-wrapper" ).prepend( "<h3 style=\"margin-top:20px;\">Angka Kredit Pengawasan</h3>" );
         $('#dupak-pengawasan-table').html(trHTML);
     }
-});
+  });
   }
+
+  // start generate table pendidikan
+
+  function generate_tabel_pendidikan(){
+    //url:'{{ route("data_dupak") }}'
+    var user_id = ( $( "#user-id" ).length ) ? $("#user-id option:selected").val() : "{{ Auth::user()->id }}";
+    var semester = $('#semester option:selected').val();
+    var tahun = $('#tahun').val();
+    var periode = (semester == 1) ? '1 Januari - 30 Juni' : '1 Juli - 31 Desember';
+    $.ajax({
+    url: '{{ route("data_dupak_pendidikan") }}',
+    type: 'GET',
+    data: {user_id: user_id, semester: semester, tahun: tahun},
+    success: function (response) {
+//console.log(response);
+        var trHTML = '<tr style="background:#fff"><td colspan="5" align="center">SURAT PERNYATAAN</td></tr>'
+            +'<tr  style="background:#fff"><td colspan="5" align="center">MELAKUKAN KEGIATAN PENDIDIKAN SEKOLAH</td></tr>'
+            +'<tr style="background:#fff"><td colspan="5">Yang bertandatangan dibawah ini :</td></tr>'
+            +'<tr style="background:#fff"><td colspan="2">Nama</td><td colspan="3"> : '+response[0].irban_kepala.full_name_gelar+'</td></tr>'
+            +'<tr style="background:#fff"><td colspan="2">NIP</td><td colspan="3"> : '+response[0].irban_kepala.nip+'</td></tr>'
+            +'<tr style="background:#fff"><td colspan="2">Pangkat / golongan ruang</td><td colspan="3"> : '+response[0].irban_kepala.pangkat+'</td></tr>'
+            +'<tr style="background:#fff"><td colspan="2">J a b a t a n</td><td colspan="3"> : '+response[0].irban_kepala.jabatan+'</td></tr>'
+            +'<tr style="background:#fff"><td colspan="2">Unit Kerja</td><td colspan="3"> : Inspektorat Kabupaten Sidoarjo</td></tr>'
+            +'<tr style="background:#fff"></tr>'
+            +'<tr style="background:#fff"><td colspan="5">Menyatakan Bahwa :</td></tr>'
+            +'<tr style="background:#fff"><td colspan="2">Nama</td><td colspan="3"> : '+response[0].user_dupak.full_name_gelar+'</td></tr>'
+            +'<tr style="background:#fff"><td colspan="2">NIP</td><td colspan="3"> : '+response[0].user_dupak.nip+'</td></tr>'
+            +'<tr style="background:#fff"><td colspan="2">Pangkat / golongan ruang</td><td colspan="3"> : '+response[0].user_dupak.pangkat+'</td></tr>'
+            +'<tr style="background:#fff"><td colspan="2">J a b a t a n</td><td colspan="3"> : '+response[0].user_dupak.jabatan+'</td></tr>'
+            +'<tr style="background:#fff"><td colspan="2">Unit Kerja</td><td colspan="3"> : Inspektorat Kabupaten Sidoarjo</td></tr>'
+            +'<tr style="background:#fff"><td colspan="5"></td></tr>';
+
+            //No	Uraian Sub Unsur
+
+            trHTML += '<tr></tr>'
+              +'<tr>'
+              +'<th>No.</th>'
+              +'<th>Uraian Sub Unsur</th>'
+              +'<th>Butir Kegiatan</th>'
+              +'<th>Angka Kredit</th>'
+              +'<th>Keterangan</th>'
+              +'</tr>';
+              //response[0].user_dupak.pendidikan.tingkat
+        $.each(response, function (i, item) {
+
+          var n = i+1;
+            trHTML += '<tr>'
+              +'<td>' + n + '</td>'
+              +'<td>' + item.user_dupak.pendidikan.tingkat + '</td>'
+              +'<td>' + item.user_dupak.pendidikan.jurusan + '</td>'
+              +'<td>'+ item.dupak +'</td>'
+              +'<td></td>'
+              '</tr>';
+          dupak = item.dupak++;
+        });
+        trHTML += '<tr>'
+          +'<td></td>'
+          +'<td>JUMLAH</td>'
+          +'<td></td>'
+          +'<td>'+ dupak +'</td>'
+          +'<td></td>'
+          '</tr>';
+
+        trHTML += '<tr>'
+          +'<td colspan="5">Demikian pernyataan ini dibuat untuk dapat dipergunakan sebagaimana mestinya.</td>'
+          +'</tr>';
+        //$( "#dupak-pendidikan-wrapper" ).prepend( "<h3 style=\"margin-top:20px;\">Angka Kredit Pendidikan</h3>" );
+        $('#dupak-pendidikan-table').html(trHTML);
+    }
+  });
+  }
+
+
+  //end table pendidikan
 
 $('.datepicker').each(function() {
         $(this).datepicker({

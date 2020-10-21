@@ -278,7 +278,7 @@ class DupakController extends Controller
         return view('admin.calendar.user.index');
     }
 
-    public function getDupakPendidikan(Request $request){
+    public function getDupakPendidikanz(Request $request){
         $user_id = ($request->user_id) ? $request->user_id : auth()->user()->id;
         if($request->ajax()):
             $q = Dupak::where('user_id', $user_id)->where('unsur_dupak','pendidikan');
@@ -310,6 +310,20 @@ class DupakController extends Controller
             //end datatable
 
         endif;
+    }
+
+    public function getDupakPendidikan(Request $request){
+      $user_id = ($request->user_id) ? $request->user_id : auth()->user()->id;
+      $q = Dupak::where('user_id', $user_id)->where('unsur_dupak','pendidikan');
+      if($q->count()>1){
+          $dupak = $q->where('status','baru');
+      }else{
+          $dupak = $q;
+      }
+      $data = $dupak->get();
+
+      return $data;
+
     }
 
 

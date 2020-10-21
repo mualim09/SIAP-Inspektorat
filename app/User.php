@@ -60,20 +60,20 @@ class User extends Authenticatable implements HasMedia
         return str_replace( ', , ', ', ', $user);
     }
 
-    
+
 
     public function getTempatTanggalLahirAttribute(){
-        $tanggal = Carbon::parse($this->tanggal_lahir);        
+        $tanggal = Carbon::parse($this->tanggal_lahir);
         return ($this->tempat_lahir != null) ? $this->tempat_lahir.', '. $tanggal->formatLocalized('%d %B %Y') : $tanggal->formatLocalized('%d %B %Y');
     }
 
     public function getRuangJabatanAttribute(){
-        
+
         return $this->ruang['nama'] . '/ ' . $this->ruang['jabatan'];
     }
 
     public function setPasswordAttribute($password)
-    {   
+    {
         $this->attributes['password'] = Hash::make($password);
     }
     public function profile(){
@@ -84,16 +84,7 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->hasAnyPermission($permissions);
     }
-    
-    public function User()
-    {
-        return $this->belongsTo('App\models\LaporanSPt');
-    }
 
-    public function relasi_resiko()
-    {
-        return $this->hasMany('App\models\Detail_resiko', 'user_id','id');
-    }
 
     /*public function setSerfikatAttribute($value)
     {
@@ -111,11 +102,14 @@ class User extends Authenticatable implements HasMedia
     public function userSertifikat(){
         return $this->hasMany('App\models\Sertifikat');
     }
+    public function dupak(){
+      return $this->hasMany('App\models\Dupak');
+    }
 
     //membership (to hide super admin visibility from another member )
     public function scopeMember($query){
         return $query->where('email','!=','admin@local.host');
         //return $query->whereHas('role','Super Admin'); // untested hiding super admin role
-    }   
+    }
 
 }
