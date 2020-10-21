@@ -4,6 +4,7 @@ namespace App\models;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use App\User;
 
 
 class DetailSpt extends Model
@@ -12,13 +13,27 @@ class DetailSpt extends Model
     protected $fillable = ['spt_id', 'user_id', 'peran', 'status','status_dupak','unsur_dupak','kode_temuan_id','jenis_laporan','info_dupak','info_laporan_pemeriksaan'];
     protected $table = 'detail_spt';
     public $timestamps = false;
-    protected $appends = ['kode_file_laporan'];
+    protected $appends = ['kode_file_laporan','irban_kepala','user_dupak'];
 
     protected $casts = [
         'isi_laporan_pemeriksaan' => 'array',
         'status' => 'array',
         'info_dupak' => 'array'
     ];
+    public function getIrbanKepalaAttribute(){
+      $user_id = $this->user_id;
+      $ruang = User::select('ruang->nama as nama_ruang')->where('id', $user_id)->first();
+      if($ruang) :
+        $irban = User::where('ruang->jabatan','kepala')->where('ruang->nama', $ruang->nama_ruang)->first();
+        return $irban;
+      endif;
+    }
+
+    public function getUserDupakAttribute(){
+      $user_id= $this->user_id;
+      $user = User::where('id', $user_id)->first();
+      return $user;
+    }
 
     public function spt(){
         return $this->belongsTo('App\models\Spt');
@@ -45,7 +60,7 @@ class DetailSpt extends Model
         }
 
         $this->attributes['isi_laporan_pemeriksaan'] = json_encode($isi_laporan_pemeriksaan);
-    } 
+    }
 
     public function setStatusAttribute($value)
     {
