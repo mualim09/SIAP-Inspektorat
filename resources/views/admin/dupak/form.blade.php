@@ -113,13 +113,13 @@
                         </div>
                       </div>
                       <div id="dupak-pendidikan" class="mb-20" style="margin-bottom: 30px;">
-                        <div class="table-responsive">
+                        <div class="table-responsive col-print-12">
                             <table class="table table-sm table-bordered ajax-table" id="dupak-pendidikan-table">
                             </table>
                         </div>
                       </div>
                       <div id="dupak-penunjang" class="mb-20" style="margin-bottom: 30px;">
-                        <div class="table-responsive">
+                        <div class="table-responsive col-print-12">
                             <table class="table table-sm table-bordered ajax-table" id="dupak-penunjang-table">
                             </table>
                         </div>

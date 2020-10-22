@@ -249,27 +249,27 @@
       var irban_kepala_nip = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.nip;
       var irban_kepala_pangkat = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.pangkat;
       var irban_kepala_jabatan = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.jabatan;
-        var trHTML = '<tr style="background:#fff"><td colspan="5" align="center">SURAT PERNYATAAN</td></tr>'
-            +'<tr style="background:#fff; border:0px solid #000;"><td colspan="5" align="center">MELAKUKAN KEGIATAN PENDIDIKAN SEKOLAH</td></tr>'
-            +'<tr style="background:#fff"><td colspan="5">Yang bertandatangan dibawah ini :</td></tr>' //typeof yourVariable === 'object' && yourVariable !== null
-            +'<tr style="background:#fff"><td colspan="2">Nama</td><td colspan="3"> : '+ irban_kepala_name +'</td></tr>'
-            +'<tr style="background:#fff"><td colspan="2">NIP</td><td colspan="3"> : '+ irban_kepala_nip +'</td></tr>'
-            +'<tr style="background:#fff"><td colspan="2">Pangkat / golongan ruang</td><td colspan="3"> : '+ irban_kepala_pangkat +'</td></tr>'
-            +'<tr style="background:#fff"><td colspan="2">J a b a t a n</td><td colspan="3"> : '+irban_kepala_jabatan+'</td></tr>'
-            +'<tr style="background:#fff"><td colspan="2">Unit Kerja</td><td colspan="3"> : Inspektorat Kabupaten Sidoarjo</td></tr>'
-            +'<tr style="background:#fff"></tr>'
-            +'<tr style="background:#fff"><td colspan="5">Menyatakan Bahwa :</td></tr>'
-            +'<tr style="background:#fff"><td colspan="2">Nama</td><td colspan="3"> : '+response[0].user_dupak.full_name_gelar+'</td></tr>'
-            +'<tr style="background:#fff"><td colspan="2">NIP</td><td colspan="3"> : '+response[0].user_dupak.nip+'</td></tr>'
-            +'<tr style="background:#fff"><td colspan="2">Pangkat / golongan ruang</td><td colspan="3"> : '+response[0].user_dupak.pangkat+'</td></tr>'
-            +'<tr style="background:#fff"><td colspan="2">J a b a t a n</td><td colspan="3"> : '+response[0].user_dupak.jabatan+'</td></tr>'
-            +'<tr style="background:#fff"><td colspan="2">Unit Kerja</td><td colspan="3"> : Inspektorat Kabupaten Sidoarjo</td></tr>'
-            +'<tr style="background:#fff"><td colspan="5"></td></tr>';
+        var trHTML = '<tr style="background:#fff" class="col-print-header"><td colspan="5" align="center">SURAT PERNYATAAN</td></tr>'
+            +'<tr style="background:#fff;" class="col-print-header"><td colspan="5" align="center">MELAKUKAN KEGIATAN PENDIDIKAN SEKOLAH</td></tr>'
+            +'<tr style="background:#fff" class="col-print-header"><td colspan="5">Yang bertandatangan dibawah ini :</td></tr>' //typeof yourVariable === 'object' && yourVariable !== null
+            +'<tr style="background:#fff" class="col-print-header"><td colspan="2">Nama</td><td colspan="3"> : '+ irban_kepala_name +'</td></tr>'
+            +'<tr style="background:#fff" class="col-print-header"><td colspan="2">NIP</td><td colspan="3"> : '+ irban_kepala_nip +'</td></tr>'
+            +'<tr style="background:#fff" class="col-print-header"><td colspan="2">Pangkat / golongan ruang</td><td colspan="3"> : '+ irban_kepala_pangkat +'</td></tr>'
+            +'<tr style="background:#fff" class="col-print-header"><td colspan="2">J a b a t a n</td><td colspan="3"> : '+irban_kepala_jabatan+'</td></tr>'
+            +'<tr style="background:#fff" class="col-print-header"><td colspan="2">Unit Kerja</td><td colspan="3"> : Inspektorat Kabupaten Sidoarjo</td></tr>'
+            +'<tr style="background:#fff" class="col-print-header"></tr>'
+            +'<tr style="background:#fff" class="col-print-header"><td colspan="5">Menyatakan Bahwa :</td></tr>'
+            +'<tr style="background:#fff" class="col-print-header"><td colspan="2">Nama</td><td colspan="3"> : '+response[0].user_dupak.full_name_gelar+'</td></tr>'
+            +'<tr style="background:#fff" class="col-print-header"><td colspan="2">NIP</td><td colspan="3"> : '+response[0].user_dupak.nip+'</td></tr>'
+            +'<tr style="background:#fff" class="col-print-header"><td colspan="2">Pangkat / golongan ruang</td><td colspan="3"> : '+response[0].user_dupak.pangkat+'</td></tr>'
+            +'<tr style="background:#fff" class="col-print-header"><td colspan="2">J a b a t a n</td><td colspan="3"> : '+response[0].user_dupak.jabatan+'</td></tr>'
+            +'<tr style="background:#fff" class="col-print-header"><td colspan="2">Unit Kerja</td><td colspan="3"> : Inspektorat Kabupaten Sidoarjo</td></tr>'
+            +'<tr style="background:#fff" class="col-print-header"><td colspan="5"></td></tr>';
 
-            //No	Uraian Sub Unsur
+            //No	Uraian Sub Unsur  class="col-print-th"
 
             trHTML += '<tr><td colspan="5"></td></tr>'
-              +'<tr class="table-dark">'
+              +'<tr class="table-dark col-print-th">'
               +'<th>No.</th>'
               +'<th>Uraian Sub Unsur</th>'
               +'<th>Butir Kegiatan</th>'
@@ -280,7 +280,7 @@
         $.each(response, function (i, item) {
 
           var n = i+1;
-            trHTML += '<tr>'
+            trHTML += '<tr class="col-print-data">'
               +'<td>' + n + '</td>'
               +'<td>' + item.user_dupak.pendidikan.tingkat + '</td>'
               +'<td>' + item.user_dupak.pendidikan.jurusan + '</td>'
@@ -289,13 +289,10 @@
               '</tr>';
           dupak = item.dupak++;
         });
-        trHTML += '<tr>'
-          +'<td></td>'
-          +'<td>JUMLAH</td>'
-          +'<td></td>'
-          +'<td>'+ dupak +'</td>'
-          +'<td></td>'
-          '</tr>';
+        trHTML += '<tr class="col-print-data">'
+          +'<td colspan="3">JUMLAH</td>'
+          +'<td colspan="2">'+ dupak +'</td>'
+          +'</tr>';
 
         trHTML += '<tr>'
           +'<td colspan="5">Demikian pernyataan ini dibuat untuk dapat dipergunakan sebagaimana mestinya.</td>'
@@ -336,15 +333,13 @@ $('.datepicker').each(function() {
     });
 
 function printDiv(divName){
-    printJS(divName, 'html');
-
-    //below example using css file
-   /* printJS({
-        printable: 'test',
-        type: 'html',
-        css: 'test.css',
-        scanStyles: false
-      })*/
+ //printJS(divName, 'html');
+  printJS({
+    printable : divName,
+    type: 'html',
+    css: "{{ asset('css/print.css') }}",
+    scanStyles: false
+  });
 }
 
 </script>
