@@ -32,6 +32,15 @@
     margin-right:0;
     margin-left:0;
   }
+
+  #print-dupak{
+    visibility: visible;
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+
   .col-print-1 {width:8%;  float:left;}
   .col-print-2 {width:16%; float:left;}
   .col-print-3 {width:25%; float:left;}

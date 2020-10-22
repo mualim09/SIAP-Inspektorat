@@ -23,7 +23,7 @@
 			<div class="text-center header-text" style="text-align: center;">
 			  	<h5>PEMERINTAH KABUPATEN SIDOARJO</h5>
 			  	<h4>INSPEKTORAT DAERAH</h4>
-			  	<h6>Jl. Diponegoro No. 139 Telp. (031)8923249, 8061957; Fax. 8927804<br/>
+			  	<h6>Jl. Untung Suropati No. 10 Telp. (031)8923249, 8061957; Fax. 8927804<br/>
 			  	SIDOARJO - 61213
 			  	</h6>			  	
 			</div>

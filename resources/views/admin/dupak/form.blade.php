@@ -96,6 +96,7 @@
                       <a href="#dupak-pengawasan" class="btn btn-default" > Pengawasan </a>
                       <a href="#dupak-pendidikan" class="btn btn-default" > Pendidikan </a>
                       <a onclick="exports();" href="#" class="btn btn-default" > Export js </a>
+                      <button onclick="printDiv('print-dupak')">Print only the above div</button>
                     </div>
 
                     <!-- <ul class="nav nav-tabs justify-content-end">
@@ -104,7 +105,7 @@
                       <li class="nav-item"><a data-toggle="tab" class="nav-link" href="#penunjang">Penunjang</a></li>
                     </ul> -->
 
-                    <div class="dupak-content">
+                    <div class="dupak-content" id="print-dupak">
                       <div id="dupak-pengawasan" class="mb-20" style="margin-bottom: 30px;">
                         <div class="table-responsive" id="dupak-pengawasan-wrapper">
                             <table class="table table-sm table-bordered ajax-table" id="dupak-pengawasan-table">
@@ -125,8 +126,6 @@
                       </div>
                     </div>
 
-
-
                 </div>
             </div>
         </div>
@@ -139,6 +138,7 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/datatables/datatables.min.css') }}">
     <link href="{{ asset('assets/vendor/bsdatepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/vendor/selectize/css/selectize.bootstrap3.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/vendor/jquery/print.min.css') }}" rel="stylesheet" />
 @endpush
 @push('js')
     <script src="{{ asset('assets/vendor/jquery/jquery.validate.min.js') }}"></script>
@@ -147,5 +147,6 @@
     <script src="{{ asset('assets/vendor/bsdatepicker/locales/bootstrap-datepicker.'.config("app.locale").'.min.js') }}" charset="UTF-8"></script>
     <script src="{{ asset('assets/vendor/selectize/js/standalone/selectize.min.js') }}"></script>
     <script lang="javascript" src="{{ asset('assets/vendor/datatables/xlsx.full.min.js') }}"></script>
+    <script lang="javascript" src="{{ asset('assets/vendor/jquery/print.min.js') }}"></script>
     <script lang="javascript" src="{{ asset('assets/vendor/datatables/FileSaver.min.js') }}"></script>
 @endpush

@@ -335,7 +335,19 @@ $('.datepicker').each(function() {
         $(this).closest('div').next().find('input').focus();
     });
 
+function printDiv(divName){
+    printJS(divName, 'html');
+
+    //below example using css file
+   /* printJS({
+        printable: 'test',
+        type: 'html',
+        css: 'test.css',
+        scanStyles: false
+      })*/
+}
 
 </script>
+
 @include('admin.dupak.export_tool')
 @include('admin.dupak.export')
