@@ -194,6 +194,9 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 
 		//role TU Umum
 		Route::group(['middleware'=>['auth', 'role:Super Admin|TU Umum']], function(){
+			Route::get('last-data-umum/{jenis_data}', 'SptController@getLastDataUmum')->name('last_data_umum');
+			Route::get('cetak-pdf-umum/{id}','SptController@sptPdfUmum')->name('spt_pdf_umum');
+
 			Route::get('get-penomoran-umum','SptController@getPenomoranSptUmum')->name('penomoran_umum');
 			Route::get('get-arsio-umum','SptController@getArsipUmum')->name('spt_umum');
 			Route::post('update-nomor/{id}','SptController@updateNomorSpt')->name('update_nomor_spt');

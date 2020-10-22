@@ -171,17 +171,6 @@
 			        			@endforeach
 			        		</select>
 			        	</div>
-			        	<!-- <div class="col-md-4">
-			        		<select class="form-control selectize" id="session-peran" name="session_peran">
-			        			<option value="">{{ __('Peran SPT') }}</option>
-			        			@foreach($listPeran as $peran)
-			        			<option class="form-control" value="{{$peran}}" >{{ $peran }}</option>
-			        			@endforeach
-			        		</select>
-			        	</div> -->
-			        	<!-- <div class="col-md-2">
-			        		<input type="number" name="lama" id="lama" class="form-control" placeholder="Lama">
-			        	</div> -->
 			        </div>
 			        
 			        <div class="form-group">
@@ -215,11 +204,7 @@
 		            	var tgl_akhir = $('#spt-umum-form').find('#tgl-akhir-umum').val();
 		                var user_id = $('#session-anggota-umum option:selected').val();
 		                var spt_id = $('#spt-umum-form').find('#id').val();
-		                // console.log(tgl_mulai);
-		                // console.log(tgl_akhir);
-		                // console.log(user_id);
-		                // console.log(spt_id);
-		                // console.log(spt_id !== '');
+
 		                url = (spt_id !== '') ? "{{ route('store_detail_anggota_umum') }}" : "{{ route('store_session_anggota_umum') }}" ;
 		                if(tgl_mulai == '' || tgl_akhir==''){
 		                	$.alert('Isikan tanggal mulai dan tanggal akhir terlebih dahulu.');
@@ -231,7 +216,7 @@
 			                    data: {user_id:user_id, spt_id:spt_id, tgl_mulai: tgl_mulai, tgl_akhir:tgl_akhir},
 			                    success: function(data){		                        		                        
 			                        $('#list-anggota-umum-session').DataTable().ajax.reload();
-			                        clearOptions();
+			                        clearOptionsUmum();
 			                    },
 			                    error: function(error){
 			                        console.log('Error :', error);
@@ -322,14 +307,13 @@
 
         submitHandler: function(form){
             var jenis_spt_umum = $('#jenis-spt-id').val();
-            var tgl_mulai_umum = $('#tgl-mulai-umum').val();
-            var tgl_akhir_umum = $('#tgl-akhir-umum').val();
+            var tgl_mulai_umum = $("#tgl-mulai-umum").val();
+            var tgl_akhir_umum = $("#tgl-akhir-umum").val();
             var lama_umum = $('#lama-spt-umum').val();
             var lokasi_umum_id = $('#lokasi-id-umum').val();
             var info_dasar_umum = $('#info-dasar-umum').val();
             var info_untuk_umum = $('#info-untuk-kegiatan-umum').val();
-            // var info_dasar = $('#tambahan').val();
-            // var info_kegiatan = ( typeof $('.info-lanjutan:checked').val() !== 'undefined' ) ? '"lanjutan":"'+$('.info-lanjutan:checked').val()+'"' : '"lanjutan":'+null;            
+
             var id = $('#id').val();
             save_method = (id == '') ? 'new' : save_method;
             var url_prefix = (window.location.pathname == '/admin') ? 'admin/spt/' : 'spt/';
@@ -343,17 +327,15 @@
                 url: url,
                 type: type,
                 data: {info_dasar_umum:info_dasar_umum, info_untuk_umum:info_untuk_umum, jenis_spt_umum:jenis_spt_umum, lokasi_umum_id:lokasi_umum_id, tgl_mulai_umum:tgl_mulai_umum, tgl_akhir_umum:tgl_akhir_umum, lama_umum:lama_umum,  _method: method},
-                //data: $('#spt-form').serialize(),
-                //dataType: 'json',
 
-                /*data: $('#spt-form').serialize(),*/
                 success: function(data){
                 	console.log(data);
-                    // $("#spt-form")[0].reset();
-                    // $('#formModal').modal('hide');
-                    // if(save_method == 'new') clearSessionAnggota();
-                    // //table.ajax.reload();
-                    // $('#penomoran-spt').DataTable().ajax.reload(null, false );
+                    $("#spt-umum-form")[0].reset();
+                    $('#formSptUmum').modal('hide');
+                    if(save_method == 'new') clearSessionAnggota();
+                    //table.ajax.reload();
+                    $('#spt-umum').DataTable().ajax.reload(null, false );
+                    clearOptionsUmum();
                 },
                 error: function(error){
                     console.log(error);
@@ -396,4 +378,27 @@
 	            }
 	    });
 	}
+
+	
+
+    $('#formSptUmum').on('hidden.bs.modal', function () {
+		$('#spt-umum-form')[0].reset();
+		$('#id').val('');
+		// $('#tambahan').val('');
+		select_lokasi[0].selectize.clear();
+		save_method = null;
+		$('#list-anggota-umum-session').DataTable().clear().destroy();
+		// $('#input-tambahan-container').hide();
+		// $('#input-lokasi-container').hide();
+
+		function clearOptionsUmum(){            
+	        var optPeran = $('#session-anggota-umum').selectize();
+	        var optAnggota = $('#session-anggota-umum').selectize();            
+	        var controlPeran = optPeran[0].selectize;
+	        var controlAnggota = optAnggota[0].selectize;
+	        controlPeran.clear();
+	        controlAnggota.clear();
+	    }
+	});
+	
 </script>

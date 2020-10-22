@@ -155,8 +155,8 @@ class SptController extends Controller
         );
          $data = [
             'jenis_spt_umum' => Common::cleanInput($request['jenis_spt_umum']),
-            'tgl_mulai' => date('Y-m-d H:i:s',strtotime($request['tgl_mulai'])),
-            'tgl_akhir' => date('Y-m-d H:i:s',strtotime($request['tgl_akhir'])),
+            'tgl_mulai' => date('Y-m-d H:i:s',strtotime($request['tgl_mulai_umum'])),
+            'tgl_akhir' => date('Y-m-d H:i:s',strtotime($request['tgl_akhir_umum'])),
             'lokasi_id' => $request['lokasi_umum_id'],
             'lama' => $request['lama_umum'],
             'info_untuk_umum' => Common::cleanInput($request['info_untuk_umum']),
@@ -539,7 +539,7 @@ class SptController extends Controller
     {
         $spt2 = SptUmum::where('nomor','!=','null');
         $spt = SptUmum::where('nomor',null);
-        $cols = ($spt == false) ? $spt->orderBy('created_at', 'desc')->get() : $spt2->orderBy('created_at', 'desc')->get();
+        $cols = ($spt == true) ? $spt2->orderBy('created_at', 'desc')->get() : $spt->orderBy('created_at', 'desc')->get();
         // dd($cols);
         $dt = Datatables::of($cols)
                 ->addIndexColumn()
@@ -622,6 +622,9 @@ class SptController extends Controller
         if($user->hasPermissionTo('View SPT') && $method === 'cetakPdf'){
         $control = '<a href="'.route('spt_pdf',$id).'" data-toggle="tooltip" title="Cetak PDF" class="btn btn-outline-primary btn-sm" target="__blank"><i class="fa fa-file-pdf"></i></a>';
         }
+        if($user->hasPermissionTo('View SPT') && $method === 'cetakPdfUmum'){
+        $control = '<a href="'.route('spt_pdf_umum',$id).'" data-toggle="tooltip" title="Cetak PDF" class="btn btn-outline-primary btn-sm" target="__blank"><i class="fa fa-file-pdf"></i></a>';
+        }
         if($user->hasPermissionTo('View SPT') && $method === 'viewAnggota'){
             $control = '<a href="javascript:void(0);" onclick="viewAnggota('. $id .')" data-toggle="tooltip" title="Anggota SPT" class="btn btn-outline-primary btn-sm"><i class="ni ni-single-02"></i></a>';
         }
@@ -655,6 +658,10 @@ class SptController extends Controller
                     $control = '<a href="#" onclick="showFormModal('.$id.')" class="btn btn-outline-primary btn-sm" title="Penomoran SPT"><i class="fa fa-list-ol"></i></a>';
                     return $control;
                     }
+        if ( $user->hasAnyRole(['TU Umum', 'Super Admin']) && $method == 'showFormModalUmum') {
+            $control = '<a href="#" onclick="showFormModalUmum('.$id.')" class="btn btn-outline-primary btn-sm" title="Penomoran SPT Umum"><i class="fa fa-list-ol"></i></a>';
+            return $control;
+        }
         
 
         return $control;
@@ -686,6 +693,29 @@ class SptController extends Controller
         return @$pdf->stream('SPT-'.$id.'.pdf',array('Attachment'=>1));
         //return $pdf->setWarnings(false)->save('spt-'.$id.'.pdf');
     }
+
+    public function sptPdfUmum($id){        
+        $spt = SptUmum::findOrFail($id);
+        // $sort_detail = implode(",",$this->list_peran);
+        $detail_spt = DetailSpt::where('spt_id','=',$id)->with(['spt','user'])->get();
+        //     ->orderByRaw(DB::raw("FIELD(peran,'Penanggungjawab', 'Pembantu Penanggungjawab', 'Pengendali Mutu', 'Pengendali Teknis', 'Ketua Tim', 'Anggota Tim')"))->get();
+        // $template_name = 'pdfsplit'; // default template name
+        
+        //untuk debug html saja (tanpa pdf)
+        // return view('admin.laporan.spt_umum.sptUmum', compact('spt','detail_spt'));
+        return view('admin.laporan.spt_umum.sptUmum', compact('spt','detail_spt'));
+
+        // if( isset($spt->info['radio']) && $spt->info['radio'] !== null){
+        //     $radio = $spt->info['radio'];
+        //     $template_name = str_replace( ' ', '-', strtolower($spt->jenisSpt->radio[$radio]) );
+        // }
+        //dd($template_name);
+
+        //$pdf = new PDF::setOptions(['dpi' => 150, 'defaultFont' => 'arial','debugCss' => true]);
+        // $pdf = PDF::loadView('admin.laporan.spt.'.$template_name, compact('spt','detail_spt'))->setPaper([0,0,583.65354,877.03937],'portrait'); //setpaper = ukuran kertas custom sesuai dokumen word dari mbak ita
+        // return @$pdf->stream('SPT-'.$id.'.pdf',array('Attachment'=>1));
+        //return $pdf->setWarnings(false)->save('spt-'.$id.'.pdf');
+    }    
 
     public function getAnggota($id=null)
     {        
@@ -862,7 +892,7 @@ class SptController extends Controller
                 })
                 ->addColumn('action', function($col){
                     if (auth()->user()->hasRole('TU Perencanaan') == null) {
-                    $control = '<a href="#" onclick="showFormModal('.$col->id.')" class="btn btn-sm">Penomoran</a>';
+                    $control = '<a href="#" onclick="showFormModalUmum('.$col->id.')" class="btn btn-sm">Penomoran</a>';
                     return $control;
                     }else{
                         // liaht spt pada rencanaan
@@ -899,16 +929,25 @@ class SptController extends Controller
                     return $col->lokasi_spt;
                 })
                 ->addColumn('action', function($col){
-                    if (auth()->user()->hasRole('TU Perencanaan') == null) {
-                    $control = '<a href="#" onclick="showFormModal('.$col->id.')" class="btn btn-sm">Penomoran</a>';
-                    return $control;
-                    }else{
-                        // liaht spt pada rencanaan
-                        $lihatSpt = '<a href="'.route('spt_pdf',$col).'" class="btn btn-sm">Lihat SPT</a>';
-                        return $lihatSpt;
+                   
+                    $return = "";
+                    if( !is_null($col->nomor) ){
+                        if(!is_null($col->file) || $col->file != ""){
+                            $return .= '<a href="'.$col->file.'" data-toggle="tooltip" title="Scan SPT" class="btn btn-outline-primary btn-sm" target="__blank"><i class="ni ni-paper-diploma"></i><span>Download</span></a>';
+                        }else{
+                            $return .= '<a href="#" data-toggle="tooltip" title="Scan SPT" class="btn btn-outline-danger btn-sm disabled" ><i class="ni ni-paper-diploma"></i><span>Download</span></a>';
+                            if( auth()->user()->hasAnyRole(['TU Umum', 'Super Admin']) ){
+                                $return .= '<a href="#" data-toggle="tooltip" title="Upload File Scan SPT" class="btn btn-outline-primary btn-sm" onclick="uploadSpt('.$col->id.')"><i class="fa fa-file-pdf"></i><span>Upload</span></a>';
+                            }
+                        }
                     }
-                    /*$control = '<a href="#" onclick="showFormModal('.$col->id.')" class="btn btn-sm">Penomoran</a>';
-                    return $control;*/
+                    if($col->nomor == null){
+                        $return .= $this->buildControl('showFormModalUmum', $col->id);
+                        $return .= $this->buildControl('cetakPdfUmum',$col->id);
+                        $return .= $this->buildControl('editForm',$col->id);
+                        $return .= $this->buildControl('deleteData',$col->id);
+                    }
+                    return $return;
                 })
                 ->make(true);
 
@@ -917,7 +956,13 @@ class SptController extends Controller
 
     public function updateNomorSpt(Request $request){
         $id = $request->spt_id;
-        $spt = Spt::findOrFail($id);
+        if($request->jenis_spt != 'umum'){
+            $spt = Spt::findOrFail($id);
+        }else{
+            $spt = SptUmum::findOrFail($id);
+        }
+        dd($spt);
+        die();
         $filename = ($request->file_spt) ? 'SPT-' . $id . '-' . $request->file_spt->getClientOriginalName() : null ;
         //dd(storage_path()."/spt");
         if($filename !== null ){
@@ -1748,13 +1793,22 @@ class SptController extends Controller
         }
     }
 
+    // menampilkan data tambahan bedasarkan jenis_spt_id
     public function getLastDataTambahan($jenis_spt_id){
         $data = Spt::select('tambahan')->where('jenis_spt_id',$jenis_spt_id)->latest()->first();
         return $data;        
     }
 
+    // jenis data disesuikan dengan nama kolom ditabel 
     public function getLastData($jenis_data){
         $spt = Spt::select($jenis_data);
+        $data = ( $jenis_data === 'nomor' ) ? $spt->whereNotNull('nomor') : $spt;
+        $data = $data->latest("updated_at")->first();
+        return $data;
+    }
+
+    public function getLastDataUmum($jenis_data){
+        $spt = SptUmum::select($jenis_data);
         $data = ( $jenis_data === 'nomor' ) ? $spt->whereNotNull('nomor') : $spt;
         $data = $data->latest("updated_at")->first();
         return $data;
