@@ -92,33 +92,34 @@
                         <table class="table table-striped table-sm table-bordered ajax-table" id="list-dupak-table">
                         </table>
                     </div> -->
-                    <div id="btn-show-dupak" class="row">
-                      <a href="#dupak-pengawasan" class="btn btn-default" > Pengawasan </a>
-                      <a href="#dupak-pendidikan" class="btn btn-default" > Pendidikan </a>
-                      <a onclick="exports();" href="#" class="btn btn-default" > Export js </a>
-                      <button onclick="printDiv('print-dupak')">Print only the above div</button>
+                    <div id="btn-show-dupak" class="col-md-12 row justify-content-end" style="margin-bottom: 30px;">
+                      <!-- <a href="#dupak-pengawasan" class="btn btn-default" > Pengawasan </a>
+                      <a href="#dupak-pendidikan" class="btn btn-default" > Pendidikan </a> -->
+                      <!-- <a onclick="exports();" href="#" class="btn btn-default" > Export js </a> -->
+                      <button onclick="printDiv('print-dupak')" class="btn btn-default" >Print</button>
                     </div>
 
-                    <!-- <ul class="nav nav-tabs justify-content-end">
-                      <li class="nav-item"><a data-toggle="tab" class="nav-link active" href="#pengawasan">Pengawasan</a></li>
+                    <ul class="nav nav-tabs justify-content-end" id="dupak-tab" >
+                      <!-- <li class="nav-item"><a data-toggle="tab" class="nav-link active" href="#pengawasan">Pengawasan</a></li>
                       <li class="nav-item"><a data-toggle="tab" class="nav-link" href="#pendidikan">Pendidikan</a></li>
-                      <li class="nav-item"><a data-toggle="tab" class="nav-link" href="#penunjang">Penunjang</a></li>
-                    </ul> -->
+                      <li class="nav-item"><a data-toggle="tab" class="nav-link" href="#penunjang">Penunjang</a></li> -->
+                    </ul>
+                    
 
-                    <div class="dupak-content" id="print-dupak">
-                      <div id="dupak-pengawasan" class="mb-20" style="margin-bottom: 30px;">
+                    <div class="tab-content" id="print-dupak">
+                      <div id="dupak-pengawasan" class="tab-pane fade show active" role="tabpanel" style="margin-bottom: 30px;">
                         <div class="table-responsive" id="dupak-pengawasan-wrapper">
                             <table class="table table-sm table-bordered ajax-table col-print-12" id="dupak-pengawasan-table">
                             </table>
                         </div>
                       </div>
-                      <div id="dupak-pendidikan" class="mb-20" style="margin-bottom: 30px;">
+                      <div id="dupak-pendidikan" class="tab-pane fade" role="tabpanel" style="margin-bottom: 30px;">
                         <div class="table-responsive ">
                             <table class="table table-sm table-bordered ajax-table col-print-12" id="dupak-pendidikan-table">
                             </table>
                         </div>
                       </div>
-                      <div id="dupak-penunjang" class="mb-20" style="margin-bottom: 30px;">
+                      <div id="dupak-penunjang" class="tab-pane fade" role="tabpanel" style="margin-bottom: 30px;">
                         <div class="table-responsive ">
                             <table class="table table-sm table-bordered ajax-table col-print-12" id="dupak-penunjang-table">
                             </table>

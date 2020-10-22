@@ -131,6 +131,10 @@
         //dupak_pengawasan_table.draw();//versi datatable
         //dupak_pendidikan_table.draw();//versi datatable
         //e.preventDefault();
+        tab = '<li class="nav-item"><a data-toggle="tab" class="nav-link active" href="#dupak-pengawasan">Pengawasan</a></li>'
+              +'<li class="nav-item"><a data-toggle="tab" class="nav-link" href="#dupak-pendidikan">Pendidikan</a></li>'
+              +'<li class="nav-item"><a data-toggle="tab" class="nav-link" href="#dupak-penunjang">Penunjang</a></li>';
+        $('#dupak-tab').html(tab);
 
         //coba versi html biasa
         generate_tabel_pengawasan();
@@ -167,26 +171,26 @@
         var irban_kepala_nip = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.nip;
         var irban_kepala_pangkat = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.pangkat;
         var irban_kepala_jabatan = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.jabatan;
-          var trHTML = '<tr style="background:#fff"><td colspan="10" align="center">SURAT PERNYATAAN</td></tr>'
-              +'<tr style="background:#fff; border:0px solid #000;"><td colspan="10" align="center">MELAKUKAN KEGIATAN PENGAWASAN</td></tr>'
-              +'<tr style="background:#fff"><td colspan="10">Yang bertandatangan dibawah ini :</td></tr>' //typeof yourVariable === 'object' && yourVariable !== null
-              +'<tr style="background:#fff"><td colspan="4">Nama</td><td colspan="6"> : '+ irban_kepala_name +'</td></tr>'
-              +'<tr style="background:#fff"><td colspan="4">NIP</td><td colspan="6"> : '+ irban_kepala_nip +'</td></tr>'
-              +'<tr style="background:#fff"><td colspan="4">Pangkat / golongan ruang</td><td colspan="6"> : '+ irban_kepala_pangkat +'</td></tr>'
-              +'<tr style="background:#fff"><td colspan="4">J a b a t a n</td><td colspan="6"> : '+irban_kepala_jabatan+'</td></tr>'
-              +'<tr style="background:#fff"><td colspan="4">Unit Kerja</td><td colspan="6"> : Inspektorat Kabupaten Sidoarjo</td></tr>'
-              +'<tr style="background:#fff"></tr>'
-              +'<tr style="background:#fff"><td colspan="10">Menyatakan Bahwa :</td></tr>'
-              +'<tr style="background:#fff"><td colspan="4">Nama</td><td colspan="6"> : '+response[0].user_dupak.full_name_gelar+'</td></tr>'
-              +'<tr style="background:#fff"><td colspan="4">NIP</td><td colspan="6"> : '+response[0].user_dupak.nip+'</td></tr>'
-              +'<tr style="background:#fff"><td colspan="4">Pangkat / golongan ruang</td><td colspan="6"> : '+response[0].user_dupak.pangkat+'</td></tr>'
-              +'<tr style="background:#fff"><td colspan="4">J a b a t a n</td><td colspan="6"> : '+response[0].user_dupak.jabatan+'</td></tr>'
-              +'<tr style="background:#fff"><td colspan="4">Unit Kerja</td><td colspan="6"> : Inspektorat Kabupaten Sidoarjo</td></tr>'
-              +'<tr style="background:#fff" height="5"><td colspan="10"></td></tr>'
-              +'<tr style="background:#fff" ><td colspan="10">Sudah melakukan kegiatan pengawasan sebagai berikut :</td></tr>';
+          var trHTML = '<tr class="col-print-header" style="background:#fff"><td colspan="10" align="center">SURAT PERNYATAAN</td></tr>'
+              +'<tr class="col-print-header" style="background:#fff; border:0px solid #000;"><td colspan="10" align="center">MELAKUKAN KEGIATAN PENGAWASAN</td></tr>'
+              +'<tr class="col-print-header" style="background:#fff"><td colspan="10">Yang bertandatangan dibawah ini :</td></tr>' //typeof yourVariable === 'object' && yourVariable !== null
+              +'<tr class="col-print-header" style="background:#fff"><td colspan="4">Nama</td><td colspan="6"> : '+ irban_kepala_name +'</td></tr>'
+              +'<tr class="col-print-header" style="background:#fff"><td colspan="4">NIP</td><td colspan="6"> : '+ irban_kepala_nip +'</td></tr>'
+              +'<tr class="col-print-header" style="background:#fff"><td colspan="4">Pangkat / golongan ruang</td><td colspan="6"> : '+ irban_kepala_pangkat +'</td></tr>'
+              +'<tr class="col-print-header" style="background:#fff"><td colspan="4">J a b a t a n</td><td colspan="6"> : '+irban_kepala_jabatan+'</td></tr>'
+              +'<tr class="col-print-header" style="background:#fff"><td colspan="4">Unit Kerja</td><td colspan="6"> : Inspektorat Kabupaten Sidoarjo</td></tr>'
+              +'<tr class="col-print-header" style="background:#fff"></tr>'
+              +'<tr class="col-print-header" style="background:#fff"><td colspan="10">Menyatakan Bahwa :</td></tr>'
+              +'<tr class="col-print-header" style="background:#fff"><td colspan="4">Nama</td><td colspan="6"> : '+response[0].user_dupak.full_name_gelar+'</td></tr>'
+              +'<tr class="col-print-header" style="background:#fff"><td colspan="4">NIP</td><td colspan="6"> : '+response[0].user_dupak.nip+'</td></tr>'
+              +'<tr class="col-print-header" style="background:#fff"><td colspan="4">Pangkat / golongan ruang</td><td colspan="6"> : '+response[0].user_dupak.pangkat+'</td></tr>'
+              +'<tr class="col-print-header" style="background:#fff"><td colspan="4">J a b a t a n</td><td colspan="6"> : '+response[0].user_dupak.jabatan+'</td></tr>'
+              +'<tr class="col-print-header" style="background:#fff"><td colspan="4">Unit Kerja</td><td colspan="6"> : Inspektorat Kabupaten Sidoarjo</td></tr>'
+              +'<tr class="col-print-header" style="background:#fff" height="5"><td colspan="10"></td></tr>'
+              +'<tr class="col-print-header" style="background:#fff" ><td colspan="10">Sudah melakukan kegiatan pengawasan sebagai berikut :</td></tr>';
 
-            trHTML += '<tr><td colspan="10"></td></tr>'
-              +'<tr class="table-dark">'
+            trHTML += '<tr class="h-30"><td colspan="10"></td></tr>'
+              +'<tr class="table-dark col-print-th">'
               +'<th>No.</th>'
               +'<th>Tanggal SPT</th>'
               +'<th>Lama SPT</th>'
@@ -200,7 +204,7 @@
         $.each(response, function (i, item) {
           //console.log(item);
           var n = i+1;
-            trHTML += '<tr>'
+            trHTML += '<tr class="col-print-data">'
               +'<td>' + n + '</td>'
               +'<td>' + item.spt.periode + '</td>'
               +'<td>' + item.spt.lama + '</td>'
@@ -219,9 +223,7 @@
 
         trHTML += '<tr><td colspan="5"></td><td colspan="5">Atasan langsung</td>'
           +'<tr><td colspan="5"></td><td colspan="5">Inspektur Pembantu Wilayah</td>'
-          +'<tr><td colspan="5"></td><td colspan="5"></td>'
-          +'<tr><td colspan="5"></td><td colspan="5"></td>'
-          +'<tr><td colspan="5"></td><td colspan="5"></td>'
+          +'<tr class="h-100"><td colspan="5"></td><td colspan="5"></td>'
           +'<tr><td colspan="5"></td><td colspan="5">'+irban_kepala_name+'</td>'
           +'<tr><td colspan="5"></td><td colspan="5">'+irban_kepala_jabatan+' '+irban_kepala_pangkat+' </td>'
           +'<tr><td colspan="5"></td><td colspan="5">'+irban_kepala_nip+'</td>';
@@ -268,7 +270,7 @@
 
             //No	Uraian Sub Unsur  class="col-print-th"
 
-            trHTML += '<tr><td colspan="5"></td></tr>'
+            trHTML += '<tr class="h-30"><td colspan="5"></td></tr>'
               +'<tr class="table-dark col-print-th">'
               +'<th>No.</th>'
               +'<th>Uraian Sub Unsur</th>'
@@ -300,9 +302,7 @@
 
         trHTML += '<tr><td colspan="3"></td><td colspan="2">Atasan langsung</td>'
           +'<tr><td colspan="3"></td><td colspan="2">Inspektur Pembantu Wilayah</td>'
-          +'<tr><td colspan="3"></td><td colspan="2"></td>'
-          +'<tr><td colspan="3"></td><td colspan="2"></td>'
-          +'<tr><td colspan="3"></td><td colspan="2"></td>'
+          +'<tr class="h-100"><td colspan="3"></td><td colspan="2"></td>'
           +'<tr><td colspan="3"></td><td colspan="2">'+irban_kepala_name+'</td>'
           +'<tr><td colspan="3"></td><td colspan="2">'+irban_kepala_jabatan+' '+irban_kepala_pangkat+' </td>'
           +'<tr><td colspan="3"></td><td colspan="2">'+irban_kepala_nip+'</td>';

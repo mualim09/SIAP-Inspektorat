@@ -11,6 +11,10 @@
 .col-print-10{width:83%; float:left;}
 .col-print-11{width:92%; float:left;}
 .col-print-12{width:100%; float:left;}
+.h-10{height: 10px}
+.h-20{height: 20px}
+.h-30{height: 30px}
+.h-40{height: 40px}
 .h-50{height: 50px}
 .h-60{height: 60px}
 .h-70{height: 70px}
@@ -30,6 +34,6 @@
 	outline: thin solid #000;
 	border-collapse: collapse;
 }
-#dupak-pengawasan{
+#dupak-pengawasan, #dupak-pendidikan{
 	page-break-after: always;
 }
