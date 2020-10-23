@@ -98,11 +98,11 @@ function add_cell_to_sheet(worksheet, address, value) {
 
             trHTML += '<tr class="h-30"><td colspan="5"></td></tr>'
               +'<tr class="table-dark col-print-th">'
-              +'<th>No.</th>'
-              +'<th>Uraian Sub Unsur</th>'
-              +'<th>Butir Kegiatan</th>'
-              +'<th>Angka Kredit</th>'
-              +'<th>Keterangan</th>'
+	              +'<th>No.</th>'
+	              +'<th>Uraian Sub Unsur</th>'
+	              +'<th>Butir Kegiatan</th>'
+	              +'<th>Angka Kredit</th>'
+	              +'<th>Keterangan</th>'
               +'</tr>';
               //response[0].user_dupak.pendidikan.tingkat
         $.each(response, function (i, item) {
@@ -126,12 +126,12 @@ function add_cell_to_sheet(worksheet, address, value) {
           +'<td colspan="5">Demikian pernyataan ini dibuat untuk dapat dipergunakan sebagaimana mestinya.</td>'
           +'</tr>';
 
-        trHTML += '<tr><td colspan="3"></td><td colspan="2">Atasan langsung</td>'
-          +'<tr><td colspan="3"></td><td colspan="2">Inspektur Pembantu Wilayah</td>'
-          +'<tr class="h-100"><td colspan="3"></td><td colspan="2"></td>'
-          +'<tr><td colspan="3"></td><td colspan="2">'+irban_kepala_name+'</td>'
-          +'<tr><td colspan="3"></td><td colspan="2">'+irban_kepala_jabatan+' '+irban_kepala_pangkat+' </td>'
-          +'<tr><td colspan="3"></td><td colspan="2">'+irban_kepala_nip+'</td>';
+        trHTML += '<tr><td colspan="3"></td><td colspan="2">Atasan langsung</td></tr>'
+          +'<tr><td colspan="3"></td><td colspan="2">Inspektur Pembantu Wilayah</td></tr>'
+          +'<tr class="h-100"><td colspan="3"></td><td colspan="2"></td></tr>'
+          +'<tr><td colspan="3"></td><td colspan="2">'+irban_kepala_name+'</td></tr>'
+          +'<tr><td colspan="3"></td><td colspan="2">'+irban_kepala_jabatan+' '+irban_kepala_pangkat+' </td></tr>'
+          +'<tr><td colspan="3"></td><td colspan="2">'+irban_kepala_nip+'</td></tr>';
         //$( "#dupak-pendidikan-wrapper" ).prepend( "<h3 style=\"margin-top:20px;\">Angka Kredit Pendidikan</h3>" );
         $('#dupak-pendidikan-table').html(trHTML);
     }
@@ -155,40 +155,115 @@ function add_cell_to_sheet(worksheet, address, value) {
         var irban_kepala_nip = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.nip;
         var irban_kepala_pangkat = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.pangkat;
         var irban_kepala_jabatan = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.jabatan;
-          var trHTML = '<tr class="col-print-header" style="background:#fff"><td colspan="10" align="center">SURAT PERNYATAAN</td></tr>'
-              +'<tr class="col-print-header" style="background:#fff; border:0px solid #000;"><td colspan="10" align="center">MELAKUKAN KEGIATAN PENGAWASAN</td></tr>'
-              +'<tr class="col-print-header" style="background:#fff"><td colspan="10">Yang bertandatangan dibawah ini :</td></tr>' //typeof yourVariable === 'object' && yourVariable !== null
-              +'<tr class="col-print-header" style="background:#fff"><td colspan="4">Nama</td><td colspan="6"> : '+ irban_kepala_name +'</td></tr>'
-              +'<tr class="col-print-header" style="background:#fff"><td colspan="4">NIP</td><td colspan="6"> : '+ irban_kepala_nip +'</td></tr>'
-              +'<tr class="col-print-header" style="background:#fff"><td colspan="4">Pangkat / golongan ruang</td><td colspan="6"> : '+ irban_kepala_pangkat +'</td></tr>'
-              +'<tr class="col-print-header" style="background:#fff"><td colspan="4">J a b a t a n</td><td colspan="6"> : '+irban_kepala_jabatan+'</td></tr>'
-              +'<tr class="col-print-header" style="background:#fff"><td colspan="4">Unit Kerja</td><td colspan="6"> : Inspektorat Kabupaten Sidoarjo</td></tr>'
-              +'<tr class="col-print-header" style="background:#fff"></tr>'
-              +'<tr class="col-print-header" style="background:#fff"><td colspan="10">Menyatakan Bahwa :</td></tr>'
-              +'<tr class="col-print-header" style="background:#fff"><td colspan="4">Nama</td><td colspan="6"> : '+response[0].user_dupak.full_name_gelar+'</td></tr>'
-              +'<tr class="col-print-header" style="background:#fff"><td colspan="4">NIP</td><td colspan="6"> : '+response[0].user_dupak.nip+'</td></tr>'
-              +'<tr class="col-print-header" style="background:#fff"><td colspan="4">Pangkat / golongan ruang</td><td colspan="6"> : '+response[0].user_dupak.pangkat+'</td></tr>'
-              +'<tr class="col-print-header" style="background:#fff"><td colspan="4">J a b a t a n</td><td colspan="6"> : '+response[0].user_dupak.jabatan+'</td></tr>'
-              +'<tr class="col-print-header" style="background:#fff"><td colspan="4">Unit Kerja</td><td colspan="6"> : Inspektorat Kabupaten Sidoarjo</td></tr>'
-              +'<tr class="col-print-header" style="background:#fff" height="5"><td colspan="10"></td></tr>'
-              +'<tr class="col-print-header" style="background:#fff" ><td colspan="10">Sudah melakukan kegiatan pengawasan sebagai berikut :</td></tr>';
+	    /*var trHTML = '<tr class="col-print-header" style="background:#fff"><td colspan="10" align="center">SURAT PERNYATAAN</td></tr>'
+	          +'<tr class="col-print-header" style="background:#fff; border:0px solid #000;"><td colspan="10" align="center">MELAKUKAN KEGIATAN PENGAWASAN</td></tr>'
+	          +'<tr class="h-20"><td colspan="10"></td></tr>'
+	          +'<tr class="col-print-header" style="background:#fff"><td colspan="10">Yang bertandatangan dibawah ini :</td></tr>' //typeof yourVariable === 'object' && yourVariable !== null
+	          +'<tr class="col-print-header" style="background:#fff"><td colspan="4">Nama</td><td colspan="6"> : '+ irban_kepala_name +'</td></tr>'
+	          +'<tr class="col-print-header" style="background:#fff"><td colspan="4">NIP</td><td colspan="6"> : '+ irban_kepala_nip +'</td></tr>'
+	          +'<tr class="col-print-header" style="background:#fff"><td colspan="4">Pangkat / golongan ruang</td><td colspan="6"> : '+ irban_kepala_pangkat +'</td></tr>'
+	          +'<tr class="col-print-header" style="background:#fff"><td colspan="4">J a b a t a n</td><td colspan="6"> : '+irban_kepala_jabatan+'</td></tr>'
+	          +'<tr class="col-print-header" style="background:#fff"><td colspan="4">Unit Kerja</td><td colspan="6"> : Inspektorat Kabupaten Sidoarjo</td></tr>'
+	          +'<tr class="col-print-header h-20" style="background:#fff"></tr>'
+	          +'<tr class="col-print-header" style="background:#fff"><td colspan="10">Menyatakan Bahwa :</td></tr>'
+	          +'<tr class="col-print-header" style="background:#fff"><td colspan="4">Nama</td><td colspan="6"> : '+response[0].user_dupak.full_name_gelar+'</td></tr>'
+	          +'<tr class="col-print-header" style="background:#fff"><td colspan="4">NIP</td><td colspan="6"> : '+response[0].user_dupak.nip+'</td></tr>'
+	          +'<tr class="col-print-header" style="background:#fff"><td colspan="4">Pangkat / golongan ruang</td><td colspan="6"> : '+response[0].user_dupak.pangkat+'</td></tr>'
+	          +'<tr class="col-print-header" style="background:#fff"><td colspan="4">J a b a t a n</td><td colspan="6"> : '+response[0].user_dupak.jabatan+'</td></tr>'
+	          +'<tr class="col-print-header" style="background:#fff"><td colspan="4">Unit Kerja</td><td colspan="6"> : Inspektorat Kabupaten Sidoarjo</td></tr>'
+	          +'<tr class="col-print-header" style="background:#fff" height="5"><td colspan="10"></td></tr>'
+	          +'<tr class="col-print-header" style="background:#fff" ><td colspan="10">Sudah melakukan kegiatan pengawasan sebagai berikut :</td></tr>';*/
+	    var header = '<div class="col-print-12 col-md-12"><h3 class="print-center">SURAT PERNYATAAN</h3></div>'
+	    			+'<div class="col-print-12 col-md-12"><h3 class="print-center">MELAKUKAN KEGIATAN PENGAWASAN</h3></div>'
+	    			+'<div class="h-20"></div>'
+	    			+'<div class="row"><div class="col-print-12 col-md-12">Yang bertandatangan dibawah ini :</div></div>'
+	    			+'<div class="row">'
+	    				+'<div class="col-print-4 col-md-4">Nama</div>'
+	    				+'<div class="col-print-8 col-md-8">: '+ irban_kepala_name +'</div>'
+	    			+'</div>'
+	    			+'<div class="row">'
+	    				+'<div class="col-print-4 col-md-4">NIP</div>'
+	    				+'<div class="col-print-8 col-md-8">: '+ irban_kepala_nip +'</div>'
+	    			+'</div>'
+	    			+'<div class="row">'
+	    				+'<div class="col-print-4 col-md-4">Pangkat / golongan ruang</div>'
+	    				+'<div class="col-print-8 col-md-8">: '+ irban_kepala_pangkat +'</div>'
+	    			+'</div>'
+	    			+'<div class="row">'
+	    				+'<div class="col-print-4 col-md-4">Jabatan</div>'
+	    				+'<div class="col-print-8 col-md-8">: '+ irban_kepala_jabatan +'</div>'
+	    			+'</div>'
+	    			+'<div class="row">'
+	    				+'<div class="col-print-4 col-md-4">Unit kerja</div>'
+	    				+'<div class="col-print-8 col-md-8">: Inspektorat Kabupaten Sidoarjo</div>'
+	    			+'</div>'
+	    			+'<div class="h-20"></div>' //separator
+	    			+'<div class="row"><div class="col-print-12 col-md-12">Menyatakan bahwa :</div></div>'
+	    			+'<div class="row">'
+	    				+'<div class="col-print-4 col-md-4">Nama</div>'
+	    				+'<div class="col-print-8 col-md-8">: '+response[0].user_dupak.full_name_gelar+'</div>'
+	    			+'</div>'
+	    			+'<div class="row">'
+	    				+'<div class="col-print-4 col-md-4">NIP</div>'
+	    				+'<div class="col-print-8 col-md-8">: '+response[0].user_dupak.nip+'</div>'
+	    			+'</div>'
+	    			+'<div class="row">'
+	    				+'<div class="col-print-4 col-md-4">Pangkat / golongan ruang</div>'
+	    				+'<div class="col-print-8 col-md-8">: '+response[0].user_dupak.pangkat+'</div>'
+	    			+'</div>'
+	    			+'<div class="row">'
+	    				+'<div class="col-print-4 col-md-4">Jabatan</div>'
+	    				+'<div class="col-print-8 col-md-8">: '+response[0].user_dupak.jabatan+'</div>'
+	    			+'</div>'
+	    			+'<div class="row">'
+	    				+'<div class="col-print-4 col-md-4">Unit kerja</div>'
+	    				+'<div class="col-print-8 col-md-8">: Inspektorat Kabupaten Sidoarjo</div>'
+	    			+'</div>'
+	    			+'<div class="h-20"></div>'
+	    	var table = '<table class="table table-sm table-bordered ajax-table col-print-12 table-print-border" id="dupak-pengawasan-table">';
 
-            trHTML += '<tr class="h-30"><td colspan="10"></td></tr>'
-              +'<tr class="table-dark col-print-th">'
-              +'<th>No.</th>'
-              +'<th>Tanggal SPT</th>'
-              +'<th>Lama SPT</th>'
-              +'<th>Efektif</th>'
-              +'<th>Kegiatan</th>'
-              +'<th>Koefisien</th>'
-              +'<th>Dupak</th>'
-              +'<th>Peran</th>'
-              +'<th>Lembur</th>'
+            /*trHTML += '<tr class="h-30"><td colspan="10"></td></tr>'
+	          +'<tr class="table-dark col-print-th">'
+	              +'<th>No.</th>'
+	              +'<th>Tanggal SPT</th>'
+	              +'<th>Lama SPT</th>'
+	              +'<th>Efektif</th>'
+	              +'<th>Kegiatan</th>'
+	              +'<th>Koefisien</th>'
+	              +'<th>Dupak</th>'
+	              +'<th>Peran</th>'
+	              +'<th>Lembur</th>'
+              +'</tr>';*/
+              /* tampilan table header output
+             | No |	Uraian Kegiatan 	|	Tgl Jml Hari Efektif	|		Satuan AK	|Jumlah Jam	|Jumlah AK	|Keterangan
+			 |	  |	Kode  |  Kegiatan	|							|					|			|			|
+*/
+              table += '<tr>'
+	              +'<th>No.</th>'
+	              +'<th>Tanggal SPT</th>'
+	              +'<th>Lama SPT</th>'
+	              +'<th>Efektif</th>'
+	              +'<th>Kegiatan</th>'
+	              +'<th>Koefisien</th>'
+	              +'<th>Dupak</th>'
+	              +'<th>Peran</th>'
+	              +'<th>Lembur</th>'
               +'</tr>';
         $.each(response, function (i, item) {
           //console.log(item);
           var n = i+1;
-            trHTML += '<tr class="col-print-data">'
+            /*trHTML += '<tr class="col-print-data">'
+              +'<td>' + n + '</td>'
+              +'<td>' + item.spt.periode + '</td>'
+              +'<td>' + item.spt.lama + '</td>'
+              +'<td>'+ item.info_dupak.efektif +'</td>'
+              +'<td>'+ item.spt.kegiatan.sebutan +'</td>'
+              +'<td>'+ item.info_dupak.koefisien +'</td>'
+              +'<td>'+ item.info_dupak.dupak +'</td>'
+              +'<td>'+ item.peran +'</td>'
+              +'<td>'+ item.info_dupak.lembur +'</td>'
+              '</tr>';*/
+              table += '<tr>'
               +'<td>' + n + '</td>'
               +'<td>' + item.spt.periode + '</td>'
               +'<td>' + item.spt.lama + '</td>'
@@ -201,18 +276,44 @@ function add_cell_to_sheet(worksheet, address, value) {
               '</tr>';
         });
 
-        trHTML += '<tr>'
+        /*trHTML += '<tr>'
           +'<td colspan="10">Demikian pernyataan ini dibuat untuk dapat dipergunakan sebagaimana mestinya.</td>'
           +'</tr>';
 
-        trHTML += '<tr><td colspan="5"></td><td colspan="5">Atasan langsung</td>'
-          +'<tr><td colspan="5"></td><td colspan="5">Inspektur Pembantu Wilayah</td>'
-          +'<tr class="h-100"><td colspan="5"></td><td colspan="5"></td>'
-          +'<tr><td colspan="5"></td><td colspan="5">'+irban_kepala_name+'</td>'
-          +'<tr><td colspan="5"></td><td colspan="5">'+irban_kepala_jabatan+' '+irban_kepala_pangkat+' </td>'
-          +'<tr><td colspan="5"></td><td colspan="5">'+irban_kepala_nip+'</td>';
+        trHTML += '<tr><td colspan="5"></td><td colspan="5">Atasan langsung</td></tr>'
+          +'<tr><td colspan="5"></td><td colspan="5">Inspektur Pembantu Wilayah</td></tr>'
+          +'<tr class="h-100"><td colspan="5"></td><td colspan="5"></td></tr>'
+          +'<tr><td colspan="5"></td><td colspan="5">'+irban_kepala_name+'</td></tr>'
+          +'<tr><td colspan="5"></td><td colspan="5">'+irban_kepala_jabatan+' '+irban_kepala_pangkat+' </td></tr>'
+          +'<tr><td colspan="5"></td><td colspan="5">'+irban_kepala_nip+'</td></tr>';*/
         //$( "#dupak-pengawasan-wrapper" ).prepend( "<h3 style=\"margin-top:20px;\">Angka Kredit Pengawasan</h3>" );
-        $('#dupak-pengawasan-table').html(trHTML);
+        table += '</table>';
+        var footer = '<div class="row"><div class="col-md-12 col-print-12">Demikian pernyataan ini dibuat untuk dapat dipergunakan sebagaimana mestinya.</div></div>'
+        		+'<div class="h-20"></div>'
+        		+'<div class="row">'
+        			+'<div class="col-md-8 col-print-8"></div>'
+        			+'<div class="col-md-4 col-print-8">Atasan langsung</div>'
+        		+'</div>'
+        		+'<div class="row">'
+        			+'<div class="col-md-8 col-print-8"></div>'
+        			+'<div class="col-md-4 col-print-8">Inspektur Pembantu Wilayah</div>'
+        		+'</div>'
+        		+'<div class="h-100"></div>' //separator ttd atasan
+        		+'<div class="row">'
+        			+'<div class="col-md-8 col-print-8"></div>'
+        			+'<div class="col-md-4 col-print-8">'+irban_kepala_name+'</div>'
+        		+'</div>'
+        		+'<div class="row">'
+        			+'<div class="col-md-8 col-print-8"></div>'
+        			+'<div class="col-md-4 col-print-8">'+irban_kepala_jabatan+' '+irban_kepala_pangkat+'</div>'
+        		+'</div>'
+        		+'<div class="row">'
+        			+'<div class="col-md-8 col-print-8"></div>'
+        			+'<div class="col-md-4 col-print-8">'+irban_kepala_nip+'</div>'
+        		+'</div>';
+
+        //$('#dupak-pengawasan-table').html(trHTML);
+        $( "#dupak-pengawasan-wrapper" ).html(header+table+footer);
     }
   });
   }
@@ -274,7 +375,7 @@ function generate_tabel_penunjang(){
         $.each(response, function (i, item) {
           //console.log(item);
           var n = i+1;
-            /*trHTML += '<tr class="col-print-data">'
+            trHTML += '<tr class="col-print-data">'
               +'<td>' + n + '</td>'
               +'<td>' + item.spt.periode + '</td>'
               +'<td>' + item.spt.lama + '</td>'
@@ -283,20 +384,19 @@ function generate_tabel_penunjang(){
               +'<td>'+ item.info_dupak.koefisien +'</td>'
               +'<td>'+ item.info_dupak.dupak +'</td>'
               +'<td>'+ item.peran +'</td>'
-              +'<td>'+ item.info_dupak.lembur +'</td>'
-              '</tr>';*/
+              '</tr>';
         });
 
         trHTML += '<tr>'
           +'<td colspan="10">Demikian pernyataan ini dibuat untuk dapat dipergunakan sebagaimana mestinya.</td>'
           +'</tr>';
 
-        trHTML += '<tr><td colspan="5"></td><td colspan="5">Atasan langsung</td>'
-          +'<tr><td colspan="5"></td><td colspan="5">Inspektur Pembantu Wilayah</td>'
-          +'<tr class="h-100"><td colspan="5"></td><td colspan="5"></td>'
-          +'<tr><td colspan="5"></td><td colspan="5">'+irban_kepala_name+'</td>'
-          +'<tr><td colspan="5"></td><td colspan="5">'+irban_kepala_jabatan+' '+irban_kepala_pangkat+' </td>'
-          +'<tr><td colspan="5"></td><td colspan="5">'+irban_kepala_nip+'</td>';
+        trHTML += '<tr><td colspan="5"></td><td colspan="5">Atasan langsung</td></tr>'
+          +'<tr><td colspan="5"></td><td colspan="5">Inspektur Pembantu Wilayah</td></tr>'
+          +'<tr class="h-100"><td colspan="5"></td><td colspan="5"></td></tr>'
+          +'<tr><td colspan="5"></td><td colspan="5">'+irban_kepala_name+'</td></tr>'
+          +'<tr><td colspan="5"></td><td colspan="5">'+irban_kepala_jabatan+' '+irban_kepala_pangkat+' </td></tr>'
+          +'<tr><td colspan="5"></td><td colspan="5">'+irban_kepala_nip+'</td></tr>';
         //$( "#dupak-pengawasan-wrapper" ).prepend( "<h3 style=\"margin-top:20px;\">Angka Kredit Pengawasan</h3>" );
         $('#dupak-penunjang-table').html(trHTML);
     }

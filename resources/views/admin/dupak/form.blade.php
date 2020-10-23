@@ -107,24 +107,27 @@
                     
 
                     <div class="tab-content" id="print-dupak">
-                      <div id="dupak-pengawasan" class="tab-pane fade show active" role="tabpanel" style="margin-bottom: 30px;">
-                        <div class="table-responsive" id="dupak-pengawasan-wrapper">
-                            <table class="table table-sm table-bordered ajax-table col-print-12" id="dupak-pengawasan-table">
-                            </table>
+                      <div id="dupak-pengawasan" class="tab-pane fade show active" role="tabpanel" style="margin-bottom: 30px; page-break-after: always;">
+                        <div class="table-responsive" id="dupak-pengawasan-wrapper">                            
+                            <!-- <table class="table table-sm table-bordered ajax-table col-print-12" id="dupak-pengawasan-table">
+                            </table> -->
                         </div>
                       </div>
-                      <div id="dupak-pendidikan" class="tab-pane fade" role="tabpanel" style="margin-bottom: 30px;">
+                      <pre class="page-break"></pre>
+                      <div id="dupak-pendidikan" class="tab-pane fade" role="tabpanel" style="margin-bottom: 30px; page-break-after: always;">
                         <div class="table-responsive ">
                             <table class="table table-sm table-bordered ajax-table col-print-12" id="dupak-pendidikan-table">
                             </table>
                         </div>
                       </div>
-                      <div id="dupak-penunjang" class="tab-pane fade" role="tabpanel" style="margin-bottom: 30px;">
+                      <pre class="page-break"></pre>
+                      <div id="dupak-penunjang" class="tab-pane fade" role="tabpanel" style="margin-bottom: 30px; page-break-after: always;">
                         <div class="table-responsive ">
                             <table class="table table-sm table-bordered ajax-table col-print-12" id="dupak-penunjang-table">
                             </table>
                         </div>
                       </div>
+                      <pre class="page-break"></pre>
                     </div>
 
                 </div>

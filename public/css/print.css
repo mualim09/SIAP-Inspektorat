@@ -1,4 +1,10 @@
 
+.row {
+    display: flex;    
+    flex-wrap: wrap;
+    clear: both;
+}
+.col-print*{display:block;}
 .col-print-1 {width:8%;  float:left;}
 .col-print-2 {width:16%; float:left;}
 .col-print-3 {width:25%; float:left;}
@@ -25,15 +31,25 @@
 .col-print-header{
 	max-height: 20px;
 }
-.col-print-th th{
+/*.col-print-th th{
 	outline: thin solid #000;
 	border-collapse: collapse;
 	font-weight: bold;
-}
-.col-print-data td{
-	outline: thin solid #000;
+}*/
+table{
 	border-collapse: collapse;
 }
-#dupak-pengawasan, #dupak-pendidikan{
+
+.table-print-border th, .table-print-border td{
+	border: 1px solid #000;	
+    border-spacing: 0;
+    font-size: 11pt;
+}
+
+/*#dupak-pengawasan, #dupak-pendidikan{
 	page-break-after: always;
+}
+*/
+table{
+	page-break-before: always !important;
 }

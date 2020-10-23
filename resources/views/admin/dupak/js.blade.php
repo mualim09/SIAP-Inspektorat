@@ -139,7 +139,7 @@
         //coba versi html biasa
         generate_tabel_pengawasan();
         generate_tabel_pendidikan();
-        generate_tabel_penunjang();
+        //generate_tabel_penunjang();
         e.preventDefault();
     });
 
