@@ -83,3 +83,13 @@
 		.ttd-inspektur span.nama-inspektur{
 			margin-top: 60px;
 		}
+		div.lampiran{
+			width: 44%;
+			float: right;			
+		}
+		.lampiran-surat span{
+			display: block;
+			text-align: left;
+			/*padding : 10px;*/
+			width: 80%;
+		}

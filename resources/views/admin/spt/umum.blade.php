@@ -43,7 +43,8 @@
       </div>
       <div class="modal-body">
         <form class="ajax-form" id="form-penomoran-umum" enctype="multipart/form-data">
-            <input type="hidden" name="spt_id" id="spt-id">
+            <input type="hidden" name="spt_id" id="spt-id-umum">
+            <input type="hidden" name="jenis_spt_umum" id="jenis-spt-umum">
             <div class="form-group row">
                 <label for="nomor" class="col-md-3 col-form-label text-md-right">{{ __('Nomor')}} </label>
                 <input type="text" name="nomor_umum" class="form-control col-md-8" required placeholder="Nomor SPT" id="nomor-spt-umum">                    
@@ -71,6 +72,7 @@
                 <label class="custom-file-label" for="customFile">Pilih Scan File SPT</label>                    
               </div>
               <div class="offset-md-3">File format pdf, max 2MB</div>
+              
             </div>
             <script>
               // Add the following code if you want the name of the file appear on select
@@ -94,15 +96,15 @@
 
 @section('js_umum')
 <script type="text/javascript">
-  // show modal by id from controller 
-  function showFormModal(spt_id){
-      $('#spt-id').val(spt_id);
-      $('#modalFormPenomoranSptUmum').modal('show');          
+  // show modal by id from controller
+  function showFormModalUmum(spt_id){
+      $('#spt-id-umum').val(spt_id);
+      $('#modalFormPenomoranSptUmum').modal('show');
       url = "{{ route('last_data_umum', 'nomor') }}";
       $.ajax({
           url : url,
           success: function(results) {                  
-              $('#nomor-spt').val(results.nomor);
+              $('#nomor-spt-umum').val(results.nomor);
           },
           error: function(error) {
               console.log(error);
@@ -110,14 +112,34 @@
       });
   }
 
+  $(document).on('show.bs.modal','#modalFormPenomoranSptUmum', function () { //fungsi ketika modal hide mendestroy data table yg di dlm modal
+        // alert('jalan');
+        // $('#dataKKA-perAuditor').dataTable().fnDestroy(); //mendestroy data table
+        var id = $('#spt-id-umum').attr('value');
+        // console.log(id);
+        url = "{{ url('admin/spt/get-spt-umum-byid') }}" +'/'+id;
+        $.ajax({
+            type: "GET",
+            url : url,
+            success: function(data) {
+                $('input[name=jenis_spt_umum]').val(data.jenis_spt_umum);
+                // console.log(data.jenis_spt_umum);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    });
+
   // validate data from form penomoran umum
   $("#form-penomoran-umum").validate({
         rules: {
             nomor_umum : {required: true},
-            tgl_register_umum : {required: true}
+            tgl_register_umum : {required: true},
+            // file_spt_umum : {required: true}
         },
         submitHandler: function(form){
-            var id = $('#spt-id').val();
+            var id = $('#spt-id-umum').val();
             //url ='spt/update-nomor/' + id ;
             url = (window.location.pathname == '/admin') ? 'admin/spt/update-nomor/'+id : 'spt/update-nomor/'+id;
             type = "POST";
@@ -130,7 +152,7 @@
                 contentType: false,
                 success: function(data){
                   console.log('success:',data);
-                  $('#modalFormPenomoranSpt').modal('hide');
+                  $('#modalFormPenomoranSptUmum').modal('hide');
                   $('#spt-umum').DataTable().ajax.reload();
                   $('#arsip-spt-umum').DataTable().ajax.reload();
                   $('#form-penomoran-umum')[0].reset();                      
@@ -190,7 +212,7 @@
         },
         processing: true,
         serverSide: true,
-        ajax: '{{ route("spt_umum") }}',
+        ajax: '{{ route("arsip_spt_umum") }}',
         deferRender: true,
         columns: [
           {'defaultContent' : '', 'data' : 'DT_RowIndex', 'name' : 'DT_RowIndex', 'title' : 'No', 'orderable' : false, 'searchable' : false, 'exportable' : true, 'printable' : true},

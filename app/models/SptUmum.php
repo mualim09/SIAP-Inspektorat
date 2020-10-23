@@ -46,4 +46,8 @@ class SptUmum extends Model
         }
     }
 
+    public function detailSpt(){
+        return $this->hasMany('App\models\DetailSpt');
+    }
+
 }

@@ -39,6 +39,10 @@ class DetailSpt extends Model
         return $this->belongsTo('App\models\Spt');
     }
 
+    public function sptUmum(){
+        return $this->belongsTo('App\models\SptUmum');
+    }
+
     public function user(){
         return $this->belongsTo('App\User');
     }

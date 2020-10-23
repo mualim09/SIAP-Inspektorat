@@ -45,7 +45,7 @@
 			            </div>
 			        </div>
 
-			        <div class="form-group row" id="input-lokasi-container">
+			        <div class="form-group row" id="input-lokasi-container" style="display: none;">
 					    <label for="lokasi" class="col-md-2 col-form-label">{{ __('Lokasi') }} </label>
 						<div class="col">
 							<select class="form-control selectize" id="lokasi-id-umum" name="lokasi_id_umum" placeholder="Pilih Lokasi">
@@ -300,7 +300,7 @@
             jenis_spt_umum : {required: true},
             tgl_mulai_umum: {required: true},
             tgl_akhir_umum: {required: true},
-            lokasi_id_umum : {required: true},
+            // lokasi_id_umum : {required: true},
             // info_kegiatan : {teks: true},
 
         },

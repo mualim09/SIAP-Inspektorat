@@ -575,16 +575,18 @@ class SptController extends Controller
                              
                 })*/
                 ->addColumn('action', function($col){
-                   
                     $return = "";
-                    if( !is_null($col->nomor) ){
+                    if( !is_null($col->nomor) && auth()->user()->hasAnyRole(['TU Umum', 'Super Admin'])){
                         if(!is_null($col->file) || $col->file != ""){
-                            $return .= '<a href="'.$col->file.'" data-toggle="tooltip" title="Scan SPT" class="btn btn-outline-primary btn-sm" target="__blank"><i class="ni ni-paper-diploma"></i><span>Download</span></a>';
+                            // $return .= '<a href="'.$col->file.'" data-toggle="tooltip" title="Scan SPT" class="btn btn-outline-primary btn-sm" target="__blank"><i class="ni ni-paper-diploma"></i><span>Download</span></a>';
+                            $return .= 'button dornwload';
                         }else{
-                            $return .= '<a href="#" data-toggle="tooltip" title="Download SPT" class="btn btn-outline-danger btn-sm disabled" ><i class="ni ni-paper-diploma"></i><span>Download</span></a>';
-                            if( auth()->user()->hasAnyRole(['TU Umum', 'Super Admin']) ){
-                                $return .= '<a href="#" data-toggle="tooltip" title="Upload File Scan SPT" class="btn btn-outline-primary btn-sm" onclick="uploadSpt('.$col->id.')"><i class="fa fa-file-pdf"></i><span>Upload</span></a>';
-                            }
+                            // $return .= '<a href="#" data-toggle="tooltip" title="Download SPT" class="btn btn-outline-danger btn-sm disabled" ><i class="ni ni-paper-diploma"></i><span>Download</span></a>';
+                            $return .= 'button download disable karena blm upload';
+                            // $return .= '<a href="#" data-toggle="tooltip" title="Upload File Scan SPT" class="btn btn-outline-primary btn-sm" onclick="uploadSpt('.$col->id.')"><i class="fa fa-file-pdf"></i><span>Upload</span></a>';
+                            $return .= 'button upload';
+                            // if( auth()->user()->hasAnyRole(['TU Umum', 'Super Admin']) ){
+                            // }
                         }
                     }
                     if($col->nomor == null){
@@ -955,37 +957,58 @@ class SptController extends Controller
     }
 
     public function updateNomorSpt(Request $request){
+        // dd($request);
         $id = $request->spt_id;
-        if($request->jenis_spt != 'umum'){
-            $spt = Spt::findOrFail($id);
-        }else{
-            $spt = SptUmum::findOrFail($id);
-        }
-        dd($spt);
-        die();
-        $filename = ($request->file_spt) ? 'SPT-' . $id . '-' . $request->file_spt->getClientOriginalName() : null ;
-        //dd(storage_path()."/spt");
-        if($filename !== null ){
-            if (! File::exists(public_path()."/storage/spt")) {
-                File::makeDirectory(public_path()."/storage/spt", 0755, true);
-            }
-            $request->file_spt->move(public_path()."/storage/spt" , $filename);
-        } 
-        $spt->file = ($filename !== null ) ? url('/storage/spt/'.$filename) : null;
-        $spt->nomor = $request->nomor;
-        $spt->tgl_register = date('Y-m-d H:i:s',strtotime($request->tgl_register));
 
-        //setup info_spt untuk tabel dupak
-        $info_spt = json_encode([
-                       'spt_id' => $spt->id,
-                       'nomor_spt' => $spt->nomor,
-                       'jenis_spt' => $spt->jenisSpt->name,
-                       'unsur_dupak' => $spt->jenisSpt->kategori,
-                       'tgl_mulai'=> $spt->tgl_mulai,
-                       'tgl_akhir' => $spt->tgl_akhir,
-                       'tgl_register' => $spt->tgl_register
-                  ]);
-        if($spt->save()) {
+        if($request->jenis_spt_umum != 'Spt Umum'){
+           
+            $spt = Spt::findOrFail($id);
+            $filename = ($request->file_spt) ? 'SPT-' . $id . '-' . $request->file_spt->getClientOriginalName() : null ;
+            //dd(storage_path()."/spt");
+            if($filename !== null ){
+                if (! File::exists(public_path()."/storage/spt")) {
+                    File::makeDirectory(public_path()."/storage/spt", 0755, true);
+                }
+                $request->file_spt->move(public_path()."/storage/spt" , $filename);
+            } 
+            $spt->file = ($filename !== null ) ? url('/storage/spt/'.$filename) : null;
+            $spt->nomor = $request->nomor;
+            $spt->tgl_register = date('Y-m-d H:i:s',strtotime($request->tgl_register));
+
+            //setup info_spt untuk tabel dupak
+            $info_spt = json_encode([
+                 'spt_id' => $spt->id,
+                 'nomor_spt' => $spt->nomor,
+                 'jenis_spt' => $spt->jenisSpt->name,
+                 'unsur_dupak' => $spt->jenisSpt->kategori,
+                 'tgl_mulai'=> $spt->tgl_mulai,
+                 'tgl_akhir' => $spt->tgl_akhir,
+                 'tgl_register' => $spt->tgl_register
+            ]);
+
+        }else{
+
+            $spt = SptUmum::findOrFail($id);
+            $filename = ($request->file_spt_umum) ? 'SPT-' . $id . '-' . $request->file_spt_umum->getClientOriginalName() : null ;
+            //dd(storage_path()."/spt");
+            if($filename !== null ){
+                if (! File::exists(public_path()."/storage/spt-umum")) {
+                    File::makeDirectory(public_path()."/storage/spt-umum", 0755, true);
+                }
+                $request->file_spt_umum->move(public_path()."/storage/spt-umum" , $filename);
+            } 
+            $spt->file = ($filename !== null ) ? url('/storage/spt-umum/'.$filename) : null;
+            $spt->nomor = $request->nomor;
+            $spt->tgl_register = date('Y-m-d H:i:s',strtotime($request->tgl_register));
+
+            $info_spt = null;
+            $spt->update(['nomor'=>$request->nomor_umum,'tgl_register'=>date('Y-m-d',strtotime($request->tgl_register_umum))]);
+        }
+
+        
+        // dd($spt->file);
+        // die();
+        if($request->jenis_spt_umum != 'Spt Umum' && $spt->save()) {
 
            //ambil data detail spt terkait sesuai id spt           
            $detail_spt = DetailSpt::where('spt_id', $id)->with('spt')->get();
@@ -1035,6 +1058,9 @@ class SptController extends Controller
            //buat event terkait spt untuk penerapan di kalender
            $this->createEventSpt($spt);
            return $spt;
+        }else{
+            $detail_spt = DetailSpt::where('spt_id', $id)->with('sptUmum')->get();
+            return $spt;
         }
         return false;
     }
@@ -1791,6 +1817,12 @@ class SptController extends Controller
                 break; // stop loop
             }
         }
+    }
+
+    public function getSptUmumbyId($id)
+    {
+        $data = SptUmum::findOrFail($id);
+        return $data;
     }
 
     // menampilkan data tambahan bedasarkan jenis_spt_id

@@ -197,8 +197,9 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 			Route::get('last-data-umum/{jenis_data}', 'SptController@getLastDataUmum')->name('last_data_umum');
 			Route::get('cetak-pdf-umum/{id}','SptController@sptPdfUmum')->name('spt_pdf_umum');
 
+			Route::get('get-spt-umum-byid/{id}','SptController@getSptUmumbyId')->name('get_spt_umum_byid');
 			Route::get('get-penomoran-umum','SptController@getPenomoranSptUmum')->name('penomoran_umum');
-			Route::get('get-arsio-umum','SptController@getArsipUmum')->name('spt_umum');
+			Route::get('get-arsip-umum','SptController@getArsipUmum')->name('arsip_spt_umum');
 			Route::post('update-nomor/{id}','SptController@updateNomorSpt')->name('update_nomor_spt');
 			Route::post('upload-scan/{id}','SptController@uploadScanSpt')->name('upload_scan_spt');
 			Route::post('umum/store', 'SptController@storeUmum')->name('store_spt_umum');
