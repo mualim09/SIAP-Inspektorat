@@ -165,7 +165,7 @@
         }
     });
 
-  //datatable penomoran SPT
+  // datatable penomoran SPT
      $('#spt-umum').DataTable({
           'pageLength': 50,
           dom: '<"col-md-12 row"<"col-md-6"B><"col"f>>rtlp',
@@ -187,12 +187,30 @@
             {'defaultContent' : '', 'data' : 'DT_RowIndex', 'name' : 'DT_RowIndex', 'title' : 'No', 'orderable' : false, 'searchable' : false, 'exportable' : true, 'printable' : true},
             {data: 'jenis_spt', name: 'jenis_spt', 'title': "{{ __('Jenis SPT') }}"},
             // {data: 'ringkasan', name: 'ringkasan', 'title': "{{ __('Ringkasan') }}"},
+            {data: 'ringkasan', name: 'ringkasan', 'title': "{{ __('Ringkasan') }}", 'allowHTML': true},
             // {data: 'tanggal_mulai', name: 'tanggal_mulai', 'title': "{{ __('Tanggal Mulai') }}"},
             // {data: 'tanggal_akhir', name: 'tanggal_akhir', 'title': "{{ __('Tanggal Akhir') }}"},
             // {data: 'periode', name: 'periode', 'title': "{{ __('Tanggal') }}"},
             {data: 'lama', name: 'lama', 'title': "{{ __('Lama') }}"},
             {data: 'action', name: 'action', 'orderable': false, 'searchable': false, 'title': "{{ __('') }}", 'exportable' : false,'printable': false},
           ],
+          columnDefs : [
+          {"width": '2%', "targets": 0},
+          {"width": '5%', "targets": 1},
+          {"width": '10%', "targets": 2},
+          {
+            "width": '45%', 
+            "targets": 3,
+            //"data" : null,
+            // "render": function ( data, type, row, meta ) {
+            //   tambahan = (data.tambahan.length > 0 ) ? '<br/><small class="text-muted">'+data.tambahan+'</small>' : ''
+            //   return data.jenis+tambahan;
+            // }
+          },
+          {"width": '20%', "targets": 4},
+          // {"width": '5%', "targets": 5},
+          // {"width": '15%', "targets": 6},
+        ]
       });
 
      $('#arsip-spt-umum').DataTable({
@@ -243,5 +261,36 @@
         //   {"width": '15%', "targets": 6},
         // ]
     });
+
+    //butuh revisi
+    function deleteDataSptUmum(id){
+        save_method = 'delete';
+        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        $.confirm({
+            title: "{{ __('Delete Confirmation') }}",
+            content: "{{ __('Are you sure to delete ?') }}",
+            buttons: {
+                delete: {
+                    btnClass: 'btn-danger',
+                    action: function(){                       
+                        //url = "spt/" +id;
+                        url = "{{url('admin/spt/umum/spt-umum')}}"+'/'+id;
+                        $.ajax({
+                            url: url,
+                            type: "delete",
+                            data: {_method: 'delete', '_token' : csrf_token },
+                            success: function(data){
+                                //table.ajax.reload();
+                                $('#spt-umum').DataTable().ajax.reload(null, false );
+                            }
+                        });
+                    },
+                },
+                cancel: function(){
+                    $.alert('Canceled!');
+                }
+            }
+        });
+    }
 </script>
 @endsection

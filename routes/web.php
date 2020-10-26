@@ -204,6 +204,7 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 			Route::post('upload-scan/{id}','SptController@uploadScanSpt')->name('upload_scan_spt');
 			Route::post('umum/store', 'SptController@storeUmum')->name('store_spt_umum');
 			Route::post('umum/edit/{id}', 'SptController@updateUmum')->name('update_spt_umum');
+			Route::delete('umum/spt-umum/{id}','SptController@delelteSptUmum')->name('detele_spt_umum');
 
 			Route::post('umum/session/store','SptController@storeSessionAnggotaUmum')->name('store_session_anggota_umum');
 			Route::post('umum/store-detail-anggota','SptController@storeDetailAnggotaUmum')->name('store_detail_anggota_umum');
