@@ -4,6 +4,12 @@
     flex-wrap: wrap;
     clear: both;
 }
+h3{
+	margin-bottom: .5rem; 	 
+	font-weight: 600;
+    line-height: 1.5;
+    display: block;
+}
 .col-print*{display:block;}
 .col-print-1 {width:8%;  float:left;}
 .col-print-2 {width:16%; float:left;}
@@ -45,11 +51,17 @@ table{
     border-spacing: 0;
     font-size: 11pt;
 }
-
+.print-center{
+	text-align: center;
+}
+.clearfix{clear: both;}
 /*#dupak-pengawasan, #dupak-pendidikan{
 	page-break-after: always;
 }
 */
+.page-break{
+	page-break-after: always !important;
+}
 table{
 	page-break-before: always !important;
 }
