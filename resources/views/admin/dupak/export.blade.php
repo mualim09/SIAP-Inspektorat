@@ -272,9 +272,9 @@ function add_cell_to_sheet(worksheet, address, value) {
 	    	var table = '<table class="table table-sm table-bordered ajax-table col-print-12 table-print-border" id="dupak-pengawasan-table">';
 
               table += '<tr align="center">'
-	              +'<th rowspan="2">No.</th>'
-	              +'<th colspan="2">Uraian Kegiatan</th>'
-	              +'<th rowspan="2">Tgl Jml Hari Efektif</th>'
+	              +'<th rowspan="2">No.</th>' //1
+	              +'<th colspan="2">Uraian Kegiatan</th>' //2
+	              +'<th rowspan="2" colspan="2">Tgl Jml Hari Efektif</th>' //3
 	              +'<th rowspan="2">Satuan AK</th>'
 	              +'<th rowspan="2">Jumlah Jam</th>'
 	              +'<th rowspan="2">Jumlah AK</th>'
@@ -289,7 +289,7 @@ function add_cell_to_sheet(worksheet, address, value) {
               	  +'<th>1</th>'
               	  +'<th>2</th>'
               	  +'<th>3</th>'
-              	  +'<th>4</th>'
+              	  +'<th colspan="2">4</th>'
               	  +'<th>5</th>'
               	  +'<th>6</th>'
               	  +'<th>7</th>'
@@ -301,15 +301,20 @@ function add_cell_to_sheet(worksheet, address, value) {
           var year = new Date().getFullYear();
           var n = i+1;            
               table += '<tr>'
-              +'<td>' + n + '</td>'
-              +'<td></td>'
-              +'<td>'+ item.spt.kegiatan.sebutan +'</td>'
-              +'<td>' + item.spt.periode + '<br />' + item.spt.lama + '</td>'
-              +'<td>'+ item.info_dupak.koefisien +'</td>'
-              +'<td>'+ item.info_dupak.lama_jam +'</td>' 
-              +'<td>'+ item.info_dupak.dupak +'</td>'
-              +'<td>SPT No.700/'+ item.spt.nomor +'/438.4/'+year+'</td>'
-              '</tr>';
+              +'<td rowspan="2">' + n + '</td>'
+              +'<td rowspan="2"></td>'
+              +'<td rowspan="2">'+ item.spt.kegiatan.sebutan +'</td>'
+              //+'<td>' + item.spt.periode + '<br />' + item.spt.lama + '</td>'
+              +'<td colspan="2" style="text-align: center;">' + item.spt.periode + '</td>'
+              +'<td rowspan="2">'+ item.info_dupak.koefisien +'</td>'
+              +'<td rowspan="2">'+ item.info_dupak.lama_jam +'</td>' 
+              +'<td rowspan="2">'+ item.info_dupak.dupak +'</td>'
+              +'<td rowspan="2">SPT No.700/'+ item.spt.nomor +'/438.4/'+year+'</td>'
+              +'</tr>';
+              table += '<tr>'
+              		+'<td style="width:50%">' + item.spt.lama + ' hari</td>'
+              		+'<td style="width:50%">'+ item.peran +'</td>'
+              		+'</tr>';
         });
         
         table += '</table>';
