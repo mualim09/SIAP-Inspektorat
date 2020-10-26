@@ -232,21 +232,26 @@ class SptController extends Controller
         {
             $session_anggota = Session::get('anggota_umum');
             // dd($session_anggota);
-            foreach($session_anggota as $anggota){
+            foreach($session_anggota as $k=>$anggota){
                 //cek lembur, set lembur to true jika tgl mulai spt ada di tgl akhir spt
                 $lembur = Spt::where('tgl_akhir','=', $start)->where('user_id','=', $anggota['user_id'])->join('detail_spt','detail_spt.spt_id','=','spt.id')->get();
                 $isLembur = ( $lembur->count() > 0) ? true : false;
+                if($k === 0){
+                    $peran = 'pejabat_utama';
+                }else{
+                    $peran = 'anggota';
+                }
 
                 DB::table('detail_spt')->insertGetId([
                 'spt_id' => $spt_id,
                 'user_id' => $anggota['user_id'],
-                'peran' => Common::cleanInput($anggota['peran']),
+                'peran' => $peran,
                 'lama' => $lama,
                 'info_dupak' => json_encode('null'),
                 //'dupak' => $this->hitungDupak($anggota['user_id'],$anggota['peran'],$lama,$isLembur)
             ]);
             }
-            $this->clearSessionAnggota();
+            $this->clearSessionAnggotaUmum();
         }
         return;
     }
@@ -500,7 +505,7 @@ class SptController extends Controller
                     return $col->lokasi_spt;
                 })
                 ->addColumn('ringkasan', function($col){                    
-                    $tambahan = (!is_null($col->tambahan) ) ? '<br /> <small class="text-muted"> Info tambahan : ' . Common::cutText($col->tambahan, 2, 70) . '</small>' : '';
+                    $tambahan = (!is_null($col->tambahan) ) ? '<br /> <small class="text-muted"> ' . Common::cutText($col->tambahan, 2, 70) . '</small>' : '';
                     return $col->jenisSpt->name . $tambahan ;
                     /*$tambahan = (!is_null($col->tambahan) ) ? Common::cutText($col->tambahan, 2) : '';
                     $ringkasan = [
@@ -705,17 +710,18 @@ class SptController extends Controller
         
         //untuk debug html saja (tanpa pdf)
         // return view('admin.laporan.spt_umum.sptUmum', compact('spt','detail_spt'));
-        return view('admin.laporan.spt_umum.sptUmum', compact('spt','detail_spt'));
+        // return view('admin.laporan.spt_umum.sptUmum', compact('spt','detail_spt'));
 
         // if( isset($spt->info['radio']) && $spt->info['radio'] !== null){
         //     $radio = $spt->info['radio'];
-        //     $template_name = str_replace( ' ', '-', strtolower($spt->jenisSpt->radio[$radio]) );
+            // $template_name = str_replace( ' ', '-', strtolower($spt->jenis_spt_umum) );
         // }
         //dd($template_name);
 
         //$pdf = new PDF::setOptions(['dpi' => 150, 'defaultFont' => 'arial','debugCss' => true]);
         // $pdf = PDF::loadView('admin.laporan.spt.'.$template_name, compact('spt','detail_spt'))->setPaper([0,0,583.65354,877.03937],'portrait'); //setpaper = ukuran kertas custom sesuai dokumen word dari mbak ita
-        // return @$pdf->stream('SPT-'.$id.'.pdf',array('Attachment'=>1));
+        $pdf = PDF::loadView('admin.laporan.spt_umum.PdfsptUmum', compact('spt','detail_spt'))/*->setPaper([0,0,583.65354,877.03937],'portrait')*/; //setpaper = ukuran kertas custom sesuai dokumen word dari mbak ita
+        return @$pdf->stream('SPT-'.$id.'.pdf',array('Attachment'=>1));
         //return $pdf->setWarnings(false)->save('spt-'.$id.'.pdf');
     }    
 
@@ -945,9 +951,9 @@ class SptController extends Controller
                     }
                     if($col->nomor == null){
                         $return .= $this->buildControl('showFormModalUmum', $col->id);
-                        $return .= $this->buildControl('cetakPdfUmum',$col->id);
-                        $return .= $this->buildControl('editForm',$col->id);
-                        $return .= $this->buildControl('deleteData',$col->id);
+                        // $return .= $this->buildControl('cetakPdfUmum',$col->id);
+                        // $return .= $this->buildControl('editForm',$col->id);
+                        // $return .= $this->buildControl('deleteData',$col->id);
                     }
                     return $return;
                 })
@@ -1448,7 +1454,7 @@ class SptController extends Controller
                     return $lokasi[0]->nama_lokasi;
                 })*/
                 ->addColumn('ringkasan', function($col){                    
-                    $tambahan = (!is_null($col->tambahan) ) ? '<br /> <small class="text-muted"> Info tambahan : ' . Common::cutText($col->tambahan, 2) . '</small>' : '';
+                    $tambahan = (!is_null($col->tambahan) ) ? '<br /> <small class="text-muted"> ' . Common::cutText($col->tambahan, 2) . '</small>' : '';
                     return $col->jenis_spt . $tambahan ;
                     /*$tambahan = (!is_null($col->tambahan) ) ? Common::cutText($col->tambahan, 2) : '';
                     $ringkasan = [
@@ -1653,46 +1659,11 @@ class SptController extends Controller
           
     }
 
-    // public function storeSessionKepadaUmum(Request $request)
-    // {
-    //     // dd($request->session()->all());
-    //     // die();
-    //     $uid = $request->user_id;
-    //     $tgl_mulai = date($request->tgl_mulai);
-    //     $tgl_akhir = date($request->tgl_akhir);
-        
-    //     if(Session::has('kepada_umum')){
-    //         //'Penanggungjawab', 'Pembantu Penanggungjawab', 'Pengendali Mutu', 'Pengendali Teknis', 'Ketua Tim', 'Anggota Tim'
-    //         $listAnggota = Session::get('kepada_umum');
-
-    //         $anggota_uid = [];
-    //         foreach( $listAnggota as $a){
-    //             array_push($anggota_uid, $a['user_id']);
-    //         }
-            
-    //         if(in_array($uid,$anggota_uid)){
-    //             return "User sudah ada dalam list anggota";
-    //         }else{
-    //             $session = Session::push('kepada_umum', [
-    //                 'user_id'    => $request->user_id,
-    //                 'peran'   => 'Ditunjuk'
-    //             ]);
-    //             return "Session anggota updated";
-    //         }
-            
-    //     }else{
-    //         $session = Session::push('kepada_umum', [
-    //             'user_id'    => $request->user_id,
-    //             'peran'   => 'Ditunjuk'
-    //         ]);
-    //         return "Session anggota created";
-    //     }
-    // }
-
     public function storeSessionAnggotaUmum(Request $request)
     {
         // dd($request->session()->all());
         // die();
+
         $uid = $request->user_id;
         $tgl_mulai = date($request->tgl_mulai);
         $tgl_akhir = date($request->tgl_akhir);
@@ -1710,16 +1681,16 @@ class SptController extends Controller
                 return "User sudah ada dalam list anggota";
             }else{
                 $session = Session::push('anggota_umum', [
-                    'user_id'    => $request->user_id,
-                    'peran'   => 'Pegawai'
+                    'user_id'    => $request->user_id
+                    // 'peran'   => 'Pegawai'
                 ]);
                 return "Session anggota updated";
             }
             
         }else{
             $session = Session::push('anggota_umum', [
-                'user_id'    => $request->user_id,
-                'peran'   => 'Pegawai'
+                'user_id'    => $request->user_id
+                // 'peran'   => 'Pegawai'
             ]);
             return "Session anggota created";
         }
@@ -1776,6 +1747,11 @@ class SptController extends Controller
 
     public function clearSessionAnggota(){
         Session::forget('anggota');
+        return "Session Anggota deleted";
+    }
+
+    public function clearSessionAnggotaUmum(){
+        Session::forget('anggota_umum');
         return "Session Anggota deleted";
     }
 

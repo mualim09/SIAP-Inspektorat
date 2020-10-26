@@ -45,6 +45,14 @@
 			            </div>
 			        </div>
 
+			        <!-- <div class="form-group row" id="input-anggota-umum" >
+					    <div class="col-md-2 col-form-label">{{ __('Di Tugaskan') }} </div>
+						<div class="col">
+							<table id="list-anggota-umum-session" class="col"></table>
+							<button id="add-anggota-umum" class="btn btn-outline-primary btn-sm" type="button" data-toggle="modal" data-target="#anggotaSptUmumModal"> <i class="fa fa-plus"></i> <span>Tambah Anggota</span></button>
+						</div>
+					</div> -->
+
 			        <div class="form-group row" id="input-lokasi-container" style="display: none;">
 					    <label for="lokasi" class="col-md-2 col-form-label">{{ __('Lokasi') }} </label>
 						<div class="col">
@@ -289,7 +297,7 @@
 			        {'defaultContent' : '', 'data' : 'DT_RowIndex', 'name' : 'DT_RowIndex', 'title' : 'No', 'orderable' : false, 'searchable' : false, 'exportable' : true, 'printable' : true, width: '10%'
 			        },
 			        {data: 'nama_anggota', name: 'nama_anggota', 'title': "{{ __('Nama') }}", width: '40%'},
-			        {data: 'peran', name: 'peran', 'title': "{{ __('Peran') }}", width: '40%'},
+			        // {data: 'peran', name: 'peran', 'title': "{{ __('Peran') }}", width: '40%'},
 			        {data: 'action', name: 'action', 'orderable': false, 'searchable': false, 'title': "{{ __('Action') }}", 'exportable' : false,'printable': false, width: '10%'},
 			    ],
 			});
