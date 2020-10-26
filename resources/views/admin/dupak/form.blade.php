@@ -113,21 +113,24 @@
                             </table> -->
                         </div>
                       </div>
-                      <pre class="page-break"></pre>
+                      <div class="clearfix page-break"></div>
+                      
                       <div id="dupak-pendidikan" class="tab-pane fade" role="tabpanel" style="margin-bottom: 30px; page-break-after: always;">
-                        <div class="table-responsive ">
-                            <table class="table table-sm table-bordered ajax-table col-print-12" id="dupak-pendidikan-table">
-                            </table>
+                        <div class="table-responsive " id="dupak-pendidikan-wrapper">
+                            <!-- <table class="table table-sm table-bordered ajax-table col-print-12" id="dupak-pendidikan-table">
+                            </table> -->
                         </div>
                       </div>
-                      <pre class="page-break"></pre>
+                      <div class="clearfix page-break"></div>
+                      
                       <div id="dupak-penunjang" class="tab-pane fade" role="tabpanel" style="margin-bottom: 30px; page-break-after: always;">
-                        <div class="table-responsive ">
-                            <table class="table table-sm table-bordered ajax-table col-print-12" id="dupak-penunjang-table">
-                            </table>
+                        <div class="table-responsive " id="dupak-penunjang-wrapper">
+                            <!-- <table class="table table-sm table-bordered ajax-table col-print-12" id="dupak-penunjang-table">
+                            </table> -->
                         </div>
                       </div>
-                      <pre class="page-break"></pre>
+                      <div class="clearfix page-break"></div>
+                      
                     </div>
 
                 </div>
