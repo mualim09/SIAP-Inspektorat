@@ -45,11 +45,13 @@ h3{
 table{
 	border-collapse: collapse;
 }
-
+table > tr > td, table > tr > th{
+	padding-left: 5px;
+}
 .table-print-border th, .table-print-border td{
 	border: 1px solid #000;	
     border-spacing: 0;
-    font-size: 11pt;
+    font-size: 11pt;    
 }
 .print-center{
 	text-align: center;
@@ -62,6 +64,6 @@ table{
 .page-break{
 	page-break-after: always !important;
 }
-table{
+/*table{
 	page-break-before: always !important;
-}
+}*/
