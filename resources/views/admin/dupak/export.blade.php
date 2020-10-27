@@ -72,27 +72,7 @@ function add_cell_to_sheet(worksheet, address, value) {
     type: 'GET',
     data: {user_id: user_id, semester: semester, tahun: tahun},
     success: function (response) {
-      //console.log(response[0].irban_kepala);
-      var irban_kepala_name = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.full_name_gelar ;
-      var irban_kepala_nip = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.nip;
-      var irban_kepala_pangkat = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.pangkat;
-      var irban_kepala_jabatan = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.jabatan;
-      /*  var trHTML = '<tr style="background:#fff" class="col-print-header"><td colspan="5" align="center">SURAT PERNYATAAN</td></tr>'
-            +'<tr style="background:#fff;" class="col-print-header"><td colspan="5" align="center">MELAKUKAN KEGIATAN PENDIDIKAN SEKOLAH</td></tr>'
-            +'<tr style="background:#fff" class="col-print-header"><td colspan="5">Yang bertandatangan dibawah ini :</td></tr>' //typeof yourVariable === 'object' && yourVariable !== null
-            +'<tr style="background:#fff" class="col-print-header"><td colspan="2">Nama</td><td colspan="3"> : '+ irban_kepala_name +'</td></tr>'
-            +'<tr style="background:#fff" class="col-print-header"><td colspan="2">NIP</td><td colspan="3"> : '+ irban_kepala_nip +'</td></tr>'
-            +'<tr style="background:#fff" class="col-print-header"><td colspan="2">Pangkat / golongan ruang</td><td colspan="3"> : '+ irban_kepala_pangkat +'</td></tr>'
-            +'<tr style="background:#fff" class="col-print-header"><td colspan="2">J a b a t a n</td><td colspan="3"> : '+irban_kepala_jabatan+'</td></tr>'
-            +'<tr style="background:#fff" class="col-print-header"><td colspan="2">Unit Kerja</td><td colspan="3"> : Inspektorat Kabupaten Sidoarjo</td></tr>'
-            +'<tr style="background:#fff" class="col-print-header"></tr>'
-            +'<tr style="background:#fff" class="col-print-header"><td colspan="5">Menyatakan Bahwa :</td></tr>'
-            +'<tr style="background:#fff" class="col-print-header"><td colspan="2">Nama</td><td colspan="3"> : '+response[0].user_dupak.full_name_gelar+'</td></tr>'
-            +'<tr style="background:#fff" class="col-print-header"><td colspan="2">NIP</td><td colspan="3"> : '+response[0].user_dupak.nip+'</td></tr>'
-            +'<tr style="background:#fff" class="col-print-header"><td colspan="2">Pangkat / golongan ruang</td><td colspan="3"> : '+response[0].user_dupak.pangkat+'</td></tr>'
-            +'<tr style="background:#fff" class="col-print-header"><td colspan="2">J a b a t a n</td><td colspan="3"> : '+response[0].user_dupak.jabatan+'</td></tr>'
-            +'<tr style="background:#fff" class="col-print-header"><td colspan="2">Unit Kerja</td><td colspan="3"> : Inspektorat Kabupaten Sidoarjo</td></tr>'
-            +'<tr style="background:#fff" class="col-print-header"><td colspan="5"></td></tr>';*/
+      
       	var irban_kepala_name = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.full_name_gelar ;
         var irban_kepala_nip = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.nip;
         var irban_kepala_pangkat = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.pangkat;
@@ -157,7 +137,6 @@ function add_cell_to_sheet(worksheet, address, value) {
               +'</tr>';
               //response[0].user_dupak.pendidikan.tingkat
         $.each(response, function (i, item) {
-
           var n = i+1;
             table += '<tr>'
               +'<td>' + n + '</td>'
@@ -174,7 +153,7 @@ function add_cell_to_sheet(worksheet, address, value) {
           +'</tr>';
 
         //close table tag
-        table += '</table>'
+        table += '</table>';
 
         var footer = '<div class="row"><div class="col-md-12 col-print-12">Demikian pernyataan ini dibuat untuk dapat dipergunakan sebagaimana mestinya.</div></div>'
         		+'<div class="h-20"></div>'
@@ -218,6 +197,7 @@ function add_cell_to_sheet(worksheet, address, value) {
     type: 'GET',
     data: {user_id: user_id, semester: semester, tahun: tahun},
     success: function (response) {
+      console.log(response);
         var irban_kepala_name = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.full_name_gelar ;
         var irban_kepala_nip = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.nip;
         var irban_kepala_pangkat = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.pangkat;

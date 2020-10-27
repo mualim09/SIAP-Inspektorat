@@ -210,7 +210,7 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 			Route::post('umum/store-detail-anggota','SptController@storeDetailAnggotaUmum')->name('store_detail_anggota_umum');
 			Route::get('get-anggota/umum/{id}','SptController@getAnggotaUmum')->name('get_anggota_umum_spt');
 			Route::delete('session/anggota/umum/delete/{user_id}', 'SptController@deleteSessionAnggotaUmumItem')->name('delete_session_anggota_umum_by_id');
-			Route::delete('delete-anggota-umum/{id}','SptController@deleteAnggotaUmum')->name('delete_anggota_umum');
+			Route::delete('delete-anggota-umum/{id}','SptController@deleteAnggotaUmum')->name('delete_anggota_umum');			
 
 		});
 	});
@@ -314,6 +314,8 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
     Route::group(['prefix' => 'users'], function(){
     	Route::get('getdata','UserController@getData');
     	Route::get('search-user', 'UserController@search')->name('search_user');
+    	//satgas ppm (penunjukan pejabat)
+		Route::get('penunjukan/pejabat', 'PejabatController@index')->name('satgas_ppm');
     });
 
     Route::group(['prefix' => 'roles'], function(){

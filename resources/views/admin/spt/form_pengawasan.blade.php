@@ -212,6 +212,7 @@
 		                var user_id = $('#session-anggota option:selected').val();
 		                var peran = $('#session-peran option:selected').val();
 		                var spt_id = $('#spt-form').find('#id').val();
+		                alert(spt_id)
 		                url = (spt_id !== '') ? "{{ route('store_detail_anggota') }}" : "{{ route('store_session_anggota') }}" ;
 		                if(tgl_mulai == '' || tgl_akhir==''){
 		                	$.alert('Isikan tanggal mulai dan tanggal akhir terlebih dahulu.');
