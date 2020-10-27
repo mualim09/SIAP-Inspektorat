@@ -219,6 +219,7 @@ class SptController extends Controller
                 'spt_id' => $spt_id,
                 'user_id' => $anggota['user_id'],
                 'peran' => $peran,
+                'jenis_laporan' => $spt->jenis_spt_umum,
                 'lama' => $lama,
                 'info_dupak' => json_encode('null'),
                 //'dupak' => $this->hitungDupak($anggota['user_id'],$anggota['peran'],$lama,$isLembur)
@@ -536,6 +537,9 @@ class SptController extends Controller
         if($user->hasPermissionTo('Edit SPT') && $method == 'editForm'){
             $control = '<a href="#" data="'.$id.'" onclick="editForm('.$id.')" data-toggle="tooltip" title="Edit SPT" class="btn btn-outline-primary btn-sm edit-spt"><i class="fa fa-edit"></i></a>';
         }
+        if($user->hasPermissionTo('Edit SPT') && $method == 'editFormUmum'){
+            $control = '<a href="#" data="'.$id.'" onclick="editFormUmum('.$id.')" data-toggle="tooltip" title="Edit SPT" class="btn btn-outline-primary btn-sm edit-spt"><i class="fa fa-edit"></i></a>';
+        }
         if($user->hasPermissionTo('Delete SPT') && $method == 'deleteData'){
             $control = '<a href="javascript:void(0);" onclick="deleteData('. $id .')" data-toggle="tooltip" title="Hapus SPT" class="btn btn-outline-danger btn-sm"><i class="fa fa-times"></i></a>';
         }
@@ -626,7 +630,7 @@ class SptController extends Controller
     public function sptPdfUmum($id){        
         $spt = SptUmum::findOrFail($id);
         // $sort_detail = implode(",",$this->list_peran);
-        $detail_spt = DetailSpt::where('spt_id','=',$id)->with(['spt','user'])->get();
+        $detail_spt = DetailSpt::where('spt_id','=',$id)->with(['spt','user','sptUmum'])->get();
         //     ->orderByRaw(DB::raw("FIELD(peran,'Penanggungjawab', 'Pembantu Penanggungjawab', 'Pengendali Mutu', 'Pengendali Teknis', 'Ketua Tim', 'Anggota Tim')"))->get();
         // $template_name = 'pdfsplit'; // default template name
         
@@ -836,7 +840,7 @@ class SptController extends Controller
                     if($col->nomor == null){
                         $return .= $this->buildControl('showFormModalUmum', $col->id);
                         $return .= $this->buildControl('cetakPdfUmum',$col->id);
-                        // $return .= $this->buildControl('editForm',$col->id);
+                        // $return .= $this->buildControl('editFormUmum',$col->id); //belum bisa
                         $return .= $this->buildControl('deleteDataSptUmum',$col->id);
                     }
                     return $return;
@@ -848,7 +852,14 @@ class SptController extends Controller
 
     public function delelteSptUmum($id)
     {
-        dd($id);
+        // delelte 2 tabel sptumum & detail spt(yg berkaitan bedasarkan jenis spt yg diinputkan)
+        if(auth()->user()->hasPermissionTo('Delete SPT')){
+            $spt = SptUmum::findOrFail($id);
+            $delete = DetailSpt::where('spt_id',$id)->where('jenis_laporan',$spt->jenis_spt_umum)->delete();
+            // dd($delete);
+            SptUmum::destroy($id);
+            return 'SPT deleted!';
+        }
     }
 
     public function updateNomorSpt(Request $request){

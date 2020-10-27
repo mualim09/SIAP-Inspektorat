@@ -292,5 +292,50 @@
             }
         });
     }
+
+    function editFormUmum(id){        
+        save_method = 'edit';
+
+        //avoid false ajax url. read url first, then add it to te prefixed url
+        var url = (window.location.pathname == '/admin') ? 'admin/spt/get-spt-umum-byid/'+id : 'spt/get-spt-umum-byid/' +id;
+        // url = url_prefix+id+"/edit";
+        
+        $.ajax({
+            url: url,
+            type: "GET",
+            dataType: "JSON",
+            success: function(data){                
+                // $('#spt-form')[0].reset();
+                $('#id-jenis-spt').val(data.jenis_spt_umum);
+
+                //variabel jenis spt               
+                // lokasi = (data.jenis_spt.input_lokasi == true) ? data.lokasi_id : '';
+                // tambahan = (data.jenis_spt.input_tambahan == true) ? data.tambahan : '';                
+                // input_lokasi = data.jenis_spt.input.lokasi;
+                // input_tambahan = data.jenis_spt.input.tambahan;
+                // cek_radio = data.jenis_spt.cek_radio;
+                // jenis_spt_id = data.jenis_spt_id;
+
+                $('#id').val(data.id);
+                $('#info-dasar-umum').val(data.info_dasar_umum);
+                $('#info-untuk-kegiatan-umum').val(data.info_untuk_umum);
+                //$('#jenis-spt-'+data.jenis_spt_id).prop('selected','selected');
+                //$('#jenis-spt')[0].selectize.setValue(data.jenis_spt_id);
+                // if(data.info_lanjutan == 1){
+                //     $('#info-lanjutan').prop('checked',true);
+                // }else{
+                //     $('#info-lanjutan').prop('checked',false);
+                // }
+                $('#tgl-mulai-umum').val(data.tgl_mulai);
+                $('#tgl-akhir-umum').val(data.tgl_akhir);
+                $('#lama-spt-umum').val(data.lama);
+                // $('#lokasi').val(data.lokasi);
+                $('#formSptUmum').modal('show');
+            },
+            error: function(err){
+                console.log(err);
+            }
+        });
+    }
 </script>
 @endsection
