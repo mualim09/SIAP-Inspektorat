@@ -30,11 +30,11 @@
                             @endforeach
                         </ul>
                     </div>
-                    <div class="col-md-4">
+                    <!-- <div class="col-md-4">
                         <h3>{{ __('Tambah Kode Temuan')}}</h3>
-                        <!-- form kode temuan -->
-                        @include('admin.kode.form')
-                    </div>
+                        
+                        @ include('admin.kode.form')
+                    </div> -->
                     
                     
                 </div>

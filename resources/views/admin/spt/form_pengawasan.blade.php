@@ -152,10 +152,10 @@
 		        	<span class="btn-inner--text">{{ __('Close') }}</span>
 	        	</button>
 			</div>
-			<div class="modal-body">
+			<div class="modal-body" id="modal-body-anggota">
 				@if(Auth::user()->can(['Create SPT', 'Edit SPT']))
 				<form  id="new-anggota-spt-form" class="ajax-form needs-validation" novalidate>
-					<input type="hidden" name="spt_id" id="spt-id">
+					<input type="hidden" name="spt_id" id="spt-id-anggota">
 			        @csrf
 			        <div class="form-group row">
 			        	<label for="anggota" class="col-md-2 col-form-label">{{ __('Anggota') }} </label>
@@ -211,9 +211,9 @@
 		            	var tgl_akhir = $('#spt-form').find('#tgl-akhir').val();
 		                var user_id = $('#session-anggota option:selected').val();
 		                var peran = $('#session-peran option:selected').val();
-		                var spt_id = $('#spt-form').find('#id').val();
-		                alert(spt_id)
-		                url = (spt_id !== '') ? "{{ route('store_detail_anggota') }}" : "{{ route('store_session_anggota') }}" ;
+		                var id_spt = $('#spt-id-anggota').val();
+		                //alert(id_spt)
+		                url = (id_spt !== '') ? "{{ route('store_detail_anggota') }}" : "{{ route('store_session_anggota') }}" ;
 		                if(tgl_mulai == '' || tgl_akhir==''){
 		                	$.alert('Isikan tanggal mulai dan tanggal akhir terlebih dahulu.');
 		                }else{
@@ -221,7 +221,7 @@
 		                	$.ajax({
 			                    url: url,
 			                    type: 'post',
-			                    data: {user_id:user_id, peran:peran, spt_id:spt_id, tgl_mulai: tgl_mulai, tgl_akhir:tgl_akhir},
+			                    data: {user_id:user_id, peran:peran, spt_id:id_spt, tgl_mulai: tgl_mulai, tgl_akhir:tgl_akhir},
 			                    success: function(data){		                        		                        
 			                        $('#list-anggota-session').DataTable().ajax.reload();
 			                        clearOptions();

@@ -45,6 +45,7 @@
     //butuh revisi
     function editForm(id){        
         save_method = 'edit';
+        //spt_id = id;
 
         //avoid false ajax url. read url first, then add it to te prefixed url
         var url_prefix = (window.location.pathname == '/admin') ? 'admin/spt/' : 'spt/';
@@ -80,6 +81,7 @@
                 $('#lama').val(data.lama);
                 $('#lokasi').val(data.lokasi);
                 $('#formModal').modal('show');
+                $("#modal-body-anggota #spt-id-anggota").val( id );
             },
             error: function(err){
                 console.log(err);

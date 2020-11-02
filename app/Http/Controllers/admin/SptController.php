@@ -258,6 +258,32 @@ class SptController extends Controller
         return;
     }
 
+    public function storeDetailAnggota(Request $request){
+        $cek = DetailSpt::where('spt_id', $request->spt_id)->where('user_id', $request->user_id)->count();
+        if($cek>0):
+            return 'User sudah ada dalam list anggota';
+        else:
+            $spt = Spt::find($request->spt_id);
+            $unsur_dupak = $spt->jenisSpt->kategori;
+            $start =$spt->tgl_mulai;
+            $end = $spt->tgl_akhir;
+            $lama = $spt->lama;
+            $counter = array();
+            $store = DB::table('detail_spt')->insertGetId([
+                    'spt_id' => $request->spt_id,
+                    'user_id' => $request->user_id,
+                    'peran' => Common::cleanInput($request->peran),
+                    'unsur_dupak' => $unsur_dupak,
+                    //'dupak' => $this->hitungDupak($anggota['user_id'],$anggota['peran'],$lama,$isLembur)
+                ]);
+            if($store){
+                return 'Anggota SPT berhasil ditambahkan';
+            }else{
+                return 'Gagal menambahkan anggota SPT!';
+            }
+        endif;
+    }
+
     public function updateUmum(Request $request, $id){
         //masukkan kode untuk update SPT bagian umum
     }
@@ -1713,5 +1739,6 @@ class SptController extends Controller
         }
         return;        
     }
+
 
 }

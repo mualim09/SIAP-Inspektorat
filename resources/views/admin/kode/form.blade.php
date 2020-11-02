@@ -58,6 +58,95 @@
         </div>
     </div>
 </form>
+<script type="text/javascript">
+    /*ajax selectize to get kelompok and sub kelompok*/
+  var xhr;
+  var select_kelompok, $select_kelompok;
+  var select_sub, $select_sub;
+  
+  $select_kelompok = $('#kelompok').selectize({
+    onChange: function(value) {
+        
+        if (!value.length) return;
+        select_sub.disable();
+        select_sub.clear();
+        select_sub.clearOptions();
+        select_sub.load(function(callback) {
+            xhr && xhr.abort();
+            xhr = $.ajax({
+                url: '{{ url("/admin/kode/get-sub-kelompok") }}' + '/' + value ,
+                success: function(results) {
+                    select_sub.enable();
+                    console.log(results);
+                    callback(results);
+                },
+                error: function() {
+                    callback();
+                }
+            })
+        });
+    }
+});
+
+  $select_sub = $('#sub-kelompok').selectize({
+    
+    valueField: 'kode',
+    labelField: ['select_deskripsi'],
+    searchField: ['deskripsi'],
+    allowEmptyOption: true
+});
+
+
+select_sub  = $select_sub[0].selectize;
+select_kelompok = $select_kelompok[0].selectize;
+
+select_sub.disable();
+
+/*end selectize*/
+
+
+/*Ajax form submit kode temuan*/
+$.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $("#form-kode-temuan").validate({
+        rules: {
+            kode : {required: true, minlength: 1, maxlength: 5},
+            deskripsi: {required: true, minlength: 10}
+        },
+
+        submitHandler: function(form){
+            
+            var id = $('#id').val();            
+            save_method = (id == '') ? 'new' : save_method;
+            base_url = "{{ url('admin/kode') }}";
+            url =  (save_method == 'new') ? base_url : base_url + '/' + id ;
+            type = (save_method == 'new') ? "POST" : "PUT";
+            
+
+            $.ajax({
+                url: url,
+                type: type,
+                data: $('#form-kode-temuan').serialize(),
+                dataType: 'text',
+
+                /*data: $('#spt-form').serialize(),*/
+                success: function(data){                                        
+                    $("#form-kode-temuan")[0].reset();
+                   // console.log('success:', data);                    
+                    select_sub.clear();
+                    select_kelompok.clear();
+                },
+                error: function(data){
+                    console.log('Error:', data);
+                }
+            });
+        }
+    });
+</script>
 @push('css')
    <link href="{{ asset('assets/vendor/selectize/css/selectize.bootstrap3.css') }}" rel="stylesheet" />
 @endpush

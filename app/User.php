@@ -112,4 +112,9 @@ class User extends Authenticatable implements HasMedia
         //return $query->whereHas('role','Super Admin'); // untested hiding super admin role
     }
 
+    //relasi ke pejabat
+    public function pejabat(){
+        return $this->hasOne('App\models\Pejabat');
+    }
+
 }
