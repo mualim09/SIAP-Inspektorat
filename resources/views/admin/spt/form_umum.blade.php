@@ -13,28 +13,32 @@
 	    	<div class="modal-body">
 	    		<form id="spt-umum-form">
 	    			<input type="hidden" name="id" id="id">
-	    			<input type="hidden" name="jenis_spt_id" id="jenis-spt-id" value="Spt Umum">
+	    			<!-- <input type="hidden" name="jenis_spt_id" id="jenis-spt-id" value="Spt Umum"> -->
 					@csrf
 
 					<!-- jenis spt bag umum -->
-					<!-- <div class="form-group row">
+					<div class="form-group row">
 						<label for="dasar" class="col-md-2 col-form-label ">{{ __('Jenis Spt') }}</label>
 						<div class="col-md-10">
-							<div class="custom-control custom-radio custom-control-inline">
-								<input type="radio" class="custom-control-input" id="jenis-spt-umum-SPT1" name="jenis_laporan" value="SPT1" onclick="showresponddiv(this.id)">
+							<!-- <div class="custom-control custom-radio custom-control-inline">
+								<input type="radio" class="custom-control-input" id="jenis-spt-umum-SPT1" name="jenis_spt_id" value="SPT Umum">
 		                        <label class="custom-control-label" for="jenis-spt-umum-SPT1">SPT Umum</label>
+							</div> -->
+							<div class="custom-control custom-radio custom-control-inline">
+								<input type="radio" class="custom-control-input" id="jenis-spt-umum-SPT2" name="jenis_spt_id" value="SPT Pengembangan Profesi">
+		                        <label class="custom-control-label" for="jenis-spt-umum-SPT2">SPT Pengembangan Profesi</label>
 							</div>
 							<div class="custom-control custom-radio custom-control-inline">
-								<input type="radio" class="custom-control-input" id="jenis-spt-umum-SPT2" name="jenis_laporan" value="SPT2" onclick="showresponddiv(this.id)">
-		                        <label class="custom-control-label" for="jenis-spt-umum-SPT2">SPT Workshop</label>
-							</div>
-							<div class="custom-control custom-radio custom-control-inline">
-								<input type="radio" class="custom-control-input" id="jenis-spt-umum-SPT3" name="jenis_laporan" value="SPT3" onclick="showresponddiv(this.id)">
-		                    	<label class="custom-control-label" for="jenis-spt-umum-SPT3">SPT Diklat</label>
+								<input type="radio" class="custom-control-input" id="jenis-spt-umum-SPT3" name="jenis_spt_id" value="SPT Penunjang">
+		                    	<label class="custom-control-label" for="jenis-spt-umum-SPT3">SPT Penunjang</label>
+		                	</div>
+		                	<div class="custom-control custom-radio custom-control-inline">
+								<input type="radio" class="custom-control-input" id="jenis-spt-umum-SPT4" name="jenis_spt_id" value="SPT Diklat">
+		                    	<label class="custom-control-label" for="jenis-spt-umum-SPT4">SPT Diklat</label>
 		                	</div>
 		                	<small id="infoDasarHelp" class="form-text text-muted">Silahkan pilih Jenis Spt yang akan dibuat.</small>
 		                </div>
-	                </div> -->
+	                </div>
 
 					<!-- dasar spt bag umum -->
 					<div class="form-group row">
@@ -164,7 +168,7 @@
 			        @csrf
 			        <div class="form-group row">
 			        	<label for="anggota" class="col-md-2 col-form-label">{{ __('Anggota') }} </label>
-			        	<div class="col-md-8">
+			        	<div class="col-md-4">
 			        		<select class="form-control selectize" id="session-anggota-umum" name="session_anggota_umum">
 			        			<option value="">{{ __('Anggota SPT') }}</option>
 			        			@foreach($listAnggota as $anggota)
@@ -172,6 +176,19 @@
 			        			@endforeach
 			        		</select>
 			        	</div>
+			        	<div class="col-md-3">
+			        		<div class="md-form input-group mb-3">
+						      <input type="text" class="form-control" name="lama_jam" id="lama-jam-id" autocomplete="off" placeholder="{{ __('Lama jam')}}">
+						      <div class="input-group-prepend">
+						        <span class="input-group-text md-addon">/jam</span>
+						      </div>
+						    </div>
+			        		<!-- <input type="text" class="form-control" name="lama_jam" id="lama-jam-id" autocomplete="off" placeholder="{{ __('Lama jam')}}"> -->
+			        	</div>
+			        	<div class="col-md-3">
+			        		<input type="text" class="form-control" name="nilai_dupak" id="dupak-id" autocomplete="off" placeholder="{{ __('Dupak')}}">
+			        	</div>
+			        <small class="form-text text-muted">Inputkan Nama, Nilai Dupak, dan total jam 1(satu) per 1(satu) dari tiap - tiap anggota yang dipilih!</small>
 			        </div>
 			        
 			        <div class="form-group">
@@ -203,6 +220,8 @@
 		            submitHandler: function(form){
 		            	var tgl_mulai = $('#spt-umum-form').find('#tgl-mulai-umum').val();
 		            	var tgl_akhir = $('#spt-umum-form').find('#tgl-akhir-umum').val();
+		            	var lama_jam = $('#new-anggota-spt-form-umum').find('#lama-jam-id').val();
+		            	var dupak_anggota = $('#new-anggota-spt-form-umum').find('#dupak-id').val();
 		                var user_id = $('#session-anggota-umum option:selected').val();
 		                var spt_id = $('#spt-umum-form').find('#id').val();
 
@@ -214,9 +233,11 @@
 		                	$.ajax({
 			                    url: url,
 			                    type: 'post',
-			                    data: {user_id:user_id, spt_id:spt_id, tgl_mulai: tgl_mulai, tgl_akhir:tgl_akhir},
+			                    data: {user_id:user_id, spt_id:spt_id, tgl_mulai: tgl_mulai, tgl_akhir:tgl_akhir, lama_jam:lama_jam, dupak_anggota:dupak_anggota},
 			                    success: function(data){		                        		                        
 			                        $('#list-anggota-umum-session').DataTable().ajax.reload();
+			                        $("#lama-jam-id").val('');
+			                        $("#dupak-id").val('');
 			                        clearOptionsUmum();
 			                    },
 			                    error: function(error){
@@ -236,6 +257,13 @@
 
 <!-- end form pengajuan spt umum -->
 <script type="text/javascript">
+
+		// var current = null;
+	 //    function showresponddiv(messagedivid){
+	 //        var id = messagedivid.replace("jenis-spt-umum-", ""),
+	 //            div = document.getElementById(id);
+	 //        // hide previous one
+	 //    }
 
 		var select_lokasi = $('#lokasi-id-umum').selectize({	   
 		   /*sortField: 'text',*/
@@ -307,7 +335,8 @@
         },
 
         submitHandler: function(form){
-            var jenis_spt_umum = $('#jenis-spt-id').val();
+            var jenis_spt_umum = $("input[name='jenis_spt_id']:checked").val();/*$('#jenis-spt-id').val();*/
+            // alert(jenis_spt_umum);
             var tgl_mulai_umum = $("#tgl-mulai-umum").val();
             var tgl_akhir_umum = $("#tgl-akhir-umum").val();
             var lama_umum = $('#lama-spt-umum').val();
@@ -337,6 +366,7 @@
                     //table.ajax.reload();
                     $('#spt-umum').DataTable().ajax.reload(null, false );
                     clearOptionsUmum();
+                    $('#list-anggota-umum-session').DataTable().clear().destroy();
                 },
                 error: function(error){
                     console.log(error);
@@ -392,6 +422,8 @@
 		// $('#input-tambahan-container').hide();
 		// $('#input-lokasi-container').hide();
 
+	});
+
 		function clearOptionsUmum(){            
 	        var optPeran = $('#session-anggota-umum').selectize();
 	        var optAnggota = $('#session-anggota-umum').selectize();            
@@ -400,6 +432,5 @@
 	        controlPeran.clear();
 	        controlAnggota.clear();
 	    }
-	});
 	
 </script>

@@ -91,6 +91,45 @@
   </div>
 </div>
 
+<div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="formPenomoranModal" aria-hidden="true" id="modalFormScanUploadSptUmum">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="formPenomoranModal">Upload Scan SPT</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="ajax-form" id="form-scan-spt-umum" enctype="multipart/form-data">
+            <input type="hidden" name="spt_id" id="scan-spt-id-umum">
+            <!-- <input type="hidden" name="jenis_spt_umum" id="jenis-spt-umum"> -->
+            <div class="row">
+              <div class="col-md-3 text-md-right">Scan</div>
+              <div class="custom-file col-md-8">
+                <input type="file" class="custom-file-input" id="customFileScan" name="file_spt_umum" accept=".pdf">
+                <label class="custom-file-label" for="customFile">Pilih Scan File SPT</label>                    
+              </div>
+              <div class="offset-md-3">File format pdf, max 2MB</div>
+              
+            </div>
+            <script>
+              // Add the following code if you want the name of the file appear on select
+              $(".custom-file-input").on("change", function() {
+                var fileName = $(this).val().split("\\").pop();
+                $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+              });
+            </script>
+            
+            
+            
+            <button type="submit" class="btn btn-primary col"><i class="fa fa-save"></i></button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 @endsection
 
 
@@ -110,6 +149,11 @@
               console.log(error);
           }
       });
+  }
+
+  function PopUpFunctionUploadScan(id) {
+      $('#scan-spt-id-umum').val(id);
+      $('#modalFormScanUploadSptUmum').modal('show');
   }
 
   $(document).on('show.bs.modal','#modalFormPenomoranSptUmum', function () { //fungsi ketika modal hide mendestroy data table yg di dlm modal
@@ -165,6 +209,39 @@
         }
     });
 
+    $("#form-scan-spt-umum").validate({
+        rules: {
+            // nomor_umum : {required: true},
+            // tgl_register_umum : {required: true},
+            // file_spt_umum : {required: true}
+        },
+        submitHandler: function(form){
+            var id = $('#scan-spt-id-umum').val();
+            //url ='spt/update-nomor/' + id ;
+            url = (window.location.pathname == '/admin') ? 'admin/spt/upload-scan-umum/'+id : 'spt/upload-scan-umum/'+id;
+            type = "POST";
+            var formData = new FormData($(form)[0]);
+            $.ajax({
+                url: url,
+                type: type,
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(data){
+                  console.log('success:',data);
+                  $('#modalFormScanUploadSptUmum').modal('hide');
+                  // $('#spt-umum').DataTable().ajax.reload();
+                  $('#arsip-spt-umum').DataTable().ajax.reload();
+                  $('#form-scan-spt-umum')[0].reset();                      
+                },
+                error: function(request, status, error){                      
+                  console.log(request);
+                }
+            });
+            return false;
+        }
+    });
+
   // datatable penomoran SPT
      $('#spt-umum').DataTable({
           'pageLength': 50,
@@ -190,27 +267,10 @@
             {data: 'ringkasan', name: 'ringkasan', 'title': "{{ __('Ringkasan') }}", 'allowHTML': true},
             // {data: 'tanggal_mulai', name: 'tanggal_mulai', 'title': "{{ __('Tanggal Mulai') }}"},
             // {data: 'tanggal_akhir', name: 'tanggal_akhir', 'title': "{{ __('Tanggal Akhir') }}"},
-            // {data: 'periode', name: 'periode', 'title': "{{ __('Tanggal') }}"},
+            {data: 'periode', name: 'periode', 'title': "{{ __('Tanggal') }}"},
             {data: 'lama', name: 'lama', 'title': "{{ __('Lama') }}"},
             {data: 'action', name: 'action', 'orderable': false, 'searchable': false, 'title': "{{ __('') }}", 'exportable' : false,'printable': false},
           ],
-          columnDefs : [
-          {"width": '2%', "targets": 0},
-          {"width": '5%', "targets": 1},
-          {"width": '10%', "targets": 2},
-          {
-            "width": '45%', 
-            "targets": 3,
-            //"data" : null,
-            // "render": function ( data, type, row, meta ) {
-            //   tambahan = (data.tambahan.length > 0 ) ? '<br/><small class="text-muted">'+data.tambahan+'</small>' : ''
-            //   return data.jenis+tambahan;
-            // }
-          },
-          {"width": '20%', "targets": 4},
-          // {"width": '5%', "targets": 5},
-          // {"width": '15%', "targets": 6},
-        ]
       });
 
      $('#arsip-spt-umum').DataTable({
@@ -236,30 +296,13 @@
           {'defaultContent' : '', 'data' : 'DT_RowIndex', 'name' : 'DT_RowIndex', 'title' : 'No', 'orderable' : false, 'searchable' : false, 'exportable' : true, 'printable' : true},
           {data: 'nomor', name: 'nomor', 'title': "{{ __('Nomor') }}"},
           {data: 'jenis_spt', name: 'jenis_spt', 'title': "{{ __('Jenis SPT') }}"},
-          // {data: 'ringkasan', name: 'ringkasan', 'title': "{{ __('Ringkasan') }}", 'allowHTML': true},
+          {data: 'ringkasan', name: 'ringkasan', 'title': "{{ __('Ringkasan') }}", 'allowHTML': true},
           /*{data: 'tanggal_mulai', name: 'tanggal_mulai', 'title': "{{ __('Tanggal Mulai') }}"},
           {data: 'tanggal_akhir', name: 'tanggal_akhir', 'title': "{{ __('Tanggal Akhir') }}"},*/
           {data: 'periode', name: 'periode', 'title': "{{ __('Tanggal') }}"},
           {data: 'lama', name: 'lama', 'title': "{{ __('Lama ') }}"},
           {data: 'action', name: 'action', 'orderable': false, 'searchable': false, 'title': "{{ __('') }}", 'exportable' : false,'printable': false},
         ],
-        // columnDefs : [
-        //   {"width": '2%', "targets": 0},
-        //   {"width": '5%', "targets": 1},
-        //   {"width": '10%', "targets": 2},
-        //   {
-        //     "width": '45%', 
-        //     "targets": 3,
-        //     //"data" : null,
-        //     "render": function ( data, type, row, meta ) {
-        //       tambahan = (data.tambahan.length > 0 ) ? '<br/><small class="text-muted">'+data.tambahan+'</small>' : ''
-        //       return data.jenis+tambahan;
-        //     }
-        //   },
-        //   {"width": '20%', "targets": 4},
-        //   {"width": '5%', "targets": 5},
-        //   {"width": '15%', "targets": 6},
-        // ]
     });
 
     //butuh revisi

@@ -145,9 +145,9 @@ class SptController extends Controller
         $user = auth()->user();
         $this->validate($request, [
             'jenis_spt_umum' => 'required',
-            'lokasi_umum_id' => 'nullable',
+            // 'lokasi_umum_id' => 'nullable',
             'tgl_mulai_umum'=>'required|date_format:"d-m-Y"',
-            'tgl_akhir_umum' =>'required|date_format:"d-m-Y"|after_or_equal:tgl_mulai',
+            'tgl_akhir_umum' =>'required|date_format:"d-m-Y"|after_or_equal:tgl_mulai_umum',
             'lama_umum' => 'required|integer',
             'info_untuk_umum'=> 'required',
             'info_dasar_umum'=> 'required'
@@ -157,7 +157,7 @@ class SptController extends Controller
             'jenis_spt_umum' => Common::cleanInput($request['jenis_spt_umum']),
             'tgl_mulai' => date('Y-m-d H:i:s',strtotime($request['tgl_mulai_umum'])),
             'tgl_akhir' => date('Y-m-d H:i:s',strtotime($request['tgl_akhir_umum'])),
-            'lokasi_id' => $request['lokasi_umum_id'],
+            // 'lokasi_id' => $request['lokasi_umum_id'],
             'lama' => $request['lama_umum'],
             'info_untuk_umum' => Common::cleanInput($request['info_untuk_umum']),
             'info_dasar_umum' => Common::cleanInput($request['info_dasar_umum']),
@@ -214,13 +214,26 @@ class SptController extends Controller
                 }else{
                     $peran = 'anggota';
                 }
+                $dupak = [
+                    'lama' => $anggota['lama'],
+                    'dupak' => $anggota['dupak']
+                ];
+
+                if($spt->jenis_spt_umum == 'SPT Pengembangan Profesi'){
+                    $unsur_dupak = 'pengembangan profesi';
+                }if($spt->jenis_spt_umum == 'SPT Penunjang'){
+                    $unsur_dupak = 'penunjang';
+                }if($spt->jenis_spt_umum == 'SPT Diklat'){
+                    $unsur_dupak = 'diklat';
+                }
 
                 DB::table('detail_spt')->insertGetId([
                 'spt_id' => $spt_id,
                 'user_id' => $anggota['user_id'],
                 'peran' => $peran,
                 'lama' => $lama,
-                'info_dupak' => json_encode('null'),
+                'info_dupak' => json_encode($dupak),
+                'unsur_dupak' => $unsur_dupak
                 //'dupak' => $this->hitungDupak($anggota['user_id'],$anggota['peran'],$lama,$isLembur)
             ]);
             }
@@ -492,21 +505,17 @@ class SptController extends Controller
     {
         $spt2 = SptUmum::where('nomor','!=','null');
         $spt = SptUmum::where('nomor',null);
-        $cols = ($spt == true) ? $spt2->orderBy('created_at', 'desc')->get() : $spt->orderBy('created_at', 'desc')->get();
+        $cols = ($spt == true) ? $spt2->orderBy('id', 'desc')->get() : $spt->orderBy('id', 'desc')->get();
         // dd($cols);
         $dt = Datatables::of($cols)
                 ->addIndexColumn()
                 ->addColumn('jenis_spt', function($col){
                     return $col->jenis_spt_umum;
                 })
-                ->addColumn('tanggal_mulai', function($col){
-                    return $col->tanggal_mulai;
-                })
-                ->addColumn('tanggal_akhir', function($col){
-                    return $col->tanggal_akhir;
-                })
                 ->addColumn('periode', function($col){
-                    return $col->periode;
+                    $start = Carbon::parse($col->tgl_mulai)->formatLocalized('%d %B');
+                    $end = Carbon::parse($col->tgl_akhir)->formatLocalized('%d %B %Y');
+                    return $start . ' s.d ' . $end;
                 })
                 ->addColumn('lama', function($col){
                     return $col->lama;
@@ -514,30 +523,30 @@ class SptController extends Controller
                 ->addColumn('nomor', function ($col){
                     return ($col->nomor !== null ) ? $col->nomor : 'SPT belum diregister';
                 })
-                ->addColumn('lokasi', function ($col){
-                    return $col->lokasi_spt;
-                })
-                /*->addColumn('ringkasan', function($col){                    
-                    $tambahan = (!is_null($col->tambahan) ) ? '<br /> <small class="text-muted"> Info tambahan : ' . Common::cutText($col->tambahan, 2, 70) . '</small>' : '';
-                    return $col->jenisSpt->name . $tambahan ;
-                    // $tambahan = (!is_null($col->tambahan) ) ? Common::cutText($col->tambahan, 2) : '';
-                    // $ringkasan = [
-                    //     'jenis' => $col->jenisSpt->nama_sebutan,
-                    //     'tambahan' => $tambahan];
-                    // return $ringkasan;
+               ->addColumn('ringkasan', function($col){                    
+                    // $tambahan = (!is_null($col->info_untuk_umum) ) ? '<br /> <small class="text-muted"> ' . Common::cutText($col->info_untuk_umum, 2, 70) . '</small>' : '';
+                    $tambahan = (!is_null($col->info_untuk_umum) ) ? '<br /> <small class="text-muted"> ' . Common::cutText($col->info_untuk_umum, 2, 70) . '</small>' : '';
+                    return $col->info_untuk_umum . $tambahan ;
+                    // $tambahan = (!is_null($col->tambahan) ) ? '<br /> <small class="text-muted"> ' . Common::cutText($col->tambahan, 2) . '</small>' : '';
+                    // return $col->jenis_spt . $tambahan ;
+                    /*$tambahan = (!is_null($col->tambahan) ) ? Common::cutText($col->tambahan, 2) : '';
+                    $ringkasan = [
+                        'jenis' => $col->jenis_spt,
+                        'tambahan' => $tambahan];
+                    return $ringkasan;*/
                              
-                })*/
+                })
                 ->addColumn('action', function($col){
                     $return = "";
                     if( !is_null($col->nomor) && auth()->user()->hasAnyRole(['TU Umum', 'Super Admin'])){
                         if(!is_null($col->file) || $col->file != ""){
-                            // $return .= '<a href="'.$col->file.'" data-toggle="tooltip" title="Scan SPT" class="btn btn-outline-primary btn-sm" target="__blank"><i class="ni ni-paper-diploma"></i><span>Download</span></a>';
-                            $return .= 'button download';
+                            $return .= '<a href="'.$col->file.'" data-toggle="tooltip" title="Scan SPT" class="btn btn-outline-primary btn-sm" target="__blank"><i class="ni ni-paper-diploma"></i><span>Download</span></a>';
+                            // $return .= 'button download';
                         }else{
-                            // $return .= '<a href="#" data-toggle="tooltip" title="Download SPT" class="btn btn-outline-danger btn-sm disabled" ><i class="ni ni-paper-diploma"></i><span>Download</span></a>';
-                            $return .= 'button download disable karena blm upload';
-                            // $return .= '<a href="#" data-toggle="tooltip" title="Upload File Scan SPT" class="btn btn-outline-primary btn-sm" onclick="uploadSpt('.$col->id.')"><i class="fa fa-file-pdf"></i><span>Upload</span></a>';
-                            $return .= 'button upload';
+                            $return .= '<a href="#" data-toggle="tooltip" title="Download SPT" class="btn btn-outline-danger btn-sm disabled" ><i class="ni ni-paper-diploma"></i><span>Download</span></a>';
+                            // $return .= 'button download disable karena blm upload';
+                            $return .= '<a href="#" data-toggle="tooltip" title="Upload File Scan SPT" class="btn btn-outline-primary btn-sm" onclick="PopUpFunctionUploadScan('.$col->id.')"><i class="fa fa-file-pdf"></i><span>Upload</span></a>';
+                            // $return .= 'button upload';
                             // if( auth()->user()->hasAnyRole(['TU Umum', 'Super Admin']) ){
                             // }
                         }
@@ -550,7 +559,7 @@ class SptController extends Controller
                     }
                     return $return;
                 })
-                ->rawColumns(['ringkasan', 'action'])
+                ->escapeColumns([])
                 ->make(true);
         return $dt;
     }
@@ -586,27 +595,6 @@ class SptController extends Controller
         if($user->hasPermissionTo('Sign SPT') && $method === 'signOrReject'){
             $control = '<a href="#" onclick="showRejectFormModal('.$id.')" class="btn btn-outline-danger btn-sm">Tolak</a> 
                     <a href="#" onclick="sign('.$id.')" class="btn btn-outline-success btn-sm">Setuju</a> ';
-        }
-
-        if($user->hasRole('Auditor') && $method === 'buatKka'){
-            $control = '<a href="'.route('input_kka',$id).'"data-toggle="tooltip" title="Upload KKA" class="btn btn-outline-success btn-sm" target="__blank"><i class="ni ni-folder-17"></i><span>Input KKA</span></a>';
-        }
-
-        if($user->hasRole('Auditor') && $method === 'cetakLhp'){
-            $control = '<a href="'.route('laporan-lhp-cetak',$id).'"data-toggle="tooltip" title="Lihat LHP" class="btn btn-outline-primary btn-sm" target="__blank"><i class="ni ni-folder-17"></i><span>Cetak LHP</span></a>';
-        }
-
-        if($user->hasRole('Auditor') && $method === 'cetakLhp-disable'){
-            $control = '<a href="#"data-toggle="tooltip" title="" class="btn btn-outline-danger btn-sm disabled"><i class="ni ni-folder-17"></i><span>LHP</span></a>';
-        }
-
-        if($user->hasRole('Auditor') && $method === 'buatLaporan-disable'){
-            $control = '<a href="#"data-toggle="tooltip" title="Maaf untuk spt tsbt tidak bisa input kka" class="btn btn-outline-danger btn-sm disabled"><i class="ni ni-folder-17"></i><span>Input Temuan</span></a>';
-        }
-
-        if($user->hasRole('Auditor') && $method === 'Cetak_KKA'){
-            // $control = '<a href="#"data-toggle="tooltip" title="Cetak KKA" class="btn btn-outline-danger btn-sm" target="__blank"><i class="ni ni-single-copy-04"></i><span>Cetak KKA</span></a>';
-            $control = '<a href="'.route('laporan-cetak',$id).'" data-toggle="tooltip" title="Cetak KKA" class="btn btn-outline-danger btn-sm"><i class="ni ni-single-copy-04"></i><span>Lihat</span></a>';
         }
 
         if ( $user->hasAnyRole(['TU Umum', 'Super Admin']) && $method == 'penomoran') {
@@ -815,17 +803,17 @@ class SptController extends Controller
     }
 
     public function getPenomoranSptUmum(){
-        $cols = SptUmum::where('nomor',null)->orderBy('tgl_mulai');
+        $cols = SptUmum::where('nomor',null)->orderBy('id', 'DESC');
         $dt = Datatables::of($cols)
                 ->addIndexColumn()
                 ->addColumn('jenis_spt', function($col){
                     return $col->jenis_spt_umum;
                 })
-                ->addColumn('tanggal_mulai', function($col){
-                    return $col->tgl_mulai;
-                })
-                ->addColumn('tanggal_akhir', function($col){
-                    return $col->tgl_akhir;
+                
+                ->addColumn('periode', function($col){
+                    $start = Carbon::parse($col->tgl_mulai)->formatLocalized('%d %B');
+                    $end = Carbon::parse($col->tgl_akhir)->formatLocalized('%d %B %Y');
+                    return $start . ' s.d ' . $end;
                 })
                 ->addColumn('lama', function($col){
                     //$common = new Common;
@@ -838,7 +826,9 @@ class SptController extends Controller
                 ->addColumn('ringkasan', function($col){                    
                     // $tambahan = (!is_null($col->info_untuk_umum) ) ? '<br /> <small class="text-muted"> ' . Common::cutText($col->info_untuk_umum, 2, 70) . '</small>' : '';
                     $tambahan = (!is_null($col->info_untuk_umum) ) ? '<br /> <small class="text-muted"> ' . Common::cutText($col->info_untuk_umum, 2, 70) . '</small>' : '';
-                    return $col->info_untuk_umum /*. $tambahan*/ ;
+                    return $col->info_untuk_umum . $tambahan ;
+                    // $tambahan = (!is_null($col->tambahan) ) ? '<br /> <small class="text-muted"> ' . Common::cutText($col->tambahan, 2) . '</small>' : '';
+                    // return $col->jenis_spt . $tambahan ;
                     /*$tambahan = (!is_null($col->tambahan) ) ? Common::cutText($col->tambahan, 2) : '';
                     $ringkasan = [
                         'jenis' => $col->jenis_spt,
@@ -860,13 +850,16 @@ class SptController extends Controller
                         }
                     }
                     if($col->nomor == null){
-                        $return .= $this->buildControl('showFormModalUmum', $col->id);
-                        $return .= $this->buildControl('cetakPdfUmum',$col->id);
-                        // $return .= $this->buildControl('editForm',$col->id);
+
+                        $return .= $this->buildControl('showFormModalUmum', $col->id); //upload + update nomor spt umum
+                        $return .= $this->buildControl('cetakPdfUmum',$col->id); //cetak pdf spt Umum
+                        // $return .= $this->buildControl('editFormUmum',$col->id); //belum bisa
+
                         $return .= $this->buildControl('deleteDataSptUmum',$col->id);
                     }
                     return $return;
                 })
+                ->escapeColumns([])
                 ->make(true);
 
         return $dt;
@@ -878,10 +871,26 @@ class SptController extends Controller
     }
 
     public function updateNomorSpt(Request $request){
-        // dd($request);
+        switch ($request->jenis_spt_umum) {
+          case "SPT Umum":
+            $spt_umum = 'umum';
+            break;
+          case "SPT Pengembangan Profesi":
+            $spt_umum = 'umum';
+            break;
+          case "SPT Penunjang":
+            $spt_umum = 'umum';
+            break;
+          case "SPT Diklat":
+            $spt = 'umum';
+            break;
+          default:
+            $spt_umum = '';
+        }
+        // dd($spt_umum == null);
         $id = $request->spt_id;
 
-        if($request->jenis_spt_umum != 'Spt Umum'){
+        if($spt_umum == null){
            
             $spt = Spt::findOrFail($id);
             $filename = ($request->file_spt) ? 'SPT-' . $id . '-' . $request->file_spt->getClientOriginalName() : null ;
@@ -929,7 +938,7 @@ class SptController extends Controller
         
         // dd($spt->file);
         // die();
-        if($request->jenis_spt_umum != 'Spt Umum' && $spt->save()) {
+        if($spt_umum == null && $spt->save()) {
 
            //ambil data detail spt terkait sesuai id spt           
            $detail_spt = DetailSpt::where('spt_id', $id)->with('spt')->get();
@@ -981,6 +990,53 @@ class SptController extends Controller
            return $spt;
         }else{
             $detail_spt = DetailSpt::where('spt_id', $id)->with('sptUmum')->get();
+
+            // proses input info dupak tu umum 
+
+           //  //update detail kuota dan dupak di detail_spt
+           // $detail_kuota = [];
+           // for($i=0;$i<count($detail_spt);$i++){
+           //  $detail_kuota[] = $this->detailKuota( $detail_spt[$i]['user_id'],$spt->tgl_mulai,$spt->tgl_akhir); // result array lama jam per user per spt per tanggal
+           // }           
+           // //end update detail kuota           
+           
+           // foreach($detail_spt as $i=>$detail){            
+
+           //  //perhitungan kumulatif lama_jam per detail_spt (sesuai user_id dan data detail kuota per tanggal kalender spt)
+           //  $lama_jam = array_sum($detail_kuota[$i][$detail->user_id]);
+            
+           //  //perhitungan dupak berdasarkan lama_jam kuota kalender dan fungsi peran spt
+           //  $dupak = $this->hitungDupak($detail->user_id,$detail->peran,$lama_jam);            
+
+           //  $jam_efektif = intval($lama_jam/6.5);
+           //  $jam_lembur = fmod($lama_jam, 6.5);
+               
+           //  $info = [
+           //      'lama_jam' => $lama_jam,
+           //      'efektif' => $jam_efektif,
+           //      'lembur' => $jam_lembur,
+           //      'dupak' => $dupak['nilai'],
+           //      'koefisien' => $dupak['koef']
+           //  ];
+           //  //$info['koefisien'] = $dupak['koef'];
+
+           //  //update lama_jam dan nilai dupak pada detail_spt
+           //  //DetailSpt::where('id', $detail->id)->update(['lama_jam' => $lama_jam, 'dupak'=>$dupak['nilai'], 'info_dupak'=>json_encode($info)]);
+           //  DetailSpt::where('id', $detail->id)->update(['info_dupak'=>json_encode($info)]);
+
+           //  //set array var $data untuk membuat data dupak di tabel dupak
+           //  $data = [
+           //      'user_id' => $detail->user_id,
+           //      'dupak' => $detail->dupak,
+           //      'unsur_dupak' => $spt->jenisSpt->kategori,
+           //      'status' => 'baru',
+           //      'info_spt' => $info_spt
+           //  ];            
+           //  //Dupak::create($data);
+           // }
+           // //buat event terkait spt untuk penerapan di kalender
+           // $this->createEventSpt($spt);
+
             return $spt;
         }
         return false;
@@ -1109,6 +1165,26 @@ class SptController extends Controller
                 File::makeDirectory(public_path()."/storage/spt", 0755, true);
             }
             $request->file_spt->move(public_path()."/storage/spt" , $filename);
+        } 
+        $spt->file = ($filename !== null ) ? url('/storage/spt/'.$filename) : null;
+        $spt->save();
+        return 'Updated';
+    }
+
+    public function uploadScanSptumum(Request $request)
+    {
+        $id = $request->spt_id;
+        $spt = SptUmum::findOrFail($id);
+        // dd($spt);
+        // die();       
+
+        $filename = ($request->file_spt_umum) ? 'SPT-'. $spt->jenis_spt_umum .'-'. $id . '-' . $request->file_spt_umum->getClientOriginalName() : null ;
+        //if($filename !== null ) $request->file_spt->move(public_path('storage\files') , $filename);
+        if($filename !== null ){
+            if (! File::exists(public_path()."/storage/spt")) {
+                File::makeDirectory(public_path()."/storage/spt", 0755, true);
+            }
+            $request->file_spt_umum->move(public_path()."/storage/spt" , $filename);
         } 
         $spt->file = ($filename !== null ) ? url('/storage/spt/'.$filename) : null;
         $spt->save();
@@ -1449,61 +1525,7 @@ class SptController extends Controller
                 })
                 ->addColumn('action', function($col){
                     //perubahan ke download file spt (sudah ditandatangani) dari cetak pdf
-                    //$control = $this->buildControl('cetakPdf',$col->spt_id);
-
-                    $control = "";
-                    if( !is_null($col->nomor) ){
-                        if(!is_null($col->file) || $col->file != ""){
-                            $control .= '<a href="'.$col->file.'" data-toggle="tooltip" title="Scan SPT" class="btn btn-outline-primary btn-sm" target="__blank"><i class="ni ni-paper-diploma"></i><span>Download</span></a>';
-                        }else{
-                            $control .= '<a href="#" data-toggle="tooltip" title="Scan SPT" class="btn btn-outline-danger btn-sm disabled" ><i class="ni ni-paper-diploma"></i><span>Download</span></a>';
-                        }
-                    }
-
-                    $get_id_detail = DetailSpt::where('id',$col->id_detail)->first(); //get by id detail
-                    if($get_id_detail != false){
-                        $control .= $this->buildControl('pemeriksaan',$col->spt_id);
-
-                        $ceking_data_detail_sendiri = DetailSpt::where('spt_id',$col->id)->where('user_id',auth()->user()->id)->get();
-                        
-                        if ($ceking_data_detail_sendiri[0]->id_laporan_pemeriksaan != null) {
-                            $control .= $this->buildControl('Cetak_KKA',$ceking_data_detail_sendiri[0]->id);
-                        }
-                            if ($ceking_data_detail_sendiri[0]->peran == 'Ketua Tim' || $ceking_data_detail_sendiri[0]->peran == 'Pengendali Teknis' || $ceking_data_detail_sendiri[0]->peran == 'Pengendali Mutu' || $ceking_data_detail_sendiri[0]->peran == 'PenanggungJawab') {
-
-                                if ($ceking_data_detail_sendiri[0]->peran == 'Ketua Tim' && $ceking_data_detail_sendiri[0]->status != null) {
-                                    $control .= $this->buildControl('buatLhp',$get_id_detail); //fitur button ketua tim
-                                    $control .= '<a href="#" onclick="showModalLihatLaporanPemeriksaan('.$ceking_data_detail_sendiri[0]->id.')" data-toggle="tooltip" title="Lihat KKA" class="btn btn btn-outline-info btn-sm"><i class="ni ni-paper-diploma"></i></a>';
-                                }elseif($ceking_data_detail_sendiri[0]->peran == 'Pengendali Teknis' || $ceking_data_detail_sendiri[0]->peran == 'Pengendali Mutu' || $ceking_data_detail_sendiri[0]->peran == 'PenanggungJawab' && $ceking_data_detail_sendiri[0]->status != null){ //fitur button daltu & dalnis
-                                    $get_info_ketua = DetailSpt::where('spt_id',$col->id)->where('peran','Ketua Tim')->get();
-                                    // dd($get_info_ketua[0]->info_laporan_pemeriksaan);
-                                    if($get_info_ketua[0]->info_laporan_pemeriksaan == null){
-                                        $control .= $this->buildControl('cetakLhp-disable',$get_id_detail);
-                                    }else{
-                                        // $control .= $this->buildControl('cetakLhp',$get_id_detail);
-                                        $control .= '<a href="#" onclick="confirm_lhp('.$ceking_data_detail_sendiri[0]->id.')" data-toggle="tooltip" title="Lihat LHP" class="btn btn-outline-primary btn-sm"><i class="ni ni-folder-17"></i><span>LHP</span></a>';
-                                        // $control .= '<a href="#" onclick="confirm('.$ceking_data_detail_sendiri[0]->id.')" data-toggle="tooltip" title="Lihat KKA" class="btn btn btn-outline-info btn-sm"><i class="ni ni-paper-diploma"></i></a>';
-                                    }
-                                    $control .= '<a href="#" onclick="showModalLihatLaporanPemeriksaan('.$ceking_data_detail_sendiri[0]->id.')" data-toggle="tooltip" title="Lihat KKA" class="btn btn btn-outline-info btn-sm"><i class="ni ni-paper-diploma"></i></a>';
-                                }else{
-                                    $control .= $this->buildControl('buatLaporan-disable',$get_id_detail);
-                                    $control .= '<a href="#" onclick="showModalLihatLaporanPemeriksaan('.$ceking_data_detail_sendiri[0]->id.')" data-toggle="tooltip" title="Lihat KKA" class="btn btn btn-outline-info btn-sm"><i class="ni ni-paper-diploma"></i></a>';
-                                }
-                            }elseif($ceking_data_detail_sendiri[0]->peran == 'Anggota Tim'){
-                                    if($ceking_data_detail_sendiri[0]->status == null){
-                                        $control .= $this->buildControl('buatKka',$get_id_detail);
-                                    }elseif($ceking_data_detail_sendiri[0]->status != null){
-                                        $control .= $this->buildControl('buatLaporan-disable',$get_id_detail);
-                                    }
-                                    $control .= '<a href="#" onclick="showModalLihatLaporanPemeriksaan('.$ceking_data_detail_sendiri[0]->id.')" data-toggle="tooltip" title="Lihat KKA" class="btn btn btn-outline-info btn-sm"><i class="ni ni-paper-diploma"></i></a>';
-                            }else{
-                                $control .= null;
-                            }
-                            
-                    }else{
-                        return 'no Action';
-                    }
-
+                            $control = '<a href="'.$col->file.'" data-toggle="tooltip" title="Scan SPT" class="btn btn-outline-primary btn-sm" target="__blank"><i class="ni ni-paper-diploma"></i><span>Download</span></a>';
                     return $control;
                 })
                 ->escapeColumns([])
@@ -1568,12 +1590,14 @@ class SptController extends Controller
 
     public function storeSessionAnggotaUmum(Request $request)
     {
-        // dd($request->session()->all());
+        // dd($request);
         // die();
 
         $uid = $request->user_id;
         $tgl_mulai = date($request->tgl_mulai);
         $tgl_akhir = date($request->tgl_akhir);
+        // $lama_jam = Common::cleanInput($request->lama_jam);
+        // $dupak_anggota = Common::cleanInput($request->dupak_anggota);
         
         if(Session::has('anggota_umum')){
             //'Penanggungjawab', 'Pembantu Penanggungjawab', 'Pengendali Mutu', 'Pengendali Teknis', 'Ketua Tim', 'Anggota Tim'
@@ -1588,16 +1612,20 @@ class SptController extends Controller
                 return "User sudah ada dalam list anggota";
             }else{
                 $session = Session::push('anggota_umum', [
-                    'user_id'    => $request->user_id
+                    'user_id'    => $request->user_id,
                     // 'peran'   => 'Pegawai'
+                    'lama' => $request->lama_jam,
+                    'dupak' => $request->dupak_anggota
                 ]);
                 return "Session anggota updated";
             }
             
         }else{
             $session = Session::push('anggota_umum', [
-                'user_id'    => $request->user_id
+                'user_id'    => $request->user_id,
                 // 'peran'   => 'Pegawai'
+                'lama' => $request->lama_jam,
+                'dupak' => $request->dupak_anggota
             ]);
             return "Session anggota created";
         }
