@@ -871,10 +871,8 @@ class SptController extends Controller
     }
 
     public function updateNomorSpt(Request $request){
+        $spt_umum = $request->jenis_spt_umum;
         switch ($request->jenis_spt_umum) {
-          case "SPT Umum":
-            $spt_umum = 'umum';
-            break;
           case "SPT Pengembangan Profesi":
             $spt_umum = 'umum';
             break;
@@ -885,7 +883,7 @@ class SptController extends Controller
             $spt = 'umum';
             break;
           default:
-            $spt_umum = '';
+            $spt_umum = $spt_umum;
         }
         // dd($spt_umum == null);
         $id = $request->spt_id;
