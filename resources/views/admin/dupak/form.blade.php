@@ -129,6 +129,14 @@
                             </table> -->
                         </div>
                       </div>
+                      <div class="clearfix page-break"></div>
+
+                      <div id="dupak-diklat" class="tab-pane fade" role="tabpanel" style="margin-bottom: 30px; page-break-after: always;">
+                        <div class="table-responsive " id="dupak-diklat-wrapper">
+                            <!-- <table class="table table-sm table-bordered ajax-table col-print-12" id="dupak-penunjang-table">
+                            </table> -->
+                        </div>
+                      </div>
                       <!-- <div class="clearfix page-break"></div> -->
                       
                     </div>

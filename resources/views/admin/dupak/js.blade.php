@@ -133,13 +133,15 @@
         //e.preventDefault();
         tab = '<li class="nav-item"><a data-toggle="tab" class="nav-link active" href="#dupak-pengawasan">Pengawasan</a></li>'
               +'<li class="nav-item"><a data-toggle="tab" class="nav-link" href="#dupak-pendidikan">Pendidikan</a></li>'
-              +'<li class="nav-item"><a data-toggle="tab" class="nav-link" href="#dupak-penunjang">Penunjang</a></li>';
+              +'<li class="nav-item"><a data-toggle="tab" class="nav-link" href="#dupak-penunjang">Penunjang</a></li>'
+              +'<li class="nav-item"><a data-toggle="tab" class="nav-link" href="#dupak-diklat">Diklat</a></li>';
         $('#dupak-tab').html(tab);
 
         //coba versi html biasa
         generate_tabel_pengawasan();
         generate_tabel_pendidikan();
         generate_tabel_penunjang();
+        generate_tabel_diklat();
         e.preventDefault();
     });
 

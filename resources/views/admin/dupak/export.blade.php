@@ -72,70 +72,22 @@ function add_cell_to_sheet(worksheet, address, value) {
     type: 'GET',
     data: {user_id: user_id, semester: semester, tahun: tahun},
     success: function (response) {
-      
-      	var irban_kepala_name = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.full_name_gelar ;
-        var irban_kepala_nip = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.nip;
-        var irban_kepala_pangkat = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.pangkat;
-        var irban_kepala_jabatan = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.jabatan;
+      if(response.length>0){
 	    
-	    var header = '<div class="col-print-12 col-md-12"><h3 class="print-center text-center">SURAT PERNYATAAN<br/>MELAKUKAN KEGIATAN PENDIDIKAN SEKOLAH</h3></div>'	    			
-	    			+'<div class="h-20"></div>'
-	    			+'<div class="row"><div class="col-print-12 col-md-12">Yang bertandatangan dibawah ini :</div></div>'
-	    			+'<div class="row">'
-	    				+'<div class="col-print-4 col-md-4">Nama</div>'
-	    				+'<div class="col-print-8 col-md-8">: <strong>'+ irban_kepala_name +'</strong></div>'
-	    			+'</div>'
-	    			+'<div class="row">'
-	    				+'<div class="col-print-4 col-md-4">NIP</div>'
-	    				+'<div class="col-print-8 col-md-8">: '+ irban_kepala_nip +'</div>'
-	    			+'</div>'
-	    			+'<div class="row">'
-	    				+'<div class="col-print-4 col-md-4">Pangkat / golongan ruang</div>'
-	    				+'<div class="col-print-8 col-md-8">: '+ irban_kepala_pangkat +'</div>'
-	    			+'</div>'
-	    			+'<div class="row">'
-	    				+'<div class="col-print-4 col-md-4">Jabatan</div>'
-	    				+'<div class="col-print-8 col-md-8">: '+ irban_kepala_jabatan +'</div>'
-	    			+'</div>'
-	    			+'<div class="row">'
-	    				+'<div class="col-print-4 col-md-4">Unit kerja</div>'
-	    				+'<div class="col-print-8 col-md-8">: Inspektorat Kabupaten Sidoarjo</div>'
-	    			+'</div>'
-	    			+'<div class="h-20"></div>' //separator
-	    			+'<div class="row"><div class="col-print-12 col-md-12">Menyatakan bahwa :</div></div>'
-	    			+'<div class="row">'
-	    				+'<div class="col-print-4 col-md-4">Nama</div>'
-	    				+'<div class="col-print-8 col-md-8">: <strong>'+response[0].user_dupak.full_name_gelar+'</strong></div>'
-	    			+'</div>'
-	    			+'<div class="row">'
-	    				+'<div class="col-print-4 col-md-4">NIP</div>'
-	    				+'<div class="col-print-8 col-md-8">: '+response[0].user_dupak.nip+'</div>'
-	    			+'</div>'
-	    			+'<div class="row">'
-	    				+'<div class="col-print-4 col-md-4">Pangkat / golongan ruang</div>'
-	    				+'<div class="col-print-8 col-md-8">: '+response[0].user_dupak.pangkat+'</div>'
-	    			+'</div>'
-	    			+'<div class="row">'
-	    				+'<div class="col-print-4 col-md-4">Jabatan</div>'
-	    				+'<div class="col-print-8 col-md-8">: '+response[0].user_dupak.jabatan+'</div>'
-	    			+'</div>'
-	    			+'<div class="row">'
-	    				+'<div class="col-print-4 col-md-4">Unit kerja</div>'
-	    				+'<div class="col-print-8 col-md-8">: Inspektorat Kabupaten Sidoarjo</div>'
-	    			+'</div>'
-	    			+'<div class="h-20"></div>';
+	    var header = generate_header(response,'pendidikan');
+      var footer = generate_footer(response);
 
-            //No	Uraian Sub Unsur  class="col-print-th"
-            var table = '<table class="table table-sm table-bordered ajax-table col-print-12 table-print-border" id="dupak-pendidikan-table">';
+      //No	Uraian Sub Unsur  class="col-print-th"
+      var table = '<table class="table table-sm table-bordered ajax-table col-print-12 table-print-border" id="dupak-pendidikan-table">';
 
-            table += '<tr>'
-	              +'<th>No.</th>'
-	              +'<th>Uraian Sub Unsur</th>'
-	              +'<th>Butir Kegiatan</th>'
-	              +'<th>Angka Kredit</th>'
-	              +'<th>Keterangan</th>'
-              +'</tr>';
-              //response[0].user_dupak.pendidikan.tingkat
+          table += '<tr>'
+              +'<th>No.</th>'
+              +'<th>Uraian Sub Unsur</th>'
+              +'<th>Butir Kegiatan</th>'
+              +'<th>Angka Kredit</th>'
+              +'<th>Keterangan</th>'
+            +'</tr>';
+            //response[0].user_dupak.pendidikan.tingkat
         $.each(response, function (i, item) {
           var n = i+1;
             table += '<tr>'
@@ -154,32 +106,12 @@ function add_cell_to_sheet(worksheet, address, value) {
 
         //close table tag
         table += '</table>';
-
-        var footer = '<div class="row"><div class="col-md-12 col-print-12">Demikian pernyataan ini dibuat untuk dapat dipergunakan sebagaimana mestinya.</div></div>'
-        		+'<div class="h-20"></div>'
-        		+'<div class="row">'
-        			+'<div class="col-md-8 col-print-8"></div>'
-        			+'<div class="col-md-4 col-print-4">Atasan langsung</div>'
-        		+'</div>'
-        		+'<div class="row">'
-        			+'<div class="col-md-8 col-print-8"></div>'
-        			+'<div class="col-md-4 col-print-4">Inspektur Pembantu Wilayah</div>'
-        		+'</div>'
-        		+'<div class="h-100"></div>' //separator ttd atasan
-        		+'<div class="row">'
-        			+'<div class="col-md-8 col-print-8"></div>'
-        			+'<div class="col-md-4 col-print-4"><strong>'+irban_kepala_name+'</strong></div>'
-        		+'</div>'
-        		+'<div class="row">'
-        			+'<div class="col-md-8 col-print-8"></div>'
-        			+'<div class="col-md-4 col-print-4">'+irban_kepala_jabatan+' '+irban_kepala_pangkat+'</div>'
-        		+'</div>'
-        		+'<div class="row">'
-        			+'<div class="col-md-8 col-print-8"></div>'
-        			+'<div class="col-md-4 col-print-4">'+irban_kepala_nip+'</div>'
-        		+'</div>';
+        
         $( "#dupak-pendidikan-wrapper" ).html( header+table+footer );
         //$('#dupak-pendidikan-table').html(trHTML);
+      }else{
+        $("#dupak-pendidikan-wrapper").html('<div class="col-md-12 empty-data text-center">Data DUPAK user Tidak ditemukan. </div>');
+      }
     }
   });
   }
@@ -196,59 +128,9 @@ function add_cell_to_sheet(worksheet, address, value) {
     url: '{{ route("data_dupak") }}',
     type: 'GET',
     data: {user_id: user_id, semester: semester, tahun: tahun},
-    success: function (response) {
-      console.log(response);
-        var irban_kepala_name = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.full_name_gelar ;
-        var irban_kepala_nip = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.nip;
-        var irban_kepala_pangkat = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.pangkat;
-        var irban_kepala_jabatan = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.jabatan;
-	    
-	    var header = '<div class="col-print-12 col-md-12"><h3 class="print-center text-center">SURAT PERNYATAAN<br/>MELAKUKAN KEGIATAN PENGAWASAN</h3></div>'	    			
-	    			+'<div class="h-20"></div>'
-	    			+'<div class="row"><div class="col-print-12 col-md-12">Yang bertandatangan dibawah ini :</div></div>'
-	    			+'<div class="row">'
-	    				+'<div class="col-print-4 col-md-4">Nama</div>'
-	    				+'<div class="col-print-8 col-md-8">: <strong>'+ irban_kepala_name +'</strong></div>'
-	    			+'</div>'
-	    			+'<div class="row">'
-	    				+'<div class="col-print-4 col-md-4">NIP</div>'
-	    				+'<div class="col-print-8 col-md-8">: '+ irban_kepala_nip +'</div>'
-	    			+'</div>'
-	    			+'<div class="row">'
-	    				+'<div class="col-print-4 col-md-4">Pangkat / golongan ruang</div>'
-	    				+'<div class="col-print-8 col-md-8">: '+ irban_kepala_pangkat +'</div>'
-	    			+'</div>'
-	    			+'<div class="row">'
-	    				+'<div class="col-print-4 col-md-4">Jabatan</div>'
-	    				+'<div class="col-print-8 col-md-8">: '+ irban_kepala_jabatan +'</div>'
-	    			+'</div>'
-	    			+'<div class="row">'
-	    				+'<div class="col-print-4 col-md-4">Unit kerja</div>'
-	    				+'<div class="col-print-8 col-md-8">: Inspektorat Kabupaten Sidoarjo</div>'
-	    			+'</div>'
-	    			+'<div class="h-20"></div>' //separator
-	    			+'<div class="row"><div class="col-print-12 col-md-12">Menyatakan bahwa :</div></div>'
-	    			+'<div class="row">'
-	    				+'<div class="col-print-4 col-md-4">Nama</div>'
-	    				+'<div class="col-print-8 col-md-8">: <strong>'+response[0].user_dupak.full_name_gelar+'</strong></div>'
-	    			+'</div>'
-	    			+'<div class="row">'
-	    				+'<div class="col-print-4 col-md-4">NIP</div>'
-	    				+'<div class="col-print-8 col-md-8">: '+response[0].user_dupak.nip+'</div>'
-	    			+'</div>'
-	    			+'<div class="row">'
-	    				+'<div class="col-print-4 col-md-4">Pangkat / golongan ruang</div>'
-	    				+'<div class="col-print-8 col-md-8">: '+response[0].user_dupak.pangkat+'</div>'
-	    			+'</div>'
-	    			+'<div class="row">'
-	    				+'<div class="col-print-4 col-md-4">Jabatan</div>'
-	    				+'<div class="col-print-8 col-md-8">: '+response[0].user_dupak.jabatan+'</div>'
-	    			+'</div>'
-	    			+'<div class="row">'
-	    				+'<div class="col-print-4 col-md-4">Unit kerja</div>'
-	    				+'<div class="col-print-8 col-md-8">: Inspektorat Kabupaten Sidoarjo</div>'
-	    			+'</div>'
-	    			+'<div class="h-20"></div>';
+    success: function (response) {      
+      if(response.length>0){
+        var header = generate_header(response, 'pengawasan');
 	    	var table = '<table class="table table-sm table-bordered ajax-table col-print-12 table-print-border" id="dupak-pengawasan-table">';
 
               table += '<tr align="center">'
@@ -298,32 +180,12 @@ function add_cell_to_sheet(worksheet, address, value) {
         });
         
         table += '</table>';
-        var footer = '<div class="row"><div class="col-md-12 col-print-12">Demikian pernyataan ini dibuat untuk dapat dipergunakan sebagaimana mestinya.</div></div>'
-        		+'<div class="h-20"></div>'
-        		+'<div class="row">'
-        			+'<div class="col-md-8 col-print-8"></div>'
-        			+'<div class="col-md-4 col-print-4">Atasan langsung</div>'
-        		+'</div>'
-        		+'<div class="row">'
-        			+'<div class="col-md-8 col-print-8"></div>'
-        			+'<div class="col-md-4 col-print-4">Inspektur Pembantu Wilayah</div>'
-        		+'</div>'
-        		+'<div class="h-100"></div>' //separator ttd atasan
-        		+'<div class="row">'
-        			+'<div class="col-md-8 col-print-8"></div>'
-        			+'<div class="col-md-4 col-print-4"><strong>'+irban_kepala_name+'</strong></div>'
-        		+'</div>'
-        		+'<div class="row">'
-        			+'<div class="col-md-8 col-print-8"></div>'
-        			+'<div class="col-md-4 col-print-4">'+irban_kepala_jabatan+' '+irban_kepala_pangkat+'</div>'
-        		+'</div>'
-        		+'<div class="row">'
-        			+'<div class="col-md-8 col-print-8"></div>'
-        			+'<div class="col-md-4 col-print-4">'+irban_kepala_nip+'</div>'
-        		+'</div>';
-
-        //$('#dupak-pengawasan-table').html(trHTML);
+        var footer = generate_footer(response);
+        
         $( "#dupak-pengawasan-wrapper" ).html(header+table+footer);
+      }else{
+        $( "#dupak-pengawasan-wrapper" ).html('<div class="col-md-12 empty-data text-center">Data DUPAK user Tidak ditemukan. </div>');
+      }
     }
   });
   }
@@ -340,62 +202,14 @@ function generate_tabel_penunjang(){
     url: '{{ route("data_dupak") }}',
     type: 'GET',
     data: {user_id: user_id, semester: semester, tahun: tahun},
-    success: function (response) {
-        var irban_kepala_name = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.full_name_gelar ;
-        var irban_kepala_nip = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.nip;
-        var irban_kepala_pangkat = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.pangkat;
-        var irban_kepala_jabatan = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.jabatan;
-	    
-	    var header = '<div class="col-print-12 col-md-12"><h3 class="print-center text-center">SURAT PERNYATAAN<br/>MELAKUKAN KEGIATAN PENUNJANG PENGAWASAN</h3></div>'	    			
-	    			+'<div class="h-20"></div>'
-	    			+'<div class="row"><div class="col-print-12 col-md-12">Yang bertandatangan dibawah ini :</div></div>'
-	    			+'<div class="row">'
-	    				+'<div class="col-print-4 col-md-4">Nama</div>'
-	    				+'<div class="col-print-8 col-md-8">: <strong>'+ irban_kepala_name +'</strong></div>'
-	    			+'</div>'
-	    			+'<div class="row">'
-	    				+'<div class="col-print-4 col-md-4">NIP</div>'
-	    				+'<div class="col-print-8 col-md-8">: '+ irban_kepala_nip +'</div>'
-	    			+'</div>'
-	    			+'<div class="row">'
-	    				+'<div class="col-print-4 col-md-4">Pangkat / golongan ruang</div>'
-	    				+'<div class="col-print-8 col-md-8">: '+ irban_kepala_pangkat +'</div>'
-	    			+'</div>'
-	    			+'<div class="row">'
-	    				+'<div class="col-print-4 col-md-4">Jabatan</div>'
-	    				+'<div class="col-print-8 col-md-8">: '+ irban_kepala_jabatan +'</div>'
-	    			+'</div>'
-	    			+'<div class="row">'
-	    				+'<div class="col-print-4 col-md-4">Unit kerja</div>'
-	    				+'<div class="col-print-8 col-md-8">: Inspektorat Kabupaten Sidoarjo</div>'
-	    			+'</div>'
-	    			+'<div class="h-20"></div>' //separator
-	    			+'<div class="row"><div class="col-print-12 col-md-12">Menyatakan bahwa :</div></div>'
-	    			+'<div class="row">'
-	    				+'<div class="col-print-4 col-md-4">Nama</div>'
-	    				+'<div class="col-print-8 col-md-8">: <strong>'+response[0].user_dupak.full_name_gelar+'</strong></div>'
-	    			+'</div>'
-	    			+'<div class="row">'
-	    				+'<div class="col-print-4 col-md-4">NIP</div>'
-	    				+'<div class="col-print-8 col-md-8">: '+response[0].user_dupak.nip+'</div>'
-	    			+'</div>'
-	    			+'<div class="row">'
-	    				+'<div class="col-print-4 col-md-4">Pangkat / golongan ruang</div>'
-	    				+'<div class="col-print-8 col-md-8">: '+response[0].user_dupak.pangkat+'</div>'
-	    			+'</div>'
-	    			+'<div class="row">'
-	    				+'<div class="col-print-4 col-md-4">Jabatan</div>'
-	    				+'<div class="col-print-8 col-md-8">: '+response[0].user_dupak.jabatan+'</div>'
-	    			+'</div>'
-	    			+'<div class="row">'
-	    				+'<div class="col-print-4 col-md-4">Unit kerja</div>'
-	    				+'<div class="col-print-8 col-md-8">: Inspektorat Kabupaten Sidoarjo</div>'
-	    			+'</div>'
-	    			+'<div class="h-20"></div>';
+    success: function (response) { 
+	    if(response.length>0){
+      var header = generate_header(response,'penunjang');
+      var footer = generate_footer(response);
 	    var table = '<table class="table table-sm table-bordered ajax-table col-print-12 table-print-border" id="dupak-penunjang-table">';
 /* No	Uraian Kegiatan		Tanggal	Satuan AK	Jumlah jam	Jumlah AK	Keterangan
 		Kode	Kegiatan	*/
-		table += '<tr align="center">'
+		  table += '<tr align="center">'
 	              +'<th rowspan="2">No.</th>'
 	              +'<th colspan="2">Uraian Kegiatan</th>'
 	              +'<th rowspan="2">Tanggal</th>'
@@ -438,35 +252,177 @@ function generate_tabel_penunjang(){
               '</tr>';
         });*/
 
-        table += '</table>';
-        var footer = '<div class="row"><div class="col-md-12 col-print-12">Demikian pernyataan ini dibuat untuk dapat dipergunakan sebagaimana mestinya.</div></div>'
-        		+'<div class="h-20"></div>'
-        		+'<div class="row">'
-        			+'<div class="col-md-8 col-print-8"></div>'
-        			+'<div class="col-md-4 col-print-4">Atasan langsung</div>'
-        		+'</div>'
-        		+'<div class="row">'
-        			+'<div class="col-md-8 col-print-8"></div>'
-        			+'<div class="col-md-4 col-print-4">Inspektur Pembantu Wilayah</div>'
-        		+'</div>'
-        		+'<div class="h-100"></div>' //separator ttd atasan
-        		+'<div class="row">'
-        			+'<div class="col-md-8 col-print-8"></div>'
-        			+'<div class="col-md-4 col-print-4"><strong>'+irban_kepala_name+'</strong></div>'
-        		+'</div>'
-        		+'<div class="row">'
-        			+'<div class="col-md-8 col-print-8"></div>'
-        			+'<div class="col-md-4 col-print-4">'+irban_kepala_jabatan+' '+irban_kepala_pangkat+'</div>'
-        		+'</div>'
-        		+'<div class="row">'
-        			+'<div class="col-md-8 col-print-8"></div>'
-        			+'<div class="col-md-4 col-print-4">'+irban_kepala_nip+'</div>'
-        		+'</div>';
-
-        //$('#dupak-pengawasan-table').html(trHTML);
+        table += '</table>';        
         $( "#dupak-penunjang-wrapper" ).html(header+table+footer);
+      }else{
+        $( "#dupak-penunjang-wrapper" ).html('<div class="col-md-12 empty-data text-center">Data DUPAK user Tidak ditemukan. </div>');
+      }
     }
   });
   }
 //end generate tabel penunjang
+
+//start generate table dupak diklat
+    function generate_tabel_diklat(){
+    var user_id = ( $( "#user-id" ).length ) ? $("#user-id option:selected").val() : "{{ Auth::user()->id }}";
+    var semester = $('#semester option:selected').val();
+    var tahun = $('#tahun').val();
+    var periode = (semester == 1) ? '1 Januari - 30 Juni' : '1 Juli - 31 Desember';
+    $.ajax({
+    url: '{{ route("data_dupak_diklat") }}',
+    type: 'GET',
+    data: {user_id: user_id, semester: semester, tahun: tahun},
+    success: function (response) {
+      //console.log(response);
+      if(response.length > 0) {
+        var header = generate_header(response, 'pendidikan dan pelatihan');
+        var footer = generate_footer(response);
+        var table = '<table class="table table-sm table-bordered ajax-table col-print-12 table-print-border" id="dupak-diklat-table">';
+
+              table += '<tr align="center">'
+                +'<th rowspan="2">No.</th>' //1
+                +'<th colspan="2">Uraian Kegiatan</th>' //2
+                +'<th rowspan="2" colspan="2">Tgl Jml Hari Efektif</th>' //3
+                +'<th rowspan="2">Satuan AK</th>'
+                +'<th rowspan="2">Jumlah Jam</th>'
+                +'<th rowspan="2">Jumlah AK</th>'
+                +'<th rowspan="2">Keterangan</th>'
+              +'</tr>'
+              +'<tr align="center">'
+                  +'<th>Kode</th>'
+                  +'<th>Kegiatan</th>'
+              +'</tr>'
+              //nomor tabel
+              +'<tr align="center">'
+                  +'<th>1</th>'
+                  +'<th>2</th>'
+                  +'<th>3</th>'
+                  +'<th colspan="2">4</th>'
+                  +'<th>5</th>'
+                  +'<th>6</th>'
+                  +'<th>7</th>'
+                  +'<th>8</th>'
+              +'</tr>';
+
+        //penambahan tabel kosong tanpa data, hapus jika sudah ada response data
+        table += '<tr style="height: 100px;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>';
+
+       /* $.each(response, function (i, item) {
+          
+          var year = new Date().getFullYear();
+          var n = i+1;            
+              table += '<tr>'
+              +'<td rowspan="2">' + n + '</td>'
+              +'<td rowspan="2"></td>'
+              +'<td rowspan="2">'+ item.spt.kegiatan.sebutan +'</td>'
+              //+'<td>' + item.spt.periode + '<br />' + item.spt.lama + '</td>'
+              +'<td colspan="2" style="text-align: center;">' + item.spt.periode + '</td>'
+              +'<td rowspan="2">'+ item.info_dupak.koefisien +'</td>'
+              +'<td rowspan="2">'+ item.info_dupak.lama_jam +'</td>' 
+              +'<td rowspan="2">'+ item.info_dupak.dupak +'</td>'
+              +'<td rowspan="2">SPT No.700/'+ item.spt.nomor +'/438.4/'+year+'</td>'
+              +'</tr>';
+              table += '<tr>'
+                  +'<td style="width:50%">' + item.spt.lama + ' hari</td>'
+                  +'<td style="width:50%">'+ item.peran +'</td>'
+                  +'</tr>';
+        });*/
+        
+        table += '</table>';
+        $( "#dupak-diklat-wrapper" ).html(header+table+footer);
+      }else {
+          $( "#dupak-diklat-wrapper" ).html('<div class="col-md-12 empty-data text-center">Data DUPAK user Tidak ditemukan. </div>');
+      }
+    }
+  });
+  }
+  //end tabel diklat
+
+//set generate header function
+function generate_header(response, jenis=''){
+  var irban_kepala_name = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.full_name_gelar ;
+  var irban_kepala_nip = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.nip;
+  var irban_kepala_pangkat = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.pangkat;
+  var irban_kepala_jabatan = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.jabatan;
+  
+  var header = '<div class="col-print-12 col-md-12"><h3 class="print-center text-center">SURAT PERNYATAAN<br/>MELAKUKAN KEGIATAN '+jenis.toUpperCase()+'</h3></div>'           
+        +'<div class="h-20"></div>'
+        +'<div class="row"><div class="col-print-12 col-md-12">Yang bertandatangan dibawah ini :</div></div>'
+        +'<div class="row">'
+          +'<div class="col-print-4 col-md-4">Nama</div>'
+          +'<div class="col-print-8 col-md-8">: <strong>'+ irban_kepala_name +'</strong></div>'
+        +'</div>'
+        +'<div class="row">'
+          +'<div class="col-print-4 col-md-4">NIP</div>'
+          +'<div class="col-print-8 col-md-8">: '+ irban_kepala_nip +'</div>'
+        +'</div>'
+        +'<div class="row">'
+          +'<div class="col-print-4 col-md-4">Pangkat / golongan ruang</div>'
+          +'<div class="col-print-8 col-md-8">: '+ irban_kepala_pangkat +'</div>'
+        +'</div>'
+        +'<div class="row">'
+          +'<div class="col-print-4 col-md-4">Jabatan</div>'
+          +'<div class="col-print-8 col-md-8">: '+ irban_kepala_jabatan +'</div>'
+        +'</div>'
+        +'<div class="row">'
+          +'<div class="col-print-4 col-md-4">Unit kerja</div>'
+          +'<div class="col-print-8 col-md-8">: Inspektorat Kabupaten Sidoarjo</div>'
+        +'</div>'
+        +'<div class="h-20"></div>' //separator
+        +'<div class="row"><div class="col-print-12 col-md-12">Menyatakan bahwa :</div></div>'
+        +'<div class="row">'
+          +'<div class="col-print-4 col-md-4">Nama</div>'
+          +'<div class="col-print-8 col-md-8">: <strong>'+response[0].user_dupak.full_name_gelar+'</strong></div>'
+        +'</div>'
+        +'<div class="row">'
+          +'<div class="col-print-4 col-md-4">NIP</div>'
+          +'<div class="col-print-8 col-md-8">: '+response[0].user_dupak.nip+'</div>'
+        +'</div>'
+        +'<div class="row">'
+          +'<div class="col-print-4 col-md-4">Pangkat / golongan ruang</div>'
+          +'<div class="col-print-8 col-md-8">: '+response[0].user_dupak.pangkat+'</div>'
+        +'</div>'
+        +'<div class="row">'
+          +'<div class="col-print-4 col-md-4">Jabatan</div>'
+          +'<div class="col-print-8 col-md-8">: '+response[0].user_dupak.jabatan+'</div>'
+        +'</div>'
+        +'<div class="row">'
+          +'<div class="col-print-4 col-md-4">Unit kerja</div>'
+          +'<div class="col-print-8 col-md-8">: Inspektorat Kabupaten Sidoarjo</div>'
+        +'</div>'
+        +'<div class="h-20"></div>';
+  return header;
+}
+
+//set generate_footer function
+function generate_footer(response){
+  var irban_kepala_name = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.full_name_gelar ;
+  var irban_kepala_nip = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.nip;
+  var irban_kepala_pangkat = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.pangkat;
+  var irban_kepala_jabatan = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.jabatan;
+  var footer = '<div class="row"><div class="col-md-12 col-print-12">Demikian pernyataan ini dibuat untuk dapat dipergunakan sebagaimana mestinya.</div></div>'
+            +'<div class="h-20"></div>'
+            +'<div class="row">'
+              +'<div class="col-md-8 col-print-8"></div>'
+              +'<div class="col-md-4 col-print-4">Atasan langsung</div>'
+            +'</div>'
+            +'<div class="row">'
+              +'<div class="col-md-8 col-print-8"></div>'
+              +'<div class="col-md-4 col-print-4">Inspektur Pembantu Wilayah</div>'
+            +'</div>'
+            +'<div class="h-100"></div>' //separator ttd atasan
+            +'<div class="row">'
+              +'<div class="col-md-8 col-print-8"></div>'
+              +'<div class="col-md-4 col-print-4"><strong>'+irban_kepala_name+'</strong></div>'
+            +'</div>'
+            +'<div class="row">'
+              +'<div class="col-md-8 col-print-8"></div>'
+              +'<div class="col-md-4 col-print-4">'+irban_kepala_jabatan+' '+irban_kepala_pangkat+'</div>'
+            +'</div>'
+            +'<div class="row">'
+              +'<div class="col-md-8 col-print-8"></div>'
+              +'<div class="col-md-4 col-print-4">'+irban_kepala_nip+'</div>'
+            +'</div>';
+  return footer;
+}
 </script>
