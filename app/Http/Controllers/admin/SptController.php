@@ -803,7 +803,7 @@ class SptController extends Controller
     }
 
     public function getPenomoranSptUmum(){
-        $cols = SptUmum::where('nomor',null)->orderBy('id', 'DESC');
+        $cols = SptUmum::where('nomor',null)->orderBy('id', 'DESC')->get();
         $dt = Datatables::of($cols)
                 ->addIndexColumn()
                 ->addColumn('jenis_spt', function($col){
@@ -859,7 +859,7 @@ class SptController extends Controller
                     }
                     return $return;
                 })
-                ->escapeColumns([])
+                ->rawColumns(['ringkasan', 'action'])
                 ->make(true);
 
         return $dt;
