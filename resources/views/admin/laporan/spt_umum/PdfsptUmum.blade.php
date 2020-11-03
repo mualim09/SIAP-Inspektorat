@@ -73,7 +73,7 @@
     // dd();
     for ($i = 0; $i <= 0; $i++) {
         // dd($detail_spt[$i]);
-        $user_ditunjuk = $detail_spt[$i]['user']->first_name.' '.$detail_spt[$i]['user']->last_name.'.'.$detail_spt[$i]['user']->gelar.' , '.$detail_spt[$i]['user']->nip.' Pangkat/Gol.ruang:'.' '.$detail_spt[$i]['user']->pangkat.' Jabatan '.$detail_spt[$i]['user']->jabatan.' pada Inspektorat Daerah Kabupaten Sidoarjo '.(count($detail_spt) > 0 ? "dkk ( $total_dkk orang sebagaimana daftar nama terlampir)" : '');
+        $user_ditunjuk = $detail_spt[$i]['user']->first_name.' '.$detail_spt[$i]['user']->last_name.'.'.$detail_spt[$i]['user']->gelar.' , '.$detail_spt[$i]['user']->nip.' Pangkat/Gol.ruang:'.' '.$detail_spt[$i]['user']->pangkat.' Jabatan '.$detail_spt[$i]['user']->jabatan.' pada Inspektorat Daerah Kabupaten Sidoarjo '.(count($detail_spt) != 1 ? "dkk ( $total_dkk orang sebagaimana daftar nama terlampir)" : '');
         // dd($user_ditunjuk);
     }
     
@@ -156,11 +156,11 @@
 <body>
     <header>
         @include('admin.laporan.header')
-    </header>
+    </header><br>
 
     <div id="header-spt" style="display: block;margin: 5px auto; text-align: center; width: 45%;">          
         {!!$header_spt!!}
-    </div>
+    </div><br><br>
 
     <table width="100%">
         <tr>
@@ -173,12 +173,12 @@
                 </table>
             </td>
             <td style="width:85%">
-                <table width="100%">{!!$dasar!!}</table>
+                <table width="100%" style="margin-left: 100px">{!!$dasar!!}</table>
             </td>
         </tr>
-    </table>
+    </table><br>
 
-    <div class="bold center" style="line-height: 1.5">MEMERINTAHKAN :</div>
+    <div class="bold center" style="line-height: 1.5">MEMERINTAHKAN :</div><br>
 
     <table width="100%">
         <tr>
@@ -190,11 +190,11 @@
                     </tr>
                 </table>
             </td>
-            <td style="width:85%">
-                <p style="text-align: justify;">{{$user_ditunjuk}}</p>
+            <td style="width:85%" >
+                <p style="text-align: justify;margin-left: 100px;">{{$user_ditunjuk}}</p>
             </td>
         </tr>
-    </table>
+    </table><br>
     <table width="100%">
         <tr>
             <td style="width:15%" valign="top">
@@ -206,16 +206,14 @@
                 </table>
             </td>
             <td style="text-align:justify">
-                <p>Melaksanakan {{$spt->info_untuk_umum}}
-                    
-                </p>
+                <p style="margin-left: 100px;">Melaksanakan {{$spt->info_untuk_umum}}</p>
                 <!-- <p>
                     Jangka waktu {{ $short_name }} selama {{ $spt->lama_hari }} kerja pada periode tanggal {{$spt->periode}}.
                 </p>
                 <p>Kepada pihak-pihak yang bersangkutan diminta kesediaannya untuk memberikan bantuan serta keterangan-keterangan yang diperlukan guna kelancaran dalam penyelesaian tugas yang dimaksud.</p> -->
             </td>
         </tr>
-    </table>
+    </table><br>
 
     <div class="ttd-inspektur" style="clear: both;">
         <span>Dikeluarkan di : SIDOARJO</span>
@@ -230,7 +228,7 @@
     <container>
        
     </container>
-
+        <?php if(count($detail_spt) != 1){ ?>
         <div class="lampiran" id="lampiran">
             <span class="lampiran-surat">Lampiran Surat</span><br>
             <span class="lampiran-surat">Nomor :{{$nomor_lampiran}}</span><br>
@@ -244,7 +242,9 @@
             <span class="nip-inspektur">NIP. 197009261990031005</span>
         </div>
         <div class="clear"></div>
-
+        <?php }else{?>
+            
+        <?php } ?>
     <footer>
 
     </footer>

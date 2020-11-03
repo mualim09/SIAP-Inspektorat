@@ -1,5 +1,5 @@
 <form id="satgas-ppm" class="ajax-form needs-validation" novalidate>
-
+@csrf
     <!-- inspektur -->
     <div class="form-group row">
         <label for="inspektur" class="col-md-2 col-form-label text-md-right">{{ __('Inspektur') }}</label>
@@ -123,7 +123,42 @@
 </form>
 
 <script type="text/javascript">
-  $('.selectize').selectize({
+  $('#inspektur').selectize({
+   /*sortField: 'text',*/
+   allowEmptyOption: false,
+   placeholder: 'Pilih Pejabat',
+   create: false
+  });
+
+  $('#sekretaris').selectize({
+   /*sortField: 'text',*/
+   allowEmptyOption: false,
+   placeholder: 'Pilih Pejabat',
+   create: false
+  });
+
+  $('#irban-i').selectize({
+   /*sortField: 'text',*/
+   allowEmptyOption: false,
+   placeholder: 'Pilih Pejabat',
+   create: false
+  });
+
+  $('#irban-ii').selectize({
+   /*sortField: 'text',*/
+   allowEmptyOption: false,
+   placeholder: 'Pilih Pejabat',
+   create: false
+  });
+
+  $('#irban-iii').selectize({
+   /*sortField: 'text',*/
+   allowEmptyOption: false,
+   placeholder: 'Pilih Pejabat',
+   create: false
+  });
+
+  $('#irban-iv').selectize({
    /*sortField: 'text',*/
    allowEmptyOption: false,
    placeholder: 'Pilih Pejabat',
@@ -132,33 +167,32 @@
 
   
 
-  //form submit
- $("#satgas-ppm").validate({
-        
-    submitHandler: function(form){            
-        //("option:selected").val();
-        var inspektur = $('#inspektur:selected').val();
-        var sekretaris = $('#sekretaris:selected').val();
-        var irban_i = $('#irban-i:selected').val();
-        var irban_ii = $('#irban-ii:selected').val();
-        var irban_iii = $('#irban-iii:selected').val();
-        var irban_iv = $('#irban-iv:selected').val();
-        alert(inspektur+'<br/>'+sekretaris+'<br/>'+irban_i+'<br/>'+irban_ii+'<br/>'+irban_iii+'<br/>'+irban_iv+'<br/>'+);
+    //form submit
+    $("#satgas-ppm").validate({
 
-        /*url = "{{ route('submit_pejabat') }}"
+        submitHandler: function(form){
+            
+            var inspektur = $('select[name=inspektur] option').filter(':selected').val();
+            var sekretaris = $('select[name=sekretaris] option').filter(':selected').val();
+            var irban_i = $('select[name=irban_i] option').filter(':selected').val();
+            var irban_ii = $('select[name=irban_ii] option').filter(':selected').val();
+            var irban_iii = $('select[name=irban_iii] option').filter(':selected').val();
+            var irban_iv = $('select[name=irban_iv] option').filter(':selected').val();
+            // alert(inspektur+'<br/>'+sekretaris+'<br/>'+irban_i+'<br/>'+irban_ii+'<br/>'+irban_iii+'<br/>'+irban_iv+'<br/>');
 
-        $.ajax({
-            url: url,
-            type: type,
-            data: $('.ajax-form').serialize(),
-            success: function($data){
-                $.alert(alert);
-                $('.ajax-form')[0].reset();
-                table.ajax.reload();
-            },
-            error: function($data){
-            }
-        });*/
-    }
-});
+            url = "{{ route('submit_pejabat') }}"
+
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: $('.ajax-form').serialize(),
+                success: function($data){
+                    $('.ajax-form')[0].reset();
+                    location.reload();
+                },
+                error: function($data){
+                }
+            });
+        }
+    });
 </script>

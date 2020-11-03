@@ -17,7 +17,6 @@
                 </div>
                 <div class="alert"></div>
                 <div class="card-body">
-                    @csrf
                     @include('admin.pejabat.form')
                 </div>
             </div>
