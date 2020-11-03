@@ -867,7 +867,13 @@ class SptController extends Controller
 
     public function delelteSptUmum($id)
     {
-        dd($id);
+        if(auth()->user()->hasPermissionTo('Delete SPT')){
+            $spt = SptUmum::findOrFail($id);
+            $delete = DetailSpt::where('spt_id',$id)->where('jenis_laporan',$spt->jenis_spt_umum)->delete();
+            // dd($delete);
+            SptUmum::destroy($id);
+            return 'SPT deleted!';
+        }
     }
 
     public function updateNomorSpt(Request $request){

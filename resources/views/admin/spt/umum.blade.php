@@ -356,7 +356,7 @@
                             data: {_method: 'delete', '_token' : csrf_token },
                             success: function(data){
                                 //table.ajax.reload();
-                                $('#spt-umum').DataTable().ajax.reload(null, false );
+                                $('#spt-umum-table').DataTable().ajax.reload();
                             }
                         });
                     },
