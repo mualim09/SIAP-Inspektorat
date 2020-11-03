@@ -93,9 +93,51 @@ class PejabatController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function submit(Request $request)
     {
-        //
+        $inspektur = User::where('jabatan', 'Inspektur Kabupaten')->select(['id' ,'first_name','last_name'])->first();
+        $sekretaris = User::where('jabatan', 'Sekretaris')->select(['id' ,'first_name','last_name'])->first();
+        $irban_i_default = User::where('jabatan', 'Inspektur Pembantu Wilayah I')->select(['id' ,'first_name','last_name','ruang->nama as nama_ruang'])->first();
+        $irban_ii_default = User::where('jabatan', 'Inspektur Pembantu Wilayah II')->select(['id' ,'first_name','last_name','ruang->nama as nama_ruang'])->first();
+        $irban_iii_default = User::where('jabatan', 'Inspektur Pembantu Wilayah III')->select(['id' ,'first_name','last_name','ruang->nama as nama_ruang'])->first();
+        $irban_iv_default = User::where('jabatan', 'Inspektur Pembantu Wilayah IV')->select(['id' ,'first_name','last_name','ruang->nama as nama_ruang'])->first();
+
+        //$plt_inspektur = Pejabat::where('name', 'Inspektur Kabupaten')->with('user:id,first_name,last_name')->first();
+        $plt_inspektur = User::whereHas('pejabat', function($q){
+            $q->where('name','Inspektur Kabupaten')->whereNotNull('status');
+        })->first();
+
+        $plt_sekretaris = User::whereHas('pejabat', function($q){
+            $q->where('name','Sekretaris')->whereNotNull('status');
+        })->first();
+
+        $plt_irban_i = User::whereHas('pejabat', function($q){
+            $q->where('name','Inspektur Pembantu Wilayah I')->whereNotNull('status');
+        })->first();
+
+        $plt_irban_ii = User::whereHas('pejabat', function($q){
+            $q->where('name','Inspektur Pembantu Wilayah II')->whereNotNull('status');
+        })->first();
+
+        $plt_irban_iii = User::whereHas('pejabat', function($q){
+            $q->where('name','Inspektur Pembantu Wilayah III')->whereNotNull('status');
+        })->first();
+
+        $plt_irban_iv = User::whereHas('pejabat', function($q){
+            $q->where('name','Inspektur Pembantu Wilayah IV')->whereNotNull('status');
+        })->first();
+       
+        if($request->inspektur !== $inspektur->id){
+            $cek_pejabat = Pejabat::where('name', 'Inspektur Kabupaten')->count();
+            if($cek_pejabat>0){
+                //query update tabel pejabat 'name:Inspektur Kabupaten'
+
+            }else{
+                //query insert pejabat inspektur
+            }
+        }
+
+        //if request sekretaris
     }
 
     /**

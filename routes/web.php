@@ -317,6 +317,7 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
     	Route::get('search-user', 'UserController@search')->name('search_user');
     	//satgas ppm (penunjukan pejabat)
 		Route::get('penunjukan/pejabat', 'PejabatController@index')->name('satgas_ppm');
+		Route::post('submit/pejabat', 'PejabatController@submit')->name('submit_pejabat');
     });
 
     Route::group(['prefix' => 'roles'], function(){
