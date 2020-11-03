@@ -11,7 +11,7 @@
     <h4 class="text-center"> Penomoran SPT Umum </h4>
     <div class="card-body table-responsive">
       <div class="table-responsive">
-        <table id="spt-umum" class="table table-striped table-sm ajax-table" style="border-collapse: collapse;margin: 0;padding: 0;width: 100%;table-layout: fixed;">
+        <table id="spt-umum-table" class="table table-striped table-sm ajax-table" style="border-collapse: collapse;margin: 0;padding: 0;width: 100%;table-layout: fixed;">
             <thead></thead>
             <tbody></tbody>
         </table>
@@ -243,7 +243,7 @@
     });
 
   // datatable penomoran SPT
-     $('#spt-umum').DataTable({
+     $('#spt-umum-table').DataTable({
           'pageLength': 50,
           dom: '<"col-md-12 row"<"col-md-6"B><"col"f>>rtlp',
           buttons:[ {extend:'excel', title:'Daftar SPT'}, {extend:'pdf', title:'Daftar SPT'} ],
@@ -262,13 +262,10 @@
           deferRender: true,
           columns: [
             {'defaultContent' : '', 'data' : 'DT_RowIndex', 'name' : 'DT_RowIndex', 'title' : 'No', 'orderable' : false, 'searchable' : false, 'exportable' : true, 'printable' : true},
-            {data: 'jenis_spt', name: 'jenis_spt', 'title': "{{ __('Jenis SPT') }}"},
-            // {data: 'ringkasan', name: 'ringkasan', 'title': "{{ __('Ringkasan') }}"},
-            {data: 'ringkasan', name: 'ringkasan', 'title': "{{ __('Ringkasan') }}", 'allowHTML': true},
-            // {data: 'tanggal_mulai', name: 'tanggal_mulai', 'title': "{{ __('Tanggal Mulai') }}"},
-            // {data: 'tanggal_akhir', name: 'tanggal_akhir', 'title': "{{ __('Tanggal Akhir') }}"},
-            {data: 'periode', name: 'periode', 'title': "{{ __('Tanggal') }}"},
-            {data: 'lama', name: 'lama', 'title': "{{ __('Lama') }}"},
+            {data: 'jenis_spt', name: 'jenis_spt', 'title': "{{ __('Jenis SPT') }}", 'searchable': true},
+            {data: 'ringkasan', name: 'ringkasan', 'title': "{{ __('Ringkasan') }}", 'allowHTML': true, 'searchable': true},
+            {data: 'periode', name: 'periode', 'title': "{{ __('Tanggal') }}", 'searchable': true},
+            {data: 'lama', name: 'lama', 'title': "{{ __('Lama') }}", 'searchable': false},
             {data: 'action', name: 'action', 'orderable': false, 'searchable': false, 'title': "{{ __('') }}", 'exportable' : false,'printable': false},
           ],
       });
@@ -297,8 +294,6 @@
           {data: 'nomor', name: 'nomor', 'title': "{{ __('Nomor') }}"},
           {data: 'jenis_spt', name: 'jenis_spt', 'title': "{{ __('Jenis SPT') }}"},
           {data: 'ringkasan', name: 'ringkasan', 'title': "{{ __('Ringkasan') }}", 'allowHTML': true},
-          /*{data: 'tanggal_mulai', name: 'tanggal_mulai', 'title': "{{ __('Tanggal Mulai') }}"},
-          {data: 'tanggal_akhir', name: 'tanggal_akhir', 'title': "{{ __('Tanggal Akhir') }}"},*/
           {data: 'periode', name: 'periode', 'title': "{{ __('Tanggal') }}"},
           {data: 'lama', name: 'lama', 'title': "{{ __('Lama ') }}"},
           {data: 'action', name: 'action', 'orderable': false, 'searchable': false, 'title': "{{ __('') }}", 'exportable' : false,'printable': false},
