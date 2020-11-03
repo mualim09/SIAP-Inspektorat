@@ -27,9 +27,9 @@
     // $nomor_spt = ($spt->nomor) ? $spt->nomor : echo '&nbsp;&nbsp;&nbsp;';
     
     $kode_kelompok = '';
-    if ($spt->jenis_spt_umum == 'SPT Umum') {
+    /*if ($spt->jenis_spt_umum == 'SPT Umum') {
         $kode_kelompok = '800';
-    }if($spt->jenis_spt_umum == 'SPT Pengembangan Profesi'){
+    }*/if($spt->jenis_spt_umum == 'SPT Pengembangan Profesi'){
         $kode_kelompok = '800';
     }if($spt->jenis_spt_umum == 'SPT Penunjang'){
         $kode_kelompok = '800';
