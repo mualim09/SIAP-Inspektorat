@@ -825,8 +825,8 @@ class SptController extends Controller
                 })
                 ->addColumn('ringkasan', function($col){                    
                     // $tambahan = (!is_null($col->info_untuk_umum) ) ? '<br /> <small class="text-muted"> ' . Common::cutText($col->info_untuk_umum, 2, 70) . '</small>' : '';
-                    $tambahan = (!is_null($col->info_untuk_umum) ) ? '<br /> <small class="text-muted"> ' . Common::cutText($col->info_untuk_umum, 2, 70) . '</small>' : '';
-                    return $col->info_untuk_umum . $tambahan ;
+                    $tambahan = (!is_null($col->info_untuk_umum) ) ? '<br /> <small class="text-muted"> ' . Common::cutText($col->info_untuk_umum, 2, 90) . '</small>' : '';
+                    return Common::cutText($col->info_untuk_umum, 2, 50) . $tambahan ;
                     // $tambahan = (!is_null($col->tambahan) ) ? '<br /> <small class="text-muted"> ' . Common::cutText($col->tambahan, 2) . '</small>' : '';
                     // return $col->jenis_spt . $tambahan ;
                     /*$tambahan = (!is_null($col->tambahan) ) ? Common::cutText($col->tambahan, 2) : '';

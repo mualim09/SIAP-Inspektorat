@@ -243,32 +243,52 @@
     });
 
   // datatable penomoran SPT
+
      $('#spt-umum-table').DataTable({
-          'pageLength': 50,
-          dom: '<"col-md-12 row"<"col-md-6"B><"col"f>>rtlp',
-          buttons:[ {extend:'excel', title:'Daftar SPT'}, {extend:'pdf', title:'Daftar SPT'} ],
-          language: {
-              paginate: {
-                next: '&gt;', 
-                previous: '&lt;' 
-              }
+        'pageLength': 50,
+        autoWidth: false,
+        //dom: '<"col-md-12 row"<"col-md-6"B><"col"f>>rtlp',
+        dom: '<"col-md-12 row"<"col-md-6"B><"col"f>>rtlp',
+        buttons:[ {extend:'excel', title:'Daftar SPT'}, {extend:'pdf', title:'Daftar SPT'} ],
+        language: {
+            paginate: {
+              next: '&gt;', 
+              previous: '&lt;' 
+            }
+        },
+        "opts": {
+          "theme": "bootstrap",
+        },
+        processing: true,
+        serverSide: true,
+        ajax: '{{ route("penomoran_umum") }}',
+        deferRender: true,
+        columns: [
+          {'defaultContent' : '', 'data' : 'DT_RowIndex', 'name' : 'DT_RowIndex', 'title' : 'No', 'orderable' : false, 'searchable' : false, 'exportable' : true, 'printable' : true},
+          {data: 'jenis_spt', name: 'jenis_spt', 'title': "{{ __('Jenis SPT') }}", 'searchable': true},
+          {data: 'ringkasan', name: 'ringkasan', 'title': "{{ __('Ringkasan') }}", 'allowHTML': true, 'searchable': true},
+          {data: 'periode', name: 'periode', 'title': "{{ __('Tanggal') }}", 'searchable': true},
+          {data: 'lama', name: 'lama', 'title': "{{ __('Lama') }}", 'searchable': false},
+          {data: 'action', name: 'action', 'orderable': false, 'searchable': false, 'title': "{{ __('') }}", 'exportable' : false,'printable': false},
+        ],
+        columnDefs : [
+          {"width": '2%', "targets": 0},
+          // {"width": '5%', "targets": 2},
+          {"width": '19%', "targets": 1},
+          {
+            "width": '45%', 
+            "targets": 2,
+            //"data" : null,
+            /*"render": function ( data, type, row, meta ) {
+              tambahan = (data.tambahan.length > 0 ) ? '<br/><small class="text-muted">'+data.tambahan+'</small>' : ''
+              return data.jenis+tambahan;
+            }*/
           },
-          "opts": {
-            "theme": "bootstrap",
-          },
-          processing: true,
-          serverSide: true,
-          ajax: '{{ route("penomoran_umum") }}',
-          deferRender: true,
-          columns: [
-            {'defaultContent' : '', 'data' : 'DT_RowIndex', 'name' : 'DT_RowIndex', 'title' : 'No', 'orderable' : false, 'searchable' : false, 'exportable' : true, 'printable' : true},
-            {data: 'jenis_spt', name: 'jenis_spt', 'title': "{{ __('Jenis SPT') }}", 'searchable': true},
-            {data: 'ringkasan', name: 'ringkasan', 'title': "{{ __('Ringkasan') }}", 'allowHTML': true, 'searchable': true},
-            {data: 'periode', name: 'periode', 'title': "{{ __('Tanggal') }}", 'searchable': true},
-            {data: 'lama', name: 'lama', 'title': "{{ __('Lama') }}", 'searchable': false},
-            {data: 'action', name: 'action', 'orderable': false, 'searchable': false, 'title': "{{ __('') }}", 'exportable' : false,'printable': false},
-          ],
-      });
+          {"width": '20%', "targets": 3},
+          {"width": '5%', "targets": 4},
+          // {"width": '15%', "targets": 6},
+        ]
+    });
 
      $('#arsip-spt-umum').DataTable({
         'pageLength': 50,
@@ -298,6 +318,23 @@
           {data: 'lama', name: 'lama', 'title': "{{ __('Lama ') }}"},
           {data: 'action', name: 'action', 'orderable': false, 'searchable': false, 'title': "{{ __('') }}", 'exportable' : false,'printable': false},
         ],
+        columnDefs : [
+          {"width": '2%', "targets": 0},
+          {"width": '5%', "targets": 1},
+          {"width": '10%', "targets": 2},
+          {
+            "width": '45%', 
+            "targets": 3,
+            //"data" : null,
+            /*"render": function ( data, type, row, meta ) {
+              tambahan = (data.tambahan.length > 0 ) ? '<br/><small class="text-muted">'+data.tambahan+'</small>' : ''
+              return data.jenis+tambahan;
+            }*/
+          },
+          {"width": '20%', "targets": 4},
+          {"width": '5%', "targets": 5},
+          {"width": '15%', "targets": 6},
+        ]
     });
 
     //butuh revisi
