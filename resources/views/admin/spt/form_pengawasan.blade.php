@@ -212,7 +212,7 @@
 		                var user_id = $('#session-anggota option:selected').val();
 		                var peran = $('#session-peran option:selected').val();
 		                //var id_spt = id_spt;
-		                alert(save_method);
+		                //alert(save_method);
 		                url = (save_method === 'edit') ? "{{ route('store_detail_anggota') }}" : "{{ route('store_session_anggota') }}" ;
 		                if(tgl_mulai == '' || tgl_akhir==''){
 		                	$.alert('Isikan tanggal mulai dan tanggal akhir terlebih dahulu.');
