@@ -283,9 +283,10 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 	Route::group(['prefix'=>'dupak'],function(){
 		Route::get('list', 'DupakController@index')->name('list_dupak');
 		Route::get('reviu', 'DupakController@reviuDupak')->name('reviu_dupak');
-		Route::get('getdata', 'DupakController@getData')->name('data_dupak');
-    	Route::get('getDupakPendidikan', 'DupakController@getDupakPendidikan')->name('data_dupak_pendidikan');
+		Route::get('pengawasan', 'DupakController@getData')->name('data_dupak');
+    	Route::get('pendidikan', 'DupakController@getDupakPendidikan')->name('data_dupak_pendidikan');
     	Route::get('diklat', 'DupakController@getDupakDiklat')->name('data_dupak_diklat');
+    	Route::get('penunjang', 'DupakController@getDupakPenunjang')->name('data_dupak_penunjang');
 		Route::get('user/{id}', 'DupakController@dupakUser')->name('get_dupak_user');
 		Route::post('store/penunjang', 'DupakController@storePenunjang')->name('store_dupak_penunjang');
 	});

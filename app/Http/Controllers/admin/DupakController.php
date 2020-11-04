@@ -352,7 +352,36 @@ class DupakController extends Controller
         ->where('unsur_dupak','=','diklat')->where('user_id','=',$user_id)->get();
 
         return $data;
+        //getDupakPenunjang
+    }
 
+    public function getDupakPenunjang(Request $request){
+        $user_id = ($request->user_id) ? $request->user_id : auth()->user()->id;
+        $year = ($request->tahun) ? $request->tahun : date('Y');
+        if(isset($request->semester)) {
+            if($request->semester == 1) {
+                $start = date("Y-m-d H:i:s", strtotime("$year-01-01"));
+                $end = date("Y-m-d H:i:s", strtotime("$year-06-30"));
+            }
+            elseif ($request->semester == 2) {
+                $start = date("Y-m-d H:i:s", strtotime("$year-07-01"));
+                $end = date("Y-m-d H:i:s", strtotime("$year-12-31"));
+            }else{
+                return response('Pilih periode semester terlebih dahulu.', 401);
+            }
+        }else{
+            $start = ( date('n')<=6 ) ? date("Y-m-d H:i:s", strtotime("$year-01-01")) : date("Y-m-d H:i:s", strtotime("$year-07-01"));
+            $end = ( date('n')<=6 ) ? date("Y-m-d H:i:s", strtotime("$year-06-30")) : date("Y-m-d H:i:s", strtotime("$year-12-31"));
+        }
+
+        //query dari model DetailSpt
+        $data = DetailSpt::whereHas('sptUmum', function($q) use ($start, $end){
+            $q->whereBetween('tgl_mulai',[$start,$end])->whereNotNull('nomor');
+        })->with('sptUmum')
+        ->where('unsur_dupak','=','penunjang')->where('user_id','=',$user_id)->get();
+
+        return $data;
+        //getDupakPenunjang
     }
 
 

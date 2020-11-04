@@ -199,12 +199,14 @@ function generate_tabel_penunjang(){
     var tahun = $('#tahun').val();
     var periode = (semester == 1) ? '1 Januari - 30 Juni' : '1 Juli - 31 Desember';
     $.ajax({
-    url: '{{ route("data_dupak") }}',
+    url: '{{ route("data_dupak_penunjang") }}',
     type: 'GET',
     data: {user_id: user_id, semester: semester, tahun: tahun},
     success: function (response) { 
-	    if(response.length>0){
-      var header = generate_header(response,'penunjang');
+	    //console.log(response);
+      if(response.length>0){
+      var year = new Date().getFullYear();
+      var header = generate_header(response,'penunjang pengawasan');
       var footer = generate_footer(response);
 	    var table = '<table class="table table-sm table-bordered ajax-table col-print-12 table-print-border" id="dupak-penunjang-table">';
 /* No	Uraian Kegiatan		Tanggal	Satuan AK	Jumlah jam	Jumlah AK	Keterangan
@@ -233,24 +235,27 @@ function generate_tabel_penunjang(){
               	  +'<th>7</th>'
               	  +'<th>8</th>'
               +'</tr>';
-        table += '<tr style="height: 100px;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>';
+       //table += '<tr style="height: 100px;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>';
 				
         //commenting, SPT penunjang belum jadi, sementara tampilkan template saja
-       /*$.each(response, function (i, item) {
-          
-          var year = new Date().getFullYear();
+       $.each(response, function (i, item) {
           var n = i+1;            
               table += '<tr>'
-              +'<td>' + n + '</td>'
+              +'<td >' + n + '</td>'
               +'<td></td>'
-              +'<td>'+ item.spt.kegiatan.sebutan +'</td>'
-              +'<td>' + item.spt.periode + '<br />' + item.spt.lama + '</td>'
-              +'<td>'+ item.info_dupak.koefisien +'</td>'
-              +'<td>'+ item.info_dupak.lama_jam +'</td>' 
+              +'<td>'+ item.spt_umum.info_untuk_umum+'</td>'
+              //+'<td>' + item.spt.periode + '<br />' + item.spt.lama + '</td>'
+              +'<td style="text-align: center;">' + item.spt_umum.periode + '</td>'
               +'<td>'+ item.info_dupak.dupak +'</td>'
-              +'<td>SPT No.700/'+ item.spt.nomor +'/438.4/'+year+'</td>'
-              '</tr>';
-        });*/
+              +'<td>'+ item.info_dupak.lama +'</td>' 
+              +'<td>'+ item.info_dupak.dupak +'</td>'
+              +'<td>SPT No.700/'+ item.spt_umum.nomor +'/438.4/'+year+'</td>'
+              +'</tr>';
+              /*table += '<tr>'
+                  +'<td style="width:50%">' + item.spt_umum.lama + ' hari</td>'
+                  +'<td style="width:50%">'+ item.peran +'</td>'
+                  +'</tr>';*/
+        });
 
         table += '</table>';        
         $( "#dupak-penunjang-wrapper" ).html(header+table+footer);
@@ -280,7 +285,7 @@ function generate_tabel_penunjang(){
         var footer = generate_footer(response);
         var table = '<table class="table table-sm table-bordered ajax-table col-print-12 table-print-border" id="dupak-diklat-table">';
 
-              table += '<tr align="center">'
+        /*      table += '<tr align="center">'
                 +'<th rowspan="2">No.</th>' //1
                 +'<th colspan="2">Uraian Kegiatan</th>' //2
                 +'<th rowspan="2" colspan="2">Tgl Jml Hari Efektif</th>' //3
@@ -303,28 +308,52 @@ function generate_tabel_penunjang(){
                   +'<th>6</th>'
                   +'<th>7</th>'
                   +'<th>8</th>'
+              +'</tr>';*/
+        table += '<tr align="center">'
+                +'<th rowspan="2">No.</th>'
+                +'<th colspan="2">Uraian Kegiatan</th>'
+                +'<th rowspan="2">Tanggal</th>'
+                +'<th rowspan="2">Satuan AK</th>'
+                +'<th rowspan="2">Jumlah Jam</th>'
+                +'<th rowspan="2">Jumlah AK</th>'
+                +'<th rowspan="2">Keterangan</th>'
+              +'</tr>'
+              +'<tr align="center">'
+                  +'<th>Kode</th>'
+                  +'<th>Kegiatan</th>'
+              +'</tr>'
+              //nomor tabel
+              +'<tr align="center">'
+                  +'<th>1</th>'
+                  +'<th>2</th>'
+                  +'<th>3</th>'
+                  +'<th>4</th>'
+                  +'<th>5</th>'
+                  +'<th>6</th>'
+                  +'<th>7</th>'
+                  +'<th>8</th>'
               +'</tr>';
 
         //penambahan tabel kosong tanpa data, hapus jika sudah ada response data
         //table += '<tr style="height: 100px;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>';
 
-        $.each(response, function (i, item) {          
+        $.each(response, function (i, item) {
           var n = i+1;            
               table += '<tr>'
-              +'<td rowspan="2">' + n + '</td>'
-              +'<td rowspan="2"></td>'
-              +'<td rowspan="2">'+ item.spt_umum.info_untuk_umum+'</td>'
+              +'<td>' + n + '</td>'
+              +'<td></td>'
+              +'<td>'+ item.spt_umum.info_untuk_umum+'</td>'
               //+'<td>' + item.spt.periode + '<br />' + item.spt.lama + '</td>'
-              +'<td colspan="2" style="text-align: center;">' + item.spt_umum.periode + '</td>'
-              +'<td rowspan="2">'+ item.info_dupak.dupak +'</td>'
-              +'<td rowspan="2">'+ item.info_dupak.lama +'</td>' 
-              +'<td rowspan="2">'+ item.info_dupak.dupak +'</td>'
-              +'<td rowspan="2">SPT No.700/'+ item.spt_umum.nomor +'/438.4/'+year+'</td>'
+              +'<td style="text-align: center;">' + item.spt_umum.periode + '</td>'
+              +'<td>'+ item.info_dupak.dupak +'</td>'
+              +'<td>'+ item.info_dupak.lama +'</td>' 
+              +'<td>'+ item.info_dupak.dupak +'</td>'
+              +'<td>SPT No.700/'+ item.spt_umum.nomor +'/438.4/'+year+'</td>'
               +'</tr>';
-              table += '<tr>'
+              /*table += '<tr>'
                   +'<td style="width:50%">' + item.spt_umum.lama + ' hari</td>'
                   +'<td style="width:50%">'+ item.peran +'</td>'
-                  +'</tr>';
+                  +'</tr>';*/
         });
         
         table += '</table>';
