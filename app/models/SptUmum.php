@@ -16,6 +16,7 @@ class SptUmum extends Model
 	protected $primaryKey = 'id';
     protected $fillable = ['jenis_spt_umum', 'lokasi_id','info_untuk_umum', 'nomor', 'info_dasar_umum', 'tgl_mulai', 'tgl_akhir', 'lama','tgl_register','file','created_at','updated_at'];
     protected $table = 'spt_umum';
+    protected $appends = ['periode','lokasi_spt'];
     protected $casts = [
         'lokasi_id' => 'array',
         'info' => 'array',
@@ -44,6 +45,12 @@ class SptUmum extends Model
             $nama_lokasi = rtrim($nama_lokasi, ", ");
             return $nama_lokasi;
         }
+    }
+
+    public function getPeriodeAttribute(){
+        $start = Carbon::parse($this->tgl_mulai)->formatLocalized('%d %B');
+        $end = Carbon::parse($this->tgl_akhir)->formatLocalized('%d %B %Y');
+        return $start . ' s.d ' . $end;
     }
 
     public function detailSpt(){

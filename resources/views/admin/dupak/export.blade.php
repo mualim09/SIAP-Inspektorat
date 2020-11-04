@@ -273,8 +273,9 @@ function generate_tabel_penunjang(){
     type: 'GET',
     data: {user_id: user_id, semester: semester, tahun: tahun},
     success: function (response) {
-      //console.log(response);
+      //console.log(response[0].irban_kepala.pejabat);
       if(response.length > 0) {
+        var year = new Date().getFullYear();
         var header = generate_header(response, 'pendidikan dan pelatihan');
         var footer = generate_footer(response);
         var table = '<table class="table table-sm table-bordered ajax-table col-print-12 table-print-border" id="dupak-diklat-table">';
@@ -305,28 +306,26 @@ function generate_tabel_penunjang(){
               +'</tr>';
 
         //penambahan tabel kosong tanpa data, hapus jika sudah ada response data
-        table += '<tr style="height: 100px;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>';
+        //table += '<tr style="height: 100px;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>';
 
-       /* $.each(response, function (i, item) {
-          
-          var year = new Date().getFullYear();
+        $.each(response, function (i, item) {          
           var n = i+1;            
               table += '<tr>'
               +'<td rowspan="2">' + n + '</td>'
               +'<td rowspan="2"></td>'
-              +'<td rowspan="2">'+ item.spt.kegiatan.sebutan +'</td>'
+              +'<td rowspan="2">'+ item.spt_umum.info_untuk_umum+'</td>'
               //+'<td>' + item.spt.periode + '<br />' + item.spt.lama + '</td>'
-              +'<td colspan="2" style="text-align: center;">' + item.spt.periode + '</td>'
-              +'<td rowspan="2">'+ item.info_dupak.koefisien +'</td>'
-              +'<td rowspan="2">'+ item.info_dupak.lama_jam +'</td>' 
+              +'<td colspan="2" style="text-align: center;">' + item.spt_umum.periode + '</td>'
               +'<td rowspan="2">'+ item.info_dupak.dupak +'</td>'
-              +'<td rowspan="2">SPT No.700/'+ item.spt.nomor +'/438.4/'+year+'</td>'
+              +'<td rowspan="2">'+ item.info_dupak.lama +'</td>' 
+              +'<td rowspan="2">'+ item.info_dupak.dupak +'</td>'
+              +'<td rowspan="2">SPT No.700/'+ item.spt_umum.nomor +'/438.4/'+year+'</td>'
               +'</tr>';
               table += '<tr>'
-                  +'<td style="width:50%">' + item.spt.lama + ' hari</td>'
+                  +'<td style="width:50%">' + item.spt_umum.lama + ' hari</td>'
                   +'<td style="width:50%">'+ item.peran +'</td>'
                   +'</tr>';
-        });*/
+        });
         
         table += '</table>';
         $( "#dupak-diklat-wrapper" ).html(header+table+footer);
@@ -343,7 +342,8 @@ function generate_header(response, jenis=''){
   var irban_kepala_name = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.full_name_gelar ;
   var irban_kepala_nip = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.nip;
   var irban_kepala_pangkat = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.pangkat;
-  var irban_kepala_jabatan = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.jabatan;
+  var irban_kepala_jabatan = ( response[0].irban_kepala === null ) ? '' : (typeof response[0].irban_kepala.pejabat === 'undefined') ? response[0].irban_kepala.jabatan : response[0].irban_kepala.pejabat.status+' '+response[0].irban_kepala.pejabat.name;
+  //status_pejabat = (response[0].irban_kepala.pejabat !== null) ? 'PLT ' : '';
   
   var header = '<div class="col-print-12 col-md-12"><h3 class="print-center text-center">SURAT PERNYATAAN<br/>MELAKUKAN KEGIATAN '+jenis.toUpperCase()+'</h3></div>'           
         +'<div class="h-20"></div>'
@@ -362,7 +362,7 @@ function generate_header(response, jenis=''){
         +'</div>'
         +'<div class="row">'
           +'<div class="col-print-4 col-md-4">Jabatan</div>'
-          +'<div class="col-print-8 col-md-8">: '+ irban_kepala_jabatan +'</div>'
+          +'<div class="col-print-8 col-md-8">: '+irban_kepala_jabatan +'</div>'
         +'</div>'
         +'<div class="row">'
           +'<div class="col-print-4 col-md-4">Unit kerja</div>'
@@ -400,6 +400,7 @@ function generate_footer(response){
   var irban_kepala_nip = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.nip;
   var irban_kepala_pangkat = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.pangkat;
   var irban_kepala_jabatan = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.jabatan;
+  var irban_kepala_atasan = ( response[0].irban_kepala === null ) ? '' : (typeof response[0].irban_kepala.pejabat === 'undefined') ? response[0].irban_kepala.jabatan : response[0].irban_kepala.pejabat.status+' '+response[0].irban_kepala.pejabat.name;
   var footer = '<div class="row"><div class="col-md-12 col-print-12">Demikian pernyataan ini dibuat untuk dapat dipergunakan sebagaimana mestinya.</div></div>'
             +'<div class="h-20"></div>'
             +'<div class="row">'
@@ -408,7 +409,7 @@ function generate_footer(response){
             +'</div>'
             +'<div class="row">'
               +'<div class="col-md-8 col-print-8"></div>'
-              +'<div class="col-md-4 col-print-4">Inspektur Pembantu Wilayah</div>'
+              +'<div class="col-md-4 col-print-4">'+irban_kepala_atasan+'</div>'
             +'</div>'
             +'<div class="h-100"></div>' //separator ttd atasan
             +'<div class="row">'
