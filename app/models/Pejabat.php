@@ -9,6 +9,7 @@ class Pejabat extends Model
     protected $fillable = ['user_id', 'name', 'status','description'];
     protected $table = 'pejabat';
     protected $appends = [];
+  	public $timestamps = false;
     protected $casts = [
         
     ];
