@@ -211,9 +211,9 @@
 		            	var tgl_akhir = $('#spt-form').find('#tgl-akhir').val();
 		                var user_id = $('#session-anggota option:selected').val();
 		                var peran = $('#session-peran option:selected').val();
-		                var id_spt = $('#spt-id-anggota').val();
-		                //alert(id_spt)
-		                url = (id_spt !== '') ? "{{ route('store_detail_anggota') }}" : "{{ route('store_session_anggota') }}" ;
+		                //var id_spt = id_spt;
+		                alert(save_method);
+		                url = (save_method === 'edit') ? "{{ route('store_detail_anggota') }}" : "{{ route('store_session_anggota') }}" ;
 		                if(tgl_mulai == '' || tgl_akhir==''){
 		                	$.alert('Isikan tanggal mulai dan tanggal akhir terlebih dahulu.');
 		                }else{
@@ -355,7 +355,7 @@
   });
 
 	function deleteAnggota(detail_id){
-		save_method = 'delete';
+		//save_method = 'delete';
 		var url_prefix = (window.location.pathname == '/admin') ? 'admin/spt/' : 'spt/';
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
         $.confirm({

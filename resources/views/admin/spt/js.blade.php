@@ -39,14 +39,16 @@
 
     $('#btn-new-spt').on('click', function(){
         save_method = 'new';
+        $('#spt-form')[0].reset();
+        $('#new-anggota-spt-form')[0].reset();
+        clearSessionAnggota();
         clearJenis();
     });
 
     //butuh revisi
     function editForm(id){        
         save_method = 'edit';
-        //spt_id = id;
-
+        id_spt = id;
         //avoid false ajax url. read url first, then add it to te prefixed url
         var url_prefix = (window.location.pathname == '/admin') ? 'admin/spt/' : 'spt/';
         url = url_prefix+id+"/edit";
@@ -81,7 +83,7 @@
                 $('#lama').val(data.lama);
                 $('#lokasi').val(data.lokasi);
                 $('#formModal').modal('show');
-                $("#modal-body-anggota #spt-id-anggota").val( id );
+                //$("#modal-body-anggota #spt-id-anggota").val( id );
             },
             error: function(err){
                 console.log(err);
@@ -234,6 +236,8 @@
 
     $('#formModal').on('hidden.bs.modal', function(){
         $('#tgl-akhir').prop('disabled',true);
+        //delete id_spt;
+        //delete save_method;
     });
 
     $( "#formAnggotaSptModal" ).on('shown.bs.modal', function(){

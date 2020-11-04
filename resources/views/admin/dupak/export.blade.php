@@ -171,7 +171,7 @@ function add_cell_to_sheet(worksheet, address, value) {
               +'<td rowspan="2">'+ item.info_dupak.koefisien +'</td>'
               +'<td rowspan="2">'+ item.info_dupak.lama_jam +'</td>' 
               +'<td rowspan="2">'+ item.info_dupak.dupak +'</td>'
-              +'<td rowspan="2">SPT No.700/'+ item.spt.nomor +'/438.4/'+year+'</td>'
+              +'<td rowspan="2">SPT No.700/'+ item.spt.nomor +'/438.4/'+year+'<br/><br/></td>'
               +'</tr>';
               table += '<tr>'
               		+'<td style="width:50%">' + item.spt.lama + ' hari</td>'
@@ -249,7 +249,7 @@ function generate_tabel_penunjang(){
               +'<td>'+ item.info_dupak.dupak +'</td>'
               +'<td>'+ item.info_dupak.lama +'</td>' 
               +'<td>'+ item.info_dupak.dupak +'</td>'
-              +'<td>SPT No.700/'+ item.spt_umum.nomor +'/438.4/'+year+'</td>'
+              +'<td>SPT No.700/'+ item.spt_umum.nomor +'/438.4/'+year+'<br/><br/></td>'
               +'</tr>';
               /*table += '<tr>'
                   +'<td style="width:50%">' + item.spt_umum.lama + ' hari</td>'
@@ -348,7 +348,7 @@ function generate_tabel_penunjang(){
               +'<td>'+ item.info_dupak.dupak +'</td>'
               +'<td>'+ item.info_dupak.lama +'</td>' 
               +'<td>'+ item.info_dupak.dupak +'</td>'
-              +'<td>SPT No.700/'+ item.spt_umum.nomor +'/438.4/'+year+'</td>'
+              +'<td>SPT No.700/'+ item.spt_umum.nomor +'/438.4/'+year+'<br/><br/></td>'
               +'</tr>';
               /*table += '<tr>'
                   +'<td style="width:50%">' + item.spt_umum.lama + ' hari</td>'
@@ -371,7 +371,7 @@ function generate_header(response, jenis=''){
   var irban_kepala_name = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.full_name_gelar ;
   var irban_kepala_nip = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.nip;
   var irban_kepala_pangkat = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.pangkat;
-  var irban_kepala_jabatan = ( response[0].irban_kepala === null ) ? '' : (typeof response[0].irban_kepala.pejabat === 'undefined') ? response[0].irban_kepala.jabatan : response[0].irban_kepala.pejabat.status+' '+response[0].irban_kepala.pejabat.name;
+  var irban_kepala_jabatan = ( response[0].irban_kepala === null ) ? '' : (typeof response[0].irban_kepala.pejabat === 'undefined') ? response[0].irban_kepala.jabatan : 'Plt. '+response[0].irban_kepala.pejabat.name;
   //status_pejabat = (response[0].irban_kepala.pejabat !== null) ? 'PLT ' : '';
   
   var header = '<div class="col-print-12 col-md-12"><h3 class="print-center text-center">SURAT PERNYATAAN<br/>MELAKUKAN KEGIATAN '+jenis.toUpperCase()+'</h3></div>'           
@@ -429,7 +429,7 @@ function generate_footer(response){
   var irban_kepala_nip = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.nip;
   var irban_kepala_pangkat = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.pangkat;
   var irban_kepala_jabatan = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.jabatan;
-  var irban_kepala_atasan = ( response[0].irban_kepala === null ) ? '' : (typeof response[0].irban_kepala.pejabat === 'undefined') ? response[0].irban_kepala.jabatan : response[0].irban_kepala.pejabat.status+' '+response[0].irban_kepala.pejabat.name;
+  var irban_kepala_atasan = ( response[0].irban_kepala === null ) ? '' : (typeof response[0].irban_kepala.pejabat === 'undefined') ? response[0].irban_kepala.jabatan : 'Plt. '+response[0].irban_kepala.pejabat.name;
   var footer = '<div class="row"><div class="col-md-12 col-print-12">Demikian pernyataan ini dibuat untuk dapat dipergunakan sebagaimana mestinya.</div></div>'
             +'<div class="h-20"></div>'
             +'<div class="row">'
