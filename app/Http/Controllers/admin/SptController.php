@@ -895,6 +895,7 @@ class SptController extends Controller
         }
         // dd($spt_umum == null);
         $id = $request->spt_id;
+        $id_umum = $request->spt_id_umum;
 
         if($spt_umum == null){
            
@@ -995,7 +996,7 @@ class SptController extends Controller
            $this->createEventSpt($spt);
            return $spt;
         }else{
-            $detail_spt = DetailSpt::where('spt_id', $id)->with('sptUmum')->get();
+            $detail_spt = DetailSpt::where('spt_id', $id_umum)->with('sptUmum')->get();
 
             // proses input info dupak tu umum 
 
@@ -1184,13 +1185,13 @@ class SptController extends Controller
         // dd($spt);
         // die();       
 
-        $filename = ($request->file_spt_umum) ? 'SPT-'. $spt->jenis_spt_umum .'-'. $id . '-' . $request->file_spt_umum->getClientOriginalName() : null ;
+        $filename = ($request->scan_file_spt_umum) ? 'SPT-'. $spt->jenis_spt_umum .'-'. $id . '-' . $request->scan_file_spt_umum->getClientOriginalName() : null ;
         //if($filename !== null ) $request->file_spt->move(public_path('storage\files') , $filename);
         if($filename !== null ){
             if (! File::exists(public_path()."/storage/spt")) {
                 File::makeDirectory(public_path()."/storage/spt", 0755, true);
             }
-            $request->file_spt_umum->move(public_path()."/storage/spt" , $filename);
+            $request->scan_file_spt_umum->move(public_path()."/storage/spt" , $filename);
         } 
         $spt->file = ($filename !== null ) ? url('/storage/spt/'.$filename) : null;
         $spt->save();

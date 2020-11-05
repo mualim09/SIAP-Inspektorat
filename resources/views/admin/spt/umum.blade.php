@@ -43,7 +43,7 @@
       </div>
       <div class="modal-body">
         <form class="ajax-form" id="form-penomoran-umum" enctype="multipart/form-data">
-            <input type="hidden" name="spt_id" id="spt-id-umum">
+            <input type="hidden" name="spt_id_umum" id="penomoran-spt-id-umum">
             <input type="hidden" name="jenis_spt_umum" id="jenis-spt-umum">
             <div class="form-group row">
                 <label for="nomor" class="col-md-3 col-form-label text-md-right">{{ __('Nomor')}} </label>
@@ -68,8 +68,8 @@
             <div class="row">
               <div class="col-md-3 text-md-right">Scan</div>
               <div class="custom-file col-md-8">
-                <input type="file" class="custom-file-input" id="customFile" name="file_spt_umum" accept=".pdf">
-                <label class="custom-file-label" for="customFile">Pilih Scan File SPT</label>                    
+                <input type="file" class="custom-file-input" id="customFileUmum" name="file_spt_umum" accept=".pdf">
+                <label class="custom-file-label" for="customFileUmum">Pilih Scan File SPT</label>                    
               </div>
               <div class="offset-md-3">File format pdf, max 2MB</div>
               
@@ -102,13 +102,13 @@
       </div>
       <div class="modal-body">
         <form class="ajax-form" id="form-scan-spt-umum" enctype="multipart/form-data">
-            <input type="hidden" name="spt_id" id="scan-spt-id-umum">
+            <input type="hidden" name="scan_spt_id" id="scan-spt-id-umum">
             <!-- <input type="hidden" name="jenis_spt_umum" id="jenis-spt-umum"> -->
             <div class="row">
               <div class="col-md-3 text-md-right">Scan</div>
               <div class="custom-file col-md-8">
-                <input type="file" class="custom-file-input" id="customFileScan" name="file_spt_umum" accept=".pdf">
-                <label class="custom-file-label" for="customFile">Pilih Scan File SPT</label>                    
+                <input type="file" class="custom-file-input-umum" id="customFileScan" name="scan_file_spt_umum" accept=".pdf">
+                <label class="custom-file-label" for="customFileScan">Pilih Scan File SPT</label>                    
               </div>
               <div class="offset-md-3">File format pdf, max 2MB</div>
               
@@ -183,7 +183,8 @@
             // file_spt_umum : {required: true}
         },
         submitHandler: function(form){
-            var id = $('#spt-id-umum').val();
+            var id = $('#penomoran-spt-id-umum').val();
+            alert(id);
             //url ='spt/update-nomor/' + id ;
             url = (window.location.pathname == '/admin') ? 'admin/spt/update-nomor/'+id : 'spt/update-nomor/'+id;
             type = "POST";
@@ -368,49 +369,49 @@
         });
     }
 
-    function editFormUmum(id){        
-        save_method = 'edit';
+    // function editFormUmum(id){        
+    //     save_method = 'edit';
 
-        //avoid false ajax url. read url first, then add it to te prefixed url
-        var url = (window.location.pathname == '/admin') ? 'admin/spt/get-spt-umum-byid/'+id : 'spt/get-spt-umum-byid/' +id;
-        // url = url_prefix+id+"/edit";
+    //     //avoid false ajax url. read url first, then add it to te prefixed url
+    //     var url = (window.location.pathname == '/admin') ? 'admin/spt/get-spt-umum-byid/'+id : 'spt/get-spt-umum-byid/' +id;
+    //     // url = url_prefix+id+"/edit";
         
-        $.ajax({
-            url: url,
-            type: "GET",
-            dataType: "JSON",
-            success: function(data){                
-                // $('#spt-form')[0].reset();
-                $('#id-jenis-spt').val(data.jenis_spt_umum);
+    //     $.ajax({
+    //         url: url,
+    //         type: "GET",
+    //         dataType: "JSON",
+    //         success: function(data){                
+    //             // $('#spt-form')[0].reset();
+    //             $('#id-jenis-spt').val(data.jenis_spt_umum);
 
-                //variabel jenis spt               
-                // lokasi = (data.jenis_spt.input_lokasi == true) ? data.lokasi_id : '';
-                // tambahan = (data.jenis_spt.input_tambahan == true) ? data.tambahan : '';                
-                // input_lokasi = data.jenis_spt.input.lokasi;
-                // input_tambahan = data.jenis_spt.input.tambahan;
-                // cek_radio = data.jenis_spt.cek_radio;
-                // jenis_spt_id = data.jenis_spt_id;
+    //             //variabel jenis spt               
+    //             // lokasi = (data.jenis_spt.input_lokasi == true) ? data.lokasi_id : '';
+    //             // tambahan = (data.jenis_spt.input_tambahan == true) ? data.tambahan : '';                
+    //             // input_lokasi = data.jenis_spt.input.lokasi;
+    //             // input_tambahan = data.jenis_spt.input.tambahan;
+    //             // cek_radio = data.jenis_spt.cek_radio;
+    //             // jenis_spt_id = data.jenis_spt_id;
 
-                $('#id').val(data.id);
-                $('#info-dasar-umum').val(data.info_dasar_umum);
-                $('#info-untuk-kegiatan-umum').val(data.info_untuk_umum);
-                //$('#jenis-spt-'+data.jenis_spt_id).prop('selected','selected');
-                //$('#jenis-spt')[0].selectize.setValue(data.jenis_spt_id);
-                // if(data.info_lanjutan == 1){
-                //     $('#info-lanjutan').prop('checked',true);
-                // }else{
-                //     $('#info-lanjutan').prop('checked',false);
-                // }
-                $('#tgl-mulai-umum').val(data.tgl_mulai);
-                $('#tgl-akhir-umum').val(data.tgl_akhir);
-                $('#lama-spt-umum').val(data.lama);
-                // $('#lokasi').val(data.lokasi);
-                $('#formSptUmum').modal('show');
-            },
-            error: function(err){
-                console.log(err);
-            }
-        });
-    }
+    //             $('#spt-id-umum').val(data.id);
+    //             $('#info-dasar-umum').val(data.info_dasar_umum);
+    //             $('#info-untuk-kegiatan-umum').val(data.info_untuk_umum);
+    //             //$('#jenis-spt-'+data.jenis_spt_id).prop('selected','selected');
+    //             //$('#jenis-spt')[0].selectize.setValue(data.jenis_spt_id);
+    //             // if(data.info_lanjutan == 1){
+    //             //     $('#info-lanjutan').prop('checked',true);
+    //             // }else{
+    //             //     $('#info-lanjutan').prop('checked',false);
+    //             // }
+    //             $('#tgl-mulai-umum').val(data.tgl_mulai);
+    //             $('#tgl-akhir-umum').val(data.tgl_akhir);
+    //             $('#lama-spt-umum').val(data.lama);
+    //             // $('#lokasi').val(data.lokasi);
+    //             $('#formSptUmum').modal('show');
+    //         },
+    //         error: function(err){
+    //             console.log(err);
+    //         }
+    //     });
+    // }
 </script>
 @endsection

@@ -12,7 +12,7 @@
 	    	</div>
 	    	<div class="modal-body">
 	    		<form id="spt-umum-form">
-	    			<input type="hidden" name="id" id="id">
+	    			<input type="hidden" name="id" id="id-umum">
 	    			<!-- <input type="hidden" name="jenis_spt_id" id="jenis-spt-id" value="Spt Umum"> -->
 					@csrf
 
@@ -164,7 +164,7 @@
 			<div class="modal-body">
 				@if(Auth::user()->can(['Create SPT', 'Edit SPT']))
 				<form  id="new-anggota-spt-form-umum" class="ajax-form needs-validation" novalidate>
-					<input type="hidden" name="spt_id" id="spt-id">
+					<input type="hidden" name="spt_id_umum" id="spt-id-umum">
 			        @csrf
 			        <div class="form-group row">
 			        	<label for="anggota" class="col-md-2 col-form-label">{{ __('Anggota') }} </label>
@@ -223,7 +223,7 @@
 		            	var lama_jam = $('#new-anggota-spt-form-umum').find('#lama-jam-id').val();
 		            	var dupak_anggota = $('#new-anggota-spt-form-umum').find('#dupak-id').val();
 		                var user_id = $('#session-anggota-umum option:selected').val();
-		                var spt_id = $('#spt-umum-form').find('#id').val();
+		                var spt_id = $('#spt-umum-form').find('#id-umum').val();
 
 		                url = (spt_id !== '') ? "{{ route('store_detail_anggota_umum') }}" : "{{ route('store_session_anggota_umum') }}" ;
 		                if(tgl_mulai == '' || tgl_akhir==''){
@@ -286,7 +286,7 @@
 
 		$( "#formSptUmum" ).on('shown.bs.modal', function(){
 
-			var id_spt = $('#id').val();
+			var id_spt = $('#id-umum').val();
 			var url_prefix = (window.location.pathname == '/admin') ? 'admin/spt/get-anggota/umum/' : 'spt/get-anggota/umum/';
 			url = (id_spt != '') ? url_prefix+id_spt : url_prefix+'0';
 
@@ -344,7 +344,7 @@
             var info_dasar_umum = $('#info-dasar-umum').val();
             var info_untuk_umum = $('#info-untuk-kegiatan-umum').val();
 
-            var id = $('#id').val();
+            var id = $('#id-umum').val();
             save_method = (id == '') ? 'new' : save_method;
             var url_prefix = (window.location.pathname == '/admin') ? 'admin/spt/' : 'spt/';
             //url =  (save_method == 'new') ? "{{ route('spt.store') }}" : base_url + '/' + id ;
@@ -414,7 +414,7 @@
 
     $('#formSptUmum').on('hidden.bs.modal', function () {
 		$('#spt-umum-form')[0].reset();
-		$('#id').val('');
+		$('#id-umum').val('');
 		// $('#tambahan').val('');
 		select_lokasi[0].selectize.clear();
 		save_method = null;

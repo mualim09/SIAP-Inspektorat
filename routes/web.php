@@ -201,6 +201,7 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 			Route::get('get-penomoran-umum','SptController@getPenomoranSptUmum')->name('penomoran_umum');
 			Route::get('get-arsip-umum','SptController@getArsipUmum')->name('arsip_spt_umum');
 			Route::post('update-nomor/{id}','SptController@updateNomorSpt')->name('update_nomor_spt');
+			// Route::post ('update-nomor-umum/{id}','SptController@updateNomorSptUmum')->name('penomoran_spt_umum');
 			Route::post('upload-scan-umum/{id}','SptController@uploadScanSptumum')->name('upload_scan_spt_umum');
 			Route::post('upload-scan/{id}','SptController@uploadScanSpt')->name('upload_scan_spt');
 			Route::post('umum/store', 'SptController@storeUmum')->name('store_spt_umum');
