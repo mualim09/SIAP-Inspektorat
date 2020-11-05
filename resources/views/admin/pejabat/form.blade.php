@@ -2,8 +2,9 @@
 @csrf
     <!-- inspektur -->
     <div class="form-group row">
+        
         <label for="inspektur" class="col-md-2 col-form-label text-md-right">{{ __('Inspektur') }}</label>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <select class="form-control selectize" id="inspektur" name="inspektur">
                 <option value="">{{ __('Pilih Pejabat') }}</option>
                 @foreach($users as $user)
@@ -16,13 +17,31 @@
         </div>
         @if($inspektur['is_plt'] === true)
             <div class="col-md-2 col-form-label "><span class="is_plt">PLT</span></div>
-        @endif                        
+            <label for="ketua_penilaian_ak" class="col-md-1 col-form-label text-md-right">{{ __('Ketua Penilai AK') }}</label>
+        @endif
+
+        @if($inspektur['is_plt'] !== true)
+            <label for="ketua_penilaian_ak" class="col-md-3 col-form-label text-md-right">{{ __('Ketua Penilai AK') }}</label>
+        @endif
+        <!-- select input ketua penilai ak -->
+        <div class="col-md-3">
+            <select class="form-control selectize" id="ketua-penilaian-ak" name="ketua_penilaian_ak">
+                <option value="">{{ __('Pilih Pejabat') }}</option>
+                <?php
+                    $selected_ketua_penilai = (is_null($ketua_penilai['user']) && $user->id == $ketua_penilai['user']->id) ? '' : 'selected';                                    
+                ?>
+                @foreach($users as $user)
+                <option class="form-control selectize" value="{{$user->id}}">{{ $user->full_name_gelar }}</option>
+                @endforeach
+            </select>                            
+        </div>
+
     </div>
 
     <!-- sekretaris -->
     <div class="form-group row">
         <label for="sekretaris" class="col-md-2 col-form-label text-md-right">{{ __('Sekretaris') }}</label>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <select class="form-control selectize" id="sekretaris" name="sekretaris">
                 <option value="">{{ __('Pilih Pejabat') }}</option>
                 @foreach($users as $user)
@@ -36,12 +55,27 @@
         @if($sekretaris['is_plt'] === true)
             <div class="col-md-2 col-form-label "><span class="is_plt">PLT</span></div>
         @endif
+
+        <!-- select input penyusun AK -->
+        <label for="penyusun_ak" class="col-md-1 col-form-label text-md-right">{{ __('Penyusun AK') }}</label>
+        <div class="col-md-3">
+            <select class="form-control selectize" id="penyusun-ak" name="penyusun_ak">
+                <option value="">{{ __('Pilih Pejabat') }}</option>
+                @foreach($users as $user)
+                <?php
+                    $selected_inspektur = (!is_null($inspektur['user']) && $user->id == $inspektur['user']->id) ? 'selected' : '';                                    
+                ?>
+                <option class="form-control selectize" value="{{$user->id}}" {{ $selected_inspektur }} >{{ $user->full_name_gelar }}</option>                               
+                @endforeach
+            </select>                                   
+        </div>
+
     </div>
 
     <!-- irban 1 -->
     <div class="form-group row">
         <label for="irban_i" class="col-md-2 col-form-label text-md-right">{{ __('Inspektur Pembantu Wilayah I') }}</label>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <select class="form-control selectize" id="irban-i" name="irban_i">
                 <option value="">{{ __('Pilih Pejabat') }}</option>
                 @foreach($users as $user)
@@ -55,12 +89,27 @@
         @if($irban_i['is_plt'] === true)
             <div class="col-md-2 col-form-label "><span class="is_plt">PLT</span></div>
         @endif
+
+        <!-- select input penetap AK -->
+        <label for="penetap_ak" class="col-md-3 col-form-label text-md-right">{{ __('Penetap AK') }}</label>
+        <div class="col-md-3">
+            <select class="form-control selectize" id="penetap-ak" name="penetap_ak">
+                <option value="">{{ __('Pilih Pejabat') }}</option>
+                @foreach($users as $user)
+                <?php
+                    $selected_inspektur = (!is_null($inspektur['user']) && $user->id == $inspektur['user']->id) ? 'selected' : '';                                    
+                ?>
+                <option class="form-control selectize" value="{{$user->id}}" {{ $selected_inspektur }} >{{ $user->full_name_gelar }}</option>                               
+                @endforeach
+            </select>                                   
+        </div>
+
     </div>
 
     <!-- irban 2 -->
     <div class="form-group row">
         <label for="irban_ii" class="col-md-2 col-form-label text-md-right">{{ __('Inspektur Pembantu Wilayah II') }}</label>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <select class="form-control selectize" id="irban-ii" name="irban_ii">
                 <option value="">{{ __('Pilih Pejabat') }}</option>
                 @foreach($users as $user)
@@ -79,7 +128,7 @@
     <!-- irban 3 -->
     <div class="form-group row">
         <label for="irban_iii" class="col-md-2 col-form-label text-md-right">{{ __('Inspektur Pembantu Wilayah III') }}</label>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <select class="form-control selectize" id="irban-iii" name="irban_iii">
                 <option value="">{{ __('Pilih Pejabat') }}</option>
                 @foreach($users as $user)
@@ -98,7 +147,7 @@
     <!-- irban 4 -->
     <div class="form-group row">
         <label for="irban_iv" class="col-md-2 col-form-label text-md-right">{{ __('Inspektur Pembantu Wilayah IV') }}</label>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <select class="form-control selectize" id="irban-iv" name="irban_iv">
                 <option value="">{{ __('Pilih Pejabat') }}</option>
                 @foreach($users as $user)
@@ -165,7 +214,26 @@
    create: false
   });
 
-  
+  $('#ketua-penilaian-ak').selectize({
+   /*sortField: 'text',*/
+   allowEmptyOption: false,
+   placeholder: 'Pilih Pejabat',
+   create: false
+  });
+
+  $('#penyusun-ak').selectize({
+   /*sortField: 'text',*/
+   allowEmptyOption: false,
+   placeholder: 'Pilih Pejabat',
+   create: false
+  });
+
+  $('#penetap-ak').selectize({
+   /*sortField: 'text',*/
+   allowEmptyOption: false,
+   placeholder: 'Pilih Pejabat',
+   create: false
+  });
 
     //form submit
     $("#satgas-ppm").validate({
@@ -188,7 +256,7 @@
                 data: $('.ajax-form').serialize(),
                 success: function($data){
                     $('.ajax-form')[0].reset();
-                    location.reload();
+                    // location.reload();
                 },
                 error: function($data){
                 }

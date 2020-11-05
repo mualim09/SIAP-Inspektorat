@@ -22,6 +22,7 @@ class PejabatController extends Controller
         $irban_ii_default = User::where('jabatan', 'Inspektur Pembantu Wilayah II')->select(['id' ,'first_name','last_name','ruang->nama as nama_ruang'])->first();
         $irban_iii_default = User::where('jabatan', 'Inspektur Pembantu Wilayah III')->select(['id' ,'first_name','last_name','ruang->nama as nama_ruang'])->first();
         $irban_iv_default = User::where('jabatan', 'Inspektur Pembantu Wilayah IV')->select(['id' ,'first_name','last_name','ruang->nama as nama_ruang'])->first();
+        // $ketua_penilai_ak_default = User::where('jabatan','!=','')->select(['id' ,'first_name','last_name','ruang->nama as nama_ruang'])->first();
 
         //$plt_inspektur = Pejabat::where('name', 'Inspektur Kabupaten')->with('user:id,first_name,last_name')->first();
         $plt_inspektur = User::whereHas('pejabat', function($q){
@@ -46,6 +47,10 @@ class PejabatController extends Controller
 
         $plt_irban_iv = User::whereHas('pejabat', function($q){
             $q->where('name','Inspektur Pembantu Wilayah IV')->whereNotNull('status');
+        })->first();
+
+        $ketua_penilai_ak = User::whereHas('pejabat', function($q){
+            $q->where('name','Ketua Penilai AK')->whereNotNull('status');
         })->first();
         
         //dd($sekretaris);
@@ -84,6 +89,10 @@ class PejabatController extends Controller
                 'user'=>(!is_null($plt_irban_iv)) ? $plt_irban_iv : $irban_iv_default,
                 'is_plt'=>(!is_null($plt_irban_iv)) ? true : false
             ],
+            'ketua_penilai'=> [
+                'user'=>(!is_null($ketua_penilai_ak)) ? $ketua_penilai_ak : '',
+                'is_ketua_penilai'=>(!is_null($ketua_penilai_ak)) ? true : false
+            ],
             'users'=>$users
         ]);
     }
@@ -102,6 +111,10 @@ class PejabatController extends Controller
         $irban_ii_default = User::where('jabatan', 'Inspektur Pembantu Wilayah II')->select(['id' ,'first_name','last_name','ruang->nama as nama_ruang'])->first();
         $irban_iii_default = User::where('jabatan', 'Inspektur Pembantu Wilayah III')->select(['id' ,'first_name','last_name','ruang->nama as nama_ruang'])->first();
         $irban_iv_default = User::where('jabatan', 'Inspektur Pembantu Wilayah IV')->select(['id' ,'first_name','last_name','ruang->nama as nama_ruang'])->first();
+        $ketua_penilai_ak_default = User::all();
+        // $penyusun_ak_default = User::where('jabatan', 'Inspektur Kabupaten')->select(['id' ,'first_name','last_name'])->first();
+        // $penetap_ak_default = User::where('jabatan', 'Inspektur Kabupaten')->select(['id' ,'first_name','last_name'])->first();
+        // dd($request->ketua_penilaian_ak === $ketua_penilai_ak_default);
 
         //$plt_inspektur = Pejabat::where('name', 'Inspektur Kabupaten')->with('user:id,first_name,last_name')->first();
         $plt_inspektur = User::whereHas('pejabat', function($q){
@@ -127,79 +140,85 @@ class PejabatController extends Controller
         $plt_irban_iv = User::whereHas('pejabat', function($q){
             $q->where('name','Inspektur Pembantu Wilayah IV')->whereNotNull('status');
         })->first();
+
+        
         
         // dd(json_decode($request->inspektur) === $inspektur->id);
-        // dd($request);
+        // dd($request->ketua_penilaian_ak);
+        $cek_pejabat = Pejabat::where('name', 'Inspektur Kabupaten')->count();
+        $cek_pejabat_sekretaris = Pejabat::where('name', 'Sekretaris')->count();
+        $cek_pejabat_irban_i = Pejabat::where('name', 'Inspektur Pembantu Wilayah I')->count();
+        $cek_pejabat_irban_ii = Pejabat::where('name', 'Inspektur Pembantu Wilayah II')->count();
+        $cek_pejabat_irban_iii = Pejabat::where('name', 'Inspektur Pembantu Wilayah III')->count();
+        $cek_pejabat_irban_iv = Pejabat::where('name', 'Inspektur Pembantu Wilayah IV')->count();
+        $cek_ketua_penilai_ak = Pejabat::where('name','Ketua Penilai AK')->count();
+        // $cek_penyusun_ak = Pejabat::where('name','Penyusun AK')->count();
+        // $cek_penetap_ak = Pejabat::where('name','Penetap AK')->count();
 
-        if($request->inspektur !== $inspektur->id && $request->sekretaris !== $sekretaris->id && $request->irban_i !== $irban_i_default->id && $request->irban_ii !== $irban_ii_default->id && $request->irban_iii !== $irban_iii_default->id && $request->irban_iv !== $irban_iv_default->id){
+        // dd($request->ketua_penilaian_ak);
+        // die();
+        // dd($request->ketua_penilaian_ak);
+        if($request->inspektur !== $inspektur->id && $request->sekretaris !== $sekretaris->id && $request->irban_i !== $irban_i_default->id && $request->irban_ii !== $irban_ii_default->id && $request->irban_iii !== $irban_iii_default->id && $request->irban_iv !== $irban_iv_default->id && $request->ketua_penilaian_ak !== $ketua_penilai_ak_default){
 
-            $cek_pejabat = Pejabat::where('name', 'Inspektur Kabupaten')->count();
-            $cek_pejabat_sekretaris = Pejabat::where('name', 'Sekretaris')->count();
-            $cek_pejabat_irban_i = Pejabat::where('name', 'Inspektur Pembantu Wilayah I')->count();
-            $cek_pejabat_irban_ii = Pejabat::where('name', 'Inspektur Pembantu Wilayah II')->count();
-            $cek_pejabat_irban_iii = Pejabat::where('name', 'Inspektur Pembantu Wilayah III')->count();
-            $cek_pejabat_irban_iv = Pejabat::where('name', 'Inspektur Pembantu Wilayah IV')->count();
 
-            if($cek_pejabat>0 && $cek_pejabat_sekretaris>0 && $cek_pejabat_irban_i>0 && $cek_pejabat_irban_ii>0 && $cek_pejabat_irban_iii>0 && $cek_pejabat_irban_iv>0){
+            if($cek_pejabat>0 && $cek_pejabat_sekretaris>0 && $cek_pejabat_irban_i>0 && $cek_pejabat_irban_ii>0 && $cek_pejabat_irban_iii>0 && $cek_pejabat_irban_iv>0 && $cek_ketua_penilai_ak>0){
                 //query update tabel pejabat 'semua pejabat'
+
+                ($request->ketua_penilaian_ak == null) ? $ketua_penilaian_ak = null : $ketua_penilaian_ak = $request->ketua_penilaian_ak;
 
                 if($request->inspektur != null){
                     if (json_decode($request->inspektur) === $inspektur->id) {
-                        $update = Pejabat::where('id','1')->update(['user_id'=>$request->inspektur,'name'=>'Inspektur Kabupaten','status'=>null]);
+                        $update_inspektur = Pejabat::where('id','1')->update(['user_id'=>$request->inspektur,'name'=>'Inspektur Kabupaten','status'=>null]);
                     }else{
-                        $update = Pejabat::where('id','1')->update(['user_id'=>$request->inspektur,'name'=>'Inspektur Kabupaten','status'=>'PLT']);
+                        $update_inspektur = Pejabat::where('id','1')->update(['user_id'=>$request->inspektur,'name'=>'Inspektur Kabupaten','status'=>'PLT']);
                     }
+                    $update = $update_inspektur;
                 }if ($request->sekretaris != null) {
                     if (json_decode($request->sekretaris) === $sekretaris->id) {
-                        $update = Pejabat::where('id','2')->update(['user_id'=>$request->sekretaris,'name'=>'Sekretaris','status'=>null]);
+                        $update_sekretaris = Pejabat::where('id','2')->update(['user_id'=>$request->sekretaris,'name'=>'Sekretaris','status'=>null]);
                     }else{
-                        $update = Pejabat::where('id','2')->update(['user_id'=>$request->sekretaris,'name'=>'Sekretaris','status'=>'PLT']);
+                        $update_sekretaris = Pejabat::where('id','2')->update(['user_id'=>$request->sekretaris,'name'=>'Sekretaris','status'=>'PLT']);
                     }
+                    $update = $update_sekretaris;
                 }if ($request->irban_i != null) {
                     if (json_decode($request->irban_i) === $irban_i_default->id) {
-                        $update = Pejabat::where('id','3')->update(['user_id'=>$request->irban_i,'name'=>'Inspektur Pembantu Wilayah I','status'=>null]);
+                        $update_irban_i = Pejabat::where('id','3')->update(['user_id'=>$request->irban_i,'name'=>'Inspektur Pembantu Wilayah I','status'=>null]);
                     }else{
-                        $update = Pejabat::where('id','3')->update(['user_id'=>$request->irban_i,'name'=>'Inspektur Pembantu Wilayah I','status'=>'PLT']);
+                        $update_irban_i = Pejabat::where('id','3')->update(['user_id'=>$request->irban_i,'name'=>'Inspektur Pembantu Wilayah I','status'=>'PLT']);
                     }
+                    $update = $update_irban_i;
                 }if ($request->irban_ii != null) {
                     if (json_decode($request->irban_ii) === $irban_ii_default->id) {
-                        $update = Pejabat::where('id','4')->update(['user_id'=>$request->irban_ii,'name'=>'Inspektur Pembantu Wilayah II','status'=>null]);
+                        $update_irban_ii = Pejabat::where('id','4')->update(['user_id'=>$request->irban_ii,'name'=>'Inspektur Pembantu Wilayah II','status'=>null]);
                     }else{
-                        $update = Pejabat::where('id','4')->update(['user_id'=>$request->irban_ii,'name'=>'Inspektur Pembantu Wilayah II','status'=>'PLT']);
+                        $update_irban_ii = Pejabat::where('id','4')->update(['user_id'=>$request->irban_ii,'name'=>'Inspektur Pembantu Wilayah II','status'=>'PLT']);
                     }
+                    $update = $update_irban_ii;
                 }if ($request->irban_iii != null) {
                     if (json_decode($request->irban_iii) === $irban_iii_default->id) {
-                        $update = Pejabat::where('id','5')->update(['user_id'=>$request->irban_iii,'name'=>'Inspektur Pembantu Wilayah III','status'=>null]);
+                        $update_irban_iii = Pejabat::where('id','5')->update(['user_id'=>$request->irban_iii,'name'=>'Inspektur Pembantu Wilayah III','status'=>null]);
                     }else{
-                        $update = Pejabat::where('id','5')->update(['user_id'=>$request->irban_iii,'name'=>'Inspektur Pembantu Wilayah III','status'=>'PLT']);
+                        $update_irban_iii = Pejabat::where('id','5')->update(['user_id'=>$request->irban_iii,'name'=>'Inspektur Pembantu Wilayah III','status'=>'PLT']);
                     }
+                    $update = $update_irban_iii;
                 }if ($request->irban_iv != null) {
                     if (json_decode($request->irban_iv) === $irban_iv_default->id) {
-                        $update = Pejabat::where('id','6')->update(['user_id'=>$request->irban_iv,'name'=>'Inspektur Pembantu Wilayah IV','status'=>null]);
+                        $update_irban_iv = Pejabat::where('id','6')->update(['user_id'=>$request->irban_iv,'name'=>'Inspektur Pembantu Wilayah IV','status'=>null]);
                     }else{
-                        $update = Pejabat::where('id','6')->update(['user_id'=>$request->irban_iv,'name'=>'Inspektur Pembantu Wilayah IV','status'=>'PLT']);
+                        $update_irban_iv = Pejabat::where('id','6')->update(['user_id'=>$request->irban_iv,'name'=>'Inspektur Pembantu Wilayah IV','status'=>'PLT']);
                     }
-                }
+                    $update = $update_irban_iv;
+                }if($request->ketua_penilaian_ak == null || $request->ketua_penilaian_ak != null){
+                    if ($ketua_penilaian_ak != null) {
+                        $update_ketua_penilai = Pejabat::where('id','7')->update(['user_id'=>$request->ketua_penilaian_ak,'name'=>'Ketua Penilai AK']);
+                    }else{
+                        $update_ketua_penilai = Pejabat::where('id','7')->update(['user_id'=>'99992','name'=>'Ketua Penilai AK']);
+                    }
+                    $update = $update_ketua_penilai;
+               }
 
-                return $update.' pejabat has been save !';
+                return $update.' pejabat has been Update !';
 
-                // if(json_decode($request->inspektur) === $inspektur->id && json_decode($request->sekretaris) === $sekretaris->id && json_decode($request->irban_i) === $irban_i_default->id && json_decode($request->irban_ii) === $irban_ii_default->id && json_decode($request->irban_iii) === $irban_iii_default->id && json_decode($request->irban_iv) === $irban_iv_default->id){
-                //     $update = Pejabat::where('id','1')->update(['user_id'=>$request->inspektur,'name'=>'Inspektur Kabupaten','status'=>null]);
-                //     $update = Pejabat::where('id','2')->update(['user_id'=>$request->sekretaris,'name'=>'Sekretaris','status'=>null]);
-                //     $update = Pejabat::where('id','3')->update(['user_id'=>$request->irban_i,'name'=>'Inspektur Pembantu Wilayah I','status'=>null]);
-                //     $update = Pejabat::where('id','4')->update(['user_id'=>$request->irban_ii,'name'=>'Inspektur Pembantu Wilayah II','status'=>null]);
-                //     $update = Pejabat::where('id','5')->update(['user_id'=>$request->irban_iii,'name'=>'Inspektur Pembantu Wilayah III','status'=>null]);
-                //     $update = Pejabat::where('id','6')->update(['user_id'=>$request->irban_iv,'name'=>'Inspektur Pembantu Wilayah IV','status'=>null]);
-                //     return $update.'has been updated no plt';
-                // }else{
-                //     $update = Pejabat::where('id','1')->update(['user_id'=>$request->inspektur,'name'=>'Inspektur Kabupaten','status'=>'PLT']);
-                //     $update = Pejabat::where('id','2')->update(['user_id'=>$request->sekretaris,'name'=>'Sekretaris','status'=>'PLT']);
-                //     $update = Pejabat::where('id','3')->update(['user_id'=>$request->irban_i,'name'=>'Inspektur Pembantu Wilayah I','status'=>'PLT']);
-                //     $update = Pejabat::where('id','4')->update(['user_id'=>$request->irban_ii,'name'=>'Inspektur Pembantu Wilayah II','status'=>'PLT']);
-                //     $update = Pejabat::where('id','5')->update(['user_id'=>$request->irban_iii,'name'=>'Inspektur Pembantu Wilayah III','status'=>'PLT']);
-                //     $update = Pejabat::where('id','6')->update(['user_id'=>$request->irban_iv,'name'=>'Inspektur Pembantu Wilayah IV','status'=>'PLT']);
-                //     return $update.'has been updated with plt';
-                // }
             }else{
                 //query insert pejabat semua
                 if($request->inspektur != null){
@@ -238,31 +257,65 @@ class PejabatController extends Controller
                     }else{
                         $save = Pejabat::insert(['user_id'=>$request->irban_iv,'name'=>'Inspektur Pembantu Wilayah IV','status'=>'PLT']);
                     }
+                }if($cek_ketua_penilai_ak<1){
+                    if ($request->ketua_penilaian_ak == null) {
+                        $save2 = Pejabat::insert(['user_id'=>'99991','name'=>'Ketua Penilai AK']);
+                    }else{
+                        $save2 = Pejabat::insert(['user_id'=>$request->ketua_penilaian_ak,'name'=>'Ketua Penilai AK']);
+                    }
                 }
-
                 return $save.' pejabat has been save !';
-
-                // if(json_decode($request->inspektur) === $inspektur->id && json_decode($request->sekretaris) === $sekretaris->id && json_decode($request->irban_i) === $irban_i_default->id && json_decode($request->irban_ii) === $irban_ii_default->id && json_decode($request->irban_iii) === $irban_iii_default->id && json_decode($request->irban_iv) === $irban_iv_default->id){
-                    // $save = Pejabat::insert(['user_id'=>$request->sekretaris,'name'=>'Sekretaris']);
-                    // $save = Pejabat::insert(['user_id'=>$request->irban_i,'name'=>'Inspektur Pembantu Wilayah I']);
-                    // $save = Pejabat::insert(['user_id'=>$request->irban_ii,'name'=>'Inspektur Pembantu Wilayah II']);
-                    // $save = Pejabat::insert(['user_id'=>$request->irban_iii,'name'=>'Inspektur Pembantu Wilayah III']);
-                    // $save = Pejabat::insert(['user_id'=>$request->irban_iv,'name'=>'Inspektur Pembantu Wilayah IV']);
-                    // return $save.'has been saved on pejabat satgas without plt';
-                // }else{
-                //     
-                //     $save = Pejabat::insert(['user_id'=>$request->sekretaris,'name'=>'Sekretaris','status'=>'PLT']);
-                //     $save = Pejabat::insert(['user_id'=>$request->irban_i,'name'=>'Inspektur Pembantu Wilayah I','status'=>'PLT']);
-                //     $save = Pejabat::insert(['user_id'=>$request->irban_ii,'name'=>'Inspektur Pembantu Wilayah II','status'=>'PLT']);
-                //     $save = Pejabat::insert(['user_id'=>$request->irban_iii,'name'=>'Inspektur Pembantu Wilayah III','status'=>'PLT']);
-                //     $save = Pejabat::insert(['user_id'=>$request->irban_iv,'name'=>'Inspektur Pembantu Wilayah IV','status'=>'PLT']);
-                //     return $save.'has been saved on pejabat satgas with plt';
-                // }
-                
             }
         }
 
-       
+        // $request->ketua_penilaian_ak == null && $request->penyusun_ak !== null && $request->cek_penetap_ak !== null
+        // dd($request->ketua_penilaian_ak !== $ketua_penilai_ak_default->id);
+        // die();
+       // if ($request->ketua_penilaian_ak !== $ketua_penilai_ak_default && $request->cek_penyusun_ak !== $penyusun_ak_default->id && $request->cek_penetap_ak !== $penetap_ak_default->id) {
+       //     // dd($cek_penyusun_ak>0);
+       //     if($cek_ketua_penilai_ak<1){
+       //          if ($request->ketua_penilaian_ak == null) {
+       //              $update2 = Pejabat::where('id','7')->update(['user_id'=>$request->ketua_penilaian_ak,'name'=>'Ketua Penilai AK','status'=>'ketuaAK']);
+       //          }else{
+       //              $update2 = Pejabat::where('id','7')->update(['user_id'=>$request->ketua_penilaian_ak,'name'=>'Ketua Penilai AK','status'=>'ketuaAK']);
+       //          }
+       //     }if ($cek_penyusun_ak>0) {
+       //         if ($request->cek_penyusun_ak == null) {
+       //              $update2 = Pejabat::where('id','8')->update(['user_id'=>$request->cek_penyusun_ak,'name'=>'Penyusun AK','status'=>'penyusunAK']);
+       //          }else{
+       //              $update2 = Pejabat::where('id','8')->update(['user_id'=>$request->cek_penyusun_ak,'name'=>'Penyusun AK','status'=>'penyusunAK']);
+       //          }
+       //     }if ($cek_penetap_ak>0) {
+       //         if ($request->cek_penetap_ak == null) {
+       //              $update2 = Pejabat::where('id','9')->update(['user_id'=>$request->cek_penetap_ak,'name'=>'Penetap AK','status'=>'penetapAK']);
+       //          }else{
+       //              $update2 = Pejabat::where('id','9')->update(['user_id'=>$request->cek_penetap_ak,'name'=>'Penetap AK','status'=>'penetapAK']);
+       //          }
+       //     }
+       //     return $update2.' has been updated!';
+       // }else{
+       //      // dd($cek_ketua_penilai_ak<1);
+       //  if($cek_ketua_penilai_ak<1){
+       //       if ($request->ketua_penilaian_ak == null) {
+       //           $save2 = Pejabat::insert(['user_id'=>$request->ketua_penilaian_ak,'name'=>'Ketua Penilai AK','status'=>'ketuaAK']);
+       //       }else{
+       //           $save2 = Pejabat::insert(['user_id'=>$request->ketua_penilaian_ak,'name'=>'Ketua Penilai AK','status'=>'ketuaAK']);
+       //       }
+       //  }if ($cek_penyusun_ak>0) {
+       //      if ($request->cek_penyusun_ak == null) {
+       //           $save2 = Pejabat::insert(['user_id'=>$request->cek_penyusun_ak,'name'=>'Penyusun AK','status'=>'penyusunAK']);
+       //       }else{
+       //           $save2 = Pejabat::insert(['user_id'=>$request->cek_penyusun_ak,'name'=>'Penyusun AK','status'=>'penyusunAK']);
+       //       }
+       //  }if ($cek_penetap_ak>0) {
+       //      if ($request->cek_penetap_ak == null) {
+       //           $save2 = Pejabat::insert(['user_id'=>$request->cek_penetap_ak,'name'=>'Penetap AK','status'=>'penetapAK']);
+       //       }else{
+       //           $save2 = Pejabat::insert(['user_id'=>$request->cek_penetap_ak,'name'=>'Penetap AK','status'=>'penetapAK']);
+       //       }
+       //  }
+       //     return $save2.' has been saved!';
+       // }
 
     }
 
