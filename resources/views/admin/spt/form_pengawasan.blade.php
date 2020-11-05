@@ -200,7 +200,7 @@
 		                	normalizer: function( value ) {
 					        	var regex = /^[a-zA-Z]+$/;
 					        	if(regex.test(value) == false){
-					        		alert("Must be in alphabets only");
+					        		$.alert("Must be in alphabets only");
 					        		return false;
 					        	}
 					    	}
@@ -292,7 +292,7 @@
 			$.ajax({
                 url: '{{ url("/admin/spt/last-data-tambahan") }}/'+id_jenis_spt,
                 success: function(results) {
-                    console.log(results.tambahan);
+                    //console.log(results.tambahan);
                     //$('#tambahan').text(results.tambahan);
                     //last_tambahan = results.tambahan;
                     if(typeof results.tambahan !== 'undefined' ){
@@ -372,7 +372,7 @@
                             data: {_method: 'delete', '_token' : csrf_token },
                             success: function(data){
                                 $('#list-anggota-session').DataTable().ajax.reload();
-                                console.log(data);                        
+                                //console.log(data);                        
                             }
                         });
                     },
@@ -421,9 +421,9 @@ $( "#formModal" ).on('shown.bs.modal', function(){
     	select_jenis_spt[0].selectize.clear();
     }
 
-    var url_prefix = (window.location.pathname == '/admin') ? 'admin/spt/get-anggota/' : 'spt/get-anggota/';
+    var url_prefix = (window.location.pathname == '/admin' || window.location.pathname == '/public/admin') ? 'admin/spt/get-anggota/' : 'spt/get-anggota/';
 	url = (id_spt != '') ? url_prefix+id_spt : url_prefix+'0';
-
+	//console.log(url);
 
 	/*datatable setup*/    
     $('#list-anggota-session').DataTable({        
@@ -492,10 +492,10 @@ function unset(user_id){
                             data: {_method: 'delete', '_token' : csrf_token, tgl_mulai:tgl_mulai, tgl_akhir:tgl_akhir, user_id:user_id },
                             success: function(data){
                                 $('#list-anggota-session').DataTable().ajax.reload();
-                                console.log(data);                        
+                                //console.log(data);                        
                             },
                             error: function(err){
-                            	console.log(err);
+                            	//console.log(err);
                             }
                         });
                     },
