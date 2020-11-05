@@ -364,7 +364,7 @@
                     $('#formSptUmum').modal('hide');
                     if(save_method == 'new') clearSessionAnggota();
                     //table.ajax.reload();
-                    $('#spt-umum').DataTable().ajax.reload(null, false );
+                    $('#spt-umum-table').DataTable().ajax.reload();
                     clearOptionsUmum();
                     $('#list-anggota-umum-session').DataTable().clear().destroy();
                 },

@@ -22,7 +22,8 @@ class PejabatController extends Controller
         $irban_ii_default = User::where('jabatan', 'Inspektur Pembantu Wilayah II')->select(['id' ,'first_name','last_name','ruang->nama as nama_ruang'])->first();
         $irban_iii_default = User::where('jabatan', 'Inspektur Pembantu Wilayah III')->select(['id' ,'first_name','last_name','ruang->nama as nama_ruang'])->first();
         $irban_iv_default = User::where('jabatan', 'Inspektur Pembantu Wilayah IV')->select(['id' ,'first_name','last_name','ruang->nama as nama_ruang'])->first();
-        // $ketua_penilai_ak_default = User::where('jabatan','!=','')->select(['id' ,'first_name','last_name','ruang->nama as nama_ruang'])->first();
+        $ketua_penilai_ak_default = User::all();
+        $penyusun_ak_default = User::where('jabatan', 'Inspektur Kabupaten')->select(['id' ,'first_name','last_name'])->first();
 
         //$plt_inspektur = Pejabat::where('name', 'Inspektur Kabupaten')->with('user:id,first_name,last_name')->first();
         $plt_inspektur = User::whereHas('pejabat', function($q){
@@ -51,6 +52,10 @@ class PejabatController extends Controller
 
         $ketua_penilai_ak = User::whereHas('pejabat', function($q){
             $q->where('name','Ketua Penilai AK')->whereNotNull('status');
+        })->first();
+
+        $penyusun_ak = User::whereHas('pejabat', function($q){
+            $q->where('name','Penyusun AK')->whereNotNull('status');
         })->first();
         
         //dd($sekretaris);
@@ -90,9 +95,17 @@ class PejabatController extends Controller
                 'is_plt'=>(!is_null($plt_irban_iv)) ? true : false
             ],
             'ketua_penilai'=> [
-                'user'=>(!is_null($ketua_penilai_ak)) ? $ketua_penilai_ak : '',
+                'user'=>(!is_null($ketua_penilai_ak)) ? $ketua_penilai_ak : $ketua_penilai_ak_default,
                 'is_ketua_penilai'=>(!is_null($ketua_penilai_ak)) ? true : false
             ],
+            'penyusun'=> [
+                'user'=>(!is_null($penyusun_ak)) ? $penyusun_ak : $penyusun_ak_default,
+                'is_ketua_penilai'=>(!is_null($penyusun_ak)) ? true : false
+            ],
+            // 'ketua_penilai'=> [
+            //     'user'=>(!is_null($ketua_penilai_ak)) ? $ketua_penilai_ak : $ketua_penilai_ak_default,
+            //     'is_ketua_penilai'=>(!is_null($ketua_penilai_ak)) ? true : false
+            // ],
             'users'=>$users
         ]);
     }
@@ -112,8 +125,8 @@ class PejabatController extends Controller
         $irban_iii_default = User::where('jabatan', 'Inspektur Pembantu Wilayah III')->select(['id' ,'first_name','last_name','ruang->nama as nama_ruang'])->first();
         $irban_iv_default = User::where('jabatan', 'Inspektur Pembantu Wilayah IV')->select(['id' ,'first_name','last_name','ruang->nama as nama_ruang'])->first();
         $ketua_penilai_ak_default = User::all();
-        // $penyusun_ak_default = User::where('jabatan', 'Inspektur Kabupaten')->select(['id' ,'first_name','last_name'])->first();
-        // $penetap_ak_default = User::where('jabatan', 'Inspektur Kabupaten')->select(['id' ,'first_name','last_name'])->first();
+        $penyusun_ak_default = User::where('jabatan', 'Inspektur Kabupaten')->select(['id' ,'first_name','last_name'])->first();
+        $penetap_ak_default = User::where('jabatan', 'Inspektur Kabupaten')->select(['id' ,'first_name','last_name'])->first();
         // dd($request->ketua_penilaian_ak === $ketua_penilai_ak_default);
 
         //$plt_inspektur = Pejabat::where('name', 'Inspektur Kabupaten')->with('user:id,first_name,last_name')->first();
@@ -141,7 +154,7 @@ class PejabatController extends Controller
             $q->where('name','Inspektur Pembantu Wilayah IV')->whereNotNull('status');
         })->first();
 
-        
+        // NOTE : SOLUSI MENGUBAH ID UPDATE YG STATIC, YAKNI DENGAN GET ID BY NAMA PADA TB PEJABAT
         
         // dd(json_decode($request->inspektur) === $inspektur->id);
         // dd($request->ketua_penilaian_ak);
@@ -152,8 +165,8 @@ class PejabatController extends Controller
         $cek_pejabat_irban_iii = Pejabat::where('name', 'Inspektur Pembantu Wilayah III')->count();
         $cek_pejabat_irban_iv = Pejabat::where('name', 'Inspektur Pembantu Wilayah IV')->count();
         $cek_ketua_penilai_ak = Pejabat::where('name','Ketua Penilai AK')->count();
-        // $cek_penyusun_ak = Pejabat::where('name','Penyusun AK')->count();
-        // $cek_penetap_ak = Pejabat::where('name','Penetap AK')->count();
+        $cek_penyusun_ak = Pejabat::where('name','Penyusun AK')->count();
+        $cek_penetap_ak = Pejabat::where('name','Penetap AK')->count();
 
         // dd($request->ketua_penilaian_ak);
         // die();
@@ -215,7 +228,21 @@ class PejabatController extends Controller
                         $update_ketua_penilai = Pejabat::where('id','7')->update(['user_id'=>'99992','name'=>'Ketua Penilai AK']);
                     }
                     $update = $update_ketua_penilai;
-               }
+               }if ($request->penyusun_ak != null) {
+                    if (json_decode($request->penyusun_ak) === $penyusun_ak_default->id) {
+                        $update_penyusun = Pejabat::where('id','8')->update(['user_id'=>$request->penyusun_ak,'name'=>'Penyusun AK']);
+                    }else{
+                        $update_penyusun = Pejabat::where('id','8')->update(['user_id'=>$request->penyusun_ak,'name'=>'Penyusun AK']);
+                    }
+                    $update = $update_penyusun;
+                }if ($request->penetap_ak != null) {
+                    if (json_decode($request->penetap_ak) === $penetap_ak_default->id) {
+                        $update_penyusun = Pejabat::where('id','9')->update(['user_id'=>$request->penetap_ak,'name'=>'Penetap AK']);
+                    }else{
+                        $update_penyusun = Pejabat::where('id','9')->update(['user_id'=>$request->penetap_ak,'name'=>'Penetap AK']);
+                    }
+                    $update = $update_penyusun;
+                }
 
                 return $update.' pejabat has been Update !';
 
@@ -262,6 +289,18 @@ class PejabatController extends Controller
                         $save2 = Pejabat::insert(['user_id'=>'99991','name'=>'Ketua Penilai AK']);
                     }else{
                         $save2 = Pejabat::insert(['user_id'=>$request->ketua_penilaian_ak,'name'=>'Ketua Penilai AK']);
+                    }
+                }if ($request->penyusun_ak != null) {
+                    if (json_decode($request->penyusun_ak) === $penyusun_ak_default->id) {
+                        $save = Pejabat::insert(['user_id'=>$request->penyusun_ak,'name'=>'Penyusun AK']);
+                    }else{
+                        $save = Pejabat::insert(['user_id'=>$request->penyusun_ak,'name'=>'Penyusun AK']);
+                    }
+                }if ($request->penetap_ak != null) {
+                    if (json_decode($request->penetap_ak) === $penetap_ak_default->id) {
+                        $save = Pejabat::insert(['user_id'=>$request->penetap_ak,'name'=>'Penetap AK']);
+                    }else{
+                        $save = Pejabat::insert(['user_id'=>$request->penetap_ak,'name'=>'Penetap AK']);
                     }
                 }
                 return $save.' pejabat has been save !';

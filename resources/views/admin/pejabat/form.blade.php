@@ -57,7 +57,7 @@
         @endif
 
         <!-- select input penyusun AK -->
-        <label for="penyusun_ak" class="col-md-1 col-form-label text-md-right">{{ __('Penyusun AK') }}</label>
+        <label for="penyusun_ak" class="col-md-3 col-form-label text-md-right">{{ __('Penyusun AK') }}</label>
         <div class="col-md-3">
             <select class="form-control selectize" id="penyusun-ak" name="penyusun_ak">
                 <option value="">{{ __('Pilih Pejabat') }}</option>

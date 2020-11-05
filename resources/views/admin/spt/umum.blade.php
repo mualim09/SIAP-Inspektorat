@@ -197,7 +197,7 @@
                 success: function(data){
                   console.log('success:',data);
                   $('#modalFormPenomoranSptUmum').modal('hide');
-                  $('#spt-umum').DataTable().ajax.reload();
+                  $('#spt-umum-table').DataTable().ajax.reload();
                   $('#arsip-spt-umum').DataTable().ajax.reload();
                   $('#form-penomoran-umum')[0].reset();                      
                 },
