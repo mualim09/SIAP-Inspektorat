@@ -22,8 +22,8 @@ class PejabatController extends Controller
         $irban_ii_default = User::where('jabatan', 'Inspektur Pembantu Wilayah II')->select(['id' ,'first_name','last_name','ruang->nama as nama_ruang'])->first();
         $irban_iii_default = User::where('jabatan', 'Inspektur Pembantu Wilayah III')->select(['id' ,'first_name','last_name','ruang->nama as nama_ruang'])->first();
         $irban_iv_default = User::where('jabatan', 'Inspektur Pembantu Wilayah IV')->select(['id' ,'first_name','last_name','ruang->nama as nama_ruang'])->first();
-        $ketua_penilai_ak_default = User::all();
         $penyusun_ak_default = User::where('jabatan', 'Inspektur Kabupaten')->select(['id' ,'first_name','last_name'])->first();
+        $penetap_ak_default = User::where('jabatan', 'Inspektur Kabupaten')->select(['id' ,'first_name','last_name'])->first();
 
         //$plt_inspektur = Pejabat::where('name', 'Inspektur Kabupaten')->with('user:id,first_name,last_name')->first();
         $plt_inspektur = User::whereHas('pejabat', function($q){
@@ -51,15 +51,18 @@ class PejabatController extends Controller
         })->first();
 
         $ketua_penilai_ak = User::whereHas('pejabat', function($q){
-            $q->where('name','Ketua Penilai AK')->whereNotNull('status');
+            $q->where('name','Ketua Penilai AK');
         })->first();
-
         $penyusun_ak = User::whereHas('pejabat', function($q){
-            $q->where('name','Penyusun AK')->whereNotNull('status');
+            $q->where('name','Penyusun AK')->whereNull('status');
+        })->first();
+        $penetap_ak = User::whereHas('pejabat', function($q){
+            $q->where('name','Penetap AK')->whereNull('status');
         })->first();
         
-        //dd($sekretaris);
+        // dd((!is_null($ketua_penilai_ak)) ? true : false);
         $users = User::all();
+        // dd($ketua_penilai_ak);
         /*return view('admin.pejabat.index')->with([
             'inspektur' => (!is_null($plt_inspektur)) ? $plt_inspektur : $inspektur,
             'sekretaris' => (!is_null($plt_sekretaris)) ? $plt_sekretaris : $sekretaris,
@@ -95,17 +98,17 @@ class PejabatController extends Controller
                 'is_plt'=>(!is_null($plt_irban_iv)) ? true : false
             ],
             'ketua_penilai'=> [
-                'user'=>(!is_null($ketua_penilai_ak)) ? $ketua_penilai_ak : $ketua_penilai_ak_default,
+                'user'=>(($ketua_penilai_ak != '99992')) ? $ketua_penilai_ak : $users, // NOTE : SOLUSI MENGUBAH ID UPDATE YG STATIC, YAKNI DENGAN GET ID BY NAMA PADA TB PEJABAT
                 'is_ketua_penilai'=>(!is_null($ketua_penilai_ak)) ? true : false
             ],
-            'penyusun'=> [
+            'penyusun_ak'=> [
                 'user'=>(!is_null($penyusun_ak)) ? $penyusun_ak : $penyusun_ak_default,
-                'is_ketua_penilai'=>(!is_null($penyusun_ak)) ? true : false
+                'is_penyusun'=>(!is_null($penyusun_ak)) ? true : false
             ],
-            // 'ketua_penilai'=> [
-            //     'user'=>(!is_null($ketua_penilai_ak)) ? $ketua_penilai_ak : $ketua_penilai_ak_default,
-            //     'is_ketua_penilai'=>(!is_null($ketua_penilai_ak)) ? true : false
-            // ],
+            'penetap_ak'=> [
+                'user'=>(!is_null($penetap_ak)) ? $penetap_ak : $penetap_ak_default,
+                'is_plt'=>(!is_null($penetap_ak)) ? true : false
+            ],
             'users'=>$users
         ]);
     }
@@ -170,7 +173,7 @@ class PejabatController extends Controller
 
         // dd($request->ketua_penilaian_ak);
         // die();
-        // dd($request->ketua_penilaian_ak);
+        
         if($request->inspektur !== $inspektur->id && $request->sekretaris !== $sekretaris->id && $request->irban_i !== $irban_i_default->id && $request->irban_ii !== $irban_ii_default->id && $request->irban_iii !== $irban_iii_default->id && $request->irban_iv !== $irban_iv_default->id && $request->ketua_penilaian_ak !== $ketua_penilai_ak_default){
 
 

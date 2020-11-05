@@ -1,4 +1,4 @@
-<form id="satgas-ppm" class="ajax-form needs-validation" novalidate>
+<form id="satgas-ppm" class="ajax-form needs-validation" novalidate style="margin-left: 100px;margin-right: 60px;">
 @csrf
     <!-- inspektur -->
     <div class="form-group row">
@@ -9,7 +9,7 @@
                 <option value="">{{ __('Pilih Pejabat') }}</option>
                 @foreach($users as $user)
                 <?php
-                    $selected_inspektur = (!is_null($inspektur['user']) && $user->id == $inspektur['user']->id) ? 'selected' : '';                                    
+                    $selected_inspektur = (!is_null($inspektur['user']) && $user->id == $inspektur['user']->id) ? 'selected' : '';                          
                 ?>
                 <option class="form-control selectize" value="{{$user->id}}" {{ $selected_inspektur }} >{{ $user->full_name_gelar }}</option>                               
                 @endforeach
@@ -27,11 +27,11 @@
         <div class="col-md-3">
             <select class="form-control selectize" id="ketua-penilaian-ak" name="ketua_penilaian_ak">
                 <option value="">{{ __('Pilih Pejabat') }}</option>
-                <?php
-                    $selected_ketua_penilai = (is_null($ketua_penilai['user']) && $user->id == $ketua_penilai['user']->id) ? '' : 'selected';                                    
-                ?>
                 @foreach($users as $user)
-                <option class="form-control selectize" value="{{$user->id}}">{{ $user->full_name_gelar }}</option>
+                <?php
+                    $selected_ketua = (!is_null($ketua_penilai['user']) && $user->id == $ketua_penilai['user']->id) ? 'selected' : '';
+                ?>
+                <option class="form-control selectize" value="{{$user->id}}" {{ $selected_ketua }} >{{ $user->full_name_gelar }}</option>
                 @endforeach
             </select>                            
         </div>
@@ -54,18 +54,21 @@
         </div>
         @if($sekretaris['is_plt'] === true)
             <div class="col-md-2 col-form-label "><span class="is_plt">PLT</span></div>
+            <label for="penyusun_ak" class="col-md-1 col-form-label text-md-right">{{ __('Penyusun AK') }}</label>
         @endif
 
         <!-- select input penyusun AK -->
+        @if($sekretaris['is_plt'] !== true)
         <label for="penyusun_ak" class="col-md-3 col-form-label text-md-right">{{ __('Penyusun AK') }}</label>
+        @endif
         <div class="col-md-3">
             <select class="form-control selectize" id="penyusun-ak" name="penyusun_ak">
                 <option value="">{{ __('Pilih Pejabat') }}</option>
                 @foreach($users as $user)
                 <?php
-                    $selected_inspektur = (!is_null($inspektur['user']) && $user->id == $inspektur['user']->id) ? 'selected' : '';                                    
+                    $selected_penyusun = (!is_null($penyusun_ak['user']) && $user->id == $penyusun_ak['user']->id) ? 'selected' : '';                                    
                 ?>
-                <option class="form-control selectize" value="{{$user->id}}" {{ $selected_inspektur }} >{{ $user->full_name_gelar }}</option>                               
+                <option class="form-control selectize" value="{{$user->id}}" {{ $selected_penyusun }} >{{ $user->full_name_gelar }}</option>                               
                 @endforeach
             </select>                                   
         </div>
@@ -88,18 +91,21 @@
         </div>
         @if($irban_i['is_plt'] === true)
             <div class="col-md-2 col-form-label "><span class="is_plt">PLT</span></div>
+        <label for="penetap_ak" class="col-md-3 col-form-label text-md-right">{{ __('Penetap AK') }}</label>
         @endif
 
         <!-- select input penetap AK -->
+        @if($irban_i['is_plt'] !== true)
         <label for="penetap_ak" class="col-md-3 col-form-label text-md-right">{{ __('Penetap AK') }}</label>
+        @endif
         <div class="col-md-3">
             <select class="form-control selectize" id="penetap-ak" name="penetap_ak">
                 <option value="">{{ __('Pilih Pejabat') }}</option>
                 @foreach($users as $user)
                 <?php
-                    $selected_inspektur = (!is_null($inspektur['user']) && $user->id == $inspektur['user']->id) ? 'selected' : '';                                    
+                    $selected_penetap = (!is_null($penetap_ak['user']) && $user->id == $penetap_ak['user']->id) ? 'selected' : '';                                    
                 ?>
-                <option class="form-control selectize" value="{{$user->id}}" {{ $selected_inspektur }} >{{ $user->full_name_gelar }}</option>                               
+                <option class="form-control selectize" value="{{$user->id}}" {{ $selected_penetap }} >{{ $user->full_name_gelar }}</option>                               
                 @endforeach
             </select>                                   
         </div>
@@ -256,7 +262,7 @@
                 data: $('.ajax-form').serialize(),
                 success: function($data){
                     $('.ajax-form')[0].reset();
-                    // location.reload();
+                    location.reload();
                 },
                 error: function($data){
                 }

@@ -51,6 +51,10 @@
                         @hasanyrole('Super Admin|TU Umum')
                         <!-- <a class="dropdown-item" href="{{ route('satgas_ppm')}}"><i class="ikon fa fa-hand-point-right"></i><span id="menu_id" class="nav-link-inner--text">{{ __('Penunjukan Pejabat') }}</span></a> -->
                         @endhasanyrole
+
+                        <!-- @if(auth()->user()->menuPpm() === true || auth()->user()->hasAnyRole(['Super Admin']))
+                        
+                        @endif -->
                     </div>
                 </li>
 
@@ -93,6 +97,18 @@
                 @hasanyrole('Auditor')
                
                 @endhasanyrole
+                <!-- auth()->user()->hasAnyRole(['Super Admin']) -->
+                <!-- @if(auth()->user()->menuPpm() === true || auth()->user()->hasAnyRole(['Super Admin']))
+                <li class="nav-item dropdown">                    
+                    <a class="nav-link nav-link-icon dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-expanded="false">
+                        <i class="fa fa-universal-access" aria-hidden="true"></i>
+                        <span id="menu_id" class="nav-link-inner--text">{{ __('SATGAS') }}</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-right">                        
+                        
+                    </div>
+                </li>
+                @endif -->
                 <!-- end -->
 
             </ul>
