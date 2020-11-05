@@ -273,11 +273,13 @@ class SptController extends Controller
 
     public function storeDetailAnggota(Request $request){
         $cek = DetailSpt::where('spt_id', $request->spt_id)->where('user_id', $request->user_id)->count();
+        //user_id:user_id, peran:peran, spt_id:id_spt, tgl_mulai: tgl_mulai, tgl_akhir:tgl_akhir
         if($cek>0):
             return 'User sudah ada dalam list anggota';
         else:
-            $spt = Spt::find($request->spt_id);
-            $unsur_dupak = $spt->jenisSpt->kategori;
+            $spt = Spt::where('id',$request->spt_id)->first();
+            dd($spt);
+            $unsur_dupak = 'pengawasan';
             $start =$spt->tgl_mulai;
             $end = $spt->tgl_akhir;
             $lama = $spt->lama;
@@ -662,14 +664,17 @@ class SptController extends Controller
         //return $pdf->setWarnings(false)->save('spt-'.$id.'.pdf');
     }    
 
-    public function getAnggota($id=null)
+    public function getAnggota(Request $request)
     {        
         //setup tabel anggota spt, jika ada data di detail_spt maka mengambil data anggota dari tabel, jika tidak, cek apakah ada data session, selebihnya set empty data untuk menghindari pesan error
 
         //cek data di tabel
-        $cek_data = ( $id == 0 ) ? 0 : DetailSpt::where('spt_id', $id)->count();
+        
+        //$cek_data = ( ) ) ? 0 : DetailSpt::where('spt_id', $id)->count();
 
-        if($cek_data > 0){
+        if( !is_null($request->id_spt) ){
+
+            $id = $request->id_spt;
 
             $cols = DetailSpt::where('spt_id','=',$id)->with(['user','spt'])
             ->orderByRaw(DB::raw("FIELD(peran,'Penanggung Jawab', 'Pembantu Penanggung jawab', 'Supervisor','Pengendali Mutu', 'Pengendali Teknis', 'Ketua Tim', 'Anggota Tim')"))->get();
@@ -925,7 +930,7 @@ class SptController extends Controller
 
         }else{
 
-            $spt = SptUmum::findOrFail($id);
+            $spt = SptUmum::findOrFail($id_umum);
             $filename = ($request->file_spt_umum) ? 'SPT-' . $id . '-' . $request->file_spt_umum->getClientOriginalName() : null ;
             //dd(storage_path()."/spt");
             if($filename !== null ){

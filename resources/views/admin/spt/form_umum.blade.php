@@ -12,7 +12,7 @@
 	    	</div>
 	    	<div class="modal-body">
 	    		<form id="spt-umum-form">
-	    			<input type="hidden" name="id" id="id-umum">
+	    			<input type="hidden" name="id" id="id-spt-umum">
 	    			<!-- <input type="hidden" name="jenis_spt_id" id="jenis-spt-id" value="Spt Umum"> -->
 					@csrf
 
@@ -164,7 +164,7 @@
 			<div class="modal-body">
 				@if(Auth::user()->can(['Create SPT', 'Edit SPT']))
 				<form  id="new-anggota-spt-form-umum" class="ajax-form needs-validation" novalidate>
-					<input type="hidden" name="spt_id_umum" id="spt-id-umum">
+					<input type="hidden" name="spt_id_umum" id="spt-id-umum-anggota">
 			        @csrf
 			        <div class="form-group row">
 			        	<label for="anggota" class="col-md-2 col-form-label">{{ __('Anggota') }} </label>
@@ -200,7 +200,7 @@
 			        </div>
 				</form>
 				@endif
-
+<!-- track -->
 				<script type="text/javascript">
 					$("#new-anggota-spt-form-umum").validate({
 		            rules: {
@@ -224,8 +224,10 @@
 		            	var dupak_anggota = $('#new-anggota-spt-form-umum').find('#dupak-id').val();
 		                var user_id = $('#session-anggota-umum option:selected').val();
 		                var spt_id = $('#spt-umum-form').find('#id-umum').val();
+		                //break save_method_umum;
 
-		                url = (spt_id !== '') ? "{{ route('store_detail_anggota_umum') }}" : "{{ route('store_session_anggota_umum') }}" ;
+		                url = (save_method_umum == 'new') ?  "{{ route('store_session_anggota_umum') }}" : "{{ route('store_detail_anggota_umum') }}";
+		                //$.alert(save_method_umum);
 		                if(tgl_mulai == '' || tgl_akhir==''){
 		                	$.alert('Isikan tanggal mulai dan tanggal akhir terlebih dahulu.');
 		                }else{
@@ -264,6 +266,13 @@
 	 //            div = document.getElementById(id);
 	 //        // hide previous one
 	 //    }
+	 $('#btn-new-spt-umum').on('click', function(){
+        save_method_umum = 'new';
+        $('#spt-umum-form')[0].reset();
+        $('#new-anggota-spt-form-umum')[0].reset();
+        //clearSessionAnggotaUmum();
+        clearOptionsUmum();
+    });
 
 		var select_lokasi = $('#lokasi-id-umum').selectize({	   
 		   /*sortField: 'text',*/
@@ -287,7 +296,7 @@
 		$( "#formSptUmum" ).on('shown.bs.modal', function(){
 
 			var id_spt = $('#id-umum').val();
-			var url_prefix = (window.location.pathname == '/admin') ? 'admin/spt/get-anggota/umum/' : 'spt/get-anggota/umum/';
+			var url_prefix = (window.location.pathname == '/admin' || window.location.pathname == '/public/admin') ? 'admin/spt/get-anggota/umum/' : 'spt/get-anggota/umum/';
 			url = (id_spt != '') ? url_prefix+id_spt : url_prefix+'0';
 
 			$('#list-anggota-umum-session').DataTable({        
@@ -345,11 +354,11 @@
             var info_untuk_umum = $('#info-untuk-kegiatan-umum').val();
 
             var id = $('#id-umum').val();
-            save_method = (id == '') ? 'new' : save_method;
-            var url_prefix = (window.location.pathname == '/admin') ? 'admin/spt/' : 'spt/';
+            save_method_umum = (id == '') ? 'new' : save_method_umum;
+            var url_prefix = (window.location.pathname == '/admin' || window.location.pathname == '/public/admin') ? 'admin/spt/' : 'spt/';
             //url =  (save_method == 'new') ? "{{ route('spt.store') }}" : base_url + '/' + id ;
-            url = (save_method == 'new') ? "{{ route('store_spt_umum') }}" : url_prefix + 'umum/edit/' +id ;
-            method = (save_method == 'new') ? "POST" : "PUT";
+            url = (save_method_umum == 'new') ? "{{ route('store_spt_umum') }}" : url_prefix + 'umum/edit/' +id ;
+            method = (save_method_umum == 'new') ? "POST" : "PUT";
             type = "POST";            
             
 
@@ -362,7 +371,7 @@
                 	console.log(data);
                     $("#spt-umum-form")[0].reset();
                     $('#formSptUmum').modal('hide');
-                    if(save_method == 'new') clearSessionAnggota();
+                    //if(save_method_umum == 'new') clearSessionAnggota();
                     //table.ajax.reload();
                     $('#spt-umum-table').DataTable().ajax.reload();
                     clearOptionsUmum();
@@ -376,7 +385,7 @@
     });
 
 	function unset_anggota(user_id){
-		save_method = 'delete';
+		save_method_umum = 'delete';
 	        var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	        var tgl_mulai = $('#tgl-mulai').val();
 	        var tgl_akhir = $('#tgl-akhir').val();
@@ -387,7 +396,7 @@
 	                delete: {
 	                    btnClass: 'btn-danger',
 	                    action: function(){
-	                    	url = (window.location.pathname == '/admin') ? "admin/spt/session/anggota/umum/delete/"+user_id : "spt/session/anggota/umum/delete/"+user_id;
+	                    	url = (window.location.pathname == '/admin' || window.location.pathname == '/public/admin') ? "admin/spt/session/anggota/umum/delete/"+user_id : "spt/session/anggota/umum/delete/"+user_id;
 	                        //url = "session/anggota/delete/"+user_id;
 	                        $.ajax({
 	                            url: url,
@@ -417,7 +426,7 @@
 		$('#id-umum').val('');
 		// $('#tambahan').val('');
 		select_lokasi[0].selectize.clear();
-		save_method = null;
+		save_method_umum = null;
 		$('#list-anggota-umum-session').DataTable().clear().destroy();
 		// $('#input-tambahan-container').hide();
 		// $('#input-lokasi-container').hide();

@@ -171,11 +171,11 @@
             var info = JSON.parse('{'+lanjutan+','+input_radio+'}');
             var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             var id = $('#id').val();
-            save_method = (id == '') ? 'new' : save_method;
+            //save_method = (id == '') ? 'new' : save_method;
             base_url = "spt";
             var url_prefix = (window.location.pathname == '/admin') ? 'admin/spt/' : 'spt/';
             //url =  (save_method == 'new') ? "{{ route('spt.store') }}" : base_url + '/' + id ;
-            url = (save_method == 'new') ? "{{ route('spt.store') }}" :url_prefix + id ;
+            url = (save_method == 'new') ? "{{ route('spt.store') }}" : url_prefix + id ;
             method = (save_method == 'new') ? "POST" : "PUT";
             type = "POST";            
             

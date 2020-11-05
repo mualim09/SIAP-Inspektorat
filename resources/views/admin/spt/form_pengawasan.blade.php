@@ -95,7 +95,16 @@
 				<div class="form-group row" id="input-anggota" >
 				    <div class="col-md-2 col-form-label">{{ __('Anggota') }} </div>
 					<div class="col">
-						<table id="list-anggota-session" class="col"></table>
+						<table id="list-anggota-session" class="col">
+							<thead>
+								<tr>
+									<th>No</th>
+									<th>Nama</th>
+									<th>Peran</th>
+									<th></th>
+								</tr>
+							</thead>
+						</table>
 						<button id="add-anggota" class="btn btn-outline-primary btn-sm" type="button" data-toggle="modal" data-target="#anggotaSptModal"> <i class="fa fa-plus"></i> <span>Tambah Anggota</span></button>
 					</div>
 				</div>
@@ -195,7 +204,7 @@
 		            rules: {
 		                session_anggota: {required: true, number:true},
 		                //session_peran: {required: true}
-		                session_peran : {
+		                /*session_peran : {
 		                	required: true,
 		                	normalizer: function( value ) {
 					        	var regex = /^[a-zA-Z]+$/;
@@ -204,14 +213,15 @@
 					        		return false;
 					        	}
 					    	}
-						}
+						}*/
 		            },
 		            submitHandler: function(form){
 		            	var tgl_mulai = $('#spt-form').find('#tgl-mulai').val();
 		            	var tgl_akhir = $('#spt-form').find('#tgl-akhir').val();
 		                var user_id = $('#session-anggota option:selected').val();
 		                var peran = $('#session-peran option:selected').val();
-		                //var id_spt = id_spt;
+		                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+		                var id_spt = (typeof id_spt == 'undefined') ? null : id_spt;
 		                //alert(save_method);
 		                url = (save_method === 'edit') ? "{{ route('store_detail_anggota') }}" : "{{ route('store_session_anggota') }}" ;
 		                if(tgl_mulai == '' || tgl_akhir==''){
@@ -220,8 +230,9 @@
 		                	//alert(url);
 		                	$.ajax({
 			                    url: url,
-			                    type: 'post',
-			                    data: {user_id:user_id, peran:peran, spt_id:id_spt, tgl_mulai: tgl_mulai, tgl_akhir:tgl_akhir},
+			                    type: 'POST',
+			                    //dataType: 'json',
+			                    data: {_token: CSRF_TOKEN, user_id:user_id, peran:peran, spt_id:spt_id, tgl_mulai: tgl_mulai, tgl_akhir:tgl_akhir},
 			                    success: function(data){		                        		                        
 			                        $('#list-anggota-session').DataTable().ajax.reload();
 			                        clearOptions();
@@ -421,9 +432,10 @@ $( "#formModal" ).on('shown.bs.modal', function(){
     	select_jenis_spt[0].selectize.clear();
     }
 
-    var url_prefix = (window.location.pathname == '/admin' || window.location.pathname == '/public/admin') ? 'admin/spt/get-anggota/' : 'spt/get-anggota/';
-	url = (id_spt != '') ? url_prefix+id_spt : url_prefix+'0';
+    /*var url_prefix = (window.location.pathname == '/admin' || window.location.pathname == '/public/admin') ? 'admin/spt/get-anggota/' : 'spt/get-anggota/';
+	url = (typeof id_spt !== 'undefined') ? url_prefix+id_spt : url_prefix+'0';*/
 	//console.log(url);
+	url = "{{ route('get_anggota_spt') }}";
 
 	/*datatable setup*/    
     $('#list-anggota-session').DataTable({        
@@ -447,7 +459,13 @@ $( "#formModal" ).on('shown.bs.modal', function(){
         retrieve: true,
         processing: true,
         serverSide: true,
-        ajax: url,
+        ajax: {
+        	'type': 'GET',
+	        'url': url,
+	        'data': {
+	           id_spt: id_spt,	           
+	        },
+        },
         /*deferRender: true,*/
         columns: [
             {'defaultContent' : '', 'data' : 'DT_RowIndex', 'name' : 'DT_RowIndex', 'title' : 'No', 'orderable' : false, 'searchable' : false, 'exportable' : true, 'printable' : true, width: '10%'

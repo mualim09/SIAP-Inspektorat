@@ -136,8 +136,8 @@
 @section('js_umum')
 <script type="text/javascript">
   // show modal by id from controller
-  function showFormModalUmum(spt_id){
-      $('#spt-id-umum').val(spt_id);
+  function showFormModalUmum(id_spt_umum){
+      $('#penomoran-spt-id-umum').val(id_spt_umum);
       $('#modalFormPenomoranSptUmum').modal('show');
       url = "{{ route('last_data_umum', 'nomor') }}";
       $.ajax({
@@ -159,9 +159,12 @@
   $(document).on('show.bs.modal','#modalFormPenomoranSptUmum', function () { //fungsi ketika modal hide mendestroy data table yg di dlm modal
         // alert('jalan');
         // $('#dataKKA-perAuditor').dataTable().fnDestroy(); //mendestroy data table
-        var id = $('#spt-id-umum').attr('value');
+        //var id = $('#spt-id-umum').attr('value');
+      
+        var id = $('#penomoran-spt-id-umum').val();
+        
         // console.log(id);
-        url = "{{ url('admin/spt/get-spt-umum-byid') }}" +'/'+id;
+        url = (window.location.pathname == '/admin' || window.location.pathname == '/public/admin') ? "{{ url('admin/spt/get-spt-umum-byid') }}" +'/'+id : '';
         $.ajax({
             type: "GET",
             url : url,
@@ -175,6 +178,7 @@
         });
     });
 
+/*track*/
   // validate data from form penomoran umum
   $("#form-penomoran-umum").validate({
         rules: {
@@ -184,9 +188,9 @@
         },
         submitHandler: function(form){
             var id = $('#penomoran-spt-id-umum').val();
-            alert(id);
+            //alert(id);
             //url ='spt/update-nomor/' + id ;
-            url = (window.location.pathname == '/admin') ? 'admin/spt/update-nomor/'+id : 'spt/update-nomor/'+id;
+            url = (window.location.pathname == '/admin' || window.location.pathname == '/public/admin') ? 'admin/spt/update-nomor/'+id : 'spt/update-nomor/'+id;
             type = "POST";
             var formData = new FormData($(form)[0]);
             $.ajax({
