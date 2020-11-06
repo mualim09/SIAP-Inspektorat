@@ -186,6 +186,9 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 			Route::delete('delete-anggota/{id}','SptController@deleteAnggota')->name('delete_anggota');
 			Route::get('{id}/edit', 'SptController@edit')->name('edit_spt');
 
+			//percobaan tampilkan data anggota spt tanpa datatable
+			Route::get('anggota/pengawasan', 'SptController@drawTableAnggota')->name('tabel_anggota_pengawasan');
+
 			//session anggota SPT
 			Route::get('session/anggota', 'SptController@getSessionAnggota')->name('get_session_anggota');
 			Route::get('session/anggota/clear', 'SptController@clearSessionAnggota')->name('clear_session_anggota');

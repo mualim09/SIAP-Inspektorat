@@ -39,8 +39,7 @@
 
     $('#btn-new-spt').on('click', function(){
         save_method = 'new';
-        $('#spt-form')[0].reset();
-        $('#new-anggota-spt-form')[0].reset();
+        id_spt_pengawasan = null;
         clearSessionAnggota();
         clearJenis();
     });
@@ -84,6 +83,7 @@
                 $('#lama').val(data.lama);
                 $('#lokasi').val(data.lokasi);
                 $('#formModal').modal('show');
+                $('#formModal').attr('data-id-spt-pengawasan', data.id);
                 //$("#modal-body-anggota #spt-id-anggota").val( id );
             },
             error: function(err){

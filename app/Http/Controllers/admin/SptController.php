@@ -1780,5 +1780,58 @@ class SptController extends Controller
         return;        
     }
 
+    public function drawTableAnggota(Request $request){
+        $spt = Spt::where('id', $request->spt_id)->whereHas('jenisSpt', function($q){
+            $q->where('kategori','pengawasan');
+        })->first();
+        //dd($request->spt_id);
+        $return = '<table>'
+                        .'<thead><tr>'
+                            .'<th>No.</th>'
+                            .'<th>Nama</th>'
+                            .'<th>Peran</th>'
+                            .'<th>Aksi</th>'
+                        .'</tr></thead>';
+        if(!is_null($spt)){
+            //bukan spt baru, data spt sudah ada, tampilkan data anggota spt dari tabel detail
+            $list_anggota = DetailSpt::where('spt_id', $request->spt_id)->where('unsur_dupak', 'pengawasan')->with('user')->get();
+            //dd($list_anggota);            
+            foreach($list_anggota as $i=>$anggota){                
+                $return .= '<tr>'
+                            .'<td>'.++$i.'</td>'
+                            .'<td>'.$anggota->user->full_name_gelar.'</td>'
+                            .'<td>'.$anggota->peran.'</td>'
+                            .'<td>buildControl</td>'
+                            .'</tr>';
+            }
+            
+        }else{
+            //data belum ada, cek session anggota, jika ada tampilkan data session anggota
+            if(Session::has('anggota')){
+                $session_anggota = Session::get('anggota');
+                //setup data anggota
+                foreach($session_anggota as $i=>$anggota){
+                    $user = User::where('id',$anggota['user_id'])->first();
+                    $return .= '<tr>'
+                            .'<td>'.++$i.'</td>'
+                            .'<td>'.$user->full_name_gelar.'</td>'
+                            .'<td>'.$anggota['peran'].'</td>'
+                            .'<td>buildControl</td>'
+                            .'</tr>';
+                }
+                
+                
+            }else{
+                //data belum ada, session anggota juga tidak ada
+                $return .= '<tr><td colspan="4" align="center">Tidak ada data anggota</td></tr>';
+            }
+
+        }
+
+        $return .= '</table>';
+        return $return;
+
+    }
+
 
 }

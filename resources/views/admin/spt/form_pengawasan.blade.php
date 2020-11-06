@@ -4,7 +4,7 @@
     <div class="modal-content">    	
     	<div class="modal-header">
     		<h3>{{ __('Pengajuan SPT') }}</h3>
-    		<button type="button" class="btn btn-icon btn-3 btn-outline-secondary" data-dismiss="modal" aria-label="Close" id="close-spt-form">
+    		<button type="button" class="btn btn-icon btn-3 btn-outline-secondary" data-dismiss="modal" aria-label="Close" id="close-spt-pengawasan-form">
 	        	<span class="btn-inner--icon"><i class="fa fa-times"></i></span>
 	        	<span class="btn-inner--text">{{ __('Close') }}</span>
 	        </button>
@@ -106,6 +106,15 @@
 							</thead>
 						</table>
 						<button id="add-anggota" class="btn btn-outline-primary btn-sm" type="button" data-toggle="modal" data-target="#anggotaSptModal"> <i class="fa fa-plus"></i> <span>Tambah Anggota</span></button>
+						<script type="text/javascript">
+							$('#add-anggota').on('click', function(){								
+								if ( typeof $('#formModal').attr('data-id-spt-pengawasan') !== 'undefined' ) {									
+									id_spt_pengawasan = $('#formModal').attr('data-id-spt-pengawasan');
+									$('#anggotaSptModal').attr('id-spt-pengawasan-anggota', id_spt_pengawasan);
+								}
+								
+							})
+						</script>
 					</div>
 				</div>
 
@@ -148,6 +157,14 @@
     </div>
   </div>
 </div>
+
+<script type="text/javascript">
+	$('#close-spt-pengawasan-form').on('click', function(){
+		if ( typeof $('#formModal').attr('data-id-spt-pengawasan') !== 'undefined' ){
+			$('#formModal').removeAttr('data-id-spt-pengawasan');//close-anggota
+		}
+	})
+</script>
 <!-- end form pengajuan spt pengawasan -->
 
 
@@ -156,7 +173,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h3>Anggota SPT</h3>
-				<button type="button" class="btn btn-icon btn-3 btn-outline-secondary" data-dismiss="modal" aria-label="Close" id="close-anggota">
+				<button type="button" class="btn btn-icon btn-3 btn-outline-secondary" data-dismiss="modal" aria-label="Close" id="close-anggota-pengawasan">
 		        	<span class="btn-inner--icon"><i class="fa fa-times"></i></span>
 		        	<span class="btn-inner--text">{{ __('Close') }}</span>
 	        	</button>
@@ -232,9 +249,10 @@
 			                    url: url,
 			                    type: 'POST',
 			                    //dataType: 'json',
-			                    data: {_token: CSRF_TOKEN, user_id:user_id, peran:peran, spt_id:spt_id, tgl_mulai: tgl_mulai, tgl_akhir:tgl_akhir},
+			                    data: {_token: CSRF_TOKEN, user_id:user_id, peran:peran, spt_id:id_spt, tgl_mulai: tgl_mulai, tgl_akhir:tgl_akhir},
 			                    success: function(data){		                        		                        
-			                        $('#list-anggota-session').DataTable().ajax.reload();
+			                        //$('#list-anggota-session').DataTable().ajax.reload();
+			                        drawTableAnggota();
 			                        clearOptions();
 			                    },
 			                    error: function(error){
@@ -245,12 +263,22 @@
 			             
 		            }
 		        });
+
+					function drawTableAnggota(){
+
+					}
 				</script>
 			</div>
 		</div>
 	</div>
 </div>
-
+<script type="text/javascript">
+	$('#close-anggota-pengawasan').on('click', function(){		
+		if ( typeof $('#anggotaSptModal').attr('id-spt-pengawasan-anggota') !== 'undefined' ){
+			$('#anggotaSptModal').removeAttr('id-spt-pengawasan-anggota');
+		}		
+	})
+</script>
 
 
 <script type="text/javascript">
