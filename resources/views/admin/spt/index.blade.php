@@ -18,17 +18,7 @@
 
 @include('admin.spt.arsip')
 
-
-<?php 
-  $count = count(auth()->user()->menuPpm());
-  $data = auth()->user()->menuPpm(); 
-?>
-
-@for($i=0;$i<$count;$i++)
-@if($data[$i]->jabatan == auth()->user()->jabatan || auth()->user()->hasAnyRole(['Super Admin']))
 @include('admin.ppm.index')
-@endif
-@endfor
 
 @section('content')
 @include('layouts.headers.cards')

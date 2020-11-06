@@ -1,4 +1,3 @@
-
 @section('nav_tab_spt_umum')
 <li class="nav-item">
   <a class="nav-link" href="#spt-umum-tab" role="tab" aria-controls="spt-umum-tab" aria-selected="true">Penomoran SPT Umum</a>
@@ -150,12 +149,10 @@
           }
       });
   }
-
   function PopUpFunctionUploadScan(id) {
       $('#scan-spt-id-umum').val(id);
       $('#modalFormScanUploadSptUmum').modal('show');
   }
-
   $(document).on('show.bs.modal','#modalFormPenomoranSptUmum', function () { //fungsi ketika modal hide mendestroy data table yg di dlm modal
         // alert('jalan');
         // $('#dataKKA-perAuditor').dataTable().fnDestroy(); //mendestroy data table
@@ -177,7 +174,6 @@
             }
         });
     });
-
 /*track*/
   // validate data from form penomoran umum
   $("#form-penomoran-umum").validate({
@@ -213,7 +209,6 @@
             return false;
         }
     });
-
     $("#form-scan-spt-umum").validate({
         rules: {
             // nomor_umum : {required: true},
@@ -246,9 +241,7 @@
             return false;
         }
     });
-
   // datatable penomoran SPT
-
      $('#spt-umum-table').DataTable({
         'pageLength': 50,
         autoWidth: false,
@@ -294,7 +287,6 @@
           // {"width": '15%', "targets": 6},
         ]
     });
-
      $('#arsip-spt-umum').DataTable({
         'pageLength': 50,
         autoWidth: false,
@@ -341,7 +333,6 @@
           {"width": '15%', "targets": 6},
         ]
     });
-
     //butuh revisi
     function deleteDataSptUmum(id){
         save_method = 'delete';
@@ -372,10 +363,8 @@
             }
         });
     }
-
     // function editFormUmum(id){        
     //     save_method = 'edit';
-
     //     //avoid false ajax url. read url first, then add it to te prefixed url
     //     var url = (window.location.pathname == '/admin') ? 'admin/spt/get-spt-umum-byid/'+id : 'spt/get-spt-umum-byid/' +id;
     //     // url = url_prefix+id+"/edit";
@@ -387,7 +376,6 @@
     //         success: function(data){                
     //             // $('#spt-form')[0].reset();
     //             $('#id-jenis-spt').val(data.jenis_spt_umum);
-
     //             //variabel jenis spt               
     //             // lokasi = (data.jenis_spt.input_lokasi == true) ? data.lokasi_id : '';
     //             // tambahan = (data.jenis_spt.input_tambahan == true) ? data.tambahan : '';                
@@ -395,7 +383,6 @@
     //             // input_tambahan = data.jenis_spt.input.tambahan;
     //             // cek_radio = data.jenis_spt.cek_radio;
     //             // jenis_spt_id = data.jenis_spt_id;
-
     //             $('#spt-id-umum').val(data.id);
     //             $('#info-dasar-umum').val(data.info_dasar_umum);
     //             $('#info-untuk-kegiatan-umum').val(data.info_untuk_umum);

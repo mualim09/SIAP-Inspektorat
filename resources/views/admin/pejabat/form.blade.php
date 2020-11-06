@@ -16,12 +16,13 @@
             </select>                            
         </div>
         @if($inspektur['is_plt'] === true)
-            <div class="col-md-2 col-form-label "><span class="is_plt">PLT</span></div>
+            <div class="col-md-2 col-form-label "><span class="is_plt">Plt.</span></div>
             <label for="ketua_penilaian_ak" class="col-md-1 col-form-label text-md-right">{{ __('Ketua Penilai AK') }}</label>
         @endif
 
         @if($inspektur['is_plt'] !== true)
-            <label for="ketua_penilaian_ak" class="col-md-3 col-form-label text-md-right">{{ __('Ketua Penilai AK') }}</label>
+            <div class="col-md-2 col-form-label "><span class="is_definitif">Definitif</span></div>
+            <label for="ketua_penilaian_ak" class="col-md-1 col-form-label text-md-right">{{ __('Ketua Penilai AK') }}</label>
         @endif
         <!-- select input ketua penilai ak -->
         <div class="col-md-3">
@@ -53,13 +54,14 @@
             </select>                            
         </div>
         @if($sekretaris['is_plt'] === true)
-            <div class="col-md-2 col-form-label "><span class="is_plt">PLT</span></div>
+            <div class="col-md-2 col-form-label "><span class="is_plt">Plt.</span></div>
             <label for="penyusun_ak" class="col-md-1 col-form-label text-md-right">{{ __('Penyusun AK') }}</label>
         @endif
 
         <!-- select input penyusun AK -->
         @if($sekretaris['is_plt'] !== true)
-        <label for="penyusun_ak" class="col-md-3 col-form-label text-md-right">{{ __('Penyusun AK') }}</label>
+        <div class="col-md-2 col-form-label "><span class="is_definitif">Definitif</span></div>
+        <label for="penyusun_ak" class="col-md-1 col-form-label text-md-right">{{ __('Penyusun AK') }}</label>
         @endif
         <div class="col-md-3">
             <select class="form-control selectize" id="penyusun-ak" name="penyusun_ak">
@@ -90,13 +92,14 @@
             </select>
         </div>
         @if($irban_i['is_plt'] === true)
-            <div class="col-md-2 col-form-label "><span class="is_plt">PLT</span></div>
+            <div class="col-md-2 col-form-label "><span class="is_plt">Plt.</span></div>
         <label for="penetap_ak" class="col-md-3 col-form-label text-md-right">{{ __('Penetap AK') }}</label>
         @endif
 
         <!-- select input penetap AK -->
         @if($irban_i['is_plt'] !== true)
-        <label for="penetap_ak" class="col-md-3 col-form-label text-md-right">{{ __('Penetap AK') }}</label>
+        <div class="col-md-2 col-form-label "><span class="is_definitif">Definitif</span></div>
+        <label for="penetap_ak" class="col-md-1 col-form-label text-md-right">{{ __('Penetap AK') }}</label>
         @endif
         <div class="col-md-3">
             <select class="form-control selectize" id="penetap-ak" name="penetap_ak">
@@ -127,8 +130,12 @@
             </select>
         </div>
          @if($irban_ii['is_plt'] === true)
-            <div class="col-md-2 col-form-label "><span class="is_plt">PLT</span></div>
-        @endif
+            <div class="col-md-2 col-form-label "><span class="is_plt">Plt.</span></div>
+         @endif
+
+         @if($irban_ii['is_plt'] !== true)
+         <div class="col-md-2 col-form-label "><span class="is_definitif">Definitif</span></div>
+         @endif
     </div>
 
     <!-- irban 3 -->
@@ -146,8 +153,12 @@
             </select>
         </div>
         @if($irban_iii['is_plt'] === true)
-            <div class="col-md-2 col-form-label "><span class="is_plt">PLT</span></div>
+            <div class="col-md-2 col-form-label "><span class="is_plt">Plt.</span></div>
         @endif
+
+        @if($irban_iii['is_plt'] !== true)
+         <div class="col-md-2 col-form-label "><span class="is_definitif">Definitif</span></div>
+         @endif
     </div>
 
     <!-- irban 4 -->
@@ -165,8 +176,12 @@
             </select>
         </div>
         @if($irban_iv['is_plt'] === true)
-            <div class="col-md-2 col-form-label "><span class="is_plt">PLT</span></div>
+            <div class="col-md-2 col-form-label "><span class="is_plt">Plt.</span></div>
         @endif
+
+        @if($irban_iv['is_plt'] !== true)
+         <div class="col-md-2 col-form-label"><span class="is_definitif">Definitif</span></div>
+         @endif
     </div>
 
     <div class="form-group row">
