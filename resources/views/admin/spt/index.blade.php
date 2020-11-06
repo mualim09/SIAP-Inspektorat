@@ -18,6 +18,18 @@
 
 @include('admin.spt.arsip')
 
+
+<?php 
+  $count = count(auth()->user()->menuPpm());
+  $data = auth()->user()->menuPpm(); 
+?>
+
+@for($i=0;$i<$count;$i++)
+@if($data[$i]->jabatan == auth()->user()->jabatan || auth()->user()->hasAnyRole(['Super Admin']))
+@include('admin.ppm.index')
+@endif
+@endfor
+
 @section('content')
 @include('layouts.headers.cards')
 <div class="container-fluid mt--7 bg-color" style="padding-top: 120px;">
@@ -35,6 +47,8 @@
             @yield('nav_tab_spt_umum')
             @yield('nav_tab_arsip')
             @yield('nav_table_inspektur')
+
+            @yield('nav_tab_ppm')
 
             <!-- tombol tambah spt berdasarkan role -->
             <li class="nav-item ml-auto">
@@ -56,6 +70,7 @@
             @yield('tab_content_arsip')
             @yield('content_auditor')
             @yield('content_inspektur')
+            @yield('tab_content_ppm')
           </div>
         </div>
     </div>     

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 use Carbon\Carbon;
+use DB;
 
 //spatie media library
 use Spatie\MediaLibrary\HasMedia\HasMedia;
@@ -115,6 +116,21 @@ class User extends Authenticatable implements HasMedia
     //relasi ke pejabat
     public function pejabat(){
         return $this->hasOne('App\models\Pejabat');
+    }
+
+    public function menuPpm()
+    {
+        // $plt_sekretaris = User::whereHas('pejabat', function($q){
+        //     $q->where('name','Sekretaris')->whereNotNull('status');
+        // })->first();
+
+        $query = DB::table('pejabat')
+                    ->join('users','pejabat.user_id','=','users.id')
+                    ->whereNotNull('status')
+                    ->get()
+        ;
+        // dd(!is_null($query));
+        return $query;
     }
 
 }
