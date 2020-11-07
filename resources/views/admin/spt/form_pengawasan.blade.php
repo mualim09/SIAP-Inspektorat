@@ -1,7 +1,7 @@
 <!-- start form pengajuan spt pengawasan -->
 <div class="modal fade modal-form" tabindex="-1" role="dialog" aria-labelledby="formModalLabel" aria-hidden="true" id="formModal" data-backdrop="static" data-keyboard="false" style="z-index: 1500;">
   <div class="modal-dialog modal-lg">
-    <div class="modal-content">    	
+    <div class="modal-content">
     	<div class="modal-header">
     		<h3>{{ __('Pengajuan SPT') }}</h3>
     		<button type="button" class="btn btn-icon btn-3 btn-outline-secondary" data-dismiss="modal" aria-label="Close" id="close-spt-pengawasan-form">
@@ -38,22 +38,22 @@
 				<div class="col-md-8 offset-md-2" id="radio-tambahan" style="display: none;">
 				</div>
 
-				<div class="form-group row">		            
+				<div class="form-group row">
 				    <label for="tgl-mulai" class="col-md-2 col-form-label">{{ __('Mulai') }}</label>
-				    <div class="col-md-4">			            
-						<input type="text" class="form-control datepicker" name="tgl_mulai" id="tgl-mulai" autocomplete="off" placeholder="{{ __('Tanggal Mulai')}}">						    
+				    <div class="col-md-4">
+						<input type="text" class="form-control datepicker" name="tgl_mulai" id="tgl-mulai" autocomplete="off" placeholder="{{ __('Tanggal Mulai')}}">
 					</div>
 					<label for="tgl-akhir" class="col-md-2 col-form-label">{{ __('Berakhir') }}</label>
-				    <div class="col-md-4">			            
-						<input type="text" class="form-control datepicker" name="tgl_akhir" id="tgl-akhir" autocomplete="off" placeholder="{{ __('Tanggal Akhir')}}" disabled="true">						    
+				    <div class="col-md-4">
+						<input type="text" class="form-control datepicker" name="tgl_akhir" id="tgl-akhir" autocomplete="off" placeholder="{{ __('Tanggal Akhir')}}" disabled="true">
 					</div>
 				</div>
 
-				<div class="form-group row">		            
+				<div class="form-group row">
 				    <label for="tgl-mulai" class="col-md-2 col-form-label">{{ __('Lama') }}</label>
-				    <div class="col-md-4">			            
-						<input type="text" class="form-control" name="lama" id="lama" autocomplete="off" placeholder="{{ __('Lama')}}">						    
-					</div>					
+				    <div class="col-md-4">
+						<input type="text" class="form-control" name="lama" id="lama" autocomplete="off" placeholder="{{ __('Lama')}}">
+					</div>
 				</div>
 
 				<script type="text/javascript">
@@ -63,7 +63,7 @@
 				            format: 'dd-mm-yyyy',
 				            autoclose: true,
 				            todayHighlight: true,
-				        });     
+				        });
 				    });
 				    $("#tgl-mulai").on('changeDate', function(selected) {
 				        var startDate = new Date(selected.date.valueOf());
@@ -71,7 +71,7 @@
 				        $('#tgl-akhir').prop('disabled',false);
 				        $('#tgl-akhir').focus();
 				    });
-					
+
 					$('#tgl-akhir').on('changeDate', function(){
 						var start = $("#tgl-mulai").val();
 						var end = $("#tgl-akhir").val();
@@ -95,7 +95,7 @@
 				<div class="form-group row" id="input-anggota" >
 				    <div class="col-md-2 col-form-label">{{ __('Anggota') }} </div>
 					<div class="col">
-						<table id="list-anggota-session" class="col">
+						<!--<table id="list-anggota-session" class="col">
 							<thead>
 								<tr>
 									<th>No</th>
@@ -104,15 +104,18 @@
 									<th></th>
 								</tr>
 							</thead>
-						</table>
+						</table>-->
+            <div class="table-responsive" id="tabel-anggota-pengawasan-wrapper">
+
+            </div>
 						<button id="add-anggota" class="btn btn-outline-primary btn-sm" type="button" data-toggle="modal" data-target="#anggotaSptModal"> <i class="fa fa-plus"></i> <span>Tambah Anggota</span></button>
 						<script type="text/javascript">
-							$('#add-anggota').on('click', function(){								
-								if ( typeof $('#formModal').attr('data-id-spt-pengawasan') !== 'undefined' ) {									
+							$('#add-anggota').on('click', function(){
+								if ( typeof $('#formModal').attr('data-id-spt-pengawasan') !== 'undefined' ) {
 									id_spt_pengawasan = $('#formModal').attr('data-id-spt-pengawasan');
 									$('#anggotaSptModal').attr('id-spt-pengawasan-anggota', id_spt_pengawasan);
 								}
-								
+
 							})
 						</script>
 					</div>
@@ -143,7 +146,7 @@
 				<!-- Hidden form untuk disesuaikan dengan jenis SPT -->
 				<div class="form-group row hidden">
 					@include('admin.spt.include')
-				</div>		               
+				</div>
 
 				<div class="form-group">
 					<div class="col">
@@ -205,7 +208,7 @@
 			        		<input type="number" name="lama" id="lama" class="form-control" placeholder="Lama">
 			        	</div> -->
 			        </div>
-			        
+
 			        <div class="form-group">
 			        	<div class="col-md-6">
 			            	<button type="submit" class="btn btn-primary offset-md-4">
@@ -235,10 +238,15 @@
 		            submitHandler: function(form){
 		            	var tgl_mulai = $('#spt-form').find('#tgl-mulai').val();
 		            	var tgl_akhir = $('#spt-form').find('#tgl-akhir').val();
-		                var user_id = $('#session-anggota option:selected').val();
-		                var peran = $('#session-peran option:selected').val();
-		                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-		                var id_spt = (typeof id_spt == 'undefined') ? null : id_spt;
+	                var user_id = $('#session-anggota option:selected').val();
+	                var peran = $('#session-peran option:selected').val();
+	                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+	                //var id_spt = (typeof id_spt == 'undefined') ? null : id_spt;
+                  if ( typeof $('#anggotaSptModal').attr('id-spt-pengawasan-anggota') !== 'undefined' ){
+                    id_spt = $('#anggotaSptModal').attr('id-spt-pengawasan-anggota');
+                  }else{
+                    id_spt = '';
+                  }
 		                //alert(save_method);
 		                url = (save_method === 'edit') ? "{{ route('store_detail_anggota') }}" : "{{ route('store_session_anggota') }}" ;
 		                if(tgl_mulai == '' || tgl_akhir==''){
@@ -250,9 +258,10 @@
 			                    type: 'POST',
 			                    //dataType: 'json',
 			                    data: {_token: CSRF_TOKEN, user_id:user_id, peran:peran, spt_id:id_spt, tgl_mulai: tgl_mulai, tgl_akhir:tgl_akhir},
-			                    success: function(data){		                        		                        
+			                    success: function(data){
 			                        //$('#list-anggota-session').DataTable().ajax.reload();
-			                        drawTableAnggota();
+                              //console.log(id_spt);
+			                        drawTableAnggota(id_spt);
 			                        clearOptions();
 			                    },
 			                    error: function(error){
@@ -260,12 +269,25 @@
 			                    }
 			                });
 		                }
-			             
+
 		            }
 		        });
 
-					function drawTableAnggota(){
+					function drawTableAnggota(spt_id = ''){
 
+            url = "{{ route('tabel_anggota_pengawasan') }}"
+
+            $.ajax({
+              url : url,
+              data: {spt_id: spt_id},
+              type: 'GET',
+              success: function(res){
+                $('#tabel-anggota-pengawasan-wrapper').html(res);
+              },
+              error: function(err){
+                console.log(err);
+              }
+            });
 					}
 				</script>
 			</div>
@@ -273,10 +295,10 @@
 	</div>
 </div>
 <script type="text/javascript">
-	$('#close-anggota-pengawasan').on('click', function(){		
+	$('#close-anggota-pengawasan').on('click', function(){
 		if ( typeof $('#anggotaSptModal').attr('id-spt-pengawasan-anggota') !== 'undefined' ){
 			$('#anggotaSptModal').removeAttr('id-spt-pengawasan-anggota');
-		}		
+		}
 	})
 </script>
 
@@ -294,7 +316,7 @@
 	   	var input_tambahan = arr_val[2];
 	   	var cek_radio = arr_val[3];
 	   	$('#id-jenis-spt').val(id_jenis_spt);
-	   	
+
 	   	//show hide radio
 	   	if(cek_radio == 1){
 	   		$('#input-radio').show('fast');
@@ -342,7 +364,7 @@
                     console.log(error);
                 }
             });
-            
+
 	   	}else if(input_tambahan == 1){
 	   		$('#input-tambahan-container').show('fast');
 	   	}
@@ -364,24 +386,24 @@
     	}
     }
 
-   var select_anggota = $('#session-anggota').selectize({	   
+   var select_anggota = $('#session-anggota').selectize({
 	   persist: false,
 	   sortField: 'text',
 	   allowEmptyOption: false,
-	   placeholder: 'Anggota SPT',	  
+	   placeholder: 'Anggota SPT',
   	});
 
-  var select_peran = $('#session-peran').selectize({	   
+  var select_peran = $('#session-peran').selectize({
 	   /*sortField: 'text',*/
 	   allowEmptyOption: false,
 	   placeholder: 'Peran SPT',
 	   create: false,
 	   onchange: function(value){
-	   	
+
 	   },
   });
 
-  var select_lokasi = $('#lokasi-id').selectize({	   
+  var select_lokasi = $('#lokasi-id').selectize({
 	   /*sortField: 'text',*/
 	   allowEmptyOption: false,
 	   placeholder: 'Pilih Lokasi',
@@ -389,7 +411,7 @@
 	   create: false,
 	   maxItems:10,
 	   onchange: function(value){
-	   	
+
 	   },
   });
 
@@ -407,11 +429,11 @@
                         url = url_prefix+'delete-anggota/' +detail_id;
                         $.ajax({
                             url: url,
-                            type: "POST",                
+                            type: "POST",
                             data: {_method: 'delete', '_token' : csrf_token },
                             success: function(data){
-                                $('#list-anggota-session').DataTable().ajax.reload();
-                                //console.log(data);                        
+                                //$('#list-anggota-session').DataTable().ajax.reload();
+                                //console.log(data);
                             }
                         });
                     },
@@ -423,26 +445,26 @@
         });
 	}
 
-	function clearOptions(){            
+	function clearOptions(){
         var optPeran = $('#session-peran').selectize();
-        var optAnggota = $('#session-anggota').selectize();            
+        var optAnggota = $('#session-anggota').selectize();
         var controlPeran = optPeran[0].selectize;
         var controlAnggota = optAnggota[0].selectize;
         controlPeran.clear();
         controlAnggota.clear();
     }
-        
+
 </script>
 
 <script type="text/javascript">
 $( "#formModal" ).on('shown.bs.modal', function(){
 
-	var id_spt = $('#id').val();
+	//var id_spt = $('#id').val();
 	//tambahan
 	if(tambahan != '' && save_method == 'edit'){
 		//$('#tambahan').text(tambahan);
 		$('#input-tambahan-container').show('fast');
-		if(typeof tambahan !== 'undefined') 
+		if(typeof tambahan !== 'undefined')
 		{setDataTambahan(tambahan);}
 	}
 	//tambahan end
@@ -453,7 +475,7 @@ $( "#formModal" ).on('shown.bs.modal', function(){
 		$('#input-lokasi-container').show();
 	}
 	//lokasi end
-	
+
     if(save_method == 'edit'){
     	select_jenis_spt[0].selectize.setValue(jenis_spt_id+';'+input_lokasi+';'+input_tambahan+';'+cek_radio);
     }else{
@@ -465,46 +487,12 @@ $( "#formModal" ).on('shown.bs.modal', function(){
 	//console.log(url);
 	url = "{{ route('get_anggota_spt') }}";
 
-	/*datatable setup*/    
-    $('#list-anggota-session').DataTable({        
-        "language": {
-	        "emptyTable":  "Data Anggota Belum dimasukkan"
-	    },
-        dom: 'rt',
-        "pageLength": 50,
-        fixedColumns:   {
-            heightMatch: 'auto'
-        },
-        language: {
-            paginate: {
-              next: '&gt;', 
-              previous: '&lt;' 
-            }
-        },
-        "opts": {
-          "theme": "bootstrap",
-        },
-        retrieve: true,
-        processing: true,
-        serverSide: true,
-        ajax: {
-        	'type': 'GET',
-	        'url': url,
-	        'data': {
-	           id_spt: id_spt,	           
-	        },
-        },
-        /*deferRender: true,*/
-        columns: [
-            {'defaultContent' : '', 'data' : 'DT_RowIndex', 'name' : 'DT_RowIndex', 'title' : 'No', 'orderable' : false, 'searchable' : false, 'exportable' : true, 'printable' : true, width: '10%'
-            },
-            {data: 'nama_anggota', name: 'nama_anggota', 'title': "{{ __('Nama') }}", width: '40%'},
-            {data: 'peran', name: 'peran', 'title': "{{ __('Peran') }}", width: '40%'},
-            {data: 'action', name: 'action', 'orderable': false, 'searchable': false, 'title': "{{ __('Action') }}", 'exportable' : false,'printable': false, width: '10%'},
-        ],
-    });
+	/*datatable setup*/
+  id_spt = ( typeof $('#formModal').attr('data-id-spt-pengawasan') !== 'undefined' ) ? $('#formModal').attr('data-id-spt-pengawasan') : '';
+  drawTableAnggota(id_spt);
+
 });
-	
+
 	//clear datatable anggota
 	$('#formModal').on('hidden.bs.modal', function () {
 		$('#spt-form')[0].reset();
@@ -534,11 +522,11 @@ function unset(user_id){
                         //url = "session/anggota/delete/"+user_id;
                         $.ajax({
                             url: url,
-                            type: "POST",                
+                            type: "POST",
                             data: {_method: 'delete', '_token' : csrf_token, tgl_mulai:tgl_mulai, tgl_akhir:tgl_akhir, user_id:user_id },
                             success: function(data){
                                 $('#list-anggota-session').DataTable().ajax.reload();
-                                //console.log(data);                        
+                                //console.log(data);
                             },
                             error: function(err){
                             	//console.log(err);
