@@ -92,9 +92,10 @@
 					});
 				</script>
 
+				<button id="add-anggota" class="btn btn-outline-primary btn-sm offset-md-2" type="button" data-toggle="modal" data-target="#anggotaSptModal"> <i class="fa fa-plus"></i> <span>Tambah Anggota</span></button>
 				<div class="form-group row" id="input-anggota" >
 				    <div class="col-md-2 col-form-label">{{ __('Anggota') }} </div>
-					<div class="col">
+					<div class="col table-responsive" id="tabel-anggota-pengawasan-wrapper">
 						<!--<table id="list-anggota-session" class="col">
 							<thead>
 								<tr>
@@ -105,21 +106,20 @@
 								</tr>
 							</thead>
 						</table>-->
-            <div class="table-responsive" id="tabel-anggota-pengawasan-wrapper">
-
-            </div>
-						<button id="add-anggota" class="btn btn-outline-primary btn-sm" type="button" data-toggle="modal" data-target="#anggotaSptModal"> <i class="fa fa-plus"></i> <span>Tambah Anggota</span></button>
-						<script type="text/javascript">
-							$('#add-anggota').on('click', function(){
-								if ( typeof $('#formModal').attr('data-id-spt-pengawasan') !== 'undefined' ) {
-									id_spt_pengawasan = $('#formModal').attr('data-id-spt-pengawasan');
-									$('#anggotaSptModal').attr('id-spt-pengawasan-anggota', id_spt_pengawasan);
-								}
-
-							})
-						</script>
-					</div>
+            			<!-- <div class="table-responsive" id="tabel-anggota-pengawasan-wrapper"></div> -->
+						
+					</div>					
 				</div>
+
+				<script type="text/javascript">
+					$('#add-anggota').on('click', function(){
+						if ( typeof $('#formModal').attr('data-id-spt-pengawasan') !== 'undefined' ) {
+							id_spt_pengawasan = $('#formModal').attr('data-id-spt-pengawasan');
+							$('#anggotaSptModal').attr('id-spt-pengawasan-anggota', id_spt_pengawasan);
+						}
+
+					})
+				</script>
 
 				<div class="form-group row" id="input-lokasi-container" style="display:none">
 				    <label for="lokasi" class="col-md-2 col-form-label">{{ __('Lokasi') }} </label>
@@ -273,7 +273,7 @@
 		            }
 		        });
 
-					function drawTableAnggota(spt_id = ''){
+		function drawTableAnggota(spt_id = ''){
 
             url = "{{ route('tabel_anggota_pengawasan') }}"
 
@@ -288,7 +288,7 @@
                 console.log(err);
               }
             });
-					}
+		}
 				</script>
 			</div>
 		</div>
@@ -419,6 +419,7 @@
 		//save_method = 'delete';
 		var url_prefix = (window.location.pathname == '/admin') ? 'admin/spt/' : 'spt/';
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        id_spt = ( typeof $('#formModal').attr('data-id-spt-pengawasan') !== 'undefined' ) ? $('#formModal').attr('data-id-spt-pengawasan') : '';
         $.confirm({
             title: "{{ __('Delete Confirmation') }}",
             content: "{{ __('Are you sure to delete ?') }}",
@@ -433,7 +434,8 @@
                             data: {_method: 'delete', '_token' : csrf_token },
                             success: function(data){
                                 //$('#list-anggota-session').DataTable().ajax.reload();
-                                //console.log(data);
+                                //console.log(url);
+                                drawTableAnggota(id_spt);
                             }
                         });
                     },
@@ -500,7 +502,7 @@ $( "#formModal" ).on('shown.bs.modal', function(){
 		$('#tambahan').val('');
 		select_lokasi[0].selectize.clear();
 		save_method = null;
-		$('#list-anggota-session').DataTable().clear().destroy();
+		//$('#list-anggota-session').DataTable().clear().destroy();
 		$('#input-tambahan-container').hide();
 		$('#input-lokasi-container').hide();
 	});
@@ -511,6 +513,7 @@ function unset(user_id){
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
         var tgl_mulai = $('#tgl-mulai').val();
         var tgl_akhir = $('#tgl-akhir').val();
+        id_spt = ( typeof $('#formModal').attr('data-id-spt-pengawasan') !== 'undefined' ) ? $('#formModal').attr('data-id-spt-pengawasan') : '';
         $.confirm({
             title: "{{ __('Delete Confirmation') }}",
             content: "{{ __('Are you sure to delete ?') }}",
@@ -525,8 +528,9 @@ function unset(user_id){
                             type: "POST",
                             data: {_method: 'delete', '_token' : csrf_token, tgl_mulai:tgl_mulai, tgl_akhir:tgl_akhir, user_id:user_id },
                             success: function(data){
-                                $('#list-anggota-session').DataTable().ajax.reload();
+                                //$('#list-anggota-session').DataTable().ajax.reload();
                                 //console.log(data);
+                                drawTableAnggota(id_spt);
                             },
                             error: function(err){
                             	//console.log(err);

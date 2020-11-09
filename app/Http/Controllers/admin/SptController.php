@@ -169,7 +169,7 @@ class SptController extends Controller
         $spt = SptUmum::create($data);
         if($spt) {
             // dd($spt->lama);
-            $this->storeDetailAnggotaUmum($spt->id, $spt->lama);
+            $this->storeDetailUmum($spt->id, $spt->lama);
             // $this->storeDetailKepadaUmum($spt->id, $spt->lama);
 
             //user id pembuat spt
@@ -193,8 +193,11 @@ class SptController extends Controller
         }
     }
 
-    public function storeDetailAnggotaUmum($spt_id,$lama){
+    //dibawah ini function storeDetailAnggotaUmum punya mas tegar, di nonaktifkan / di comment
+    public function storeDetailUmum($spt_id,$lama){
+        //dd($request);
         $spt = SptUmum::find($spt_id);
+        //dd($spt);
         $unsur_dupak = $spt->jenis_spt_umum;
         $start =$spt->tgl_mulai;
         $end = $spt->tgl_akhir;
@@ -207,8 +210,8 @@ class SptController extends Controller
             // dd($session_anggota);
             foreach($session_anggota as $k=>$anggota){
                 //cek lembur, set lembur to true jika tgl mulai spt ada di tgl akhir spt
-                $lembur = Spt::where('tgl_akhir','=', $start)->where('user_id','=', $anggota['user_id'])->join('detail_spt','detail_spt.spt_id','=','spt.id')->get();
-                $isLembur = ( $lembur->count() > 0) ? true : false;
+                //$lembur = Spt::where('tgl_akhir','=', $start)->where('user_id','=', $anggota['user_id'])->join('detail_spt','detail_spt.spt_id','=','spt.id')->get();
+                //$isLembur = ( $lembur->count() > 0) ? true : false;
                 if($k === 0){
                     $peran = 'pejabat_utama';
                 }else{
@@ -240,6 +243,41 @@ class SptController extends Controller
             $this->clearSessionAnggotaUmum();
         }
         return;
+    }
+
+    public function storeDetailAnggotaUmum(Request $request){
+        $cek = DetailSpt::where('spt_id', $request->spt_id)->where('user_id', $request->user_id)->where('unsur_dupak', '!=', 'pengawasan')->count();
+        //user_id:user_id, peran:peran, spt_id:id_spt, tgl_mulai: tgl_mulai, tgl_akhir:tgl_akhir
+        $cek_peran =  DetailSpt::where('spt_id', $request->spt_id)->where('unsur_dupak', '!=', 'pengawasan')->where('peran','pejabat_utama')->count();
+        $peran = ($cek_peran>0) ? 'anggota' : 'pejabat_utama' ;
+        if($cek>0):
+            return 'User sudah ada dalam list anggota';
+        else:
+            $spt = SptUmum::where('id',$request->spt_id)->first();
+            //dd($spt);
+            $unsur_dupak = $spt->jenis_spt_umum;
+            $start =$spt->tgl_mulai;
+            $end = $spt->tgl_akhir;
+            $lama = $spt->lama;
+            $dupak = [
+                    'lama' => $request->lama_jam,
+                    'dupak' => $request->dupak_anggota
+                ];
+            $counter = array();
+            $store = DB::table('detail_spt')->insertGetId([
+                    'spt_id' => $request->spt_id,
+                    'user_id' => $request->user_id,
+                    'peran' => Common::cleanInput($peran),
+                    'unsur_dupak' => $unsur_dupak,
+                    'info_dupak' => json_encode($dupak)
+                ]);
+            if($store){
+                return $store;
+            }else{
+                return 'Gagal menambahkan anggota SPT!';
+            }
+        endif;
+        //_token: CSRF_TOKEN, user_id:user_id, spt_id:id_spt, tgl_mulai: tgl_mulai, tgl_akhir:tgl_akhir, lama_jam:lama_jam, dupak_anggota:dupak_anggota
     }
 
     public function storeDetail($spt_id,$lama){
@@ -299,8 +337,43 @@ class SptController extends Controller
         endif;
     }
 
-    public function updateUmum(Request $request, $id){
+    public function updateUmum(Request $request){
         //masukkan kode untuk update SPT bagian umum
+        //info_dasar_umum:info_dasar_umum, info_untuk_umum:info_untuk_umum, jenis_spt_umum:jenis_spt_umum, lokasi_umum_id:lokasi_umum_id, tgl_mulai_umum:tgl_mulai_umum, tgl_akhir_umum:tgl_akhir_umum, lama_umum:lama_umum,  _method: method
+        $this->validate($request, [
+            'jenis_spt_umum' => 'required|string',
+            'info_untuk_umum'=> 'string',
+            'info_dasar_umum'=> 'string',
+            'tgl_mulai_umum'=>'required|date_format:"d-m-Y"',
+            'tgl_akhir_umum' =>'required|date_format:"d-m-Y"|after_or_equal:tgl_mulai_umum',
+            'lama_umum' => 'required|integer',
+            'lokasi_umum_id' => 'nullable'
+            ]
+        );
+         $data = [
+            'jenis_spt_umum' => $request['jenis_spt_umum'],
+            'tgl_mulai' => date('Y-m-d H:i:s',strtotime($request['tgl_mulai_umum'])),
+            'tgl_akhir' => date('Y-m-d H:i:s',strtotime($request['tgl_akhir_umum'])),
+            'lama'=> $request->lama_umum,
+            'lokasi_id' => $request['lokasi_umum_id'],
+            'info_untuk_umum' => Common::cleanInput($request['info_untuk_umum']),
+            'info_dasar_umum' => Common::cleanInput($request['info_dasar_umum']),            
+        ];
+
+        $spt = SptUmum::findOrFail($request->spt_umum_id);
+        $spt->jenis_spt_umum = $data['jenis_spt_umum'];
+        $spt->tgl_mulai = $data['tgl_mulai'];
+        $spt->tgl_akhir = $data['tgl_akhir'];
+        $spt->lama = $data['lama'];
+        $spt->lokasi_id = $data['lokasi_id'];
+        $spt->info_dasar_umum = $data['info_dasar_umum'];
+        $spt->info_untuk_umum = $data['info_untuk_umum'];
+        if($spt->save()){
+            return $spt;
+        }else{
+            return 'error';
+        }
+
     }
 
     public function updateDetail(Request $request){
@@ -332,6 +405,13 @@ class SptController extends Controller
         $spt['tgl_akhir'] = date('d-m-Y', strtotime($spt->tgl_akhir));
         return $spt;
         return $jenis_spt;
+    }
+
+    public function editSptUmum($id){
+        $spt_umum = SptUmum::find($id);
+        $spt_umum['tgl_mulai'] = date('d-m-Y', strtotime($spt_umum->tgl_mulai));
+        $spt_umum['tgl_akhir'] = date('d-m-Y', strtotime($spt_umum->tgl_akhir));
+        return $spt_umum;
     }
 
     /**
@@ -386,7 +466,7 @@ class SptController extends Controller
                'info' => json_encode([
                            'user_id' => $user->id, //user id pembuat spt
                            'type' => 'spt',
-                           'jenis'=> ( $user->hasRole('Perencanaan') ) ? 'pengawasan' : 'umum',
+                           'jenis'=>'pengawasan',
                            'spt_id' => $id
                       ])
             ]);
@@ -582,10 +662,7 @@ class SptController extends Controller
         }
         if($user->hasAnyPermission(['Create SPT', 'Edit SPT', 'Delete SPT']) && $method == 'deleteAnggota'){
             $control = '<a href="javascript:void(0);" onclick="deleteAnggota('. $id .')" class="btn btn-outline-danger btn-sm"><i class="fa fa-times"></i></a>';
-        }
-        if($user->hasAnyPermission(['Create SPT', 'Edit SPT', 'Delete SPT']) && $method == 'deleteAnggotaUmum'){
-            $control = '<a href="javascript:void(0);" onclick="deleteAnggotaUmum('. $id .')" class="btn btn-outline-danger btn-sm"><i class="fa fa-times"></i></a>';
-        }
+        }        
         if($user->hasPermissionTo('View SPT') && $method === 'cetakPdf'){
         $control = '<a href="'.route('spt_pdf',$id).'" data-toggle="tooltip" title="Cetak PDF" class="btn btn-outline-primary btn-sm" target="__blank"><i class="fa fa-file-pdf"></i></a>';
         }
@@ -603,10 +680,16 @@ class SptController extends Controller
         if ( $user->hasAnyRole(['TU Umum', 'Super Admin']) && $method == 'penomoran') {
                     $control = '<a href="#" onclick="showFormModal('.$id.')" class="btn btn-outline-primary btn-sm" title="Penomoran SPT"><i class="fa fa-list-ol"></i></a>';
                     return $control;
-                    }
+        }
         if ( $user->hasAnyRole(['TU Umum', 'Super Admin']) && $method == 'showFormModalUmum') {
             $control = '<a href="#" onclick="showFormModalUmum('.$id.')" class="btn btn-outline-primary btn-sm" title="Penomoran SPT Umum"><i class="fa fa-list-ol"></i></a>';
             return $control;
+        }
+        if( $user->hasAnyRole(['TU Umum', 'Super Admin']) && $method == 'editSptUmum' ){
+            $control = '<a href="#" data="'.$id.'" onclick="editSptUmum('.$id.')" data-toggle="tooltip" title="Edit SPT" class="btn btn-outline-primary btn-sm edit-spt"><i class="fa fa-edit"></i></a>';
+        }
+        if($user->hasAnyRole(['TU Umum', 'Super Admin']) && $method == 'deleteAnggotaUmum'){
+            $control = '<a href="javascript:void(0);" onclick="deleteAnggotaUmum('. $id .')" class="btn btn-outline-danger btn-sm"><i class="fa fa-times"></i></a>';
         }
 
 
@@ -690,7 +773,7 @@ class SptController extends Controller
                     return $col->spt->lama.' hari';
                 })
                 ->addColumn('action', function($col){
-                    return $this->buildControl('deleteAnggota',$col->id);
+                    return $this->buildControl('deleteAnggota',$col->id); 
                 })->make(true);
                 //return $dt;
 
@@ -860,7 +943,7 @@ class SptController extends Controller
 
                         $return .= $this->buildControl('showFormModalUmum', $col->id); //upload + update nomor spt umum
                         $return .= $this->buildControl('cetakPdfUmum',$col->id); //cetak pdf spt Umum
-                        // $return .= $this->buildControl('editFormUmum',$col->id); //belum bisa
+                        $return .= $this->buildControl('editSptUmum',$col->id); //belum bisa
 
                         $return .= $this->buildControl('deleteDataSptUmum',$col->id);
                     }
@@ -1784,13 +1867,13 @@ class SptController extends Controller
         $spt = Spt::where('id', $request->spt_id)->whereHas('jenisSpt', function($q){
             $q->where('kategori','pengawasan');
         })->first();
-        //dd($request->spt_id);
+        //dd($request->spt_id);$this->buildControl('deleteAnggota',$col->id); '<a href="#" class="btn btn-sm btn-outline-danger" onclick="unset('.$col['user_id'].')">Hapus</a>';
         $return = '<table class="table table-bordered table-hover">'
                         .'<thead><tr>'
                             .'<th>No.</th>'
                             .'<th>Nama</th>'
                             .'<th>Peran</th>'
-                            .'<th>Aksi</th>'
+                            .'<th></th>'
                         .'</tr></thead>';
         if(!is_null($spt)){
             //bukan spt baru, data spt sudah ada, tampilkan data anggota spt dari tabel detail
@@ -1801,8 +1884,11 @@ class SptController extends Controller
                             .'<td>'.++$i.'</td>'
                             .'<td>'.$anggota->user->full_name_gelar.'</td>'
                             .'<td>'.$anggota->peran.'</td>'
-                            .'<td>buildControl</td>'
+                            .'<td>'.$this->buildControl('deleteAnggota',$anggota->id).'</td>'
                             .'</tr>';
+            }
+            if($list_anggota->count()<=0){
+                $return .= '<tr><td colspan="4" align="center">Tidak ada data anggota</td></tr>';
             }
 
         }else{
@@ -1816,8 +1902,65 @@ class SptController extends Controller
                             .'<td>'.++$i.'</td>'
                             .'<td>'.$user->full_name_gelar.'</td>'
                             .'<td>'.$anggota['peran'].'</td>'
-                            .'<td>buildControl</td>'
+                            .'<td><a href="#" class="btn btn-sm btn-outline-danger" onclick="unset('.$anggota['user_id'].')" title="hapus anggota"><i class="fa fa-times"></i></a></td>'
                             .'</tr>';
+                }
+                if(count($session_anggota)<=0){
+                    $return .= '<tr><td colspan="4" align="center">Tidak ada data anggota</td></tr>';
+                }
+
+
+            }else{
+                //data belum ada, session anggota juga tidak ada
+                $return .= '<tr><td colspan="4" align="center">Tidak ada data anggota</td></tr>';
+            }
+
+        }
+
+        $return .= '</table>';
+        return $return;
+
+    }
+
+    public function drawTableAnggotaUmum(Request $request){
+        $spt = SptUmum::where('id', $request->spt_id)->first();
+        //dd($request->spt_id);$this->buildControl('deleteAnggota',$col->id); '<a href="#" class="btn btn-sm btn-outline-danger" onclick="unset('.$col['user_id'].')">Hapus</a>';
+        $return = '<table class="table table-bordered table-hover">'
+                        .'<thead><tr>'
+                            .'<th>No.</th>'
+                            .'<th>Nama</th>'
+                            .'<th></th>'
+                        .'</tr></thead>';
+        if(!is_null($spt)){
+            //bukan spt baru, data spt sudah ada, tampilkan data anggota spt dari tabel detail
+            $list_anggota = DetailSpt::where('spt_id', $request->spt_id)->where('unsur_dupak', '!=','pengawasan')->with('user')->get();
+            //dd($list_anggota);
+            foreach($list_anggota as $i=>$anggota){
+                $return .= '<tr>'
+                            .'<td>'.++$i.'</td>'
+                            .'<td>'.$anggota->user->full_name_gelar.'</td>'
+                            .'<td>'.$this->buildControl('deleteAnggotaUmum',$anggota->id).'</td>'
+                            .'</tr>';
+            }
+            if($list_anggota->count()<=0){
+                $return .= '<tr><td colspan="4" align="center">Tidak ada data anggota</td></tr>';
+            }
+
+        }else{
+            //data belum ada, cek session anggota, jika ada tampilkan data session anggota
+            if(Session::has('anggota_umum')){
+                $session_anggota = Session::get('anggota_umum');
+                //setup data anggota
+                foreach($session_anggota as $i=>$anggota){
+                    $user = User::where('id',$anggota['user_id'])->first();
+                    $return .= '<tr>'
+                            .'<td>'.++$i.'</td>'
+                            .'<td>'.$user->full_name_gelar.'</td>'
+                            .'<td><a href="#" class="btn btn-sm btn-outline-danger" onclick="unset_anggota('.$anggota['user_id'].')" title="hapus anggota"><i class="fa fa-times"></i></a></td>'
+                            .'</tr>';
+                }
+                if(count($session_anggota)<=0){
+                    $return .= '<tr><td colspan="4" align="center">Tidak ada data anggota</td></tr>';
                 }
 
 

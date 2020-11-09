@@ -45,7 +45,7 @@
     });
 
     //butuh revisi
-    function editForm(id){        
+    function editForm(id){
         save_method = 'edit';
         id_spt = id;
         //avoid false ajax url. read url first, then add it to te prefixed url
@@ -131,7 +131,7 @@
             type: "GET",
             success: function(data){
                 //$('#list-anggota-session').DataTable().ajax.reload();
-                $('#list-anggota-session').DataTable().clear().destroy();
+                //$('#list-anggota-session').DataTable().clear().destroy();
                 //console.log(data);
             },
             error: function(err){

@@ -208,14 +208,20 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 			Route::post('upload-scan-umum/{id}','SptController@uploadScanSptumum')->name('upload_scan_spt_umum');
 			Route::post('upload-scan/{id}','SptController@uploadScanSpt')->name('upload_scan_spt');
 			Route::post('umum/store', 'SptController@storeUmum')->name('store_spt_umum');
-			Route::post('umum/edit/{id}', 'SptController@updateUmum')->name('update_spt_umum');
+			Route::post('umum/update', 'SptController@updateUmum')->name('update_spt_umum');
 			Route::delete('umum/spt-umum/{id}','SptController@delelteSptUmum')->name('detele_spt_umum');
 
 			Route::post('umum/session/store','SptController@storeSessionAnggotaUmum')->name('store_session_anggota_umum');
 			Route::post('umum/store-detail-anggota','SptController@storeDetailAnggotaUmum')->name('store_detail_anggota_umum');
 			Route::get('get-anggota/umum/{id}','SptController@getAnggotaUmum')->name('get_anggota_umum_spt');
 			Route::delete('session/anggota/umum/delete/{user_id}', 'SptController@deleteSessionAnggotaUmumItem')->name('delete_session_anggota_umum_by_id');
-			Route::delete('delete-anggota-umum/{id}','SptController@deleteAnggotaUmum')->name('delete_anggota_umum');			
+			Route::delete('delete-anggota-umum/{id}','SptController@deleteAnggotaUmum')->name('delete_anggota_umum');
+
+			Route::get('umum/{id}/edit', 'SptController@editSptUmum')->name('edit_spt_umum');
+
+			//percobaan tampilkan data anggota spt tanpa datatable
+			Route::get('anggota/umum', 'SptController@drawTableAnggotaUmum')->name('tabel_anggota_umum');
+			Route::get('session/anggota/umum/clear', 'SptController@clearSessionAnggotaUmum')->name('clear_session_anggota_umum');
 
 		});
 	});

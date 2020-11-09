@@ -18,7 +18,6 @@
 
 @include('admin.spt.arsip')
 
-@include('admin.ppm.index')
 
 @section('content')
 @include('layouts.headers.cards')

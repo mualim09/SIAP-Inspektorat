@@ -345,7 +345,8 @@
                     btnClass: 'btn-danger',
                     action: function(){                       
                         //url = "spt/" +id;
-                        url = "{{url('admin/spt/umum/spt-umum')}}"+'/'+id;
+                        //url = "{{url('admin/spt/umum/spt-umum')}}"+'/'+id;
+                        url = (window.location.pathname == '/admin' || window.location.pathname == '/public/admin') ? 'admin/spt/umum/spt-umum/'+id : 'spt/umum/spt-umum/'+id;
                         $.ajax({
                             url: url,
                             type: "delete",
@@ -363,46 +364,38 @@
             }
         });
     }
-    // function editFormUmum(id){        
-    //     save_method = 'edit';
-    //     //avoid false ajax url. read url first, then add it to te prefixed url
-    //     var url = (window.location.pathname == '/admin') ? 'admin/spt/get-spt-umum-byid/'+id : 'spt/get-spt-umum-byid/' +id;
-    //     // url = url_prefix+id+"/edit";
+    function editSptUmum(id){
+        save_method = 'edit';
+        id_spt_umum = id;
+        //avoid false ajax url. read url first, then add it to te prefixed url
+        //alert(window.location.pathname);
+        //inputan : id_modal :#formSptUmum; input :jenis_spt_id:radio, info_dasar_umum:text_area, lokasi_id_umum:select, tgl_mulai_umum:text, tgl_akhir_umum:text, lama_spt_umum:text, info_untuk_umum:text_area
+        var url_prefix = (window.location.pathname == '/admin' || window.location.pathname == '/public/admin') ? 'admin/spt/umum/' : 'spt/umum/';
+        url = url_prefix+id+"/edit";
         
-    //     $.ajax({
-    //         url: url,
-    //         type: "GET",
-    //         dataType: "JSON",
-    //         success: function(data){                
-    //             // $('#spt-form')[0].reset();
-    //             $('#id-jenis-spt').val(data.jenis_spt_umum);
-    //             //variabel jenis spt               
-    //             // lokasi = (data.jenis_spt.input_lokasi == true) ? data.lokasi_id : '';
-    //             // tambahan = (data.jenis_spt.input_tambahan == true) ? data.tambahan : '';                
-    //             // input_lokasi = data.jenis_spt.input.lokasi;
-    //             // input_tambahan = data.jenis_spt.input.tambahan;
-    //             // cek_radio = data.jenis_spt.cek_radio;
-    //             // jenis_spt_id = data.jenis_spt_id;
-    //             $('#spt-id-umum').val(data.id);
-    //             $('#info-dasar-umum').val(data.info_dasar_umum);
-    //             $('#info-untuk-kegiatan-umum').val(data.info_untuk_umum);
-    //             //$('#jenis-spt-'+data.jenis_spt_id).prop('selected','selected');
-    //             //$('#jenis-spt')[0].selectize.setValue(data.jenis_spt_id);
-    //             // if(data.info_lanjutan == 1){
-    //             //     $('#info-lanjutan').prop('checked',true);
-    //             // }else{
-    //             //     $('#info-lanjutan').prop('checked',false);
-    //             // }
-    //             $('#tgl-mulai-umum').val(data.tgl_mulai);
-    //             $('#tgl-akhir-umum').val(data.tgl_akhir);
-    //             $('#lama-spt-umum').val(data.lama);
-    //             // $('#lokasi').val(data.lokasi);
-    //             $('#formSptUmum').modal('show');
-    //         },
-    //         error: function(err){
-    //             console.log(err);
-    //         }
-    //     });
-    // }
+        $.ajax({
+            url: url,
+            type: "GET",
+            dataType: "JSON",
+            success: function(data){                
+                $('#spt-umum-form')[0].reset();
+                $("input:radio[value='"+data.jenis_spt_umum+"']").prop("checked",true);
+                //$('input[name="jenis_spt_umum"]').val(data.jenis_spt_umum).prop('checked', true);
+                $('#info-dasar-umum').val(data.info_dasar_umum);
+                $('input[name="lokasi_id_umum"]').val(data.lokasi_id);
+                $('input[name="tgl_mulai_umum"]').val(data.tgl_mulai);
+                $('input[name="tgl_akhir_umum"]').val(data.tgl_akhir);
+                $('input[name="lama_spt_umum"]').val(data.lama);
+                $('#info-untuk-kegiatan-umum').val(data.info_untuk_umum);
+                $('#formSptUmum').modal('show');
+                $('#formSptUmum').attr('data-id-spt-umum', data.id);
+                //console.log(data);
+               
+            },
+            error: function(err){
+                console.log(err);
+            }
+        });
+    }
 </script>
 @endsection
