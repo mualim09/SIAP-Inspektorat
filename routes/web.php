@@ -270,11 +270,6 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
     	Route::get('/cetak/lhp/{id}','KkaController@cetakLhp')->name('laporan-lhp-cetak'); //
     });
 
-	//lhp
-    // Route::group(['prefix' => 'LHP', 'middleware'=> ['role:Super Admin|Auditor|Inspektur']], function(){
-    // 	Route::post('/upload-lhp', 'LhpController@upload_lhp')->name('laporan_lhp');
-    // });
-
 	//calendar route
 	Route::group(['prefix'=> 'calendar'], function(){
 		Route::get('','CalendarController@index')->name('calendar');
@@ -327,10 +322,22 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
     Route::group(['prefix' => 'users'], function(){
     	Route::get('getdata','UserController@getData');
     	Route::get('search-user', 'UserController@search')->name('search_user');
+
     	//satgas ppm (penunjukan pejabat)
 		Route::get('penunjukan/pejabat', 'PejabatController@index')->name('satgas_ppm');
 		Route::post('submit/pejabat', 'PejabatController@submit')->name('submit_pejabat');
+
+		// ppm
+		Route::post('ppm/store','PpmController@storePpm')->name('store_ppm');
+    	Route::post('ppm/session-anggota/store','PpmController@storePpmSessionAnggotaPpm')->name('store_session_anggota_ppm'); /*store session anggota ppm*/
+    	Route::post('ppm/store-detail-anggota','SptController@storePpmDetailAnggota')->name('store_detail_anggota_umum');
+    	Route::get('get-anggota/ppm/{id_ppm}','PpmController@getAnggotaPpm')->name('get_anggota_umum_spt'); /*get data store anggota session ppm*/
     });
+
+    /*// route ppm
+    Route::group(['prefix' => 'ppm'], function(){
+    	// session anggota ppm
+    });*/
 
     Route::group(['prefix' => 'roles'], function(){
     	Route::get('getdata','RoleController@getData');
