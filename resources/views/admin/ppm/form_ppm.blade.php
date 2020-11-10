@@ -62,13 +62,28 @@
         <div class="form-group">
             <div class="col-md-2 col-form-label">{{ __('Anggota') }} </div>
             <div class="col">
-                <table id="tabel-anggota-ppm" class="col"></table>
+                <!-- <table id="tabel-anggota-ppm" class="col"></table> -->
                 <button id="add-anggota-ppm" class="btn btn-outline-primary btn-sm" type="button" data-toggle="modal" data-target="#anggotaPpmModal"> <i class="fa fa-plus"></i> <span>Tambah Anggota</span></button>
                 <!-- <small id="infoanggota" class="form-text text-muted">Anggota pertama dipilih akan automatis menjadi yang ditugaskan</small> -->
+            </div>
+            <div class="col table-responsive" id="tabel-anggota-ppm-wrapper">
+                
             </div>
         </div>
         <!-- end anggota session -->
 
+        <!-- start upload note dinas ppm -->
+        <div class="form-group row">                    
+            <label for="lama-ppm" class="col-md-2 col-form-label">{{ __('Upload File') }}</label>
+            <div class="col-md-4">                      
+                <!-- <input type="file" class="form-control" name="nota_dinas" id="id-nota-dinas" placeholder="{{ __('Lama')}}"> -->
+                <!-- <div class="custom-file"> -->
+                    <input type="file" class="custom-file-input" id="id-nota-dinas" name="nota_dinas">
+                    <label class="custom-file-label" for="id-nota-dinas">Select file</label>
+                <!-- </div>                            -->
+            </div>                  
+        </div>
+        <!-- end upload note dinas ppm -->
 
         <!-- start submit ppm -->
         <div class="form-group">
@@ -144,18 +159,7 @@
             <script type="text/javascript">
                 $("#form-session-anggota-ppm").validate({
                     rules: {
-                        session_anggota_umum: {required: true, number:true},
-                        // session_peran: {required: true}
-                        // session_peran : {
-                        //     required: true,
-                        //     normalizer: function( value ) {
-                        //         var regex = /^[a-zA-Z]+$/;
-                        //         if(regex.test(value) == false){
-                        //             alert("Must be in alphabets only");
-                        //             return false;
-                        //         }
-                        //     }
-                        // }
+                        session_anggota_ppm: {required: true, number:true},
                     },
                     submitHandler: function(form){
                         var tgl_mulai = $('#form-ppm').find('#tgl-mulai-ppm').val();
@@ -164,19 +168,20 @@
                         var dupak_anggota_ppm = $('#form-session-anggota-ppm').find('#dupak-id-ppm').val();
                         var user_id = $('#session-anggota-ppm option:selected').val();
                         var ppm_id = null;
-                        //break save_method_umum;
+                        //break save_method_ppm;
+
                         if (ppm_id == null) {
-                            var save_method_umum = 'new';
-                        }else{
-                            var save_method_umum = 'old';
-                        }
+                            var save_method_ppm = 'new';
+                        }/*else{
+                            var save_method_ppm = 'old';
+                        }*/
                         
 
-                        url = (save_method_umum == 'new') ?  "{{ route('store_session_anggota_ppm') }}" : "";
-                        //$.alert(save_method_umum);
-                        // if(tgl_mulai == '' || tgl_akhir==''){
-                        //     $.alert('Isikan tanggal mulai dan tanggal akhir terlebih dahulu.');
-                        // }else{
+                        url = (save_method_ppm == 'new') ?  "{{ route('store_session_anggota_ppm') }}" : "";
+                        //$.alert(save_method_ppm);
+                        if(tgl_mulai == '' || tgl_akhir==''){
+                            $.alert('Isikan tanggal mulai dan tanggal akhir terlebih dahulu.');
+                        }else{
                             // alert(url);
                             $.ajax({
                                 url: url,
@@ -185,17 +190,24 @@
                                 success: function(data){
                                     console.log('success :', data);                                                                
                                     $('#tabel-anggota-ppm').DataTable().ajax.reload();
-                                    // $("#lama-jam-id").val('');
-                                    // $("#dupak-id").val('');
-                                    // clearOptionsUmum();
+                                    drawTableAnggotaPpm(ppm_id);
+                                    $("#lama-jam-ppm").val('');
+                                    $("#dupak-id-ppm").val('');
+                                    clearOptionsPpm();
                                 },
                                 error: function(error){
                                     console.log('Error :', error);
                                 }
                             });
-                        // }
+                        }
                     }
                 });
+
+                function clearOptionsPpm(){
+                    var optAnggotaPpm = $('#session-anggota-ppm').selectize();
+                    var controlAnggotaPpm = optAnggotaPpm[0].selectize;
+                    controlAnggotaPpm.clear();
+                }
             </script>
         </div>
     </div>
@@ -206,96 +218,115 @@
 <!-- start javascript -->
 <script type="text/javascript">
 
-$(document).ready(function () {
-
-    var id_ppm = $('#id-ppm').val();
-    var url_prefix = (window.location.pathname == '/admin' || window.location.pathname == '/public/admin') ? 'admin/spt/get-anggota/ppm/' : 'spt/get-anggota/ppm/';
-    url = (id_ppm == '') ? url_prefix+'0' : url_prefix+id_ppm ;
-
-    $('#tabel-anggota-ppm').DataTable({        
-        "language": {
-            "emptyTable":  "Data Anggota Belum dimasukkan"
-        },
-        dom: 'rt',
-        "pageLength": 50,
-        fixedColumns:   {
-            heightMatch: 'auto'
-        },
-        language: {
-            paginate: {
-              next: '&gt;', 
-              previous: '&lt;' 
-            }
-        },
-        "opts": {
-          "theme": "bootstrap",
-        },
-        retrieve: true,
-        processing: true,
-        aDataSort:true,
-        serverSide: true,
-        ajax: url,
-        /*deferRender: true,*/
-        columns: [
-            {'defaultContent' : '', 'data' : 'DT_RowIndex', 'name' : 'DT_RowIndex', 'title' : 'No', 'orderable' : false, 'searchable' : false, 'exportable' : true, 'printable' : true, width: '10%'
-            },
-            {data: 'nama_anggota', name: 'nama_anggota', 'title': "{{ __('Nama') }}", width: '40%'},
-            // {data: 'peran', name: 'peran', 'title': "{{ __('Peran') }}", width: '40%'},
-            {data: 'action', name: 'action', 'orderable': false, 'searchable': false, 'title': "{{ __('Action') }}", 'exportable' : false,'printable': false, width: '10%'},
-        ],
-    });
+var select_lokasi = $('#session-anggota-ppm').selectize({       
+   /*sortField: 'text',*/
+   allowEmptyOption: false,
+   placeholder: 'Pilih Anggota',
+   closeAfterSelect: true,
+   create: false,
+   maxItems:10,
+   onchange: function(value){
+   },
 });
 
-$("#form-ppm").validate({
-        // rules: {
-        //     jenis_spt_umum : {required: true},
-        //     tgl_mulai_umum: {required: true},
-        //     tgl_akhir_umum: {required: true},
-        //     // lokasi_id_umum : {required: true},
-        //     // info_kegiatan : {teks: true},
+function drawTableAnggotaPpm(ppm_id = ''){
+    var ppm_id = ppm_id;
+    url = "{{ route('tabel_anggota_ppm') }}";
 
-        // },
+    $.ajax({
+      url : url,
+      data: {ppm_id: ppm_id},
+      type: 'GET',
+      success: function(res){
+        $('#tabel-anggota-ppm-wrapper').html(res);
+      },
+      error: function(err){
+        console.log(err);
+      }
+    });
+}
+
+function function_ppm(user_id){
+    save_method_ppm = 'delete';
+        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        var tgl_mulai_ppm = $('#tgl-mulai-ppm').val();
+        var tgl_akhir_ppm = $('#tgl-akhir-ppm').val();
+        ppm_id = ( typeof $('#form-ppm').attr('id-ppm') !== 'undefined' ) ? $('#form-ppm').attr('id-ppm') : '';
+        $.confirm({
+            title: "{{ __('Delete Confirmation') }}",
+            content: "{{ __('Are you sure to delete ?') }}",
+            buttons: {
+                delete: {
+                    btnClass: 'btn-danger',
+                    action: function(){
+                        url = (window.location.pathname == '/admin' || window.location.pathname == '/public/admin') ? "admin/ppm/session/anggota/delete/"+user_id : "ppm/session/anggota/delete/"+user_id;
+                        //url = "session/anggota/delete/"+user_id;
+                        $.ajax({
+                            url: url,
+                            type: "POST",                
+                            data: {_method: 'delete', '_token' : csrf_token, tgl_mulai_ppm:tgl_mulai_ppm, tgl_akhir_ppm:tgl_akhir_ppm, user_id:user_id },
+                            success: function(data){
+                                drawTableAnggotaPpm(ppm_id);
+                            },
+                            error: function(err){
+                                console.log(err);
+                            }
+                        });
+                    },
+                },
+                cancel: function(){
+                    $.alert('Canceled!');
+                }
+            }
+    });
+}
+
+// $(document).ready(function () {
+    
+// });
+
+$("#form-ppm").validate({
+        rules: {
+            jenis_ppm : {required: true},
+            tgl_mulai_ppm : {required: true},
+            tgl_akhir_ppm : {required: true},
+
+        },
 
         submitHandler: function(form){
             var jenis_ppm = $("#unsur-ppm").val();
-            // // alert(jenis_spt_umum);
-            // var tgl_mulai_umum = $("#tgl-mulai-umum").val();
-            // var tgl_akhir_umum = $("#tgl-akhir-umum").val();
-            // var lama_umum = $('#lama-spt-umum').val();
-            // var lokasi_umum_id = $('#lokasi-id-umum').val();
-            // var info_dasar_umum = $('#info-dasar-umum').val();
-            // var info_untuk_umum = $('#info-untuk-kegiatan-umum').val();
+            var tgl_mulai_ppm = $("#tgl-mulai-ppm").val();
+            var tgl_akhir_ppm = $("#tgl-akhir-ppm").val();
+            var lama_ppm = $('#lama-ppm').val();
 
             var id = $('#id-ppm').val();
-            save_method_umum = (id == '') ? 'new' : save_method_umum;
-            var url_prefix = (window.location.pathname == '/admin' || window.location.pathname == '/public/admin') ? 'admin/spt/' : 'spt/';
+            save_method_ppm = (id == '') ? 'new' : save_method_ppm;
+            var url_prefix = (window.location.pathname == '/admin' || window.location.pathname == '/public/admin') ? 'admin/ppm/' : 'ppm/';
             //url =  (save_method == 'new') ? "{{ route('spt.store') }}" : base_url + '/' + id ;
-            url = (save_method_umum == 'new') ? "{{ route('store_ppm') }}" : '' ;/*edit masih blm*/
-            method = (save_method_umum == 'new') ? "POST" : "PUT";
+            url = (save_method_ppm == 'new') ? "{{ route('store_ppm') }}" : '' ;/*edit masih blm*/
+            method = (save_method_ppm == 'new') ? "POST" : "PUT";
             type = "POST";            
             
 
             $.ajax({
                 url: url,
                 type: type,
-                data: {jenis_ppm:jenis_ppm,  _method: method},
+                data: {jenis_ppm:jenis_ppm, tgl_mulai_ppm:tgl_mulai_ppm, tgl_akhir_ppm:tgl_akhir_ppm, lama_ppm:lama_ppm, _method: method},
 
                 success: function(data){
                     console.log(data);
-                    // $("#spt-umum-form")[0].reset();
-                    // $('#formSptUmum').modal('hide');
-                    // //if(save_method_umum == 'new') clearSessionAnggota();
-                    // //table.ajax.reload();
-                    // $('#spt-umum-table').DataTable().ajax.reload();
-                    // clearOptionsUmum();
-                    // $('#list-anggota-umum-session').DataTable().clear().destroy();
+                    $("#form-ppm")[0].reset();
+                    $('#form-session-anggota-ppm')[0].reset();
+                    // location.reload();
+                    $('#tabel-anggota-ppm-wrapper').html(data);
                 },
                 error: function(error){
                     console.log(error);
                 }
             });
         }
-    });    
+    });
+
 </script>
 <!-- end javascript -->
 

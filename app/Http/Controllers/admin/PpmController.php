@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\User;
 use App\models\Ppm;
 use App\Common;
+use DB;
 use Illuminate\Support\Facades\Session;
 
 class PpmController extends Controller
@@ -31,6 +32,7 @@ class PpmController extends Controller
         //
     }
 
+
     /**
      * Store a newly created resource in storage.
      *
@@ -41,72 +43,63 @@ class PpmController extends Controller
     {
         // dd($request); /*jalan*/
         $user = auth()->user();
+        $digits = 3;
+        $kode_kelompok = random_int( 2 ** ( $digits - 1 ), ( 5 ** $digits ) - 1); //mengegenerate random interger dengan max $digit(3 character)  
+
         $this->validate($request, [
-            'jenis_ppm' => 'required'
+            'jenis_ppm' => 'required',
             // 'lokasi_umum_id' => 'nullable',
-            // 'tgl_mulai_umum'=>'required|date_format:"d-m-Y"',
-            // 'tgl_akhir_umum' =>'required|date_format:"d-m-Y"|after_or_equal:tgl_mulai_umum',
-            // 'lama_umum' => 'required|integer',
+            'tgl_mulai_ppm'=>'required|date_format:"d-m-Y"',
+            'tgl_akhir_ppm' =>'required|date_format:"d-m-Y"|after_or_equal:tgl_mulai_ppm',
+            'lama_ppm' => 'required|integer',
             // 'info_untuk_umum'=> 'required',
             // 'info_dasar_umum'=> 'required'
             ]
         );
-         $data = [
-            'unsur_dupak' => Common::cleanInput($request['jenis_ppm'])
-            // 'tgl_mulai' => date('Y-m-d H:i:s',strtotime($request['tgl_mulai_umum'])),
-            // 'tgl_akhir' => date('Y-m-d H:i:s',strtotime($request['tgl_akhir_umum'])),
-            // // 'lokasi_id' => $request['lokasi_umum_id'],
-            // 'lama' => $request['lama_umum'],
-            // 'info_untuk_umum' => Common::cleanInput($request['info_untuk_umum']),
-            // 'info_dasar_umum' => Common::cleanInput($request['info_dasar_umum']),
-        ];
 
-        // dd($data);
-        // die();
-
-        $ppm = Ppm::create($data);
-        if($ppm) {
-            // $this->storeDetailAnggotaPpm($ppm->id, $ppm->lama);
-
-            // return $spt;
-            $ppm = Ppm::find($ppm->id);
-            $unsur_dupak = $ppm->unsur_dupak;
-            // $start =$spt->tgl_mulai;
-            // $end = $spt->tgl_akhir;
-            $lama = $ppm->lama;
-            // $counter = array();
-            if(Session::has('anggota_ppm'))
-            {
-                $session_anggota = Session::get('anggota_ppm');
-                // dd($session_anggota);
-                foreach($session_anggota as $k=>$anggota){
-                    //cek lembur, set lembur to true jika tgl mulai spt ada di tgl akhir spt
-                    // $lembur = Spt::where('tgl_akhir','=', $start)->where('user_id','=', $anggota['user_id'])->join('detail_spt','detail_spt.spt_id','=','spt.id')->get();
-                    // $isLembur = ( $lembur->count() > 0) ? true : false;
-                    if($k === 0){
-                        $peran = 'pejabat_utama';
-                    }else{
-                        $peran = 'peserta';
-                    }
-                    $dupak = [
-                        'lama' => $anggota['lama'],
-                        'dupak' => $anggota['dupak']
-                    ];
-
-                    DB::table('detai_ppm')->where('id',$ppm->id)->insertGetId([
-                    // 'spt_id' => $spt_id,
-                    'user_id' => $anggota['user_id'],
-                    'peran' => $peran,
-                    'lama' => $lama,
-                    'info_dupak' => json_encode($dupak),
-                    'unsur_dupak' => $unsur_dupak
-                    //'dupak' => $this->hitungDupak($anggota['user_id'],$anggota['peran'],$lama,$isLembur)
-                ]);
+        if(Session::has('anggota_ppm'))
+        {
+            $session_anggota = Session::get('anggota_ppm');
+            // dd(count($session_anggota));
+            foreach($session_anggota as $k=>$anggota){
+                //cek lembur, set lembur to true jika tgl mulai spt ada di tgl akhir spt
+                // $lembur = Spt::where('tgl_akhir','=', $start)->where('user_id','=', $anggota['user_id'])->join('detail_spt','detail_spt.spt_id','=','spt.id')->get();
+                // $isLembur = ( $lembur->count() > 0) ? true : false;
+                // dd($anggota);
+                if($k === 0){
+                    $peran = 'pejabat_utama';
+                }else{
+                    $peran = 'peserta';
                 }
-                // $this->clearSessionAnggotaUmum();
+
+                $dupak = [
+                    'lama' => $anggota['lama'],
+                    'dupak' => $anggota['dupak']
+                ];
+
+                Ppm::insertGetId([
+                // 'spt_id' => $spt_id,
+                'user_id' => $anggota['user_id'],
+                'peran' => $peran,
+                'lama' => $request['lama_ppm']  ,
+                'tgl_mulai' => date("Y-m-d H:i:s", strtotime($request['tgl_mulai_ppm'])),
+                'tgl_akhir' => date('Y-m-d H:i:s',strtotime($request['tgl_akhir_ppm'])),
+                'kode_kelompok' => $kode_kelompok,
+                'info_dupak' => json_encode($dupak),
+                'unsur_dupak' => Common::cleanInput($request['jenis_ppm'])
+                //'dupak' => $this->hitungDupak($anggota['user_id'],$anggota['peran'],$lama,$isLembur)
+            ]);
             }
-            return;
+            $this->clearSessionAnggotaPpm();
         }
+
+        return;
+
+    }
+
+    public function clearSessionAnggotaPpm(){
+        Session::forget('anggota_ppm');
+        return "Session Anggota PPM deleted";
     }
 
     // public function storeDetailAnggotaPpm($ppm_id,$lama){
@@ -260,9 +253,7 @@ class PpmController extends Controller
         // die();
         $uid = $request->user_id;
         $tgl_mulai = date($request->tgl_mulai);
-        $tgl_akhir = date($request->tgl_akhir);
-        // $lama_jam = Common::cleanInput($request->lama_jam);
-        // $dupak_anggota = Common::cleanInput($request->dupak_anggota);
+        $tgl_akhir = date($request->tgl_mulai);
 
         if(Session::has('anggota_ppm')){
             //'Penanggungjawab', 'Pembantu Penanggungjawab', 'Pengendali Mutu', 'Pengendali Teknis', 'Ketua Tim', 'Anggota Tim'
@@ -279,8 +270,8 @@ class PpmController extends Controller
                 $session = Session::push('anggota_ppm', [
                     'user_id'    => $request->user_id,
                     // 'peran'   => 'Pegawai'
-                    'lama' => $request->lama_jam,
-                    'dupak' => $request->dupak_anggota
+                    'lama' => $request->lama_jam_ppm,
+                    'dupak' => $request->dupak_anggota_ppm
                 ]);
                 return "Session anggota ppm updated";
             }
@@ -289,62 +280,135 @@ class PpmController extends Controller
             $session = Session::push('anggota_ppm', [
                 'user_id'    => $request->user_id,
                 // 'peran'   => 'Pegawai'
-                'lama' => $request->lama_jam,
-                'dupak' => $request->dupak_anggota
+                'lama' => $request->lama_jam_ppm,
+                'dupak' => $request->dupak_anggota_ppm
             ]);
             return "Session anggota ppm created";
         }
     }
 
-    public function getAnggotaPpm($id_ppm=null)
-    {
-        $cek_data = ( $id_ppm == 0 ) ? 0 : Ppm::where('kode_kelompok', $id_ppm)->count();
+    public function drawTableAnggotaPpm(Request $request){
+        // dd($request->ppm_id);
+        $ppm_id = Ppm::where('id', $request->ppm_id)->first();
+        //dd($request->spt_id);$this->buildControl('deleteAnggota',$col->id); '<a href="#" class="btn btn-sm btn-outline-danger" onclick="unset('.$col['user_id'].')">Hapus</a>';
+        $return = '<table class="table table-bordered table-hover">'
+                        .'<thead><tr>'
+                            .'<th>No.</th>'
+                            .'<th>Nama</th>'
+                            .'<th></th>'
+                        .'</tr></thead>';
 
-        if($cek_data > 0){
-
-            $cols = Ppm::where('kode_kelompok','=',$id_ppm)->with(['user'])->get();
-            $dtt = Datatables::of($cols)
-                ->addIndexColumn()
-                ->addColumn('full_name', function($col){
-                    return ($col->user) ? $col->user->full_name_gelar : 'User tidak ditemukan';
-                })
-                ->addColumn('nama_anggota', function($col){
-                    return $col->user->full_name_gelar;
-                })
-                ->editColumn('lama', function($col){
-                    return $col->spt->lama.' hari';
-                })
-                ->addColumn('action', function($col){
-                    return $this->buildControl('deleteAnggotaUmum',$col->id);
-                })->make(true);
-                //return $dt;
+        if($ppm_id != null){
+            //bukan spt baru, data spt sudah ada, tampilkan data anggota spt dari tabel detail
+            $list_anggota = Ppm::where('spt_id', $request->ppm_id)->with('user')->get();
+            //dd($list_anggota);
+            foreach($list_anggota as $i=>$anggota){
+                $return .= '<tr>'
+                            .'<td>'.++$i.'</td>'
+                            .'<td>'.$anggota->user->full_name_gelar.'</td>'
+                            // .'<td>'.$this->buildControl('deleteAnggotaUmum',$anggota->id).'</td>'
+                            .'<td>'.''.'</td>'
+                            .'</tr>';
+            }
+            if($list_anggota->count()<=0){
+                $return .= '<tr><td colspan="4" align="center">Tidak ada data anggota</td></tr>';
+            }
 
         }else{
-            //cek apakah ada session anggota
+            //data belum ada, cek session anggota, jika ada tampilkan data session anggota
             if(Session::has('anggota_ppm')){
-                $data = Session::get('anggota_ppm');
+                $session_anggota_ppm = Session::get('anggota_ppm');
                 //setup data anggota
-                $dtt = Datatables::of($data)
-                    ->addIndexColumn()
-                    ->addColumn('nama_anggota', function($col){
-                        $user = User::findOrFail($col['user_id']);
-                        return $user->full_name_gelar;
-                    })
-                    ->addColumn('action', function($col){
-                        //hapus session by user_id
-                        // unset_anggota('.$col['user_id'].')
-                        return '<a href="#" class="btn btn-sm btn-outline-danger" onclick="">Hapus</a>';
-                    })
-                    ->make(true);
+                foreach($session_anggota_ppm as $i=>$anggota){
+                    $user = User::where('id',$anggota['user_id'])->first();
+                    $return .= '<tr>'
+                            .'<td>'.++$i.'</td>'
+                            .'<td>'.$user->full_name_gelar.'</td>'
+                            .'<td><a href="#" class="btn btn-sm btn-outline-danger" onclick="function_ppm('.$anggota['user_id'].')" title="hapus anggota"><i class="fa fa-times"></i></a></td>'
+                            .'</tr>';
+                            // 
+                }
+                if(count($session_anggota_ppm)<=0){
+                    $return .= '<tr><td colspan="4" align="center">Tidak ada data anggota</td></tr>';
+                }
+
 
             }else{
-                //eksekusi empty data karena tidak ditemukan data pada tabel ataupun session
-                $data = [0=>['DT_RowIndex'=> '', 'nama_anggota'=>'', 'peran'=>'', 'action' => '']];
-                $dtt = Datatables::of($data)->toJson();
+                //data belum ada, session anggota juga tidak ada
+                $return .= '<tr><td colspan="4" align="center">Tidak ada data anggota</td></tr>';
             }
+
         }
-        return $dtt;
+
+        $return .= '</table>';
+        return $return;
+
     }
+
+    public function deleteSessionAnggotaPpm(Request $request){
+        $user_id = $request->user_id;
+        $tgl_mulai = $request->tgl_mulai;
+        $tgl_akhir = $request->tgl_akhir;
+
+        foreach (Session::get('anggota_ppm', []) as $id => $entries) {
+            if ($entries['user_id'] === $user_id) {
+                Session::forget('anggota_ppm.' . $id);
+                break; // stop loop
+            }
+            $this->clearSessionAnggotaPpm();
+        }
+    }
+
+    // public function getAnggotaPpm($id_ppm=null)
+    // {
+    //     $id_ppm = $id;
+    //     $cek_data = ( $id_ppm == 0 ) ? 0 : Ppm::where('kode_kelompok', $id_ppm)->count();
+
+    //     if($cek_data > 0){
+
+    //         $cols = Ppm::where('kode_kelompok','=',$id_ppm)->with(['user'])->get();
+    //         $dtt = Datatables::of($cols)
+    //             ->addIndexColumn()
+    //             ->addColumn('full_name', function($col){
+    //                 return ($col->user) ? $col->user->full_name_gelar : 'User tidak ditemukan';
+    //             })
+    //             ->addColumn('nama_anggota', function($col){
+    //                 return $col->user->full_name_gelar;
+    //             })
+    //             ->editColumn('lama', function($col){
+    //                 return $col->spt->lama.' hari';
+    //             })
+    //             ->addColumn('action', function($col){
+    //                 return $this->buildControl('deleteAnggotaUmum',$col->id);
+    //             })->make(true);
+    //             //return $dt;
+
+    //     }else{
+    //         //cek apakah ada session anggota
+    //         if(Session::has('anggota_ppm')){
+    //             $data = Session::get('anggota_ppm');
+    //             //setup data anggota
+    //             $dtt = Datatables::of($data)
+    //                 ->addIndexColumn()
+    //                 ->addColumn('nama_anggota', function($col){
+    //                     $user = User::findOrFail($col['user_id']);
+    //                     return $user->full_name_gelar;
+    //                 })
+    //                 ->addColumn('action', function($col){
+    //                     //hapus session by user_id
+    //                     // unset_anggota('.$col['user_id'].')
+    //                     return '<a href="#" class="btn btn-sm btn-outline-danger" onclick="">Hapus</a>';
+    //                 })
+    //                 ->make(true);
+
+    //         }else{
+    //             //eksekusi empty data karena tidak ditemukan data pada tabel ataupun session
+    //             $data = [0=>['DT_RowIndex'=> '', 'nama_anggota'=>'', 'peran'=>'', 'action' => '']];
+    //             $dtt = Datatables::of($data)->toJson();
+    //         }
+    //     }
+    //     return $dtt;
+    // }
 
     // public function getAnggotaUmum($id=null)
     // {
