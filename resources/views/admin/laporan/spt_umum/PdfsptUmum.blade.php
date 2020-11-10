@@ -232,7 +232,7 @@
         <div class="lampiran" id="lampiran">
             <span class="lampiran-surat">Lampiran Surat</span><br>
             <span class="lampiran-surat">Nomor :{{$nomor_lampiran}}</span><br>
-            <span class="lampiran-surat">Tanggal : {{($spt->tgl_register == null) ? 'Tanggal Belum di ttd' : $spt->tgl_register}}</span>
+            <span class="lampiran-surat">Tanggal : {{($spt->tgl_register == null) ? '' : $spt->tgl_register}}</span>
         </div><br>
             <table id="tabel_user" width="75%" style="margin-left: auto;margin-right: auto;">{!!$user_spt!!}</table>
         <div class="ttd-inspektur" style="clear: both;">
