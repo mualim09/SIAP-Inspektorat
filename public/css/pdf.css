@@ -32,7 +32,8 @@
 			width: 100%;
 			margin: 0px auto;
 			font-size: 12pt;
-			font-family: maiandra-gd;
+			/*font-family: maiandra-gd;*/
+			font-family: arial;
 			line-height: 1;
 		}
 		div.logo-banner{
