@@ -6,8 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Ppm extends Model
 {
-    protected $fillable = ['user_id', 'kode_kelompok','lama', 'unsur_dupak','info_dupak'];
-    protected $table = 'detail_ppm';
+    protected $fillable = ['kegiatan', 'kegiatan','tgl_mulai', 'tgl_akhir','lama','nota_dinas'];
+    protected $primaryKey = 'id';
+    protected $table = 'ppm';
     protected $appends = [];
   	public $timestamps = false;
 }

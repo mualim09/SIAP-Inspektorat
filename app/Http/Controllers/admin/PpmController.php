@@ -5,10 +5,19 @@ namespace App\Http\Controllers\admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
+use App\models\Detail_ppm;
 use App\models\Ppm;
-use App\Common;
 use DB;
+use App\Common;
+use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Response;
+use App\models\FileMedia;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Input;
 
 class PpmController extends Controller
 {
@@ -19,7 +28,39 @@ class PpmController extends Controller
      */
     public function index()
     {
-        
+        $listAnggota = User::select(['id','first_name','last_name', 'gelar'])->get();
+        return view('admin.ppm.index',['listAnggota'=>$listAnggota]);
+    }
+
+    public function getdataPpm()
+    {
+        $data = Ppm::all()->sortByDesc("id");
+        $tb = Datatables::of($data)
+              ->addIndexColumn()
+              ->addColumn('kegiatan', function($col){
+                  return $col->kegiatan;
+              })
+              ->addColumn('lama', function($col){
+                  return $col->lama;
+              })
+              ->addColumn('nota', function($col){
+                  return $col->nota_dinas;
+              })
+              ->addColumn('action', function($col){
+                  //$return = '<a href="javascript:void(0);" onclick="editLokasi('. $data->id .')" outline type="primary" title="Edit Lokasi"><i class="ni ni-single-copy-04"></i></a>';
+                  //return $return;
+                  return;
+                  // $return = $this->buildControl('viewAnggota',$col->id);
+                  // $return .= $this->buildControl('cetakPdf',$col->id);
+                  // if($col->approval_status == 'processing'){
+                  //     $return .= $this->buildControl('editForm',$col->id);
+                  //     $return .= $this->buildControl('deleteData',$col->id);
+                  // }
+                  // return $return;
+              })
+              ->escapeColumns([])
+              ->make(true);
+        return $tb;
     }
 
     /**
@@ -29,7 +70,7 @@ class PpmController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
 
@@ -41,109 +82,9 @@ class PpmController extends Controller
      */
     public function storePpm(Request $request)
     {
-        // dd($request); /*jalan*/
-        $user = auth()->user();
-        $digits = 3;
-        $kode_kelompok = random_int( 2 ** ( $digits - 1 ), ( 5 ** $digits ) - 1); //mengegenerate random interger dengan max $digit(3 character)  
-
-        $this->validate($request, [
-            'jenis_ppm' => 'required',
-            // 'lokasi_umum_id' => 'nullable',
-            'tgl_mulai_ppm'=>'required|date_format:"d-m-Y"',
-            'tgl_akhir_ppm' =>'required|date_format:"d-m-Y"|after_or_equal:tgl_mulai_ppm',
-            'lama_ppm' => 'required|integer',
-            // 'info_untuk_umum'=> 'required',
-            // 'info_dasar_umum'=> 'required'
-            ]
-        );
-
-        if(Session::has('anggota_ppm'))
-        {
-            $session_anggota = Session::get('anggota_ppm');
-            // dd(count($session_anggota));
-            foreach($session_anggota as $k=>$anggota){
-                //cek lembur, set lembur to true jika tgl mulai spt ada di tgl akhir spt
-                // $lembur = Spt::where('tgl_akhir','=', $start)->where('user_id','=', $anggota['user_id'])->join('detail_spt','detail_spt.spt_id','=','spt.id')->get();
-                // $isLembur = ( $lembur->count() > 0) ? true : false;
-                // dd($anggota);
-                if($k === 0){
-                    $peran = 'pejabat_utama';
-                }else{
-                    $peran = 'peserta';
-                }
-
-                $dupak = [
-                    'lama' => $anggota['lama'],
-                    'dupak' => $anggota['dupak']
-                ];
-
-                Ppm::insertGetId([
-                // 'spt_id' => $spt_id,
-                'user_id' => $anggota['user_id'],
-                'peran' => $peran,
-                'lama' => $request['lama_ppm']  ,
-                'tgl_mulai' => date("Y-m-d H:i:s", strtotime($request['tgl_mulai_ppm'])),
-                'tgl_akhir' => date('Y-m-d H:i:s',strtotime($request['tgl_akhir_ppm'])),
-                'kode_kelompok' => $kode_kelompok,
-                'info_dupak' => json_encode($dupak),
-                'unsur_dupak' => Common::cleanInput($request['jenis_ppm'])
-                //'dupak' => $this->hitungDupak($anggota['user_id'],$anggota['peran'],$lama,$isLembur)
-            ]);
-            }
-            $this->clearSessionAnggotaPpm();
-        }
-
-        return;
-
+        return 'fungsi berjalan ';
     }
 
-    public function clearSessionAnggotaPpm(){
-        Session::forget('anggota_ppm');
-        return "Session Anggota PPM deleted";
-    }
-
-    // public function storeDetailAnggotaPpm($ppm_id,$lama){
-    //     $ppm = Ppm::find($ppm_id);
-    //     $unsur_dupak = $spt->unsur_dupak;
-    //     $start =$spt->tgl_mulai;
-    //     $end = $spt->tgl_akhir;
-    //     $lama = $spt->lama;
-    //     $counter = array();
-
-    //     if(Session::has('anggota_umum'))
-    //     {
-    //         $session_anggota = Session::get('anggota_umum');
-    //         // dd($session_anggota);
-    //         foreach($session_anggota as $k=>$anggota){
-    //             //cek lembur, set lembur to true jika tgl mulai spt ada di tgl akhir spt
-    //             // $lembur = Spt::where('tgl_akhir','=', $start)->where('user_id','=', $anggota['user_id'])->join('detail_spt','detail_spt.spt_id','=','spt.id')->get();
-    //             // $isLembur = ( $lembur->count() > 0) ? true : false;
-    //             if($k === 0){
-    //                 $peran = 'pejabat_utama';
-    //             }else{
-    //                 $peran = 'peserta';
-    //             }
-    //             $dupak = [
-    //                 'lama' => $anggota['lama'],
-    //                 'dupak' => $anggota['dupak']
-    //             ];
-
-    //             DB::table('detai_ppm')->insertGetId([
-    //             'spt_id' => $spt_id,
-    //             'user_id' => $anggota['user_id'],
-    //             'peran' => $peran,
-    //             'lama' => $lama,
-    //             'info_dupak' => json_encode($dupak),
-    //             'unsur_dupak' => $unsur_dupak
-    //             //'dupak' => $this->hitungDupak($anggota['user_id'],$anggota['peran'],$lama,$isLembur)
-    //         ]);
-    //         }
-    //         $this->clearSessionAnggotaUmum();
-    //     }
-    //     return;
-    // }
-
-    // contoh store spt umum dengan id mungkin
     // public function storeUmum(Request $request){
     //     //masukkan kode store SPT bagian umum
 
@@ -174,7 +115,7 @@ class PpmController extends Controller
     //     $spt = SptUmum::create($data);
     //     if($spt) {
     //         // dd($spt->lama);
-    //         $this->storeDetailAnggotaUmum($spt->id, $spt->lama);
+    //         $this->storeDetailUmum($spt->id, $spt->lama);
     //         // $this->storeDetailKepadaUmum($spt->id, $spt->lama);
 
     //         //user id pembuat spt
@@ -198,8 +139,11 @@ class PpmController extends Controller
     //     }
     // }
 
-    // public function storeDetailAnggotaUmum($spt_id,$lama){
+    // //dibawah ini function storeDetailAnggotaUmum punya mas tegar, di nonaktifkan / di comment
+    // public function storeDetailUmum($spt_id,$lama){
+    //     //dd($request);
     //     $spt = SptUmum::find($spt_id);
+    //     //dd($spt);
     //     $unsur_dupak = $spt->jenis_spt_umum;
     //     $start =$spt->tgl_mulai;
     //     $end = $spt->tgl_akhir;
@@ -212,8 +156,8 @@ class PpmController extends Controller
     //         // dd($session_anggota);
     //         foreach($session_anggota as $k=>$anggota){
     //             //cek lembur, set lembur to true jika tgl mulai spt ada di tgl akhir spt
-    //             $lembur = Spt::where('tgl_akhir','=', $start)->where('user_id','=', $anggota['user_id'])->join('detail_spt','detail_spt.spt_id','=','spt.id')->get();
-    //             $isLembur = ( $lembur->count() > 0) ? true : false;
+    //             //$lembur = Spt::where('tgl_akhir','=', $start)->where('user_id','=', $anggota['user_id'])->join('detail_spt','detail_spt.spt_id','=','spt.id')->get();
+    //             //$isLembur = ( $lembur->count() > 0) ? true : false;
     //             if($k === 0){
     //                 $peran = 'pejabat_utama';
     //             }else{
@@ -246,6 +190,90 @@ class PpmController extends Controller
     //     }
     //     return;
     // }
+
+    // // dd($request); /*jalan*/
+    //     $user = auth()->user();
+    //     $digits = 3;
+    //     $kode_kelompok = random_int( 2 ** ( $digits - 1 ), ( 5 ** $digits ) - 1); //mengegenerate random interger dengan max $digit(3 character)  
+
+    //     $this->validate($request, [
+    //         'jenis_ppm' => 'required',
+    //         // 'lokasi_umum_id' => 'nullable',
+    //         'tgl_mulai_ppm'=>'required|date_format:"d-m-Y"',
+    //         'tgl_akhir_ppm' =>'required|date_format:"d-m-Y"|after_or_equal:tgl_mulai_ppm',
+    //         'lama_ppm' => 'required|integer',
+    //         // 'info_untuk_umum'=> 'required',
+    //         'nota_dinas'=> 'required'
+    //         ]
+    //     );
+
+    //         // $file = $request->file('nota_dinas');
+    //         // $fileName = json_decode($request->nota_dinas)->getClientOriginalName();
+    //         // if($request->file('nota_dinas')) 
+    //         // {
+    //             // $file = $request->file('nota_dinas');
+    //             // $filename = time() . '.' . $request->file('nota_dinas')->extension();
+    //             // $filePath = public_path() . '/files/uploads/';
+    //             // $file->move($filePath, $filename);
+                
+    //             dd(Input::File('nota_dinas'));
+    //             die();
+    //         // }
+
+    //     // if($request->hasFile('nota_dinas')) {
+
+
+    //         // dd($filename);
+    //         // die();
+    //         // $pdf = ($fileName !== null) ? 'NotaDinas'.'-'. $fileName : null ;
+    //         //if($filename !== null ) $request->file_spt->move(public_path('storage\files') , $filename);
+            
+    //     // }
+
+    //     // if(Session::has('anggota_ppm'))
+    //     // {
+    //     //     $session_anggota = Session::get('anggota_ppm');
+    //     //     // dd(count($session_anggota));
+    //     //     foreach($session_anggota as $k=>$anggota){
+    //     //         //cek lembur, set lembur to true jika tgl mulai spt ada di tgl akhir spt
+    //     //         // $lembur = Spt::where('tgl_akhir','=', $start)->where('user_id','=', $anggota['user_id'])->join('detail_spt','detail_spt.spt_id','=','spt.id')->get();
+    //     //         // $isLembur = ( $lembur->count() > 0) ? true : false;
+    //     //         // dd($anggota);
+    //     //         if($k === 0){
+    //     //             $peran = 'pejabat_utama';
+    //     //         }else{
+    //     //             $peran = 'peserta';
+    //     //         }
+
+    //     //         $dupak = [
+    //     //             'lama' => $anggota['lama'],
+    //     //             'dupak' => $anggota['dupak']
+    //     //         ];
+
+    //     //         Ppm::insertGetId([
+    //     //         // 'spt_id' => $spt_id,
+    //     //         'user_id' => $anggota['user_id'],
+    //     //         'peran' => $peran,
+    //     //         'lama' => $request['lama_ppm']  ,
+    //     //         'tgl_mulai' => date("Y-m-d H:i:s", strtotime($request['tgl_mulai_ppm'])),
+    //     //         'tgl_akhir' => date('Y-m-d H:i:s',strtotime($request['tgl_akhir_ppm'])),
+    //     //         'kode_kelompok' => $kode_kelompok,
+    //     //         'info_dupak' => json_encode($dupak),
+    //     //         'unsur_dupak' => Common::cleanInput($request['jenis_ppm'])
+    //     //         //'dupak' => $this->hitungDupak($anggota['user_id'],$anggota['peran'],$lama,$isLembur)
+    //     //     ]);
+    //     //     }
+    //     //     $this->clearSessionAnggotaPpm();
+    //     // }
+
+
+    //     // return;
+    
+
+    public function clearSessionAnggotaPpm(){
+        Session::forget('anggota_ppm');
+        return "Session Anggota PPM deleted";
+    }
 
     public function storePpmSessionAnggotaPpm(Request $request)
     {
@@ -289,7 +317,7 @@ class PpmController extends Controller
 
     public function drawTableAnggotaPpm(Request $request){
         // dd($request->ppm_id);
-        $ppm_id = Ppm::where('id', $request->ppm_id)->first();
+        $ppm_id = Detail_ppm::where('id', $request->ppm_id)->first();
         //dd($request->spt_id);$this->buildControl('deleteAnggota',$col->id); '<a href="#" class="btn btn-sm btn-outline-danger" onclick="unset('.$col['user_id'].')">Hapus</a>';
         $return = '<table class="table table-bordered table-hover">'
                         .'<thead><tr>'
@@ -300,7 +328,7 @@ class PpmController extends Controller
 
         if($ppm_id != null){
             //bukan spt baru, data spt sudah ada, tampilkan data anggota spt dari tabel detail
-            $list_anggota = Ppm::where('spt_id', $request->ppm_id)->with('user')->get();
+            $list_anggota = Detail_ppm::where('spt_id', $request->ppm_id)->with('user')->get();
             //dd($list_anggota);
             foreach($list_anggota as $i=>$anggota){
                 $return .= '<tr>'
@@ -358,106 +386,6 @@ class PpmController extends Controller
             $this->clearSessionAnggotaPpm();
         }
     }
-
-    // public function getAnggotaPpm($id_ppm=null)
-    // {
-    //     $id_ppm = $id;
-    //     $cek_data = ( $id_ppm == 0 ) ? 0 : Ppm::where('kode_kelompok', $id_ppm)->count();
-
-    //     if($cek_data > 0){
-
-    //         $cols = Ppm::where('kode_kelompok','=',$id_ppm)->with(['user'])->get();
-    //         $dtt = Datatables::of($cols)
-    //             ->addIndexColumn()
-    //             ->addColumn('full_name', function($col){
-    //                 return ($col->user) ? $col->user->full_name_gelar : 'User tidak ditemukan';
-    //             })
-    //             ->addColumn('nama_anggota', function($col){
-    //                 return $col->user->full_name_gelar;
-    //             })
-    //             ->editColumn('lama', function($col){
-    //                 return $col->spt->lama.' hari';
-    //             })
-    //             ->addColumn('action', function($col){
-    //                 return $this->buildControl('deleteAnggotaUmum',$col->id);
-    //             })->make(true);
-    //             //return $dt;
-
-    //     }else{
-    //         //cek apakah ada session anggota
-    //         if(Session::has('anggota_ppm')){
-    //             $data = Session::get('anggota_ppm');
-    //             //setup data anggota
-    //             $dtt = Datatables::of($data)
-    //                 ->addIndexColumn()
-    //                 ->addColumn('nama_anggota', function($col){
-    //                     $user = User::findOrFail($col['user_id']);
-    //                     return $user->full_name_gelar;
-    //                 })
-    //                 ->addColumn('action', function($col){
-    //                     //hapus session by user_id
-    //                     // unset_anggota('.$col['user_id'].')
-    //                     return '<a href="#" class="btn btn-sm btn-outline-danger" onclick="">Hapus</a>';
-    //                 })
-    //                 ->make(true);
-
-    //         }else{
-    //             //eksekusi empty data karena tidak ditemukan data pada tabel ataupun session
-    //             $data = [0=>['DT_RowIndex'=> '', 'nama_anggota'=>'', 'peran'=>'', 'action' => '']];
-    //             $dtt = Datatables::of($data)->toJson();
-    //         }
-    //     }
-    //     return $dtt;
-    // }
-
-    // public function getAnggotaUmum($id=null)
-    // {
-    //     $cek_data = ( $id == 0 ) ? 0 : DetailSpt::where('spt_id', $id)->count();
-
-    //     if($cek_data > 0){
-
-    //         $cols = DetailSpt::where('spt_id','=',$id)->with(['user','spt'])->get();
-    //         $dtt = Datatables::of($cols)
-    //             ->addIndexColumn()
-    //             ->addColumn('full_name', function($col){
-    //                 return ($col->user) ? $col->user->full_name_gelar : 'User tidak ditemukan';
-    //             })
-    //             ->addColumn('nama_anggota', function($col){
-    //                 return $col->user->full_name_gelar;
-    //             })
-    //             ->editColumn('lama', function($col){
-    //                 return $col->spt->lama.' hari';
-    //             })
-    //             ->addColumn('action', function($col){
-    //                 return $this->buildControl('deleteAnggotaUmum',$col->id);
-    //             })->make(true);
-    //             //return $dt;
-
-    //     }else{
-    //         //cek apakah ada session anggota
-    //         if(Session::has('anggota_umum')){
-    //             $data = Session::get('anggota_umum');
-    //             //setup data anggota
-    //             $dtt = Datatables::of($data)
-    //                 ->addIndexColumn()
-    //                 ->addColumn('nama_anggota', function($col){
-    //                     $user = User::findOrFail($col['user_id']);
-    //                     return $user->full_name_gelar;
-    //                 })
-    //                 ->addColumn('action', function($col){
-    //                     //hapus session by user_id
-    //                     return '<a href="#" class="btn btn-sm btn-outline-danger" onclick="unset_anggota('.$col['user_id'].')">Hapus</a>';
-    //                 })
-    //                 ->make(true);
-
-    //         }else{
-    //             //eksekusi empty data karena tidak ditemukan data pada tabel ataupun session
-    //             $data = [0=>['DT_RowIndex'=> '', 'nama_anggota'=>'', 'peran'=>'', 'action' => '']];
-    //             $dtt = Datatables::of($data)->toJson();
-    //         }
-    //     }
-    //     return $dtt;
-    // }
 
 
     /**
