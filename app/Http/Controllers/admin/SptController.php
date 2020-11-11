@@ -562,7 +562,7 @@ class SptController extends Controller
                     $return = "";
                     if( !is_null($col->nomor) ){
                         if(!is_null($col->file) || $col->file != ""){
-                            $return .= '<a href="'.$col->file.'" data-toggle="tooltip" title="Scan SPT" class="btn btn-outline-primary btn-sm" target="__blank"><i class="ni ni-paper-diploma"></i><span>Download</span></a>';
+                            $return .= '<a href="'.url('/storage/spt/'.$col->file).'" data-toggle="tooltip" title="Scan SPT" class="btn btn-outline-primary btn-sm" target="__blank"><i class="ni ni-paper-diploma"></i><span>Download</span></a>';
                         }else{
                             $return .= '<a href="#" data-toggle="tooltip" title="Scan SPT" class="btn btn-outline-danger btn-sm disabled" ><i class="ni ni-paper-diploma"></i><span>Download</span></a>';
                             if( auth()->user()->hasAnyRole(['TU Umum', 'Super Admin']) ){
@@ -721,6 +721,85 @@ class SptController extends Controller
         $pdf = PDF::loadView('admin.laporan.spt.'.$template_name, compact('spt','detail_spt'))->setPaper([0,0,583.65354,877.03937],'portrait'); //setpaper = ukuran kertas custom sesuai dokumen word dari mbak ita
         return @$pdf->stream('SPT-'.$id.'.pdf',array('Attachment'=>1));
         //return $pdf->setWarnings(false)->save('spt-'.$id.'.pdf');
+    }
+
+    public function sptDocx($id){
+        //https://alfinchandra4.medium.com/catatan-laravel-pass-dynamic-values-when-export-to-docx-using-phpword-32e2746b0bfa
+        $spt = Spt::findOrFail($id);
+        $sort_detail = implode(",",$this->list_peran);
+        $detail_spt = DetailSpt::where('spt_id','=',$id)->with(['spt','user'])
+            ->orderByRaw(DB::raw("FIELD(peran,'Penanggungjawab', 'Pembantu Penanggungjawab', 'Pengendali Mutu', 'Pengendali Teknis', 'Ketua Tim', 'Anggota Tim')"))->get();
+        $template_name = 'docx'; // default template name
+
+        if( isset($spt->info['radio']) && $spt->info['radio'] !== null){
+            $radio = $spt->info['radio'];
+            $template_name = str_replace( ' ', '-', strtolower($spt->jenisSpt->radio[$radio]) );
+        }
+
+        //generating docx
+        $phpWord = new \PhpOffice\PhpWord\PhpWord();
+        $phpWord->setDefaultParagraphStyle(
+            array(
+                'align'      => 'both',
+                'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0),
+                'spacing'    => 1,
+            )
+        );
+        $phpWord->setDefaultFontName('Arial');
+        $phpWord->setDefaultFontSize(12);
+        $section = $phpWord->addSection();
+
+        //fontstyle
+        $phpWord->addFontStyle('bold_kop',[
+            'bold' => true,
+            'size' => 14
+        ]);
+        $phpWord->addFontStyle('default_kop',[
+            'name'=>'arial',
+            'size'=>12
+        ]);
+        $phpWord->addTableStyle('drawBorder', array('borderBottomSize'=>5, 'borderBottomColor'=>'000000'));
+        $lineStyle = [
+            'width'       => \PhpOffice\PhpWord\Shared\Converter::cmToPixel(16),
+            'height'      => \PhpOffice\PhpWord\Shared\Converter::cmToPixel(0),
+            'positioning' => 'absolute',
+            'weight'      => 2,
+            'flip'        => true,
+            'height'      => 1,
+        ];
+        
+        //kop surat
+        $table_kop = $section->addTable();
+        $table_kop->addRow();
+        $kopImage = $table_kop->addCell(3000);
+        $kopImage->addImage( asset('assets/img/brand/logo_dinas_bw.png'), array('width' => 80, 'height' => 80, 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER) );
+        $kopImage->addText(' ',['size'=>8]);//empty text
+        $kopText =  $table_kop->addCell(6000);
+        $kopText->addText('PEMERINTAH KABUPATEN SIDOARJO', 'default_kop', array('align'=>'center'));
+        $kopText->addText('INSPEKTORAT DAERAH', 'bold_kop', array('align'=>'center'));
+        $kopText->addText('Jalan. Untung Suropati No. 10',['size'=>10],['align'=>'center']);
+        $kopText->addText('Telepon (031) 8948163 ; Fax. (031) 99010187',['size'=>10],['align'=>'center']);
+        $kopText->addText('S I D O A R J O - 61218',['size'=>10],['align'=>'center']);
+        $kopText->addText('Email : inspektorat@sidoarjokab.go.id Website : inspektorat.sidoarjokab.go.id',['size'=>8],['align'=>'center']);
+        $kopText->addText(' ',['size'=>8]);
+        //$section->addLine(['weight'=>4,'flip'=>true]);
+        $section->addLine($lineStyle);        
+       
+
+        
+       /* $docx = PDF::loadView('admin.laporan.spt.'.$template_name, compact('spt','detail_spt'))->setPaper([0,0,583.65354,877.03937],'portrait'); //setpaper = ukuran kertas custom sesuai dokumen word dari mbak ita
+        return @$pdf->stream('SPT-'.$id.'.pdf',array('Attachment'=>1));*/
+        $file = 'SPT-'.$id.'-'.time().'.docx';
+        header("Content-Description: File Transfer");
+        header('Content-Disposition: attachment; filename="' . $file . '"');
+        header('Content-Type: application/vnd.msword');
+        header('Content-Transfer-Encoding: binary');
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Expires: 0');
+        $xmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+        ob_clean();
+        $xmlWriter->save("php://output");
+        exit;
     }
 
     public function sptPdfUmum($id){
@@ -1261,7 +1340,8 @@ class SptController extends Controller
             }
             $request->file_spt->move(public_path()."/storage/spt" , $filename);
         }
-        $spt->file = ($filename !== null ) ? url('/storage/spt/'.$filename) : null;
+        //$spt->file = ($filename !== null ) ? url('/storage/spt/'.$filename) : null;
+        $spt->file = ($filename !== null ) ? $filename : null;
         $spt->save();
         return 'Updated';
     }

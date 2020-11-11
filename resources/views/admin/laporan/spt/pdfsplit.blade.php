@@ -26,8 +26,8 @@
 
 	$nomor_spt = ($spt->nomor) ? $spt->nomor : '____';
 	$header_spt = "
-				<h5 ><b><u>SURAT TUGAS</u></b></h5>
-				<h5 >Nomor : ".$spt->jenisSpt->kode_kelompok." / ".$nomor_spt." / 438.4 / ".$created->format('Y')."</h5>";
+				<div ><b><u>SURAT TUGAS</u></b></div>
+				<div >Nomor : ".$spt->jenisSpt->kode_kelompok." / ".$nomor_spt." / 438.4 / ".$created->format('Y')."</div>";
 	
 
 	//Pegawai SPT
@@ -64,11 +64,11 @@
 
 	<container>
 		<div id="spt-container">		
-			<div id="header-spt" style="display: block;margin: 5px auto; text-align: center; width: 45%;">			
+			<div id="header-spt" style="display: block;margin: 5px auto; text-align: center; width: 45%;margin-top:20px;">			
 				{!!$header_spt!!}
 			</div>
 			
-			<div id="dasar-spt">
+			<div id="dasar-spt" style="margin-top:20px;">
 				<table width="100%">
 					<tr>
 						<td style="width:15%" valign="top">
@@ -86,8 +86,8 @@
 				</table>
 			</div>
 
-			<div id="pegawai-spt">
-				<div class="bold center" style="line-height: 1.5">DITUGASKAN :</div>
+			<div id="pegawai-spt" style="margin-top:20px;">
+				<div class="bold center" style="line-height: 1; margin-bottom: 20px;">MENUGASKAN :</div>
 				<table width="100%">
 					<tr>
 						<td style="width:15%" valign="top">
@@ -129,7 +129,7 @@
 					</tr>
 				</table>
 			</div>
-			<div class="ttd-inspektur" style="clear: both;">
+			<div class="ttd-inspektur" style="clear: both;margin-top: 20px;">
 				<span class="tgl-ttd">Sidoarjo, ___ {{$approval->formatLocalized('%B %Y')}}</span>
 				<span style="margin-left:-27px;width:10%;float:left"><b>a.n</b></span><span><b>BUPATI SIDOARJO</b></span>
 				<span class="an-inspektur">INSPEKTUR</span>

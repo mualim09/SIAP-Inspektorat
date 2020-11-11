@@ -173,6 +173,7 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 		Route::get('getdata/{jenis_data}','SptController@getData')->name('get_data_spt'); // add jenis data variable (mensederhanakan route dengat method get agar terkumpul jadi 1, default value jenis_data = null)
 		Route::get('get-anggota','SptController@getAnggota')->name('get_anggota_spt');
 		Route::get('cetak-pdf/{id}','SptController@sptPdf')->name('spt_pdf');
+		Route::get('docx/{id}','SptController@sptDocx')->name('spt_docx');
 		Route::get('last-data-tambahan/{jenis_spt_id}', 'SptController@getLastDataTambahan')->name('last_data_tambahan');
 		Route::get('last-data/{jenis_data}', 'SptController@getLastData')->name('last_data');
 		Route::get('durasi', 'SptController@getDurasi')->name('durasi_spt');
