@@ -37,6 +37,7 @@ use Illuminate\Support\Facades\Response;
 use App\models\FileMedia;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Session;
+use PhpOffice\PhpWord\Element\Table;
 
 
 class SptController extends Controller
@@ -725,18 +726,52 @@ class SptController extends Controller
 
     public function sptDocx($id){
         //https://alfinchandra4.medium.com/catatan-laravel-pass-dynamic-values-when-export-to-docx-using-phpword-32e2746b0bfa
+        //dd(storage_path('spt\template-spt.docx'));
         $spt = Spt::findOrFail($id);
         $sort_detail = implode(",",$this->list_peran);
         $detail_spt = DetailSpt::where('spt_id','=',$id)->with(['spt','user'])
             ->orderByRaw(DB::raw("FIELD(peran,'Penanggungjawab', 'Pembantu Penanggungjawab', 'Pengendali Mutu', 'Pengendali Teknis', 'Ketua Tim', 'Anggota Tim')"))->get();
-        $template_name = 'docx'; // default template name
+        $template_name = (File::exists(storage_path("spt/template-spt.docx"))) ? storage_path('spt\template-spt.docx') : 'tidak ada'; // default template name
+        //dd($template_name);
+        $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($template_name);
+        $default_font = [
+            'name'=>'arial',
+            'size'=>12
+        ];
 
-        if( isset($spt->info['radio']) && $spt->info['radio'] !== null){
-            $radio = $spt->info['radio'];
-            $template_name = str_replace( ' ', '-', strtolower($spt->jenisSpt->radio[$radio]) );
+        //setup variabel
+        $dasar_spt = array_filter(explode("\n",strip_tags($spt->jenisSpt->dasar))); //explode by new line (ENTER)
+/*        $values = [
+    ['userId' => 1, 'userName' => 'Batman', 'userAddress' => 'Gotham City'],
+    ['userId' => 2, 'userName' => 'Superman', 'userAddress' => 'Metropolis'],
+];*/
+
+/*$table->addRow();
+$table->addCell(150)->addText('Cell A1');
+$table->addCell(150)->addText('Cell A2');
+$table->addCell(150)->addText('Cell A3');
+$table->addRow();
+$table->addCell(150)->addText('Cell B1');
+$table->addCell(150)->addText('Cell B2');
+$table->addCell(150)->addText('Cell B3');
+$templateProcessor->setComplexBlock('table', $table);*/
+        $tabel_dasar = new Table();
+        $dasar = array();
+        if(count($dasar_spt)>1){
+            //$table = new PhpOffice\PhpWord\Element\Table()
+            foreach($dasar_spt as $i=>$dasar2){
+                //$i = $i+1;
+                $tabel_dasar->addRow();
+                $tabel_dasar->addCell(30)->addText(++$i, $default_font);
+                $tabel_dasar->addCell()->addText($dasar2, $default_font);
+            }
+        }else{
+           $tabel_dasar->addRow();
+           $tabel_dasar->addCell()->addText($spt->jenisSpt->dasar, $default_font);
         }
+        $templateProcessor->setComplexBlock('dasar', $tabel_dasar);
 
-        //generating docx
+        /*//generating docx
         $phpWord = new \PhpOffice\PhpWord\PhpWord();
         $phpWord->setDefaultParagraphStyle(
             array(
@@ -784,7 +819,7 @@ class SptController extends Controller
         $kopText->addText(' ',['size'=>8]);
         //$section->addLine(['weight'=>4,'flip'=>true]);
         $section->addLine($lineStyle);        
-       
+       */
 
         
        /* $docx = PDF::loadView('admin.laporan.spt.'.$template_name, compact('spt','detail_spt'))->setPaper([0,0,583.65354,877.03937],'portrait'); //setpaper = ukuran kertas custom sesuai dokumen word dari mbak ita
@@ -796,9 +831,10 @@ class SptController extends Controller
         header('Content-Transfer-Encoding: binary');
         header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
         header('Expires: 0');
-        $xmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
-        ob_clean();
-        $xmlWriter->save("php://output");
+        $templateProcessor->saveAs('php://output');
+       // $xmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($templateProcessor, 'Word2007');
+        //ob_clean();
+        //$xmlWriter->save("php://output");
         exit;
     }
 
@@ -1060,6 +1096,7 @@ class SptController extends Controller
           default:
             $spt_umum = $spt_umum;
         }
+        //$umum = (in_array($request->jenis_spt_umum, ['SPT Pengembangan Profesi', 'SPT Penunjang', 'SPT Diklat'])) ? 'umum' : null;
         // dd($spt_umum == null);
         $id = $request->spt_id;
         $id_umum = $request->spt_id_umum;
