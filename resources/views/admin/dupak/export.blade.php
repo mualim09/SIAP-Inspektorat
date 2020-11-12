@@ -159,7 +159,9 @@ function add_cell_to_sheet(worksheet, address, value) {
               +'</tr>';
 
         $.each(response, function (i, item) {
-          
+          console.log(item);
+          //file_url = (window.location.pathname == '/admin' || window.location.pathname == '/public/admin') ? 'storage/spt/'
+          file = (typeof item.spt !== 'undefined' && item.spt.file !== null) ? document.location.origin+'/storage/spt/'+item.spt.file : '#';          
           var year = new Date().getFullYear();
           var n = i+1;            
               table += '<tr>'
@@ -171,7 +173,7 @@ function add_cell_to_sheet(worksheet, address, value) {
               +'<td rowspan="2">'+ item.info_dupak.koefisien +'</td>'
               +'<td rowspan="2">'+ item.info_dupak.lama_jam +'</td>' 
               +'<td rowspan="2">'+ item.info_dupak.dupak +'</td>'
-              +'<td rowspan="2">SPT No.700/'+ item.spt.nomor +'/438.4/'+year+'<br/><br/></td>'
+              +'<td rowspan="2"><a href="'+file+'" target="_blank" >SPT No.700/'+ item.spt.nomor +'/438.4/'+year+'</a><br/><br/></td>'
               +'</tr>';
               table += '<tr>'
               		+'<td style="width:50%">' + item.spt.lama + ' hari</td>'
