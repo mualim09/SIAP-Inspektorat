@@ -1,79 +1,54 @@
-{{-- Pejabat index page --}}
+{{-- PPM index page --}}
 @extends('layouts.backend')
+
+
+@include('admin.ppm.tb_ppm')
+
 
 @section('content')
 @include('layouts.headers.cards')
-<div class="container-fluid mt--7 bg-color" style="margin-top: 20px !important;">
+<div class="container-fluid mt--7 bg-color" style="padding-top: 120px;">
     <breadcrumb list-classes="breadcrumb-links">
       <breadcrumb-item><a href="{{ url('admin') }}">Dashboard</a></breadcrumb-item> 
       <breadcrumb-item>/ Dokumen</breadcrumb-item> 
       <breadcrumb-item active>/ PPM</a></breadcrumb-item>
     </breadcrumb>
-    <div class="row">
-        <div class="col">
-            <div class="card shadow">
-                <div class="card-header bg-transparent text-center">
-                    <h1 class="">{{ __('Data Program Pelatihan Mandiri') }}</h1>
-                </div>
-                <div class="alert"></div>
-                <div class="card-body">
-                    <button id="btn-input-ppm" type="button" class="btn btn-outline-success btn-sm" data-toggle="modal" data-target="#formPpm" style="margin-left: 170px;margin-bottom: 20px;">{{ __('Tambah PPM') }}</button><br>
-                    <div class="col-md-10" style="float:none;margin:auto;">
+    
+    <div class="col-md-12 dashboard-bg-color">
+    <div class="card">
+        <div class="card-header"> 
+          <ul class="nav nav-tabs card-header-tabs" id="spt-list" role="tablist">
+            <!-- tab button -->
+            <li class="nav-item ml-auto">
+                <button id="btn-input-ppm" type="button" class="btn btn-outline-success btn-sm" data-toggle="modal" data-target="#formPpm" style="margin-bottom: 20px;">{{ __('Tambah PPM') }}</button>
+            </li>
 
-                        <!-- start tabel data ppm -->
-                        <div class="table-responsive">
-                            <table id="tabel-ppm" class="table table-striped table-sm ajax-table" style="border-collapse: collapse;margin: 0;padding: 0;width: 100%;">
-                                <thead></thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-                        <!-- end tabel -->
-
-                        <!-- starat js tabel pelatihan mandiri tanpa spt -->
-                        <script type="text/javascript">
-                            var table = $('#tabel-ppm').DataTable({        
-                                'pageLength': 10,
-                                dom: '<"col-md-12 row"<"col-md-6"B><"col"f>>rtlp',
-                                buttons:[ {extend:'excel', title:'Daftar SPT'}, {extend:'pdf', title:'Daftar SPT'} ],
-                                language: {
-                                    paginate: {
-                                      next: '&gt;', 
-                                      previous: '&lt;' ,
-                                    },
-                                },
-                                
-                                "opts": {
-                                  "theme": "bootstrap",
-                                },
-                                processing: true,
-                                serverSide: true,
-                                ajax: "{{ route('getdata_ppm') }}",
-                                /*deferRender: true,*/
-                                columns: [
-                                    {'defaultContent' : '', 'data' : 'DT_RowIndex', 'name' : 'DT_RowIndex', 'title' : 'No', 'orderable' : false, 'searchable' : false, 'exportable' : true, 'printable' : true
-                                    },
-                                    {data: 'kegiatan', name: 'kegiatan', 'title': "{{ __('Kegiatan') }}"},
-                                    {data: 'lama', name: 'lama', 'title': "{{ __('Lama') }}"},
-                                    {data: 'nota', name: 'nota', 'title': "{{ __('Nota Dinas') }}"},
-                                    {data: 'action', name: 'action', 'orderable': false, 'searchable': false, 'title': "{{ __('Action') }}", 'exportable' : false,'printable': false},
-                                ],        
-                                "order": [[ 1, 'asc' ]],
-                            });
-                        </script>
-                        <!-- end js -->
-
-                    </div>
-                </div>
-                    <div class="col-md-12">
-                        @include('admin.ppm.form_ppm')
-                    </div>
-            </div>
+          </ul>
         </div>
-    </div>
+        <div class="card-body">
+          <div class="tab-content mt-3">
+          <!-- content -->
+            @yield('content_ppm')
+            @include('admin.ppm.form_ppm')
+          </div>
+        </div>
+    </div>     
+  </div>
+
+  <script type="text/javascript">
+    $('#spt-list a').on('click', function (e) {
+      e.preventDefault()
+      $(this).tab('show')
+    });
+    //show the first tab
+    $('.nav-tabs a:first').tab('show')
+  </script>
+
 </div>
 
-@include('layouts.footers.auth')
+@yield('js_ppm')
 
+@include('layouts.footers.auth')
 @endsection
 @push('css')
     <link href="{{ asset('assets/vendor/selectize/css/selectize.bootstrap3.css') }}" rel="stylesheet" />

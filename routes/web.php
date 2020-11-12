@@ -340,6 +340,7 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
     	Route::post('session-anggota/store/ppm','PpmController@storePpmSessionAnggotaPpm')->name('store_session_anggota_ppm'); /*store session anggota ppm*/
     	// Route::post('ppm/store-detail-anggota','SptController@storePpmDetailAnggota')->name('store_detail_anggota_umum');
     	Route::delete('session/anggota/delete/{user_id}','PpmController@deleteSessionAnggotaPpm')->name('delete_session_anggota_ppm_by_id');
+    	Route::get('/get-ppm-byid/{id}','PpmController@getPpmByid')->name('getPpmById');
   		// Route::delete('session/anggota/umum/delete/{user_id}', 'SptController@deleteSessionAnggotaUmumItem')->name('delete_session_anggota_umum_by_id');
 		// Route::delete('delete-anggota-umum/{id}','SptController@deleteAnggotaUmum')->name('delete_anggota_umum');
     	// percobaan ppm tanpa datatable
