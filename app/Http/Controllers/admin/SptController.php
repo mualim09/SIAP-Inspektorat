@@ -623,7 +623,7 @@ class SptController extends Controller
                     $return = "";
                     if( !is_null($col->nomor) && auth()->user()->hasAnyRole(['TU Umum', 'Super Admin'])){
                         if(!is_null($col->file) || $col->file != ""){
-                            $return .= '<a href="'.$col->file.'" data-toggle="tooltip" title="Scan SPT" class="btn btn-outline-primary btn-sm" target="__blank"><i class="ni ni-paper-diploma"></i><span>Download</span></a>';
+                            $return .= '<a href="'.url('/storage/spt/'.$col->file).'" data-toggle="tooltip" title="Scan SPT" class="btn btn-outline-primary btn-sm" target="__blank"><i class="ni ni-paper-diploma"></i><span>Download</span></a>';
                             // $return .= 'button download';
                         }else{
                             $return .= '<a href="#" data-toggle="tooltip" title="Download SPT" class="btn btn-outline-danger btn-sm disabled" ><i class="ni ni-paper-diploma"></i><span>Download</span></a>';
@@ -1010,7 +1010,7 @@ class SptController extends Controller
                     $return = "";
                     if( !is_null($col->nomor) ){
                         if(!is_null($col->file) || $col->file != ""){
-                            $return .= '<a href="'.$col->file.'" data-toggle="tooltip" title="Scan SPT" class="btn btn-outline-primary btn-sm" target="__blank"><i class="ni ni-paper-diploma"></i><span>Download</span></a>';
+                            $return .= '<a href="'.url('/storage/spt/'.$col->file).'" data-toggle="tooltip" title="Scan SPT" class="btn btn-outline-primary btn-sm" target="__blank"><i class="ni ni-paper-diploma"></i><span>Download</span></a>';
                         }else{
                             $return .= '<a href="#" data-toggle="tooltip" title="Scan SPT" class="btn btn-outline-danger btn-sm disabled" ><i class="ni ni-paper-diploma"></i><span>Download</span></a>';
                             if( auth()->user()->hasAnyRole(['TU Umum', 'Super Admin']) ){
@@ -1075,7 +1075,7 @@ class SptController extends Controller
                 }
                 $request->file_spt->move(public_path()."/storage/spt" , $filename);
             }
-            $spt->file = ($filename !== null ) ? url('/storage/spt/'.$filename) : null;
+            $spt->file = ($filename !== null ) ? $filename : null;
             $spt->nomor = $request->nomor;
             $spt->tgl_register = date('Y-m-d H:i:s',strtotime($request->tgl_register));
 
@@ -1093,15 +1093,16 @@ class SptController extends Controller
         }else{
 
             $spt = SptUmum::findOrFail($id_umum);
-            $filename = ($request->file_spt_umum) ? 'SPT-' . $id . '-' . $request->file_spt_umum->getClientOriginalName() : null ;
+            $filename = ($request->file_spt_umum) ? 'SPT-UMUM-' . $id_umum . '-' . $request->file_spt_umum->getClientOriginalName() : null ;
             //dd(storage_path()."/spt");
             if($filename !== null ){
-                if (! File::exists(public_path()."/storage/spt-umum")) {
-                    File::makeDirectory(public_path()."/storage/spt-umum", 0755, true);
+                if (! File::exists(public_path()."/storage/spt")) {
+                    File::makeDirectory(public_path()."/storage/spt", 0755, true);
                 }
-                $request->file_spt_umum->move(public_path()."/storage/spt-umum" , $filename);
+                $request->file_spt_umum->move(public_path()."/storage/spt" , $filename);
             }
-            $spt->file = ($filename !== null ) ? url('/storage/spt-umum/'.$filename) : null;
+            //$spt->file = ($filename !== null ) ? url('/storage/spt-umum/'.$filename) : null;
+            $spt->file = ($filename !== null ) ? $filename : null;
             $spt->nomor = $request->nomor;
             $spt->tgl_register = date('Y-m-d H:i:s',strtotime($request->tgl_register));
 
@@ -1361,7 +1362,7 @@ class SptController extends Controller
             }
             $request->scan_file_spt_umum->move(public_path()."/storage/spt" , $filename);
         }
-        $spt->file = ($filename !== null ) ? url('/storage/spt/'.$filename) : null;
+        $spt->file = ($filename !== null ) ? $filename : null;
         $spt->save();
         return 'Updated';
     }
