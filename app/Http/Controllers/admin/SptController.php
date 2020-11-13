@@ -311,13 +311,11 @@ class SptController extends Controller
     }
 
     public function storeDetailAnggota(Request $request){
-        $cek = DetailSpt::where('spt_id', $request->spt_id)->where('user_id', $request->user_id)->count();
-        //user_id:user_id, peran:peran, spt_id:id_spt, tgl_mulai: tgl_mulai, tgl_akhir:tgl_akhir
+        /*$cek = DetailSpt::where('spt_id', $request->spt_id)->where('user_id', $request->user_id)->count();        
         if($cek>0):
             return 'User sudah ada dalam list anggota';
         else:
-            $spt = Spt::where('id',$request->spt_id)->first();
-            //dd($spt);
+            $spt = Spt::where('id',$request->spt_id)->first();            
             $unsur_dupak = 'pengawasan';
             $start =$spt->tgl_mulai;
             $end = $spt->tgl_akhir;
@@ -327,15 +325,31 @@ class SptController extends Controller
                     'spt_id' => $request->spt_id,
                     'user_id' => $request->user_id,
                     'peran' => Common::cleanInput($request->peran),
-                    'unsur_dupak' => $unsur_dupak,
-                    //'dupak' => $this->hitungDupak($anggota['user_id'],$anggota['peran'],$lama,$isLembur)
+                    'unsur_dupak' => $unsur_dupak,                    
                 ]);
             if($store){
                 return 'Anggota SPT berhasil ditambahkan';
             }else{
                 return 'Gagal menambahkan anggota SPT!';
             }
-        endif;
+        endif;*/
+        $spt = Spt::where('id',$request->spt_id)->first();            
+        $unsur_dupak = 'pengawasan';
+        $start =$spt->tgl_mulai;
+        $end = $spt->tgl_akhir;
+        $lama = $spt->lama;
+        $counter = array();
+        $store = DB::table('detail_spt')->insertGetId([
+                'spt_id' => $request->spt_id,
+                'user_id' => $request->user_id,
+                'peran' => Common::cleanInput($request->peran),
+                'unsur_dupak' => $unsur_dupak,                    
+            ]);
+        if($store){
+            return 'Anggota SPT berhasil ditambahkan';
+        }else{
+            return 'Gagal menambahkan anggota SPT!';
+        }
     }
 
     public function updateUmum(Request $request){
@@ -574,6 +588,7 @@ class SptController extends Controller
                     if($col->nomor == null){
                         $return .= $this->buildControl('penomoran', $col->id);
                         $return .= $this->buildControl('cetakPdf',$col->id);
+                        $return .= $this->buildControl('docx',$col->id);
                         $return .= $this->buildControl('editForm',$col->id);
                         $return .= $this->buildControl('deleteData',$col->id);
                     }
@@ -692,6 +707,10 @@ class SptController extends Controller
         if($user->hasAnyRole(['TU Umum', 'Super Admin']) && $method == 'deleteAnggotaUmum'){
             $control = '<a href="javascript:void(0);" onclick="deleteAnggotaUmum('. $id .')" class="btn btn-outline-danger btn-sm"><i class="fa fa-times"></i></a>';
         }
+        if($user->hasAnyRole(['TU Perencanaan', 'Super Admin']) && $method == 'docx'){
+            $control = '<a href="'.route('spt_docx',$id).'" class="btn btn-outline-primary btn-sm" title="Download word e-buddy"><i class="fas fa-file-word"></i></a>';
+        }
+
 
 
         return $control;
@@ -731,8 +750,8 @@ class SptController extends Controller
         $sort_detail = implode(",",$this->list_peran);
         $detail_spt = DetailSpt::where('spt_id','=',$id)->with(['spt','user'])
             ->orderByRaw(DB::raw("FIELD(peran,'Penanggungjawab', 'Pembantu Penanggungjawab', 'Pengendali Mutu', 'Pengendali Teknis', 'Ketua Tim', 'Anggota Tim')"))->get();
-        $template_name = (File::exists(storage_path("spt/template-spt.docx"))) ? storage_path('spt\template-spt.docx') : 'tidak ada'; // default template name
-        //dd($template_name);
+        $template_name = (File::exists(storage_path("spt/template-spt.docx"))) ? storage_path('spt\template-spt.docx') : 'tidak ada'; // default template name        
+        $phpWord = new \PhpOffice\PhpWord\PhpWord();
         $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($template_name);
         $default_font = [
             'name'=>'arial',
@@ -741,89 +760,72 @@ class SptController extends Controller
 
         //setup variabel
         $dasar_spt = array_filter(explode("\n",strip_tags($spt->jenisSpt->dasar))); //explode by new line (ENTER)
-/*        $values = [
-    ['userId' => 1, 'userName' => 'Batman', 'userAddress' => 'Gotham City'],
-    ['userId' => 2, 'userName' => 'Superman', 'userAddress' => 'Metropolis'],
-];*/
+        $lanjutan = ($spt->info_lanjutan !== 'undefined') ? 'lanjutan' : '';
+        $lokasi = ($spt->jenisSpt->input_lokasi == true) ? 'di '.$spt->lokasi_spt.' Kabupaten Sidoarjo.' : '';
+        $tambahan = ($spt->jenisSpt->inputTambahan == true) ? $spt->tambahan : '';
 
-/*$table->addRow();
-$table->addCell(150)->addText('Cell A1');
-$table->addCell(150)->addText('Cell A2');
-$table->addCell(150)->addText('Cell A3');
-$table->addRow();
-$table->addCell(150)->addText('Cell B1');
-$table->addCell(150)->addText('Cell B2');
-$table->addCell(150)->addText('Cell B3');
-$templateProcessor->setComplexBlock('table', $table);*/
+        //setup dasar spt perceraian
+        preg_match_all('/(?P<izin>(?<=izin:)(.*))/', $spt->jenisSpt->dasar, $izin);
+        preg_match_all('/(?P<ket>(?<=keterangan:)(.*))/', $spt->jenisSpt->dasar, $ket);
+        if( isset(($izin['izin'])) && count($izin['izin'])>0){
+            $dasar_spt = $izin['izin'][0];            
+        }
+        if( isset(($ket['ket'])) && count($ket['ket'])>0){
+            $dasar_spt = $ket['ket'][0];            
+        }
+        $izin_cerai = ( isset(($matches['izin'])) && count($izin['izin'])>0 ) ? 'pemeriksaan guna menyelesaikan Permohonan Izin melakukan  Perceraian' : '';
+        $keterangan_cerai = ( isset(($matches['ket'])) && count($ket['ket'])>0 ) ? 'pemeriksaan atas terjadinya' : '';
+
+        //setup block dasar SPT
         $tabel_dasar = new Table();
-        $dasar = array();
-        if(count($dasar_spt)>1){
-            //$table = new PhpOffice\PhpWord\Element\Table()
+        $n = 1;
+        if( is_array($dasar_spt) && count($dasar_spt)>1){                     
             foreach($dasar_spt as $i=>$dasar2){
-                //$i = $i+1;
                 $tabel_dasar->addRow();
-                $tabel_dasar->addCell(30)->addText(++$i, $default_font);
-                $tabel_dasar->addCell()->addText($dasar2, $default_font);
+                if($i==0){
+                    $tabel_dasar->addCell(900)->addText('Dasar', $default_font);
+                    $tabel_dasar->addCell(100)->addText(':', $default_font);
+                }else{
+                    $tabel_dasar->addCell(900)->addText('', $default_font);
+                    $tabel_dasar->addCell(100)->addText('', $default_font);
+                }
+                $tabel_dasar->addCell(300)->addText(++$i, $default_font); //nomer
+                $tabel_dasar->addCell(7700)->addText($dasar2, $default_font);
             }
         }else{
            $tabel_dasar->addRow();
-           $tabel_dasar->addCell()->addText($spt->jenisSpt->dasar, $default_font);
+           $tabel_dasar->addCell(900)->addText('Dasar', $default_font);
+           $tabel_dasar->addCell(100)->addText(':', $default_font);
+           $tabel_dasar->addCell(8000)->addText($dasar_spt, $default_font);
         }
         $templateProcessor->setComplexBlock('dasar', $tabel_dasar);
 
-        /*//generating docx
-        $phpWord = new \PhpOffice\PhpWord\PhpWord();
-        $phpWord->setDefaultParagraphStyle(
-            array(
-                'align'      => 'both',
-                'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0),
-                'spacing'    => 1,
-            )
-        );
-        $phpWord->setDefaultFontName('Arial');
-        $phpWord->setDefaultFontSize(12);
-        $section = $phpWord->addSection();
+        //setup block anggota
+        $tabel_anggota = new Table();        
+        foreach($detail_spt as $i=>$detail){
+            $tabel_anggota->addRow();
+            if($i==0){
+                $tabel_anggota->addCell(1000)->addText('Kepada', $default_font);
+            }else{
+                $tabel_anggota->addCell(1000)->addText('', $default_font);
+            }
+            $tabel_anggota->addCell(300)->addText(++$i, $default_font);
+            $tabel_anggota->addCell(4000)->addText($detail->user->full_name_gelar, $default_font);
+            $tabel_anggota->addCell(3700)->addText($detail->peran, $default_font);
+        }
+        $templateProcessor->setComplexBlock('anggota', $tabel_anggota);
 
-        //fontstyle
-        $phpWord->addFontStyle('bold_kop',[
-            'bold' => true,
-            'size' => 14
-        ]);
-        $phpWord->addFontStyle('default_kop',[
-            'name'=>'arial',
-            'size'=>12
-        ]);
-        $phpWord->addTableStyle('drawBorder', array('borderBottomSize'=>5, 'borderBottomColor'=>'000000'));
-        $lineStyle = [
-            'width'       => \PhpOffice\PhpWord\Shared\Converter::cmToPixel(16),
-            'height'      => \PhpOffice\PhpWord\Shared\Converter::cmToPixel(0),
-            'positioning' => 'absolute',
-            'weight'      => 2,
-            'flip'        => true,
-            'height'      => 1,
-        ];
+        $templateProcessor->setValue('izin_cerai', $izin_cerai);
+        $templateProcessor->setValue('keterangan_cerai', $keterangan_cerai);
         
-        //kop surat
-        $table_kop = $section->addTable();
-        $table_kop->addRow();
-        $kopImage = $table_kop->addCell(3000);
-        $kopImage->addImage( asset('assets/img/brand/logo_dinas_bw.png'), array('width' => 80, 'height' => 80, 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER) );
-        $kopImage->addText(' ',['size'=>8]);//empty text
-        $kopText =  $table_kop->addCell(6000);
-        $kopText->addText('PEMERINTAH KABUPATEN SIDOARJO', 'default_kop', array('align'=>'center'));
-        $kopText->addText('INSPEKTORAT DAERAH', 'bold_kop', array('align'=>'center'));
-        $kopText->addText('Jalan. Untung Suropati No. 10',['size'=>10],['align'=>'center']);
-        $kopText->addText('Telepon (031) 8948163 ; Fax. (031) 99010187',['size'=>10],['align'=>'center']);
-        $kopText->addText('S I D O A R J O - 61218',['size'=>10],['align'=>'center']);
-        $kopText->addText('Email : inspektorat@sidoarjokab.go.id Website : inspektorat.sidoarjokab.go.id',['size'=>8],['align'=>'center']);
-        $kopText->addText(' ',['size'=>8]);
-        //$section->addLine(['weight'=>4,'flip'=>true]);
-        $section->addLine($lineStyle);        
-       */
-
-        
-       /* $docx = PDF::loadView('admin.laporan.spt.'.$template_name, compact('spt','detail_spt'))->setPaper([0,0,583.65354,877.03937],'portrait'); //setpaper = ukuran kertas custom sesuai dokumen word dari mbak ita
-        return @$pdf->stream('SPT-'.$id.'.pdf',array('Attachment'=>1));*/
+        $templateProcessor->setValue('lanjutan', $lanjutan);
+        $templateProcessor->setValue('nama_jenis_spt',$spt->jenisSpt->name);
+        $templateProcessor->setValue('lokasi',$lokasi);
+        $templateProcessor->setValue('tambahan',$tambahan);
+        $templateProcessor->setValue('lama_hari',$spt->lama_hari);
+        $templateProcessor->setValue('periode',$spt->periode);               
+       
+        //setup download
         $file = 'SPT-'.$id.'-'.time().'.docx';
         header("Content-Description: File Transfer");
         header('Content-Disposition: attachment; filename="' . $file . '"');
@@ -831,7 +833,7 @@ $templateProcessor->setComplexBlock('table', $table);*/
         header('Content-Transfer-Encoding: binary');
         header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
         header('Expires: 0');
-        $templateProcessor->saveAs('php://output');
+        $templateProcessor->saveAs('php://output'); //direct download
        // $xmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($templateProcessor, 'Word2007');
         //ob_clean();
         //$xmlWriter->save("php://output");
@@ -1781,7 +1783,8 @@ $templateProcessor->setComplexBlock('table', $table);*/
                 array_push($anggota_uid, $a['user_id']);
             }
 
-            if(in_array($uid,$anggota_uid)){
+            //SPT bisa input double anggota, dikommen
+            /*if(in_array($uid,$anggota_uid)){
                 return "User sudah ada dalam list anggota";
             }else{
                 $session = Session::push('anggota', [
@@ -1789,7 +1792,13 @@ $templateProcessor->setComplexBlock('table', $table);*/
                     'peran'   => $request->peran
                 ]);
                 return "Session anggota updated";
-            }
+            }*/
+
+            $session = Session::push('anggota', [
+                    'user_id'    => $request->user_id,
+                    'peran'   => $request->peran
+                ]);
+            return "Session anggota updated";
 
         }else{
             $session = Session::push('anggota', [
