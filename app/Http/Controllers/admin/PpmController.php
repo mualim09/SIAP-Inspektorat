@@ -15,9 +15,10 @@ use App\models\FileMedia;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+// use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\View;
 use Config, File;
-use Illuminate\Support\Facades\Input;
+//use Illuminate\Support\Facades\Input;
 
 class PpmController extends Controller
 {
@@ -94,17 +95,13 @@ class PpmController extends Controller
      */
     public function storePpm(Request $request)
     {
-        // dd($request->file_nota_dinas);
         // return 'fungsi berjalan '; /*jalan*/
         $user = auth()->user();
         $this->validate($request, [
-            'jenis_ppm' => 'required',
-            // 'lokasi_umum_id' => 'nullable',
             'kegiatan_ppm'=> 'required',
             'tgl_mulai_ppm'=>'required|date_format:"d-m-Y"',
             'tgl_akhir_ppm' =>'required|date_format:"d-m-Y"|after_or_equal:tgl_mulai_ppm',
             'lama_ppm' => 'required|integer'
-            // 'info_dasar_umum'=> 'required'
             ]
         );
 
@@ -117,22 +114,20 @@ class PpmController extends Controller
             // 'lokasi_id' => $request['lokasi_umum_id'],
             'lama' => $request['lama_ppm'],
             'jenis_ppm' => Common::cleanInput($request['jenis_ppm']),
-            // 'nota_dinas' => 'isinya url file',
         ];
 
         // dd($data);
         // die();
-
-        // $file = json_encode();
         $ppm = Ppm::create($data);
         if($ppm) {
-            $this->storeDetailPpm($ppm->id, $ppm->lama, $request->file_nota_dinas)  ;
+            $this->storeDetailPpm($ppm->id, $ppm->lama);
+            $this->storeNotaDinas($ppm->id, $request->file_nota_dinas);
 
             return $ppm;
         }
     }
 
-    public function storeDetailPpm($ppm_id,$lama,$file)
+    public function storeDetailPpm($ppm_id,$lama)
     {
         // dd($request);
         $ppm = Ppm::find($ppm_id);
@@ -142,8 +137,6 @@ class PpmController extends Controller
         $end = $ppm->tgl_akhir;
         $lama = $ppm->lama;
         $counter = array();
-        $file_nota_dinas = $file;
-        // dd($file_nota_dinas);
 
         if(Session::has('anggota_ppm'))
         {
@@ -175,43 +168,28 @@ class PpmController extends Controller
             }
             $this->clearSessionAnggotaPpm();
         }
+        return;
+    }
 
-        // NOTE : masih error untuk upload file 
-        // proses update nota dinas
-        $filename = ($file_nota_dinas) ? 'Nota Dinas-' . $ppm->id . '-' . $file_nota_dinas->getClientOriginalName() : null ;
+    // fungsi upload file nota dinas 
+    public function storeNotaDinas($ppm_id,$file)
+    {
+        $ppm = Ppm::find($ppm_id);
+
+        $filename = ($file) ? 'Nota Dinas-' . $ppm->id . '-' . $file->getClientOriginalName() : null ;
         // if($filename !== null ) $request->file_spt->move(public_path('storage\files') , $filename);
         if($filename !== null ){
             if (! File::exists(public_path()."/storage/ppm")) {
                 File::makeDirectory(public_path()."/storage/ppm", 0755, true);
             }
-            $request->file_spt->move(public_path()."/storage/ppm" , $filename);
+            $file->move(public_path()."/storage/ppm" , $filename);
         }
-        //$spt->file = ($filename !== null ) ? url('/storage/spt/'.$filename) : null;
-        $ppm->nota_dinas = ($filename !== null ) ? $filename : null;
+        $ppm->nota_dinas = ($filename !== null ) ? url('/storage/spt/'.$filename) : null;
+        $ppm->nama_file = ($filename !== null ) ? $filename : null;
         $ppm->save();
-        // return 'Updated';
-        return;
+        return 'Updated';
     }
-    
-    // public function uploadScanSpt(Request $request){
-    //     //metode sama seperti updateNomorSpt, namun hanya untuk upload file spt saja.
-
-    //     $id = $request->spt_id;
-    //     $spt = Spt::findOrFail($id);
-
-    //     $filename = ($request->file_spt) ? 'SPT-' . $id . '-' . $request->file_spt->getClientOriginalName() : null ;
-    //     //if($filename !== null ) $request->file_spt->move(public_path('storage\files') , $filename);
-    //     if($filename !== null ){
-    //         if (! File::exists(public_path()."/storage/spt")) {
-    //             File::makeDirectory(public_path()."/storage/spt", 0755, true);
-    //         }
-    //         $request->file_spt->move(public_path()."/storage/spt" , $filename);
-    //     }
-    //     //$spt->file = ($filename !== null ) ? url('/storage/spt/'.$filename) : null;
-    //     $spt->file = ($filename !== null ) ? $filename : null;
-    //     $spt->save();
-    //     return 'Updated';
-    // }
+    // end fungsi
 
     public function clearSessionAnggotaPpm(){
         Session::forget('anggota_ppm');

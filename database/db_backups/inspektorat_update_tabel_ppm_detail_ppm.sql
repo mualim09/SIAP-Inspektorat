@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Nov 12, 2020 at 09:40 AM
+-- Generation Time: Nov 16, 2020 at 05:54 AM
 -- Server version: 5.7.28
 -- PHP Version: 7.3.12
 
@@ -57,6 +57,7 @@ CREATE TABLE IF NOT EXISTS `ppm` (
   `lama` int(11) NOT NULL,
   `jenis_ppm` varchar(50) DEFAULT NULL,
   `nota_dinas` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `nama_file` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 COMMIT;

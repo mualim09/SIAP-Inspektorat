@@ -11,7 +11,7 @@
             </div>
             
             <div class="modal-body">
-            <form id="form-ppm" enctype="multipart/form-data" method="POST">
+            <form id="form-ppm" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="id_ppm" id="id-ppm">
                 <input type="hidden" name="unsur_ppm" id="unsur-ppm" value="Pengembangan Profesi">
@@ -93,9 +93,12 @@
 
                 <!-- start upload note dinas ppm -->
                 <div class="form-group row">                    
-                    <label for="lama-ppm" class="col-md-2 col-form-label">{{ __('Upload File') }}</label>
+                    <label for="nota-dinas-ppm" class="col-md-2 col-form-label">{{ __('Upload File') }}</label>
                     <div class="col-md-8">                      
-                        <input type="file" class="form-control" name="nota_dinas" id="id-nota-dinas" placeholder="{{ __('Lama')}}">                      
+                        <!-- <input type="file" class="form-control" name="nota_dinas" id="id-nota-dinas"> -->
+                        <!-- <input type="file" class="form-control nota_dinas" id="id-nota-dinas" name="nota_dinas"> -->
+                        <!-- <input type='file' id="id-nota-dinas" name='nota_dinas' multiple/> -->
+                         <input type="file" id="file-nota-dinas" name="nota_dinas" accept=".pdf">
                     </div>                  
                 </div>
                 <!-- end upload note dinas ppm -->
@@ -103,7 +106,7 @@
                 <!-- start submit ppm -->
                 <div class="form-group">
                      <div class="col">
-                         <button type="submit" class="btn btn-primary offset-md-2">
+                         <button type="submit" class="btn btn-primary offset-md-2 submit-ppm">
                              {{ __('Submit') }}
                          </button>
                      </div>
@@ -322,13 +325,14 @@ function function_ppm(user_id){
     
 // // });
 
+
 $("#form-ppm").validate({
-        rules: {
+        /*rules: {
             jenis_ppm : {required: true},
             tgl_mulai_ppm : {required: true},
             tgl_akhir_ppm : {required: true},
 
-        },
+        },*/
 
         submitHandler: function(form){
             var jenis_ppm = $("#unsur-ppm").val();
@@ -336,33 +340,35 @@ $("#form-ppm").validate({
             var tgl_mulai_ppm = $("#tgl-mulai-ppm").val();
             var tgl_akhir_ppm = $("#tgl-akhir-ppm").val();
             var lama_ppm = $('#lama-ppm').val();
-            var file_nota_dinas = document.getElementById('id-nota-dinas').value;
-            
+            var file_nota_dinas = $('#file-nota-dinas').val();/*document.getElementById('id-nota-dinas').value;*/
+
+            // console.log(file_nota_dinas);
             var id = $('#id-ppm').val();
             save_method_ppm = (id == '') ? 'new' : save_method_ppm;
             var url_prefix = (window.location.pathname == '/admin' || window.location.pathname == '/public/admin') ? 'admin/ppm/' : 'ppm/';
             //url =  (save_method == 'new') ? "{{ route('spt.store') }}" : base_url + '/' + id ;
             url = (save_method_ppm == 'new') ? "{{ route('store_ppm') }}" : '' ;/*edit masih blm*/
             method = (save_method_ppm == 'new') ? "POST" : "PUT";
-            type = "POST";            
-            
+            type = "POST";
+            var formData = new FormData($(form)[0]);
 
             $.ajax({
                 url: url,
                 type: type,
-                data: {jenis_ppm:jenis_ppm, tgl_mulai_ppm:tgl_mulai_ppm, tgl_akhir_ppm:tgl_akhir_ppm, lama_ppm:lama_ppm, kegiatan_ppm:kegiatan_ppm, file_nota_dinas:file_nota_dinas, _method: method},
-
+                data: formData,
+                processData: false,
+                contentType: false,
                 success: function(data){
-                    console.log(data);
-                    // $("#form-ppm")[0].reset();
-                    // $('#tabel-ppm').DataTable().ajax.reload();
-                    // $('#form-session-anggota-ppm')[0].reset();
-                    // // location.reload();
-                    // $('#tabel-anggota-ppm-wrapper').html(data);
-                    // $('#formPpm').modal('hide');
+                    // console.log('success:',data);
+                    $("#form-ppm")[0].reset();
+                    $('#tabel-ppm').DataTable().ajax.reload();
+                    $('#form-session-anggota-ppm')[0].reset();
+                    location.reload();
+                    $('#tabel-anggota-ppm-wrapper').html(data);
+                    $('#formPpm').modal('hide');                   
                 },
-                error: function(error){
-                    console.log(error);
+                error: function(request, status, error){                      
+                  console.log(request);
                 }
             });
         }
