@@ -132,9 +132,13 @@
                       <div class="clearfix page-break"></div>
 
                       <div id="dupak-diklat" class="tab-pane fade" role="tabpanel" style="margin-bottom: 30px; page-break-after: always;">
-                        <div class="table-responsive " id="dupak-diklat-wrapper">
-                            <!-- <table class="table table-sm table-bordered ajax-table col-print-12" id="dupak-penunjang-table">
-                            </table> -->
+                        <div class="table-responsive " id="dupak-diklat-wrapper">                            
+                        </div>
+                      </div>
+                      <div class="clearfix page-break"></div>
+
+                      <div id="dupak-lak" class="tab-pane fade" role="tabpanel" style="margin-bottom: 30px; page-break-after: always;">
+                        <div class="table-responsive " id="dupak-lak-wrapper">                            
                         </div>
                       </div>
                       <!-- <div class="clearfix page-break"></div> -->

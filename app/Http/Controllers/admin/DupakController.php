@@ -384,5 +384,64 @@ class DupakController extends Controller
         //getDupakPenunjang
     }
 
+    public function getLak(Request $request){
+        $user_id = ($request->user_id) ? $request->user_id : auth()->user()->id;
+        $year = ($request->tahun) ? $request->tahun : date('Y');
+        if(isset($request->semester)) {
+            if($request->semester == 1) {
+                $start = date("Y-m-d H:i:s", strtotime("$year-01-01"));
+                $end = date("Y-m-d H:i:s", strtotime("$year-06-30"));
+            }
+            elseif ($request->semester == 2) {
+                $start = date("Y-m-d H:i:s", strtotime("$year-07-01"));
+                $end = date("Y-m-d H:i:s", strtotime("$year-12-31"));
+            }else{
+                return response('Pilih periode semester terlebih dahulu.', 401);
+            }
+        }else{
+            $start = ( date('n')<=6 ) ? date("Y-m-d H:i:s", strtotime("$year-01-01")) : date("Y-m-d H:i:s", strtotime("$year-07-01"));
+            $end = ( date('n')<=6 ) ? date("Y-m-d H:i:s", strtotime("$year-06-30")) : date("Y-m-d H:i:s", strtotime("$year-12-31"));
+        }
+
+        //setup array variabel dupak
+        $dupak = [];
+
+        //user dupak
+        $dupak['user'] = User::where('id',$user_id)->first();
+
+        //dupak pendidikan
+        $q = Dupak::where('user_id', $user_id)->where('unsur_dupak','pendidikan');
+        if($q->count()>1){
+            $pendidikan = $q->where('status','baru');
+        }else{
+            $pendidikan = $q;
+        }
+        $dupak['pendidikan'] = $pendidikan->get();
+
+        //dupak diklat
+        $diklat = DetailSpt::whereHas('sptUmum', function($q) use ($start, $end){
+            $q->whereBetween('tgl_mulai',[$start,$end])->whereNotNull('nomor');
+        })->with('sptUmum')
+        ->where('unsur_dupak','=','diklat')->where('user_id','=',$user_id)->get();
+        $dupak['diklat'] = $diklat;
+
+        //dupak pengawasan
+        $pengawasan = DetailSpt::whereHas('spt', function($q) use ($start, $end){
+            $q->whereBetween('tgl_mulai',[$start,$end])->whereNotNull('nomor');
+        })->with('spt')
+        ->where('unsur_dupak','=','pengawasan')->where('user_id','=',$user_id)->get();
+        $dupak['pengawasan'] = $pengawasan;
+
+        //dupak penunjang
+        $penunjang = DetailSpt::whereHas('sptUmum', function($q) use ($start, $end){
+            $q->whereBetween('tgl_mulai',[$start,$end])->whereNotNull('nomor');
+        })->with('sptUmum')
+        ->where('unsur_dupak','=','penunjang')->where('user_id','=',$user_id)->get();
+        $dupak['penunjang'] = $penunjang;
+
+        return $dupak;
+        
+    }
+
 
 }
