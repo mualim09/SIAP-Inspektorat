@@ -16,6 +16,6 @@ class DetailPpm extends Model
     }
 
     public function ppm(){
-        return $this->belongsTo('App\models\Ppm');
+        return $this->belongsTo('App\models\Ppm','id_ppm');
     }
 }
