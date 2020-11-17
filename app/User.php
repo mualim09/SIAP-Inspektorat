@@ -133,4 +133,8 @@ class User extends Authenticatable implements HasMedia
         return $query;
     }
 
+    public function detailPpm(){
+        return $this->belongsTo('App\models\DetailPpm');
+    }
+
 }

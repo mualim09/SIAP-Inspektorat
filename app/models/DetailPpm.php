@@ -10,4 +10,12 @@ class DetailPpm extends Model
     protected $table = 'detail_ppm';
     protected $appends = [];
   	public $timestamps = false;
+
+  	public function users(){
+    	return $this->hasMany('App\User');
+    }
+
+    public function ppm(){
+        return $this->belongsTo('App\models\Ppm');
+    }
 }

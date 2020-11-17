@@ -11,4 +11,8 @@ class Ppm extends Model
     protected $table = 'ppm';
     protected $appends = [];
   	public $timestamps = false;
+
+  	public function detailPpm(){
+        return $this->hasMany('App\models\DetailPpm');
+    }
 }
