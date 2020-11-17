@@ -1083,6 +1083,7 @@ class SptController extends Controller
         }
     }
 
+    //remove ZZZ to enable
     public function updateNomorSpt(Request $request){
         $spt_umum = $request->jenis_spt_umum;
         switch ($request->jenis_spt_umum) {
@@ -1254,6 +1255,30 @@ class SptController extends Controller
             return $spt;
         }
         return false;
+    }
+
+    //test retrieve nomor spt from pdf file
+    public function updateNomorSptTest(Request $request){
+        $id = $request->spt_id;
+        $spt = Spt::findOrFail($id);
+        $filename = ($request->file_spt) ? $request->file_spt->getClientOriginalName().time() : null ;
+        //dd(storage_path()."/spt");
+        if($filename !== null ){
+            if (! File::exists(public_path()."/storage/spt")) {
+                File::makeDirectory(public_path()."/storage/spt", 0755, true);
+            }
+            $request->file_spt->move(public_path()."/storage/spt" , $filename);
+        }
+        $spt->file = ($filename !== null ) ? $filename : null;
+        //$spt->nomor = $request->nomor;
+        //$spt->tgl_register = date('Y-m-d H:i:s',strtotime($request->tgl_register));D:\app\inspektorat\storage\app\public\spt D:\app\inspektorat\storage\storage/app/public/spt/tgr.pdf
+        $parser = new \Smalot\PdfParser\Parser();
+        $pdf    = $parser->parseFile(storage_path("app/public/spt/$filename"));
+ 
+$text = $pdf->getText();
+
+preg_match('/\/(.*?)\//', $text, $match);
+dd($match);
     }
 
     public function detailKuota($user_id, $tgl_mulai, $tgl_akhir){

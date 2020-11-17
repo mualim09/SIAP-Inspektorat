@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\models\Spt, App\models\DetailSpt, App\models\Dupak, App\User;
+use App\models\Ppm, App\models\DetailPpm;
 use DB, Yajra\DataTables\DataTables, PDF;
 use Redirect,Response;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -438,6 +439,18 @@ class DupakController extends Controller
         })->with('sptUmum')
         ->where('unsur_dupak','=','penunjang')->where('user_id','=',$user_id)->get();
         $dupak['penunjang'] = $penunjang;
+
+        //dupak pengembangan profesi
+        $pengembangan = DetailSpt::whereHas('sptUmum', function($q) use ($start, $end){
+            $q->whereBetween('tgl_mulai',[$start,$end])->whereNotNull('nomor');
+        })->with('sptUmum')
+        ->where('unsur_dupak','=','pengembangan profesi')->where('user_id','=',$user_id)->get();
+        $ppm = DetailPpm::whereHas('ppm', function($q) use ($start, $end){
+            $q->whereBetween('tgl_mulai',[$start,$end]);
+        })->with('ppm')
+        ->where('unsur_dupak','=','pengembangan profesi')->where('user_id','=',$user_id)->get();
+        $pengembangan->concat($ppm);
+        $dupak['pengembangan'] = $pengembangan;
 
         return $dupak;
         

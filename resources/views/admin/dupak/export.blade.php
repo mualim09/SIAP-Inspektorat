@@ -80,7 +80,7 @@ function add_cell_to_sheet(worksheet, address, value) {
       //No	Uraian Sub Unsur  class="col-print-th"
       var table = '<table class="table table-sm table-bordered ajax-table col-print-12 table-print-border" id="dupak-pendidikan-table">';
 
-          table += '<tr>'
+          table += '<tr style="background: #ccc; text-align: center">'
               +'<th>No.</th>'
               +'<th>Uraian Sub Unsur</th>'
               +'<th>Butir Kegiatan</th>'
@@ -94,7 +94,7 @@ function add_cell_to_sheet(worksheet, address, value) {
               +'<td>' + n + '</td>'
               +'<td>' + item.user_dupak.pendidikan.tingkat + '</td>'
               +'<td>' + item.user_dupak.pendidikan.jurusan + '</td>'
-              +'<td>'+ item.dupak +'</td>'
+              +'<td style="text-align: center">'+ item.dupak +'</td>'
               +'<td></td>'
               '</tr>';
           dupak = item.dupak++;
@@ -133,7 +133,7 @@ function add_cell_to_sheet(worksheet, address, value) {
         var header = generate_header(response, 'pengawasan');
 	    	var table = '<table class="table table-sm table-bordered ajax-table col-print-12 table-print-border" id="dupak-pengawasan-table">';
 
-              table += '<tr align="center">'
+              table += '<tr style="background: #ccc; text-align: center">'
 	              +'<th rowspan="2">No.</th>' //1
 	              +'<th colspan="2">Uraian Kegiatan</th>' //2
 	              +'<th rowspan="2" colspan="2">Tgl Jml Hari Efektif</th>' //3
@@ -142,12 +142,12 @@ function add_cell_to_sheet(worksheet, address, value) {
 	              +'<th rowspan="2">Jumlah AK</th>'
 	              +'<th rowspan="2">Keterangan</th>'
               +'</tr>'
-              +'<tr align="center">'
+              +'<tr style="background: #ccc; text-align: center">'
               	  +'<th>Kode</th>'
               	  +'<th>Kegiatan</th>'
               +'</tr>'
               //nomor tabel
-              +'<tr align="center">'
+              +'<tr style="background: #ccc; text-align: center">'
               	  +'<th>1</th>'
               	  +'<th>2</th>'
               	  +'<th>3</th>'
@@ -178,9 +178,9 @@ function add_cell_to_sheet(worksheet, address, value) {
           +'<td rowspan="2">'+ item.spt.kegiatan.sebutan +'</td>'
           //+'<td>' + item.spt.periode + '<br />' + item.spt.lama + '</td>'
           +'<td colspan="2" style="text-align: center;">' + item.spt.periode + '</td>'
-          +'<td rowspan="2">'+ item.info_dupak.koefisien +'</td>'
-          +'<td rowspan="2">'+ item.info_dupak.lama_jam +'</td>' 
-          +'<td rowspan="2">'+ item.info_dupak.dupak +'</td>'
+          +'<td rowspan="2" style="text-align: center">'+ item.info_dupak.koefisien +'</td>'
+          +'<td rowspan="2" style="text-align: center">'+ item.info_dupak.lama_jam +'</td>' 
+          +'<td rowspan="2" style="text-align: center">'+ item.info_dupak.dupak +'</td>'
           //+'<td rowspan="2"><a href="'+file+'" target="'+target+'" >SPT No.700/'+ item.spt.nomor +'/438.4/'+year+'</a><br/><br/></td>'
           +link
           +'</tr>';
@@ -222,7 +222,7 @@ function generate_tabel_penunjang(){
 	    var table = '<table class="table table-sm table-bordered ajax-table col-print-12 table-print-border" id="dupak-penunjang-table">';
 /* No	Uraian Kegiatan		Tanggal	Satuan AK	Jumlah jam	Jumlah AK	Keterangan
 		Kode	Kegiatan	*/
-		  table += '<tr align="center">'
+		  table += '<tr style="background: #ccc; text-align: center">'
 	              +'<th rowspan="2">No.</th>'
 	              +'<th colspan="2">Uraian Kegiatan</th>'
 	              +'<th rowspan="2">Tanggal</th>'
@@ -231,12 +231,12 @@ function generate_tabel_penunjang(){
 	              +'<th rowspan="2">Jumlah AK</th>'
 	              +'<th rowspan="2">Keterangan</th>'
               +'</tr>'
-              +'<tr align="center">'
+              +'<tr style="background: #ccc; text-align: center">'
               	  +'<th>Kode</th>'
               	  +'<th>Kegiatan</th>'
               +'</tr>'
               //nomor tabel
-              +'<tr align="center">'
+              +'<tr style="background: #ccc; text-align: center">'
               	  +'<th>1</th>'
               	  +'<th>2</th>'
               	  +'<th>3</th>'
@@ -257,9 +257,9 @@ function generate_tabel_penunjang(){
               +'<td>'+ item.spt_umum.info_untuk_umum+'</td>'
               //+'<td>' + item.spt.periode + '<br />' + item.spt.lama + '</td>'
               +'<td style="text-align: center;">' + item.spt_umum.periode + '</td>'
-              +'<td>'+ item.info_dupak.dupak +'</td>'
-              +'<td>'+ item.info_dupak.lama +'</td>' 
-              +'<td>'+ item.info_dupak.dupak +'</td>'
+              +'<td style="text-align: center">'+ item.info_dupak.dupak +'</td>'
+              +'<td style="text-align: center">'+ item.info_dupak.lama +'</td>' 
+              +'<td style="text-align: center">'+ item.info_dupak.dupak +'</td>'
               +'<td>SPT No.700/'+ item.spt_umum.nomor +'/438.4/'+year+'<br/><br/></td>'
               +'</tr>';
               /*table += '<tr>'
@@ -296,7 +296,7 @@ function generate_tabel_penunjang(){
         var footer = generate_footer(response);
         var table = '<table class="table table-sm table-bordered ajax-table col-print-12 table-print-border" id="dupak-diklat-table">';
        
-        table += '<tr align="center">'
+        table += '<tr style="background: #ccc; text-align: center">'
                 +'<th rowspan="2">No.</th>'
                 +'<th colspan="2">Uraian Kegiatan</th>'
                 +'<th rowspan="2">Tanggal</th>'
@@ -305,12 +305,12 @@ function generate_tabel_penunjang(){
                 +'<th rowspan="2">Jumlah AK</th>'
                 +'<th rowspan="2">Keterangan</th>'
               +'</tr>'
-              +'<tr align="center">'
+              +'<tr style="background: #ccc; text-align: center">'
                   +'<th>Kode</th>'
                   +'<th>Kegiatan</th>'
               +'</tr>'
               //nomor tabel
-              +'<tr align="center">'
+              +'<tr style="background: #ccc; text-align: center">'
                   +'<th>1</th>'
                   +'<th>2</th>'
                   +'<th>3</th>'
@@ -329,9 +329,9 @@ function generate_tabel_penunjang(){
               +'<td>'+ item.spt_umum.info_untuk_umum+'</td>'
               //+'<td>' + item.spt.periode + '<br />' + item.spt.lama + '</td>'
               +'<td style="text-align: center;">' + item.spt_umum.periode + '</td>'
-              +'<td>'+ item.info_dupak.dupak +'</td>'
-              +'<td>'+ item.info_dupak.lama +'</td>' 
-              +'<td>'+ item.info_dupak.dupak +'</td>'
+              +'<td style="text-align: center">'+ item.info_dupak.dupak +'</td>'
+              +'<td style="text-align: center">'+ item.info_dupak.lama +'</td>' 
+              +'<td style="text-align: center">'+ item.info_dupak.dupak +'</td>'
               +'<td>SPT No.700/'+ item.spt_umum.nomor +'/438.4/'+year+'<br/><br/></td>'
               +'</tr>';
         });
@@ -357,11 +357,10 @@ function generate_tabel_penunjang(){
       type : 'GET',
       data: {user_id: user_id, semester: semester, tahun: tahun},
       success: function(response){
-        console.log(response);        
         var year = new Date().getFullYear();
         pendidikan = ('undefined' !== typeof response.user.pendidikan.tingkat) ? response.user.pendidikan.tingkat : '';
-        header = '<div class="col-print-12 col-md-12"><h3 class="print-center text-center">LAPORAN ANGKA KREDIT</h3>'
-          +'<h5 class="print-center text-center">Masa Penilaian '+periode+' '+tahun+'</h5></div>'
+        header = '<div class="col-print-12 col-md-12"><h3 class="print-center text-center" style="margin-bottom:0px;">LAPORAN ANGKA KREDIT</h3>'
+          +'<h5 class="print-center text-center"  style="margin-top:0px;">Masa Penilaian '+periode+' '+tahun+'</h5></div>'
           +'<div class="h-20"></div>'
           +'<div class="row">'
             +'<div class="col-print-4 col-md-4">Nama</div>'
@@ -386,7 +385,7 @@ function generate_tabel_penunjang(){
           +'<div class="h-20"></div>';
          
         table = '<table class="table table-sm table-bordered ajax-table col-print-12 table-print-border" id="dupak-lak-table">'       
-              +'<tr align="center">'
+              +'<tr style="background: #ccc; text-align: center">'
                 +'<th rowspan="2">No.</th>'
                 +'<th rowspan="2">Uraian Sub Unsur</th>'
                 +'<th colspan="2">Jumlah Angka Kredit</th>'
@@ -394,14 +393,14 @@ function generate_tabel_penunjang(){
                 +'<th rowspan="2">Perbedaan</th>'
                 +'<th rowspan="2">Ket Perbedaan</th>'
               +'</tr>'
-              +'<tr align="center">'
+              +'<tr style="background: #ccc; text-align: center">'
                   +'<th>Diusulkan</th>'
                   +'<th>Disetujui</th>'
                   +'<th>Diusulkan</th>'
                   +'<th>Disetujui</th>'
               +'</tr>'
               //nomor tabel
-              +'<tr align="center">'
+              +'<tr style="background: #ccc; text-align: center">'
                   +'<th>1</th>'
                   +'<th>2</th>'
                   +'<th>3</th>'
@@ -416,9 +415,8 @@ function generate_tabel_penunjang(){
           table += '<tr>'
                   +'<td style="text-align: center;"><strong>I</strong></td>'
                   +'<td><strong>Pendidikan Sekolah</strong></td>';
-                  //pendidikan[0].dupak
           if(response.pendidikan.length>0 && 'undefined' !== response.pendidikan[0].dupak){            
-            table += '<td>'+response.pendidikan[0].dupak+'</td>'; 
+            table += '<td style="text-align: center">'+response.pendidikan[0].dupak+'</td>'; 
           }else{
             table += '<td></td>';
           }
@@ -461,21 +459,35 @@ function generate_tabel_penunjang(){
                   +'<td></td>'
                   +'</tr>';
 
-          //AK diklat
+          //AK diklat          
           if(response.diklat.length > 0){
+            var sumDiklat=0 , sumLamaDiklat = 0;
             $.each(response.diklat, function(i,item){
               n = i+1
               table += '<tr>'
                 +'<td></td>' //item.spt_umum.info_untuk_umum
                 +'<td style="padding-left:50px;">'+n+'. '+item.spt_umum.info_untuk_umum+'</td>'
-                +'<td>'+item.info_dupak.dupak+'</td>'
+                +'<td style="text-align: center">'+item.info_dupak.dupak+'</td>'
                 +'<td></td>'
-                +'<td>'+item.info_dupak.lama+'</td>'
+                +'<td style="text-align: center">'+item.info_dupak.lama+'</td>'
                 +'<td></td>'
                 +'<td></td>'
                 +'<td></td>'
                 +'</tr>';
+              sumDiklat += parseFloat(item.info_dupak.dupak);
+              sumLamaDiklat += parseFloat(item.info_dupak.lama);
             });
+
+          table += '<tr style="background: #ccc; text-align: center">'
+                  +'<td></td>'
+                  +'<td><strong>Jumlah Pendidikan dan Pelatihan</strong></td>'
+                  +'<td>'+sumDiklat+'</td>'
+                  +'<td></td>'
+                  +'<td>'+sumLamaDiklat+'</td>'
+                  +'<td></td>' 
+                  +'<td></td>'
+                  +'<td></td>'
+                  +'</tr>';
           }
 
           //breaker AK diklat
@@ -492,19 +504,76 @@ function generate_tabel_penunjang(){
 
           //AK Pengawasan
           if(response.pengawasan.length > 0){
+            var sumPengawasan = 0, sumLamaPengawasan = 0;            
             $.each(response.pengawasan, function(i,item){
               n = i+1
               table += '<tr>'
                 +'<td></td>' //pengawasan[0].spt.kegiatan.sebutan
                 +'<td style="padding-left:50px;">'+n+'. '+item.spt.kegiatan.sebutan+'</td>'
-                +'<td>'+item.info_dupak.dupak+'</td>'
+                +'<td style="text-align: center">'+item.info_dupak.dupak+'</td>'
                 +'<td></td>'
-                +'<td>'+item.spt.lama+'</td>'
+                +'<td style="text-align: center">'+item.spt.lama+'</td>'
                 +'<td></td>'
                 +'<td></td>'
                 +'<td></td>'
                 +'</tr>';
+              sumPengawasan += parseFloat(item.info_dupak.dupak);
+              sumLamaPengawasan += parseFloat(item.spt.lama);
             });
+
+            table += '<tr style="background: #ccc; text-align: center">'
+                  +'<td></td>'
+                  +'<td><strong>Jumlah Pengawasan</strong></td>'
+                  +'<td>'+sumPengawasan+'</td>'
+                  +'<td></td>'
+                  +'<td>'+sumLamaPengawasan+'</td>'
+                  +'<td></td>' 
+                  +'<td></td>'
+                  +'<td></td>'
+                  +'</tr>';
+          }
+
+          //breaker AK pengawasan
+          table += '<tr>'
+                  +'<td></td>'
+                  +'<td><strong>3. Pengembangan profesi</strong></td>'
+                  +'<td></td>'
+                  +'<td></td>'
+                  +'<td></td>'
+                  +'<td></td>' 
+                  +'<td></td>'
+                  +'<td></td>'
+                  +'</tr>';
+
+          //AK pengembangan profesi
+          if(response.pengembangan.length > 0){
+            var sumPengembangan = 0, sumLamaPengembangan = 0;
+            $.each(response.pengembangan, function(i, item){
+              n = i+1
+              table += '<tr>'
+                +'<td></td>' //item.spt_umum.info_untuk_umum
+                +'<td style="padding-left:50px;">'+n+'. '+item.spt_umum.info_untuk_umum+'</td>'
+                +'<td style="text-align: center">'+item.info_dupak.dupak+'</td>'
+                +'<td></td>'
+                +'<td style="text-align: center">'+item.info_dupak.lama+'</td>'
+                +'<td></td>'
+                +'<td></td>'
+                +'<td></td>'
+                +'</tr>';
+              sumPengembangan += parseFloat(item.info_dupak.dupak);
+              sumLamaPengembangan += parseFloat(item.info_dupak.lama);
+            });
+
+            table += '<tr style="background: #ccc; text-align: center">'
+                  +'<td></td>'
+                  +'<td><strong>Jumlah Pengawasan</strong></td>'
+                  +'<td>'+sumPengembangan+'</td>'
+                  +'<td></td>'
+                  +'<td>'+sumLamaPengembangan+'</td>'
+                  +'<td></td>' 
+                  +'<td></td>'
+                  +'<td></td>'
+                  +'</tr>';
           }
 
         //penutup tabel
@@ -608,4 +677,5 @@ function generate_footer(response){
             +'</div>';
   return footer;
 }
+
 </script>

@@ -56,7 +56,7 @@
 			            </div>
 			        </div>
 
-			        <div class="form-group row" id="input-lokasi-container" style="display: none;">
+			        <div class="form-group row" id="input-lokasi-umum-container" style="display: none;">
 					    <label for="lokasi" class="col-md-2 col-form-label">{{ __('Lokasi') }} </label>
 						<div class="col">
 							<select class="form-control selectize" id="lokasi-id-umum" name="lokasi_id_umum" placeholder="Pilih Lokasi">

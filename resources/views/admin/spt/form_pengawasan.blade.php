@@ -309,12 +309,14 @@
 	   allowEmptyOption: false,
 	   placeholder: 'Jenis SPT',
 	   create: false,
-	   onChange: function(value){
+	   onChange: function(value){	   	
+	   	
 	   	var arr_val = value.split(';');
 	   	var id_jenis_spt = arr_val[0];
 	   	var input_lokasi = arr_val[1];
 	   	var input_tambahan = arr_val[2];
 	   	var cek_radio = arr_val[3];
+	   	console.log(input_lokasi);
 	   	$('#id-jenis-spt').val(id_jenis_spt);
 
 	   	//show hide radio
