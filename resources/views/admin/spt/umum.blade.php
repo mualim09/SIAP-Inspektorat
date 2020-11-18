@@ -44,14 +44,14 @@
         <form class="ajax-form" id="form-penomoran-umum" enctype="multipart/form-data">
             <input type="hidden" name="spt_id_umum" id="penomoran-spt-id-umum">
             <input type="hidden" name="jenis_spt_umum" id="jenis-spt-umum">
-            <div class="form-group row">
+            <!-- <div class="form-group row">
                 <label for="nomor" class="col-md-3 col-form-label text-md-right">{{ __('Nomor')}} </label>
                 <input type="text" name="nomor_umum" class="form-control col-md-8" required placeholder="Nomor SPT" id="nomor-spt-umum">                    
-            </div>
+            </div> -->
 
             <div class="form-group row">                
                 <label for="tgl-register" class="col-md-3 col-form-label text-md-right">{{ __('Tanggal') }}</label>
-                <input type="text" class="form-control datepicker col-md-8" name="tgl_register_umum" id="tgl-register-umum" autocomplete="off" placeholder="{{ __('Tanggal Register')}}">
+                <input type="text" class="form-control datepicker col-md-8" name="tgl_register_umum" id="tgl-register-umum" autocomplete="off" placeholder="{{ __('Tanggal Register')}}" value="{{ date('d-m-Y') }}">
             </div>
             <script type="text/javascript">
               $('.datepicker').each(function() {
@@ -67,7 +67,7 @@
             <div class="row">
               <div class="col-md-3 text-md-right">Scan</div>
               <div class="custom-file col-md-8">
-                <input type="file" class="custom-file-input" id="customFileUmum" name="file_spt_umum" accept=".pdf">
+                <input type="file" class="custom-file-input" id="customFileUmum" name="file_spt_umum" accept="image/x-eps,application/pdf">
                 <label class="custom-file-label" for="customFileUmum">Pilih Scan File SPT</label>                    
               </div>
               <div class="offset-md-3">File format pdf, max 2MB</div>
@@ -178,7 +178,7 @@
   // validate data from form penomoran umum
   $("#form-penomoran-umum").validate({
         rules: {
-            nomor_umum : {required: true},
+            
             tgl_register_umum : {required: true},
             // file_spt_umum : {required: true}
         },

@@ -29,14 +29,14 @@
       <div class="modal-body">
         <form class="ajax-form" id="form-penomoran" enctype="multipart/form-data">
             <input type="hidden" name="spt_id" id="spt-id">
-            <div class="form-group row">
+            <!-- <div class="form-group row">
                 <label for="nomor" class="col-md-3 col-form-label text-md-right">{{ __('Nomor')}} </label>
                 <input type="text" name="nomor" class="form-control col-md-8" required placeholder="Nomor SPT" id="nomor-spt">                    
-            </div>
+            </div> -->
 
             <div class="form-group row">                
                 <label for="tgl-register" class="col-md-3 col-form-label text-md-right">{{ __('Tanggal') }}</label>
-                <input type="text" class="form-control datepicker col-md-8" name="tgl_register" id="tgl-register" autocomplete="off" placeholder="{{ __('Tanggal Register')}}">
+                <input type="text" class="form-control datepicker col-md-8" name="tgl_register" id="tgl-register" autocomplete="off" placeholder="{{ __('Tanggal Register')}}" value="{{ date('d-m-Y') }}">
             </div>
             <script type="text/javascript">
               $('.datepicker').each(function() {
@@ -176,8 +176,7 @@
 
 
      $("#form-penomoran").validate({
-        rules: {
-            nomor : {required: true},
+        rules: {            
             tgl_register : {required: true}
         },
         submitHandler: function(form){

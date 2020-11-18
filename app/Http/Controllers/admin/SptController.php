@@ -60,11 +60,30 @@ class SptController extends Controller
         $listLokasi = Lokasi::all();
         $jenisSpt = JenisSpt::all();
         $listAnggota = User::select(['id','first_name','last_name', 'gelar'])->get();
+        $pj = User::whereHas('pejabat', function($q){
+            $q->where( 'name','Inspektur Kabupaten');
+        })->first();
+
+        $ppjs = User::whereHas('pejabat', function($q){
+            $q->where('name','like', 'Inspektur Pembantu%');
+        })->get();
+
+        $pms = User::whereIn('jabatan', ['Auditor Utama', 'Auditor Madya'])->get(); 
+        $pts = User::whereIn('jabatan', ['Auditor Utama', 'Auditor Madya', 'Auditor Muda'])->get(); 
+        $kets = User::whereIn('jabatan', ['Auditor Madya', 'Auditor Muda','Auditor Pertama'])->get();
+        $anggotas = User::whereNotIn('jabatan', ['Auditor Utama'])->doesntHave('pejabat')->where('email','!=','admin@local.host')->get();
         return view('admin.spt.index',
             [
             'spt'=>$spt,
             'jenis_spt'=>$jenisSpt,
             'listAnggota'=>$listAnggota,
+            'pj'=>$pj,
+            'ppjs'=>$ppjs,
+            'pms'=>$pms,
+            'pts'=>$pts,
+            'kets'=>$kets,
+            'anggotas'=>$anggotas,
+            //'checkbox'=>$checkbox,
             'listPeran'=>$this->list_peran,
             'listLokasi' => $listLokasi
             ]
@@ -90,9 +109,7 @@ class SptController extends Controller
     public function store(Request $request)
     {
        $user = auth()->user();
-        /*$request->tgl_mulai = Carbon::createFromLocaleIsoFormat('Y-m-d H:i:s', config('app.locale'), $request['tgl_mulai']);
-        $request->tgl_akhir = Carbon::createFromLocaleIsoFormat('Y-m-d H:i:s', config('app.locale'), $request['tgl_akhir']);*/
-        //['jenis_spt_id', 'lokasi_id', 'nomor', 'tgl_mulai', 'tgl_akhir', 'lama','tambahan','info'];
+        //dd($request->pj.':penanggungjawab '.$request->a3.':anggota ke 3');
         $this->validate($request, [
             'jenis_spt_id' => 'required|integer',
             'tgl_mulai'=>'required|date_format:"d-m-Y"',
@@ -114,10 +131,85 @@ class SptController extends Controller
             'info' => $request['info'],
         ];
 
+
         $spt = Spt::create($data);
         if($spt) {
 
-            $this->storeDetail($spt->id, $spt->lama);
+            //$this->storeDetail($spt->id, $spt->lama);
+            //direct insert
+            //$unsur_dupak = $spt->jenisSpt->kategori;
+            if($request->pj){
+                DB::table('detail_spt')->insertGetId([
+                    'spt_id' => $spt->id,
+                    'user_id' => $request->pj,
+                    'peran' => 'Penanggungjawab',
+                    'unsur_dupak' => 'pengawasan',
+                ]);
+            }
+
+            if($request->ppj){
+                DB::table('detail_spt')->insertGetId([
+                    'spt_id' => $spt->id,
+                    'user_id' => $request->ppj,
+                    'peran' => 'Pembantu Penanggungjawab',
+                    'unsur_dupak' => 'pengawasan',
+                ]);
+            }
+
+            if($request->pm){
+                DB::table('detail_spt')->insertGetId([
+                    'spt_id' => $spt->id,
+                    'user_id' => $request->pm,
+                    'peran' => 'Pengendali Mutu',
+                    'unsur_dupak' => 'pengawasan',
+                ]);
+            }
+
+            if($request->pt){
+                DB::table('detail_spt')->insertGetId([
+                    'spt_id' => $spt->id,
+                    'user_id' => $request->pm,
+                    'peran' => 'Pengendali Teknis',
+                    'unsur_dupak' => 'pengawasan',
+                ]);
+            }
+
+            if($request->ket){
+                DB::table('detail_spt')->insertGetId([
+                    'spt_id' => $spt->id,
+                    'user_id' => $request->ket,
+                    'peran' => 'Ketua',
+                    'unsur_dupak' => 'pengawasan',
+                ]);
+            }
+
+            if($request->a1){
+                DB::table('detail_spt')->insertGetId([
+                    'spt_id' => $spt->id,
+                    'user_id' => $request->a1,
+                    'peran' => 'Anggota',
+                    'unsur_dupak' => 'pengawasan',
+                ]);
+            }
+
+            if($request->a2){
+                DB::table('detail_spt')->insertGetId([
+                    'spt_id' => $spt->id,
+                    'user_id' => $request->a2,
+                    'peran' => 'Anggota',
+                    'unsur_dupak' => 'pengawasan',
+                ]);
+            }
+
+            if($request->a3){
+                DB::table('detail_spt')->insertGetId([
+                    'spt_id' => $spt->id,
+                    'user_id' => $request->a3,
+                    'peran' => 'Anggota',
+                    'unsur_dupak' => 'pengawasan',
+                ]);
+            }
+                
 
             /*//user id pembuat spt
             $info['user_id'] = $user->id;
@@ -297,6 +389,7 @@ class SptController extends Controller
                 $lembur = Spt::where('tgl_akhir','=', $start)->where('user_id','=', $anggota['user_id'])->join('detail_spt','detail_spt.spt_id','=','spt.id')->get();
                 $isLembur = ( $lembur->count() > 0) ? true : false;
 
+                //$unsur_dupak = $spt->jenisSpt->kategori;
                 DB::table('detail_spt')->insertGetId([
                 'spt_id' => $spt_id,
                 'user_id' => $anggota['user_id'],
@@ -1116,7 +1209,12 @@ class SptController extends Controller
                 $request->file_spt->move(public_path()."/storage/spt" , $filename);
             }
             $spt->file = ($filename !== null ) ? $filename : null;
-            $spt->nomor = $request->nomor;
+            //$spt->nomor = $request->nomor;
+            $parser = new \Smalot\PdfParser\Parser();
+            $pdf    = $parser->parseFile(storage_path("app/public/spt/$filename"));     
+            $text = $pdf->getText();
+            preg_match('/\/(.*?)\//', $text, $match);
+            $spt->nomor = $match[1];
             $spt->tgl_register = date('Y-m-d H:i:s',strtotime($request->tgl_register));
 
             //setup info_spt untuk tabel dupak
@@ -1143,16 +1241,18 @@ class SptController extends Controller
             }
             //$spt->file = ($filename !== null ) ? url('/storage/spt-umum/'.$filename) : null;
             $spt->file = ($filename !== null ) ? $filename : null;
-            $spt->nomor = $request->nomor;
-            $spt->tgl_register = date('Y-m-d H:i:s',strtotime($request->tgl_register));
+            //$spt->nomor = $request->nomor;
+            $parser = new \Smalot\PdfParser\Parser();
+            $pdf    = $parser->parseFile(storage_path("app/public/spt/$filename"));     
+            $text = $pdf->getText();
+            preg_match('/\/(.*?)\//', $text, $match);
+            $nomor = $match[1];
+            $tgl_register = date('Y-m-d H:i:s',strtotime($request->tgl_register_umum));
 
             $info_spt = null;
-            $spt->update(['nomor'=>$request->nomor_umum,'tgl_register'=>date('Y-m-d',strtotime($request->tgl_register_umum))]);
+            $spt->update(['nomor'=>$nomor,'tgl_register'=>$tgl_register]);
         }
 
-
-        // dd($spt->file);
-        // die();
         if($spt_umum == null && $spt->save()) {
 
            //ambil data detail spt terkait sesuai id spt
@@ -1205,53 +1305,6 @@ class SptController extends Controller
            return $spt;
         }else{
             $detail_spt = DetailSpt::where('spt_id', $id_umum)->with('sptUmum')->get();
-
-            // proses input info dupak tu umum
-
-           //  //update detail kuota dan dupak di detail_spt
-           // $detail_kuota = [];
-           // for($i=0;$i<count($detail_spt);$i++){
-           //  $detail_kuota[] = $this->detailKuota( $detail_spt[$i]['user_id'],$spt->tgl_mulai,$spt->tgl_akhir); // result array lama jam per user per spt per tanggal
-           // }
-           // //end update detail kuota
-
-           // foreach($detail_spt as $i=>$detail){
-
-           //  //perhitungan kumulatif lama_jam per detail_spt (sesuai user_id dan data detail kuota per tanggal kalender spt)
-           //  $lama_jam = array_sum($detail_kuota[$i][$detail->user_id]);
-
-           //  //perhitungan dupak berdasarkan lama_jam kuota kalender dan fungsi peran spt
-           //  $dupak = $this->hitungDupak($detail->user_id,$detail->peran,$lama_jam);
-
-           //  $jam_efektif = intval($lama_jam/6.5);
-           //  $jam_lembur = fmod($lama_jam, 6.5);
-
-           //  $info = [
-           //      'lama_jam' => $lama_jam,
-           //      'efektif' => $jam_efektif,
-           //      'lembur' => $jam_lembur,
-           //      'dupak' => $dupak['nilai'],
-           //      'koefisien' => $dupak['koef']
-           //  ];
-           //  //$info['koefisien'] = $dupak['koef'];
-
-           //  //update lama_jam dan nilai dupak pada detail_spt
-           //  //DetailSpt::where('id', $detail->id)->update(['lama_jam' => $lama_jam, 'dupak'=>$dupak['nilai'], 'info_dupak'=>json_encode($info)]);
-           //  DetailSpt::where('id', $detail->id)->update(['info_dupak'=>json_encode($info)]);
-
-           //  //set array var $data untuk membuat data dupak di tabel dupak
-           //  $data = [
-           //      'user_id' => $detail->user_id,
-           //      'dupak' => $detail->dupak,
-           //      'unsur_dupak' => $spt->jenisSpt->kategori,
-           //      'status' => 'baru',
-           //      'info_spt' => $info_spt
-           //  ];
-           //  //Dupak::create($data);
-           // }
-           // //buat event terkait spt untuk penerapan di kalender
-           // $this->createEventSpt($spt);
-
             return $spt;
         }
         return false;
@@ -1275,10 +1328,12 @@ class SptController extends Controller
         $parser = new \Smalot\PdfParser\Parser();
         $pdf    = $parser->parseFile(storage_path("app/public/spt/$filename"));
  
-$text = $pdf->getText();
+        $text = $pdf->getText();
 
-preg_match('/\/(.*?)\//', $text, $match);
-dd($match);
+        preg_match('/\/(.*?)\//', $text, $match);
+        $spt->nomor = $match[1];
+        $spt->tgl_register = date('Y-m-d H:i:s',strtotime($request->tgl_register));
+
     }
 
     public function detailKuota($user_id, $tgl_mulai, $tgl_akhir){

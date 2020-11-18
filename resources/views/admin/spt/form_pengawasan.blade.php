@@ -1,6 +1,6 @@
 <!-- start form pengajuan spt pengawasan -->
 <div class="modal fade modal-form" tabindex="-1" role="dialog" aria-labelledby="formModalLabel" aria-hidden="true" id="formModal" data-backdrop="static" data-keyboard="false" style="z-index: 1500;">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-xl" style="max-width: 75%;">
     <div class="modal-content">
     	<div class="modal-header">
     		<h3>{{ __('Pengajuan SPT') }}</h3>
@@ -92,24 +92,13 @@
 					});
 				</script>
 
-				<button id="add-anggota" class="btn btn-outline-primary btn-sm offset-md-2" type="button" data-toggle="modal" data-target="#anggotaSptModal"> <i class="fa fa-plus"></i> <span>Tambah Anggota</span></button>
+				<!-- <button id="add-anggota" class="btn btn-outline-primary btn-sm offset-md-2" type="button" data-toggle="modal" data-target="#anggotaSptModal"> <i class="fa fa-plus"></i> <span>Tambah Anggota</span></button>
 				<div class="form-group row" id="input-anggota" >
 				    <div class="col-md-2 col-form-label">{{ __('Anggota') }} </div>
-					<div class="col table-responsive" id="tabel-anggota-pengawasan-wrapper">
-						<!--<table id="list-anggota-session" class="col">
-							<thead>
-								<tr>
-									<th>No</th>
-									<th>Nama</th>
-									<th>Peran</th>
-									<th></th>
-								</tr>
-							</thead>
-						</table>-->
-            			<!-- <div class="table-responsive" id="tabel-anggota-pengawasan-wrapper"></div> -->
-						
-					</div>					
-				</div>
+					<div class="col table-responsive" id="tabel-anggota-pengawasan-wrapper">						
+					</div>
+				</div> -->
+				@include('admin.spt.include.anggota_pengawasan_form')
 
 				<script type="text/javascript">
 					$('#add-anggota').on('click', function(){
@@ -171,136 +160,6 @@
 <!-- end form pengajuan spt pengawasan -->
 
 
-<div class="modal fade modal-form" tabindex="-1" role="dialog" aria-labelledby="formModalLabel" aria-hidden="true" id="anggotaSptModal" data-backdrop="static" data-keyboard="true" style="z-index: 2000;">
-	<div class="modal-lg modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h3>Anggota SPT</h3>
-				<button type="button" class="btn btn-icon btn-3 btn-outline-secondary" data-dismiss="modal" aria-label="Close" id="close-anggota-pengawasan">
-		        	<span class="btn-inner--icon"><i class="fa fa-times"></i></span>
-		        	<span class="btn-inner--text">{{ __('Close') }}</span>
-	        	</button>
-			</div>
-			<div class="modal-body" id="modal-body-anggota">
-				@if(Auth::user()->can(['Create SPT', 'Edit SPT']))
-				<form  id="new-anggota-spt-form" class="ajax-form needs-validation" novalidate>
-					<input type="hidden" name="spt_id" id="spt-id-anggota">
-			        @csrf
-			        <div class="form-group row">
-			        	<label for="anggota" class="col-md-2 col-form-label">{{ __('Anggota') }} </label>
-			        	<div class="col-md-4">
-			        		<select class="form-control selectize" id="session-anggota" name="session_anggota">
-			        			<option value="">{{ __('Anggota SPT') }}</option>
-			        			@foreach($listAnggota as $anggota)
-			        			<option class="form-control selectize" value="{{$anggota->id}}" >{{ $anggota->full_name . $anggota->gelar }}</option>
-			        			@endforeach
-			        		</select>
-			        	</div>
-			        	<div class="col-md-4">
-			        		<select class="form-control selectize" id="session-peran" name="session_peran">
-			        			<option value="">{{ __('Peran SPT') }}</option>
-			        			@foreach($listPeran as $peran)
-			        			<option class="form-control" value="{{$peran}}" >{{ $peran }}</option>
-			        			@endforeach
-			        		</select>
-			        	</div>
-			        	<!-- <div class="col-md-2">
-			        		<input type="number" name="lama" id="lama" class="form-control" placeholder="Lama">
-			        	</div> -->
-			        </div>
-
-			        <div class="form-group">
-			        	<div class="col-md-6">
-			            	<button type="submit" class="btn btn-primary offset-md-4">
-			                    {{ __('Submit') }}
-			                </button>
-			            </div>
-			        </div>
-				</form>
-				@endif
-
-				<script type="text/javascript">
-					$("#new-anggota-spt-form").validate({
-		            rules: {
-		                session_anggota: {required: true, number:true},
-		                //session_peran: {required: true}
-		                /*session_peran : {
-		                	required: true,
-		                	normalizer: function( value ) {
-					        	var regex = /^[a-zA-Z]+$/;
-					        	if(regex.test(value) == false){
-					        		$.alert("Must be in alphabets only");
-					        		return false;
-					        	}
-					    	}
-						}*/
-		            },
-		            submitHandler: function(form){
-		            	var tgl_mulai = $('#spt-form').find('#tgl-mulai').val();
-		            	var tgl_akhir = $('#spt-form').find('#tgl-akhir').val();
-	                var user_id = $('#session-anggota option:selected').val();
-	                var peran = $('#session-peran option:selected').val();
-	                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-	                //var id_spt = (typeof id_spt == 'undefined') ? null : id_spt;
-                  if ( typeof $('#anggotaSptModal').attr('id-spt-pengawasan-anggota') !== 'undefined' ){
-                    id_spt = $('#anggotaSptModal').attr('id-spt-pengawasan-anggota');
-                  }else{
-                    id_spt = '';
-                  }
-		                //alert(save_method);
-		                url = (save_method === 'edit') ? "{{ route('store_detail_anggota') }}" : "{{ route('store_session_anggota') }}" ;
-		                if(tgl_mulai == '' || tgl_akhir==''){
-		                	$.alert('Isikan tanggal mulai dan tanggal akhir terlebih dahulu.');
-		                }else{
-		                	//alert(url);
-		                	$.ajax({
-			                    url: url,
-			                    type: 'POST',
-			                    //dataType: 'json',
-			                    data: {_token: CSRF_TOKEN, user_id:user_id, peran:peran, spt_id:id_spt, tgl_mulai: tgl_mulai, tgl_akhir:tgl_akhir},
-			                    success: function(data){
-			                        //$('#list-anggota-session').DataTable().ajax.reload();
-                              //console.log(id_spt);
-			                        drawTableAnggota(id_spt);
-			                        clearOptions();
-			                    },
-			                    error: function(error){
-			                        console.log('Error :', error);
-			                    }
-			                });
-		                }
-
-		            }
-		        });
-
-		function drawTableAnggota(spt_id = ''){
-
-            url = "{{ route('tabel_anggota_pengawasan') }}"
-
-            $.ajax({
-              url : url,
-              data: {spt_id: spt_id},
-              type: 'GET',
-              success: function(res){
-                $('#tabel-anggota-pengawasan-wrapper').html(res);
-              },
-              error: function(err){
-                console.log(err);
-              }
-            });
-		}
-				</script>
-			</div>
-		</div>
-	</div>
-</div>
-<script type="text/javascript">
-	$('#close-anggota-pengawasan').on('click', function(){
-		if ( typeof $('#anggotaSptModal').attr('id-spt-pengawasan-anggota') !== 'undefined' ){
-			$('#anggotaSptModal').removeAttr('id-spt-pengawasan-anggota');
-		}
-	})
-</script>
 
 
 <script type="text/javascript">
@@ -388,7 +247,7 @@
     	}
     }
 
-   var select_anggota = $('#session-anggota').selectize({
+/*   var select_anggota = $('#session-anggota').selectize({
 	   persist: false,
 	   sortField: 'text',
 	   allowEmptyOption: false,
@@ -396,14 +255,13 @@
   	});
 
   var select_peran = $('#session-peran').selectize({
-	   /*sortField: 'text',*/
 	   allowEmptyOption: false,
 	   placeholder: 'Peran SPT',
 	   create: false,
 	   onchange: function(value){
 
 	   },
-  });
+  });*/
 
   var select_lokasi = $('#lokasi-id').selectize({
 	   /*sortField: 'text',*/

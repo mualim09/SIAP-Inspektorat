@@ -109,8 +109,8 @@ class User extends Authenticatable implements HasMedia
 
     //membership (to hide super admin visibility from another member )
     public function scopeMember($query){
-        return $query->where('email','!=','admin@local.host');
-        //return $query->whereHas('role','Super Admin'); // untested hiding super admin role
+        //return $query->where('email','!=','admin@local.host');
+        return $query->whereHas('role','Super Admin'); // untested hiding super admin role
     }
 
     //relasi ke pejabat

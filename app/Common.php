@@ -159,5 +159,27 @@ class Common
 
         return false;
     }
+
+    static function setCheckBox($label, $values= array(), $checkbox_name = 'checkbox', $columns = 4){
+        $percolumn = 12/$columns;
+        $checkbox_width = 1;
+        $checklabel_width = $percolumn - $checkbox_width;
+        $html = '<div class="form-group row">'
+                .'<div class="col-md-2 col-form-label">'.$label.'</div>'
+                .'<div class="col">'
+                    .'<div class="row">';
+                        foreach($values as $i=>$value){
+                            $html .= '<div class="col-md-1">'
+                                        .'<input class="form-check-input" name="'.$checkbox_name.'[]" id="'.$checkbox_name.'-'.$value->id.'" type="checkbox" value="'.$value->id.'">'
+                                    .'</div>'
+                                    .'<div class="col-md-'.$checklabel_width.'"> '.$value->full_name_gelar.'</div>';
+                                if($i%$columns == 0){$html .='</div><div class="row">';}                                
+                        }                        
+        $html .= '</div>'
+                .'</div>'               
+            .'</div>';
+
+        return $html;
+    }
     
 }
