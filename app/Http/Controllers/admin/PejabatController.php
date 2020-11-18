@@ -17,7 +17,7 @@ class PejabatController extends Controller
     public function index()
     {
         $inspektur = User::where('jabatan', 'Inspektur Kabupaten')->select(['id' ,'first_name','last_name'])->first();
-        $sekretaris = User::where('jabatan', 'Sekretaris')->select(['id' ,'first_name','last_name'])->first();
+        $sekretaris = User::where('jabatan', 'Sekertaris')->select(['id' ,'first_name','last_name'])->first();
         $irban_i_default = User::where('jabatan', 'Inspektur Pembantu Wilayah I')->select(['id' ,'first_name','last_name','ruang->nama as nama_ruang'])->first();
         $irban_ii_default = User::where('jabatan', 'Inspektur Pembantu Wilayah II')->select(['id' ,'first_name','last_name','ruang->nama as nama_ruang'])->first();
         $irban_iii_default = User::where('jabatan', 'Inspektur Pembantu Wilayah III')->select(['id' ,'first_name','last_name','ruang->nama as nama_ruang'])->first();
@@ -31,7 +31,7 @@ class PejabatController extends Controller
         })->first();
 
         $plt_sekretaris = User::whereHas('pejabat', function($q){
-            $q->where('name','Sekretaris')->whereNotNull('status');
+            $q->where('name','Sekertaris')->whereNotNull('status');
         })->first();
 
         $plt_irban_i = User::whereHas('pejabat', function($q){
@@ -122,7 +122,7 @@ class PejabatController extends Controller
     {
         // dd($request);
         $inspektur = User::where('jabatan', 'Inspektur Kabupaten')->select(['id' ,'first_name','last_name'])->first();
-        $sekretaris = User::where('jabatan', 'Sekretaris')->select(['id' ,'first_name','last_name'])->first();
+        $sekretaris = User::where('jabatan', 'Sekertaris')->select(['id' ,'first_name','last_name'])->first();
         $irban_i_default = User::where('jabatan', 'Inspektur Pembantu Wilayah I')->select(['id' ,'first_name','last_name','ruang->nama as nama_ruang'])->first();
         $irban_ii_default = User::where('jabatan', 'Inspektur Pembantu Wilayah II')->select(['id' ,'first_name','last_name','ruang->nama as nama_ruang'])->first();
         $irban_iii_default = User::where('jabatan', 'Inspektur Pembantu Wilayah III')->select(['id' ,'first_name','last_name','ruang->nama as nama_ruang'])->first();
@@ -138,7 +138,7 @@ class PejabatController extends Controller
         })->first();
 
         $plt_sekretaris = User::whereHas('pejabat', function($q){
-            $q->where('name','Sekretaris')->whereNotNull('status');
+            $q->where('name','Sekertaris')->whereNotNull('status');
         })->first();
 
         $plt_irban_i = User::whereHas('pejabat', function($q){
@@ -162,7 +162,7 @@ class PejabatController extends Controller
         // dd(json_decode($request->inspektur) === $inspektur->id);
         // dd($request->ketua_penilaian_ak);
         $cek_pejabat = Pejabat::where('name', 'Inspektur Kabupaten')->count();
-        $cek_pejabat_sekretaris = Pejabat::where('name', 'Sekretaris')->count();
+        $cek_pejabat_sekretaris = Pejabat::where('name', 'Sekertaris')->count();
         $cek_pejabat_irban_i = Pejabat::where('name', 'Inspektur Pembantu Wilayah I')->count();
         $cek_pejabat_irban_ii = Pejabat::where('name', 'Inspektur Pembantu Wilayah II')->count();
         $cek_pejabat_irban_iii = Pejabat::where('name', 'Inspektur Pembantu Wilayah III')->count();
@@ -191,9 +191,9 @@ class PejabatController extends Controller
                     $update = $update_inspektur;
                 }if ($request->sekretaris != null) {
                     if (json_decode($request->sekretaris) === $sekretaris->id) {
-                        $update_sekretaris = Pejabat::where('id','2')->update(['user_id'=>$request->sekretaris,'name'=>'Sekretaris','status'=>null]);
+                        $update_sekretaris = Pejabat::where('id','2')->update(['user_id'=>$request->sekretaris,'name'=>'Sekertaris','status'=>null]);
                     }else{
-                        $update_sekretaris = Pejabat::where('id','2')->update(['user_id'=>$request->sekretaris,'name'=>'Sekretaris','status'=>'PLT']);
+                        $update_sekretaris = Pejabat::where('id','2')->update(['user_id'=>$request->sekretaris,'name'=>'Sekertaris','status'=>'PLT']);
                     }
                     $update = $update_sekretaris;
                 }if ($request->irban_i != null) {
@@ -259,9 +259,9 @@ class PejabatController extends Controller
                     }
                 }if ($request->sekretaris != null) {
                     if (json_decode($request->sekretaris) === $sekretaris->id) {
-                        $save = Pejabat::insert(['user_id'=>$request->sekretaris,'name'=>'Sekretaris']);
+                        $save = Pejabat::insert(['user_id'=>$request->sekretaris,'name'=>'Sekertaris']);
                     }else{
-                        $save = Pejabat::insert(['user_id'=>$request->sekretaris,'name'=>'Sekretaris','status'=>'PLT']);
+                        $save = Pejabat::insert(['user_id'=>$request->sekretaris,'name'=>'Sekertaris','status'=>'PLT']);
                     }
                 }if ($request->irban_i != null) {
                     if (json_decode($request->irban_i) === $irban_i_default->id) {

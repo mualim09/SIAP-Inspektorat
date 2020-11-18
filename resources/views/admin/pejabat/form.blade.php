@@ -93,7 +93,7 @@
         </div>
         @if($irban_i['is_plt'] === true)
             <div class="col-md-2 col-form-label "><span class="is_plt">Plt.</span></div>
-        <label for="penetap_ak" class="col-md-3 col-form-label text-md-right">{{ __('Penetap AK') }}</label>
+        <label for="penetap_ak" class="col-md-1 col-form-label text-md-right">{{ __('Penetap AK') }}</label>
         @endif
 
         <!-- select input penetap AK -->
