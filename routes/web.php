@@ -335,17 +335,16 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
     Route::group(['prefix' => 'ppm'], function(){\
     	Route::get('index','PpmController@index')->name('ppm_index');
     	Route::get('getdata-ppm','PpmController@getdataPpm')->name('getdata_ppm');
-    	// session anggota ppm
     	// ppm
 		Route::post('store-ppm','PpmController@storePpm')->name('store_ppm'); /*strore ppm*/
     	Route::post('session-anggota/store/ppm','PpmController@storePpmSessionAnggotaPpm')->name('store_session_anggota_ppm'); /*store session anggota ppm*/
     	// Route::post('ppm/store-detail-anggota','SptController@storePpmDetailAnggota')->name('store_detail_anggota_umum');
-    	Route::delete('session/anggota/delete/{user_id}','PpmController@deleteSessionAnggotaPpm')->name('delete_session_anggota_ppm_by_id');
+    	Route::delete('session/anggota/delete/{user_id}','PpmController@deleteSessionAnggotaPpm')->name('delete_session_anggota_ppm_by_id'); /*delete anggota session by user_id*/
     	Route::get('/get-ppm-byid/{id}','PpmController@getPpmByid')->name('getPpmById');
-  		// Route::delete('session/anggota/umum/delete/{user_id}', 'SptController@deleteSessionAnggotaUmumItem')->name('delete_session_anggota_umum_by_id');
-		// Route::delete('delete-anggota-umum/{id}','SptController@deleteAnggotaUmum')->name('delete_anggota_umum');
     	// percobaan ppm tanpa datatable
-    	Route::get('ppm/get-data/anggota', 'PpmController@drawTableAnggotaPpm')->name('tabel_anggota_ppm');
+    	// Route::get('ppm/get-data/anggota', 'PpmController@drawTableAnggotaPpm')->name('tabel_anggota_ppm');
+    	Route::post('ppm/get-data/anggota', 'PpmController@TableAnggotaPpm')->name('tabel_anggota_ppm'); /*getdata user yang terkait ppm tsb*/
+    	Route::delete('delete/data-ppm/{id}','PpmController@deletePpm')->name('delete_data_PPM_by_id');
     });
 
     Route::group(['prefix' => 'roles'], function(){

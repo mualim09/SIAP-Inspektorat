@@ -140,10 +140,6 @@
             });
         }
 
-        $(document).on('hide.bs.modal','#modalListAnggotaPpm', function () {
-            $('#tabel-list-anggota-ppm').dataTable().fnDestroy();
-        });
-
     </script>
     <!-- end js -->
 @endsection

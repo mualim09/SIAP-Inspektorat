@@ -416,20 +416,74 @@ class PpmController extends Controller
         return ($delete_detail_ppm == true) ? 'data has been deleted' : 'data cant deleted cause u got a problem !';
     }
 
-    // public function deleteSertifikat($id)
-    // {
-    //     $sertifikat = Sertifikat::findOrFail($id);
-    //     $delete = File::delete($sertifikat->file_sertifikat);
-    //     // $delete = unlink($sertifikat->file_sertifikat);
-    //     return ($sertifikat->delete()) ? 'deleted' :'no data';
+    // public function drawTableAnggotaPpm(Request $request){
+    //     // dd($request->ppm_id);
+    //     $ppm_id = DetailPpm::where('id', $request->ppm_id)->first();
+    //     $return = '<table class="table table-bordered table-hover">'
+    //                     .'<thead><tr>'
+    //                         .'<th>No.</th>'
+    //                         .'<th>Nama</th>'
+    //                         .'<th></th>'
+    //                     .'</tr></thead>';
+
+    //     if($ppm_id != null){
+    //         //bukan spt baru, data spt sudah ada, tampilkan data anggota spt dari tabel detail
+    //         $list_anggota = DetailPpm::where('spt_id', $request->ppm_id)->with('user')->get();
+    //         //dd($list_anggota);
+    //         foreach($list_anggota as $i=>$anggota){
+    //             $return .= '<tr>'
+    //                         .'<td>'.++$i.'</td>'
+    //                         .'<td>'.$anggota->user->full_name_gelar.'</td>'
+    //                         // .'<td>'.$this->buildControl('deleteAnggotaUmum',$anggota->id).'</td>'
+    //                         .'<td>'.''.'</td>'
+    //                         .'</tr>';
+    //         }
+    //         if($list_anggota->count()<=0){
+    //             $return .= '<tr><td colspan="4" align="center">Tidak ada data anggota</td></tr>';
+    //         }
+
+    //     }else{
+    //         //data belum ada, cek session anggota, jika ada tampilkan data session anggota
+    //         if(Session::has('anggota_ppm')){
+    //             $session_anggota_ppm = Session::get('anggota_ppm');
+    //             //setup data anggota
+    //             foreach($session_anggota_ppm as $i=>$anggota){
+    //                 $user = User::where('id',$anggota['user_id'])->first();
+    //                 $return .= '<tr>'
+    //                         .'<td>'.++$i.'</td>'
+    //                         .'<td>'.$user->full_name_gelar.'</td>'
+    //                         .'<td><a href="#" class="btn btn-sm btn-outline-danger" onclick="function_ppm('.$anggota['user_id'].')" title="hapus anggota"><i class="fa fa-times"></i></a></td>'
+    //                         .'</tr>';
+    //                         // 
+    //             }
+    //             if(count($session_anggota_ppm)<=0){
+    //                 $return .= '<tr><td colspan="4" align="center">Tidak ada data anggota</td></tr>';
+    //             }
+
+
+    //         }else{
+    //             //data belum ada, session anggota juga tidak ada
+    //             $return .= '<tr><td colspan="4" align="center">Tidak ada data anggota</td></tr>';
+    //         }
+
+    //     }
+
+    //     $return .= '</table>';
+    //     return $return;
 
     // }
 
-    // if(auth()->user()->hasPermissionTo('Delete SPT')){
-    //         $spt = SptUmum::findOrFail($id);
-    //         $delete = DetailSpt::where('spt_id',$id)->where('jenis_laporan',$spt->jenis_spt_umum)->delete();
-    //         // dd($delete);
-    //         SptUmum::destroy($id);
-    //         return 'SPT deleted!';
-    //     }
+    public function TableAnggotaPpm(Request $request)
+    {   
+        // $request->selectedid yang dikirimkan oleh view lebih dari 1 index
+        foreach ($request->selectedid as $key => $value) {
+            $data = User::where('id',json_decode($request->selectedid[$key]))->whereHas(
+                'roles', function($q){
+                    $q->where('name', 'Auditor');
+                }
+            )->get()->toArray();
+        }
+        // NOTE : return $data setelah diloop menghasilkan 1 index
+        return response()->json($data);
+    }
 }
