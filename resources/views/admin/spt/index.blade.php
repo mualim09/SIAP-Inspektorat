@@ -2,8 +2,11 @@
 @extends('layouts.backend')
 
 {{-- Hanya super admin, TU perencanaan dan Umum yang berhak mengakses list SPT yang akan diberikan penomoran--}}
-@hasanyrole('Super Admin|TU Perencanaan|TU Umum')
+@hasanyrole('Super Admin|TU Perencanaan')
   @include('admin.spt.penomoran')
+@endhasrole
+
+@hasanyrole('Super Admin|TU Umum')
   @include('admin.spt.umum')
 @endhasrole
 
@@ -36,8 +39,6 @@
             @yield('nav_tab_spt_umum')
             @yield('nav_tab_arsip')
             @yield('nav_table_inspektur')
-
-            @yield('nav_tab_ppm')
 
             <!-- tombol tambah spt berdasarkan role -->
             <li class="nav-item ml-auto">

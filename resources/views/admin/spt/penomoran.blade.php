@@ -1,13 +1,13 @@
 
 @section('nav_tab_penomoran')
 <li class="nav-item">
-  <a class="nav-link" href="#penomoran-tab" role="tab" aria-controls="penomoran-tab" aria-selected="true">Penomoran SPT</a>
+  <a class="nav-link" href="#penomoran-tab" role="tab" aria-controls="penomoran-tab" aria-selected="true">Daftar SPT Pengawasan</a>
 </li>
 @endsection
 
 @section('tab_content_penomoran')
 <div class="tab-pane" id="penomoran-tab" role="tabpanel">
-  <h4 class="text-center"> Penomoran SPT </h4>
+  <h4 class="text-center"> Daftar SPT Pengawasan </h4>
   <table id="penomoran-spt" class="table table-striped table-sm ajax-table" style="border-collapse: collapse;margin: 0;padding: 0;width: 100%;table-layout: fixed;">
       <thead></thead>
       <tbody></tbody>
@@ -21,7 +21,7 @@
   <div class="modal-dialog modal-md">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" id="formPenomoranModal">Penomoran SPT</h4>
+        <h4 class="modal-title" id="header-form-penerusan">{{__('Teruskan SPT')}}</h4>        
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">×</span>
         </button>
@@ -57,6 +57,7 @@
               </div>
               <div class="offset-md-3">File format pdf, max 2MB</div>
             </div>
+            <!-- <small id="formPenomoranHelp" class="form-text text-muted">Form teruskan SPT secara otomatis mendeteksi nomor SPT dan meneruskan SPT kepada pegawai SPT yang bersangkutan.</small> -->
             <script>
               // Add the following code if you want the name of the file appear on select
               $(".custom-file-input").on("change", function() {

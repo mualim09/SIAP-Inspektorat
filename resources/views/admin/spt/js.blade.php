@@ -58,12 +58,7 @@
             type: "GET",
             dataType: "JSON",
             success: function(data){                
-                $('#spt-form')[0].reset();
-                //$('#id-jenis-spt').val(data.id_jenis_spt);
-                //console.log(data);
-                /*var $select = $('.selectize').selectize();
-                var control = $select[0].selectize;
-                control.clear();*/
+                $('#spt-form')[0].reset();                
 
                 //variabel jenis spt               
                 lokasi = (data.jenis_spt.input_lokasi == true) ? data.lokasi_id : '';
@@ -86,12 +81,11 @@
                 $('#tgl-akhir').val(data.tgl_akhir);
                 $('#lama').val(data.lama);
                 $('#lokasi').val(data.lokasi);
+
                 //set anggota spt
-                console.log(data.detail_spt);
                 if(data.detail_spt.length>0){
                     anggota = [];
                     $.each(data.detail_spt, function(i,item){
-                        //console.log(item);
                         if(item.peran == 'Pembantu Penanggungjawab'){
                             $('#session-ppj')[0].selectize.setValue(item.user_id);
                         }
@@ -105,17 +99,13 @@
                             $('#session-ket')[0].selectize.setValue(item.user_id);
                         }
                         if(item.peran == 'Anggota'){
-                            //$('#session-pm')[0].selectize.setValue(item.user_id);
                             anggota.push(item);
                         }
                     });
-                    //console.log(anggota);
                     $.each(anggota, function(i, item){
                         n = i+1;
-                        //console.log(n);
                         $('#session-anggota-'+n)[0].selectize.setValue(item.user_id);
                     });
-                    //delete anggota;
                 }
                 $('#formModal').modal('show');
                 $('#formModal').attr('data-id-spt-pengawasan', data.id);

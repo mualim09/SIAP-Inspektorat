@@ -459,9 +459,9 @@ function generate_tabel_penunjang(){
                   +'<td></td>'
                   +'</tr>';
 
-          //AK diklat          
+          //AK diklat
+          var sumDiklat=0 , sumLamaDiklat = 0;
           if(response.diklat.length > 0){
-            var sumDiklat=0 , sumLamaDiklat = 0;
             $.each(response.diklat, function(i,item){
               n = i+1
               table += '<tr>'
@@ -476,19 +476,18 @@ function generate_tabel_penunjang(){
                 +'</tr>';
               sumDiklat += parseFloat(item.info_dupak.dupak);
               sumLamaDiklat += parseFloat(item.info_dupak.lama);
-            });
-
+            });          
+          }
           table += '<tr style="background: #ccc; text-align: center">'
                   +'<td></td>'
                   +'<td><strong>Jumlah Pendidikan dan Pelatihan</strong></td>'
-                  +'<td>'+sumDiklat+'</td>'
+                  +'<td>'+sumDiklat.toFixed(3)+'</td>'
                   +'<td></td>'
                   +'<td>'+sumLamaDiklat+'</td>'
                   +'<td></td>' 
                   +'<td></td>'
                   +'<td></td>'
                   +'</tr>';
-          }
 
           //breaker AK diklat
           table += '<tr>'
@@ -503,8 +502,8 @@ function generate_tabel_penunjang(){
                   +'</tr>';
 
           //AK Pengawasan
-          if(response.pengawasan.length > 0){
-            var sumPengawasan = 0, sumLamaPengawasan = 0;            
+          var sumPengawasan = 0, sumLamaPengawasan = 0;
+          if(response.pengawasan.length > 0){                        
             $.each(response.pengawasan, function(i,item){
               n = i+1
               table += '<tr>'
@@ -519,19 +518,18 @@ function generate_tabel_penunjang(){
                 +'</tr>';
               sumPengawasan += parseFloat(item.info_dupak.dupak);
               sumLamaPengawasan += parseFloat(item.spt.lama);
-            });
-
-            table += '<tr style="background: #ccc; text-align: center">'
+            });            
+          }
+          table += '<tr style="background: #ccc; text-align: center">'
                   +'<td></td>'
                   +'<td><strong>Jumlah Pengawasan</strong></td>'
-                  +'<td>'+sumPengawasan+'</td>'
+                  +'<td>'+sumPengawasan.toFixed(3)+'</td>'
                   +'<td></td>'
                   +'<td>'+sumLamaPengawasan+'</td>'
                   +'<td></td>' 
                   +'<td></td>'
                   +'<td></td>'
                   +'</tr>';
-          }
 
           //breaker AK pengawasan
           table += '<tr>'
@@ -546,8 +544,8 @@ function generate_tabel_penunjang(){
                   +'</tr>';
 
           //AK pengembangan profesi
-          if(response.pengembangan.length > 0){
-            var sumPengembangan = 0, sumLamaPengembangan = 0;
+          var sumPengembangan = 0, sumLamaPengembangan = 0;
+          if(response.pengembangan.length > 0){            
             $.each(response.pengembangan, function(i, item){
               n = i+1
               table += '<tr>'
@@ -562,19 +560,86 @@ function generate_tabel_penunjang(){
                 +'</tr>';
               sumPengembangan += parseFloat(item.info_dupak.dupak);
               sumLamaPengembangan += parseFloat(item.info_dupak.lama);
-            });
-
-            table += '<tr style="background: #ccc; text-align: center">'
+            });            
+          }
+          table += '<tr style="background: #ccc; text-align: center">'
                   +'<td></td>'
-                  +'<td><strong>Jumlah Pengawasan</strong></td>'
-                  +'<td>'+sumPengembangan+'</td>'
+                  +'<td><strong>Jumlah Pengembangan Profesi</strong></td>'
+                  +'<td>'+sumPengembangan.toFixed(3)+'</td>'
                   +'<td></td>'
                   +'<td>'+sumLamaPengembangan+'</td>'
                   +'<td></td>' 
                   +'<td></td>'
                   +'<td></td>'
                   +'</tr>';
+            sumUtama = sumDiklat+sumPengawasan+sumPengembangan;
+            sumLamaUtama = sumLamaDiklat+sumLamaPengawasan+sumLamaPengembangan;
+
+            table += '<tr style="background: #ccc; text-align: center">'
+                  +'<td></td>'
+                  +'<td><strong>Jumlah Unsur Utama</strong></td>'
+                  +'<td>'+sumUtama.toFixed(3)+'</td>'
+                  +'<td></td>'
+                  +'<td>'+sumLamaUtama+'</td>'
+                  +'<td></td>' 
+                  +'<td></td>'
+                  +'<td></td>'
+                  +'</tr>';
+
+          //breaker unsur utama
+          table += '<tr>'
+                  +'<td style="text-align: right;"><strong>B</strong></td>'
+                  +'<td><strong>Unsur Penunjang</strong></td>'
+                  +'<td></td>'
+                  +'<td></td>'
+                  +'<td></td>'
+                  +'<td></td>' 
+                  +'<td></td>'
+                  +'<td></td>'
+                  +'</tr>';
+
+          //AK Penunjang
+          var sumPenunjang = 0, sumLamaPenunjang = 0;
+          if(response.penunjang.length > 0){            
+            $.each(response.penunjang, function(i, item){
+              n = i+1
+              table += '<tr>'
+                +'<td></td>' //item.spt_umum.info_untuk_umum
+                +'<td style="padding-left:50px;">'+n+'. '+item.spt_umum.info_untuk_umum+'</td>'
+                +'<td style="text-align: center">'+item.info_dupak.dupak+'</td>'
+                +'<td></td>'
+                +'<td style="text-align: center">'+item.info_dupak.lama+'</td>'
+                +'<td></td>'
+                +'<td></td>'
+                +'<td></td>'
+                +'</tr>';
+              sumPenunjang += parseFloat(item.info_dupak.dupak);
+              sumLamaPenunjang += parseFloat(item.info_dupak.lama);
+            });            
           }
+          table += '<tr style="background: #ccc; text-align: center">'
+                  +'<td></td>'
+                  +'<td><strong>Jumlah Unsur Penunjang</strong></td>'
+                  +'<td>'+sumPenunjang.toFixed(3)+'</td>'
+                  +'<td></td>'
+                  +'<td>'+sumLamaPenunjang+'</td>'
+                  +'<td></td>' 
+                  +'<td></td>'
+                  +'<td></td>'
+                  +'</tr>';
+          sumPenjenjangan = sumUtama+sumPenunjang;
+          sumLamaPenjenjangan = sumLamaUtama+sumLamaPenunjang;
+          //jumlah AK Penjenjangan
+          table += '<tr style="background: #ccc; text-align: center">'
+                  +'<td></td>'
+                  +'<td><strong>jumlah AK Penjenjangan</strong></td>'
+                  +'<td>'+sumPenjenjangan.toFixed(3)+'</td>'
+                  +'<td></td>'
+                  +'<td>'+sumLamaPenjenjangan+'</td>'
+                  +'<td></td>' 
+                  +'<td></td>'
+                  +'<td></td>'
+                  +'</tr>';
 
         //penutup tabel
           table +='</table>'

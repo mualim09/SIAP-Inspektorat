@@ -43,7 +43,7 @@ use PhpOffice\PhpWord\Element\Table;
 class SptController extends Controller
 {
 
-    private $list_peran = ['Penanggungjawab', 'Pembantu Penanggungjawab','Pengendali Mutu', 'Pengendali Teknis', 'Ketua Tim', 'Anggota Tim'];
+    private $list_peran = ['Penanggungjawab', 'Pembantu Penanggungjawab','Pengendali Mutu', 'Pengendali Teknis', 'Ketua Tim', 'Anggota'];
 
     public function __construct() {
         $this->middleware(['auth', 'spt']); //isAdmin middleware lets only users with a //specific permission permission to access these resources
@@ -71,7 +71,15 @@ class SptController extends Controller
         $pms = User::whereIn('jabatan', ['Auditor Utama', 'Auditor Madya'])->get(); 
         $pts = User::whereIn('jabatan', ['Auditor Utama', 'Auditor Madya', 'Auditor Muda'])->get(); 
         $kets = User::whereIn('jabatan', ['Auditor Madya', 'Auditor Muda','Auditor Pertama'])->get();
-        $anggotas = User::whereNotIn('jabatan', ['Auditor Utama'])->doesntHave('pejabat')->where('email','!=','admin@local.host')->get();
+        $anggotas = User::whereNotIn('jabatan', ['Auditor Utama'])->doesntHave('pejabat')
+                ->where('email','!=','admin@local.host')
+                //->select(DB::raw("id ,JSON_EXTRACT(ruang, '$.nama') AS nama_ruang]"))
+                //->orderByRaw(DB::raw("FIELD(ruang->nama,'Penanggungjawab', 'Pembantu Penanggungjawab', 'Pengendali Mutu', 'Pengendali Teknis', 'Ketua Tim', 'Anggota Tim')"))
+                //orderByRaw("cast(meta->'$.views' as unsigned) desc")-
+                ->orderBy('ruang->nama','asc')
+                //->orderByRaw(DB::raw("FIELD(JSON_EXTRACT(ruang, '$.nama'),'IRBAN I', 'IRBAN II', 'IRBAN III', 'IRBAN IV', NULL)"))
+                ->get();
+                //SELECT id, name, JSON_EXTRACT(data, '$.city_name') AS cityName FROM demo ORDER BY cityName ASC
         return view('admin.spt.index',
             [
             'spt'=>$spt,
@@ -867,8 +875,8 @@ class SptController extends Controller
                     <a href="#" onclick="sign('.$id.')" class="btn btn-outline-success btn-sm">Setuju</a> ';
         }
 
-        if ( $user->hasAnyRole(['TU Umum', 'Super Admin']) && $method == 'penomoran') {
-                    $control = '<a href="#" onclick="showFormModal('.$id.')" class="btn btn-outline-primary btn-sm" title="Penomoran SPT"><i class="fa fa-list-ol"></i></a>';
+        if ( $user->hasAnyRole(['TU Perencanaan', 'Super Admin','TU Umum']) && $method == 'penomoran') {
+                    $control = '<a href="#" onclick="showFormModal('.$id.')" class="btn btn-outline-primary btn-sm" title="Teruskan"><i class="fa fa-share"></i></a>';
                     return $control;
         }
         if ( $user->hasAnyRole(['TU Umum', 'Super Admin']) && $method == 'showFormModalUmum') {
