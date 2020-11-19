@@ -178,7 +178,7 @@ class SptController extends Controller
                 DB::table('detail_spt')->insertGetId([
                     'spt_id' => $spt->id,
                     'user_id' => $request->ket,
-                    'peran' => 'Ketua',
+                    'peran' => 'Ketua Tim',
                     'unsur_dupak' => 'pengawasan',
                 ]);
             }
@@ -507,12 +507,16 @@ class SptController extends Controller
      */
     public function edit($id)
     {
-        $spt = Spt::find($id);
-        $jenis_spt = $spt->jenisSpt;
+        $spt = Spt::where('id',$id)->with(['jenisSpt','detailSpt'=>function($q){
+            $q->where('unsur_dupak','pengawasan');
+        }])->first();
+        //dd($spt);
+        //$jenis_spt = $spt->jenisSpt;
         $spt['tgl_mulai'] = date('d-m-Y', strtotime($spt->tgl_mulai));
         $spt['tgl_akhir'] = date('d-m-Y', strtotime($spt->tgl_akhir));
         return $spt;
-        return $jenis_spt;
+        //return $jenis_spt;
+        //return $detail_spt;
     }
 
     public function editSptUmum($id){
@@ -564,8 +568,85 @@ class SptController extends Controller
         $spt = $spt->save();
         if($spt){
             $updated_spt = Spt::findOrFail($id);
-            $jenis_spt = JenisSpt::select('name','sebutan')->where('id',$updated_spt['jenis_spt_id'])->first();
+            $jenis_spt = JenisSpt::select('name','sebutan')->where('id',$updated_spt['jenis_spt_id'])->first();            
 
+            //hapus data detail terlebih dahulu
+            DetailSpt::where('spt_id',$id)->where('unsur_dupak','pengawasan')->delete();
+
+            //setelah itu, mutakhirkan data detail spt
+            if($request->pj){
+                DB::table('detail_spt')->insertGetId([
+                    'spt_id' => $id,
+                    'user_id' => $request->pj,
+                    'peran' => 'Penanggungjawab',
+                    'unsur_dupak' => 'pengawasan',
+                ]);
+            }
+
+            if($request->ppj){
+                DB::table('detail_spt')->insertGetId([
+                    'spt_id' => $id,
+                    'user_id' => $request->ppj,
+                    'peran' => 'Pembantu Penanggungjawab',
+                    'unsur_dupak' => 'pengawasan',
+                ]);
+            }
+
+            if($request->pm){
+                DB::table('detail_spt')->insertGetId([
+                    'spt_id' => $id,
+                    'user_id' => $request->pm,
+                    'peran' => 'Pengendali Mutu',
+                    'unsur_dupak' => 'pengawasan',
+                ]);
+            }
+
+            if($request->pt){
+                DB::table('detail_spt')->insertGetId([
+                    'spt_id' => $id,
+                    'user_id' => $request->pm,
+                    'peran' => 'Pengendali Teknis',
+                    'unsur_dupak' => 'pengawasan',
+                ]);
+            }
+
+            if($request->ket){
+                DB::table('detail_spt')->insertGetId([
+                    'spt_id' => $id,
+                    'user_id' => $request->ket,
+                    'peran' => 'Ketua Tim',
+                    'unsur_dupak' => 'pengawasan',
+                ]);
+            }
+
+            if($request->a1){
+                DB::table('detail_spt')->insertGetId([
+                    'spt_id' => $id,
+                    'user_id' => $request->a1,
+                    'peran' => 'Anggota',
+                    'unsur_dupak' => 'pengawasan',
+                ]);
+            }
+
+            if($request->a2){
+                DB::table('detail_spt')->insertGetId([
+                    'spt_id' => $id,
+                    'user_id' => $request->a2,
+                    'peran' => 'Anggota',
+                    'unsur_dupak' => 'pengawasan',
+                ]);
+            }
+
+            if($request->a3){
+                DB::table('detail_spt')->insertGetId([
+                    'spt_id' => $id,
+                    'user_id' => $request->a3,
+                    'peran' => 'Anggota',
+                    'unsur_dupak' => 'pengawasan',
+                ]);
+            }
+
+            //update event SPT
             $user = auth()->user();
             $event = Event::where('info->spt_id',$id)->update([
                'title' => $jenis_spt->sebutan,
@@ -842,7 +923,7 @@ class SptController extends Controller
         $spt = Spt::findOrFail($id);
         $sort_detail = implode(",",$this->list_peran);
         $detail_spt = DetailSpt::where('spt_id','=',$id)->with(['spt','user'])
-            ->orderByRaw(DB::raw("FIELD(peran,'Penanggungjawab', 'Pembantu Penanggungjawab', 'Pengendali Mutu', 'Pengendali Teknis', 'Ketua Tim', 'Anggota Tim')"))->get();
+            ->orderByRaw(DB::raw("FIELD(peran,'Penanggungjawab', 'Pembantu Penanggungjawab', 'Pengendali Mutu', 'Pengendali Teknis', 'Ketua Tim', 'Anggota')"))->get();
         $template_name = (File::exists(storage_path("spt/template-spt.docx"))) ? storage_path('spt\template-spt.docx') : 'tidak ada'; // default template name        
         $phpWord = new \PhpOffice\PhpWord\PhpWord();
         $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($template_name);
