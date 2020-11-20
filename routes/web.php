@@ -343,7 +343,6 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
     	Route::get('/get-ppm-byid/{id}','PpmController@getPpmByid')->name('getPpmById');
     	// percobaan ppm tanpa datatable
     	// Route::get('ppm/get-data/anggota', 'PpmController@drawTableAnggotaPpm')->name('tabel_anggota_ppm');
-    	Route::post('ppm/get-data/anggota', 'PpmController@TableAnggotaPpm')->name('tabel_anggota_ppm'); /*getdata user yang terkait ppm tsb*/
     	Route::delete('delete/data-ppm/{id}','PpmController@deletePpm')->name('delete_data_PPM_by_id');
     });
 
