@@ -203,24 +203,19 @@
         });
 	}
 
-		var select_lokasi = $('#lokasi-id-umum').selectize({	   
-		   /*sortField: 'text',*/
-		   allowEmptyOption: false,
-		   placeholder: 'Pilih Lokasi',
-		   closeAfterSelect: true,
-		   create: false,
-		   maxItems:10,
-		   onchange: function(value){
-		   	
-		   },
-		});
+	var select_lokasi = $('#lokasi-id-umum').selectize({	   
+	   /*sortField: 'text',*/
+	   allowEmptyOption: false,
+	   placeholder: 'Pilih Lokasi',
+	   closeAfterSelect: true,
+	   create: false,
+	   maxItems:10,
+	   onchange: function(value){
+	   	
+	   },
+	});
 
-		var select_anggota = $('#session-anggota-umum').selectize({	   
-		   persist: false,
-		   sortField: 'text',
-		   allowEmptyOption: false,
-		   placeholder: 'Anggota SPT',	  
-	  	});
+
 
 		$( "#formSptUmum" ).on('shown.bs.modal', function(){
 

@@ -642,8 +642,49 @@ function generate_tabel_penunjang(){
                   +'</tr>';
 
         //penutup tabel
-          table +='</table>'
-        $("#dupak-lak-wrapper").html(header+table);
+        table +='</table>';
+
+        var penilai = new Object(), inspektur = new Object();
+        if(response.pejabat){
+          $.each(response.pejabat, function(i, item){
+            //console.log(item);
+            if(item.name == 'Inspektur Kabupaten'){
+              inspektur.name = item.user.full_name_gelar;
+              inspektur.jabatan = item.user.jabatan+' ('+item.user.pangkat+')';
+              inspektur.nip = 'NIP. '+item.user.nip;
+              inspektur.status = ('undefined' !== typeof inspektur.status) ? inspektur.status+' ' : '';
+            }
+            if(item.name == 'Ketua Penilai AK'){
+              penilai.name = item.user.full_name_gelar;
+              penilai.jabatan = item.user.jabatan+' ('+item.user.pangkat+')';
+              penilai.nip = 'NIP. '+item.user.nip;
+            }
+          });
+        }        
+        var footer = '<div style="height:20px;display:block;"></div>'
+            +'<div class="row">'
+              +'<div class="col-md-4 col-print-4 text-center print-center">Sidoarjo,<span style="min-width:130px;display:inline-block;">&nbsp;</span>'+year+'</div>'
+              +'<div class="col-md-4 col-print-4 text-center print-center">Diperiksa</div>'
+              +'<div class="col-md-4 col-print-4 text-center print-center">Direview</div>'
+            +'</div>'
+            +'<div class="row">'
+              +'<div class="col-md-4 col-print-4 text-center print-center"></div>'
+              +'<div class="col-md-4 col-print-4 text-center print-center">Ketua Tim Penilai</div>'
+              +'<div class="col-md-4 col-print-4 text-center print-center">'+inspektur.status+'Inspektur Kabupaten</div>'
+            +'</div>'
+            +'<div class="h-100"></div>' //separator ttd atasan
+            +'<div class="row">'
+              +'<div class="col-md-4 col-print-4 text-center print-center"><strong><u>'+ response.user.full_name_gelar +'</u></strong></div>'
+              +'<div class="col-md-4 col-print-4 text-center print-center"><strong><u>'+penilai.name+'</u></strong></div>'
+              +'<div class="col-md-4 col-print-4 text-center print-center"><strong><u>'+inspektur.name+'</u></strong></div>'
+            +'</div>'
+            +'<div class="row">'
+              +'<div class="col-md-4 col-print-4 text-center print-center">'+response.user.jabatan+'<br/>NIP. '+ response.user.nip +'</div>'
+              +'<div class="col-md-4 col-print-4 text-center print-center">'+penilai.jabatan+'<br/>'+penilai.nip+'</div>'
+              +'<div class="col-md-4 col-print-4 text-center print-center">'+inspektur.jabatan+'<br/>'+inspektur.nip+'</div>'
+            +'</div>';            
+            
+        $("#dupak-lak-wrapper").html(header+table+footer);
         
       },
       error: function(error){

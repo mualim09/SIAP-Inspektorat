@@ -48,6 +48,7 @@ table{
 table > tr > td, table > tr > th{
 	padding-left: 5px;
 }
+a{color:#000; text-decoration: none;}
 .table-print-border th, .table-print-border td{
 	border: 1px solid #000;	
     border-spacing: 0;

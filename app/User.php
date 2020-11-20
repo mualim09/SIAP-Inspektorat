@@ -114,7 +114,7 @@ class User extends Authenticatable implements HasMedia
 
     //relasi ke pejabat
     public function pejabat(){
-        return $this->hasOne('App\models\Pejabat');
+        return $this->hasMany('App\models\Pejabat');
     }
 
     public function menuPpm()

@@ -1,12 +1,12 @@
 @section('nav_tab_arsip')
 <li class="nav-item">
-  <a class="nav-link"  href="#arsip-tab" role="tab" aria-controls="arsip-tab" aria-selected="false">Arsip SPT</a>
+  <a class="nav-link"  href="#arsip-tab" role="tab" aria-controls="arsip-tab" aria-selected="false">Arsip SPT pengawasan</a>
 </li>
 @endsection
 
 @section('tab_content_arsip')
 <div class="tab-pane" id="arsip-tab" role="tabpanel" aria-labelledby="arsip-tab">
-  <h4 class="text-center"> Arsip SPT </h4>
+  <h4 class="text-center"> Arsip SPT Pengawasan </h4>
 <div class="modal-body">
   <div class="card">
     <div class="card-body table-responsive">

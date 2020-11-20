@@ -4,7 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\models\Spt, App\models\DetailSpt, App\models\Dupak, App\User;
+use App\models\Spt, App\models\DetailSpt, App\models\Dupak, App\models\Pejabat, App\User;
 use App\models\Ppm, App\models\DetailPpm;
 use DB, Yajra\DataTables\DataTables, PDF;
 use Redirect,Response;
@@ -451,6 +451,17 @@ class DupakController extends Controller
         ->where('unsur_dupak','=','pengembangan profesi')->where('user_id','=',$user_id)->get();
         $pengembangan->concat($ppm);
         $dupak['pengembangan'] = $pengembangan;
+
+        //pejabat AK
+        /*$dupak['pejabat'] = User::whereHas('pejabat', function($q){
+            $q->whereIn('name',['Inspektur Kabupaten','Ketua Penilai AK']);
+        })->with([
+            'pejabat', function($q){
+                $q->select('id','name','status')->whereIn('name',['Inspektur Kabupaten','Ketua Penilai AK'])
+            }])->get();*/
+        $dupak['pejabat'] = Pejabat::whereIn('name',['Inspektur Kabupaten','Ketua Penilai AK'])->with(['user'=>function($q){
+                    $q->select(['id', 'nip', 'first_name', 'last_name', 'gelar', 'jabatan', 'pangkat']);
+                }])->get();
 
         return $dupak;
         
