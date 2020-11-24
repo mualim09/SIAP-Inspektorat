@@ -34,7 +34,7 @@ class DupakController extends Controller
             //return view('admin.dupak.auditor');
             return response('Fitur sementara sedang dalam perbaikan', 401);
         }*/
-        return view('admin.dupak.form');
+        return view('admin.dupak.index');
     }
 
     public function testExport(){
@@ -465,6 +465,16 @@ class DupakController extends Controller
 
         return $dupak;
         
+    }
+
+    public function userPak(Request $request){
+        $user_id = ($request->user_id) ? $request->user_id : auth()->user()->id;
+        $year = ($request->tahun) ? $request->tahun : date('Y');
+        $dupak['user'] = User::where('id',$user_id)->first();
+        $dupak['pejabat'] = Pejabat::where('name','Penetap AK')->with(['user'=>function($q){
+                    $q->select(['id', 'nip', 'first_name', 'last_name', 'gelar', 'jabatan', 'pangkat']);
+                }])->get();
+        return $dupak;
     }
 
 

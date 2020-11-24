@@ -135,7 +135,8 @@
               +'<li class="nav-item"><a data-toggle="tab" class="nav-link" href="#dupak-pendidikan">Pendidikan</a></li>'
               +'<li class="nav-item"><a data-toggle="tab" class="nav-link" href="#dupak-penunjang">Penunjang</a></li>'
               +'<li class="nav-item"><a data-toggle="tab" class="nav-link" href="#dupak-diklat">Diklat</a></li>'
-              +'<li class="nav-item"><a data-toggle="tab" class="nav-link" href="#dupak-lak">LAK</a></li>';
+              +'<li class="nav-item"><a data-toggle="tab" class="nav-link" href="#dupak-lak">LAK</a></li>'
+               +'<li class="nav-item"><a data-toggle="tab" class="nav-link" href="#dupak-pak">PAK</a></li>';
         $('#dupak-tab').html(tab);
 
         //coba versi html biasa
@@ -144,6 +145,7 @@
         generate_tabel_penunjang();
         generate_tabel_diklat();
         generate_tabel_lak();
+        //generate_tabel_pak();
         e.preventDefault();
     });
 
@@ -166,12 +168,14 @@ $('.datepicker').each(function() {
 
 function printDiv(divName){
  //printJS(divName, 'html');
+ //$( "div.no-print" ).parents().css( 'display','none' );
   printJS({
     printable : divName,
     type: 'html',
     css: "{{ asset('css/print.css') }}",
     scanStyles: false
   });
+  //return false;
 }
 
 </script>

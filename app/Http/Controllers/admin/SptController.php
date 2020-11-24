@@ -73,13 +73,8 @@ class SptController extends Controller
         $kets = User::whereIn('jabatan', ['Auditor Madya', 'Auditor Muda','Auditor Pertama'])->get();
         $anggotas = User::whereNotIn('jabatan', ['Auditor Utama'])->doesntHave('pejabat')
                 ->where('email','!=','admin@local.host')
-                //->select(DB::raw("id ,JSON_EXTRACT(ruang, '$.nama') AS nama_ruang]"))
-                //->orderByRaw(DB::raw("FIELD(ruang->nama,'Penanggungjawab', 'Pembantu Penanggungjawab', 'Pengendali Mutu', 'Pengendali Teknis', 'Ketua Tim', 'Anggota Tim')"))
-                //orderByRaw("cast(meta->'$.views' as unsigned) desc")-
                 ->orderBy('ruang->nama','asc')
-                //->orderByRaw(DB::raw("FIELD(JSON_EXTRACT(ruang, '$.nama'),'IRBAN I', 'IRBAN II', 'IRBAN III', 'IRBAN IV', NULL)"))
                 ->get();
-                //SELECT id, name, JSON_EXTRACT(data, '$.city_name') AS cityName FROM demo ORDER BY cityName ASC
         return view('admin.spt.index',
             [
             'spt'=>$spt,
@@ -224,7 +219,7 @@ class SptController extends Controller
             $info['type'] = 'spt';
 
             //role perencanaan jika membuat spt maka otomatis menjadi spt pengawasan, jika role TU umum: spt umum, selain itu set NULL.
-            $info['jenis'] = ( $user->hasRole('TU Perencanaan') ) ? 'pengawasan' : (($user->hasRole('TU Umum')) ? 'umum' : NULL);
+            $info['jenis'] = 'pengawasan';
 
             $info['spt_id'] = $spt->id;
             $insertArr = [
@@ -879,8 +874,8 @@ class SptController extends Controller
                     $control = '<a href="#" onclick="showFormModal('.$id.')" class="btn btn-outline-primary btn-sm" title="Teruskan"><i class="fa fa-share"></i></a>';
                     return $control;
         }
-        if ( $user->hasAnyRole(['TU Umum', 'Super Admin']) && $method == 'showFormModalUmum') {
-            $control = '<a href="#" onclick="showFormModalUmum('.$id.')" class="btn btn-outline-primary btn-sm" title="Penomoran SPT Umum"><i class="fa fa-list-ol"></i></a>';
+        if ( $user->hasAnyRole(['TU Umum', 'Super Admin']) && $method == 'showFormModalUmum') {            
+            $control = '<a href="#" onclick="showFormModalUmum('.$id.')" class="btn btn-outline-primary btn-sm" title="Teruskan"><i class="fa fa-share"></i></a>';
             return $control;
         }
         if( $user->hasAnyRole(['TU Umum', 'Super Admin']) && $method == 'editSptUmum' ){
@@ -1319,7 +1314,7 @@ class SptController extends Controller
 
         }else{
 
-            $spt = SptUmum::findOrFail($id_umum);
+            $sptumum = SptUmum::findOrFail($id_umum);
             $filename = ($request->file_spt_umum) ? 'SPT-UMUM-' . $id_umum . '-' . $request->file_spt_umum->getClientOriginalName() : null ;
             //dd(storage_path()."/spt");
             if($filename !== null ){
@@ -1329,7 +1324,7 @@ class SptController extends Controller
                 $request->file_spt_umum->move(public_path()."/storage/spt" , $filename);
             }
             //$spt->file = ($filename !== null ) ? url('/storage/spt-umum/'.$filename) : null;
-            $spt->file = ($filename !== null ) ? $filename : null;
+            $sptumum->file = ($filename !== null ) ? $filename : null;
             //$spt->nomor = $request->nomor;
             $parser = new \Smalot\PdfParser\Parser();
             $pdf    = $parser->parseFile(storage_path("app/public/spt/$filename"));     
@@ -1339,7 +1334,7 @@ class SptController extends Controller
             $tgl_register = date('Y-m-d H:i:s',strtotime($request->tgl_register_umum));
 
             $info_spt = null;
-            $spt->update(['nomor'=>$nomor,'tgl_register'=>$tgl_register]);
+            $sptumum->update(['nomor'=>$nomor,'tgl_register'=>$tgl_register]);
         }
 
         if($spt_umum == null && $spt->save()) {
@@ -1392,9 +1387,11 @@ class SptController extends Controller
            //buat event terkait spt untuk penerapan di kalender
            $this->createEventSpt($spt);
            return $spt;
-        }else{
+        }
+        if($spt_umum !== null && isset($sptumum)){
             $detail_spt = DetailSpt::where('spt_id', $id_umum)->with('sptUmum')->get();
-            return $spt;
+            $this->createEventSpt($sptumum, true);
+            return $sptumum;
         }
         return false;
     }
@@ -1474,18 +1471,16 @@ class SptController extends Controller
 
 
     //func createEventSpt use var $spt berupa stdClass object
-    public function createEventSpt($spt){
+    public function createEventSpt($spt,$spt_umum = false){
         $user = auth()->user();
         //user id pembuat spt
         $info['user_id'] = $user->id;
         $info['type'] = 'spt';
-
-        //role perencanaan jika membuat spt maka otomatis menjadi spt pengawasan, jika role TU umum: spt umum, selain itu set NULL.
-        $info['jenis'] = ( $user->hasRole('TU Perencanaan|Super Admin') ) ? 'pengawasan' : (($user->hasRole('TU Umum')) ? 'umum' : NULL);
-
+        $info['jenis'] = ($spt_umum == false) ? $spt->jenisSpt->kategori : 'umum';
         $info['spt_id'] = $spt->id;
+        $title = ($spt_umum == false) ? $spt->jenisSpt->sebutan : $spt->jenis_spt_umum ;
         $insertArr = [
-           'title' => $spt->jenisSpt->sebutan,
+           'title' => $title,
            'start' => $spt->tgl_mulai,
            'end' => $spt->tgl_akhir,
            'info' => $info

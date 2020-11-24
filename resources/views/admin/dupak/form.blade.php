@@ -162,6 +162,7 @@
 @push('js')
     <script src="{{ asset('assets/vendor/jquery/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery/moment.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/bsdatepicker/js/bootstrap-datepicker.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/bsdatepicker/locales/bootstrap-datepicker.'.config("app.locale").'.min.js') }}" charset="UTF-8"></script>
     <script src="{{ asset('assets/vendor/selectize/js/standalone/selectize.min.js') }}"></script>
