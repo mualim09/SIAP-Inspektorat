@@ -98,7 +98,7 @@
 					<div class="col table-responsive" id="tabel-anggota-pengawasan-wrapper">						
 					</div>
 				</div> -->
-				@include('admin.spt.include.anggota_pengawasan_form')
+				
 
 				<script type="text/javascript">
 					$('#add-anggota').on('click', function(){

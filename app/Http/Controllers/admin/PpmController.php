@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
 use App\models\DetailPpm;
+use App\models\DetailSpt;
+use App\models\Spt;
 use App\models\Ppm;
 use DB;
 use App\Common;
@@ -15,10 +17,8 @@ use App\models\FileMedia;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-// use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\View;
 use Config, File;
-//use Illuminate\Support\Facades\Input;
 
 class PpmController extends Controller
 {
@@ -102,125 +102,116 @@ class PpmController extends Controller
      */
     public function storePpm(Request $request)
     {
-        // return 'fungsi berjalan '; /*jalan*/
         // dd($request);
         $user = auth()->user();
         $this->validate($request, [
             'kegiatan_ppm'=> 'required',
             'tgl_mulai_ppm'=>'required|date_format:"d-m-Y"',
-            // 'tgl_akhir_ppm' =>'required|date_format:"d-m-Y"|after_or_equal:tgl_mulai_ppm',
-            'lama_ppm' => 'required|integer'
             ]
         );
 
         // sisipkan proses get value file
-
          $data = [
             'kegiatan' => Common::cleanInput($request['kegiatan_ppm']),
             'tgl_mulai' => date('Y-m-d H:i:s',strtotime($request['tgl_mulai_ppm'])),
-            // 'tgl_akhir' => date('Y-m-d H:i:s',strtotime($request['tgl_akhir_ppm'])),
-            // 'lokasi_id' => $request['lokasi_umum_id'],
-            'lama' => $request['lama_ppm'],
+            'lama' => $request->hari_ppm,
             'jenis_ppm' => Common::cleanInput($request['unsur_ppm']),
         ];
 
-        // dd($request->file_nota_dinas);
-        // die();
-        $ppm = Ppm::create($data);
-        if($ppm) {
-            // $this->storeDetailPpm($ppm->id, $ppm->lama);
+        // $ppm = Ppm::create($data);
+        // if($ppm) {
             
             // start fungsi insert detail ppm
-            $ppm = Ppm::find($ppm_id);
-            //dd($spt);
-            $unsur_dupak = $ppm->jenis_ppm;
-            // $start =$ppm->tgl_mulai;
-            // $end = $ppm->tgl_akhir;
-            $lama = $ppm->lama;
-            $counter = array();
+            // $ppm = Ppm::find($ppm->id);
+            // $unsur_dupak = $ppm->jenis_ppm;
+            // $lama = $ppm->lama;
 
-            if(Session::has('anggota_ppm'))
-            {
-                $session_anggota = Session::get('anggota_ppm');
-                // dd($session_anggota);
-                foreach($session_anggota as $k=>$anggota){
-                    //cek lembur, set lembur to true jika tgl mulai spt ada di tgl akhir spt
-                    //$lembur = Spt::where('tgl_akhir','=', $start)->where('user_id','=', $anggota['user_id'])->join('detail_spt','detail_spt.spt_id','=','spt.id')->get();
-                    //$isLembur = ( $lembur->count() > 0) ? true : false;
-                    if($k === 0){
-                        $peran = 'Pejabat Utama';
-                    }else{
-                        $peran = 'Peserta';
+            if ($request->moderator_narasumber != null && $request->id_anggota_ppm != null) {
+                
+                    /* start foreach moderator & narasumber */
+                    foreach ($request->moderator_narasumber as $index_moderator => $value_moderator) {
+                        $peran = 'Moderator / Narasumber';
+
+                        /*start set moderator ppm*/
+                        $get_spt_pengawasan = DetailSpt::where('user_id',$request->moderator_narasumber[$index_moderator])->with('spt')->get();
+                        
+                        $peran = 'Moderator/Narasumber';
+
+                        $nilai_dupak = 0.25;
+                        $hari_efektif_ppm = 1;
+                        $lama_jam_ppm = 3;
+                        $koefisien_moderator = 0.25;
+
+                        $dupak_moderator_ppm = [
+                            'dupak' => $nilai_dupak,
+                            'lembur' => 0,
+                            'efektif' => $hari_efektif_ppm,
+                            'lama_jam' => $lama_jam_ppm,
+                            'koefisien' => $koefisien_moderator
+                        ];
+                        /*end set*/
+                        
+                        // DB::table('detail_ppm')->insertGetId([
+                        // 'id_ppm' => $ppm->id,
+                        // 'user_id' => $value_moderator,
+                        // 'peran' => $peran,
+                        // 'lama' => $lama,
+                        // 'info_dupak' => json_encode($dupak_moderator_ppm),
+                        // 'unsur_dupak' => $unsur_dupak
+                        // ]);
+                        // dd($dupak_moderator_ppm);
+
+                        /*start nilai dupak pengawasan yg terimbas*/
+                        $nilai_dupak_pengawasan = $get_spt_pengawasan[$index_moderator]->info_dupak;
+
+                        $nilai_dupak_terimbas = $nilai_dupak_pengawasan['dupak'] - $nilai_dupak;
+                        $hari_efektif_terimbas = $nilai_dupak_pengawasan['efektif'] - $hari_efektif_ppm;
+                        $lama_jam_terimbas = $nilai_dupak_pengawasan['lama_jam'] - $lama_jam_ppm;
+                        // $koefisien_moderator_terimbas = 0.25;
+
+                        $dupak_moderator_terimbas = [
+                            'dupak' => $nilai_dupak_terimbas,
+                            'lembur' => 0,
+                            'efektif' => $hari_efektif_terimbas,
+                            'lama_jam' => $lama_jam_terimbas,
+                            'koefisien' => $nilai_dupak_pengawasan['koefisien']
+                        ];
+                        // dd($dupak_moderator_ppm);
+                        /*end nilai dupak pengawasan yg terimbas*/
+                        
                     }
-                    $dupak = [
-                        'lama' => $anggota['lama'],
-                        'dupak' => $anggota['dupak']
-                    ];
+                    /* end foreach */
 
-                    DB::table('detail_ppm')->insertGetId([
-                    'id_ppm' => $ppm_id,
-                    'user_id' => $anggota['user_id'],
-                    'peran' => $peran,
-                    'lama' => $lama,
-                    'info_dupak' => json_encode($dupak),
-                    'unsur_dupak' => $unsur_dupak
-                    //'dupak' => $this->hitungDupak($anggota['user_id'],$anggota['peran'],$lama,$isLembur)
-                ]);
+                    /* start foreach peserta ppm */
+                    foreach (json_decode($request->id_anggota_ppm) as $index_moderator => $value_moderator) {
+
+                        $peran = 'Peserta';
+
+                        $dupak = [
+                            'lama' => '3',
+                            'dupak' => '0,1'
+                        ];
+                        // dd($value_moderator);
+                        // DB::table('detail_ppm')->insertGetId([
+                        // 'id_ppm' => $ppm->id,
+                        // 'user_id' => $value_moderator,
+                        // 'peran' => $peran,
+                        // 'lama' => '1',
+                        // 'info_dupak' => json_encode($dupak),
+                        // 'unsur_dupak' => $unsur_dupak
+                        // ]);
+                        
+                    }
+                    /* end foreach */
                 }
-                $this->clearSessionAnggotaPpm();
-            }
-            // end fungsi
+            // end fungsi insert detail ppm
 
+            /*throwing id ppm and file nota dinas*/
+            // $this->storeNotaDinas($ppm->id, $request->file_nota_dinas);
 
-            $this->storeNotaDinas($ppm->id, $request->file_nota_dinas);
-
-            return $ppm;
-        }
+            // return $ppm;
+        // }
     }
-
-    // public function storeDetailPpm($ppm_id,$lama)
-    // {
-    //     // dd($request);
-    //     $ppm = Ppm::find($ppm_id);
-    //     //dd($spt);
-    //     $unsur_dupak = $ppm->jenis_ppm;
-    //     $start =$ppm->tgl_mulai;
-    //     // $end = $ppm->tgl_akhir;
-    //     $lama = $ppm->lama;
-    //     $counter = array();
-
-    //     if(Session::has('anggota_ppm'))
-    //     {
-    //         $session_anggota = Session::get('anggota_ppm');
-    //         // dd($session_anggota);
-    //         foreach($session_anggota as $k=>$anggota){
-    //             //cek lembur, set lembur to true jika tgl mulai spt ada di tgl akhir spt
-    //             //$lembur = Spt::where('tgl_akhir','=', $start)->where('user_id','=', $anggota['user_id'])->join('detail_spt','detail_spt.spt_id','=','spt.id')->get();
-    //             //$isLembur = ( $lembur->count() > 0) ? true : false;
-    //             if($k === 0){
-    //                 $peran = 'Pejabat Utama';
-    //             }else{
-    //                 $peran = 'Peserta';
-    //             }
-    //             $dupak = [
-    //                 'lama' => $anggota['lama'],
-    //                 'dupak' => $anggota['dupak']
-    //             ];
-
-    //             DB::table('detail_ppm')->insertGetId([
-    //             'id_ppm' => $ppm_id,
-    //             'user_id' => $anggota['user_id'],
-    //             'peran' => $peran,
-    //             'lama' => $lama,
-    //             'info_dupak' => json_encode($dupak),
-    //             'unsur_dupak' => $unsur_dupak
-    //             //'dupak' => $this->hitungDupak($anggota['user_id'],$anggota['peran'],$lama,$isLembur)
-    //         ]);
-    //         }
-    //         $this->clearSessionAnggotaPpm();
-    //     }
-    //     return;
-    // }
 
     // fungsi upload file nota dinas 
     public function storeNotaDinas($ppm_id,$file)
@@ -228,7 +219,7 @@ class PpmController extends Controller
         $ppm = Ppm::find($ppm_id);
 
         $filename = ($file) ? 'Nota Dinas-' . $ppm->id . '-' . $file->getClientOriginalName() : null ;
-        // if($filename !== null ) $request->file_spt->move(public_path('storage\files') , $filename);
+
         if($filename !== null ){
             if (! File::exists(public_path()."/storage/ppm")) {
                 File::makeDirectory(public_path()."/storage/ppm", 0755, true);
@@ -416,74 +407,43 @@ class PpmController extends Controller
         return ($delete_detail_ppm == true) ? 'data has been deleted' : 'data cant deleted cause u got a problem !';
     }
 
-    // public function drawTableAnggotaPpm(Request $request){
-    //     // dd($request->ppm_id);
-    //     $ppm_id = DetailPpm::where('id', $request->ppm_id)->first();
-    //     $return = '<table class="table table-bordered table-hover">'
-    //                     .'<thead><tr>'
-    //                         .'<th>No.</th>'
-    //                         .'<th>Nama</th>'
-    //                         .'<th></th>'
-    //                     .'</tr></thead>';
-
-    //     if($ppm_id != null){
-    //         //bukan spt baru, data spt sudah ada, tampilkan data anggota spt dari tabel detail
-    //         $list_anggota = DetailPpm::where('spt_id', $request->ppm_id)->with('user')->get();
-    //         //dd($list_anggota);
-    //         foreach($list_anggota as $i=>$anggota){
-    //             $return .= '<tr>'
-    //                         .'<td>'.++$i.'</td>'
-    //                         .'<td>'.$anggota->user->full_name_gelar.'</td>'
-    //                         // .'<td>'.$this->buildControl('deleteAnggotaUmum',$anggota->id).'</td>'
-    //                         .'<td>'.''.'</td>'
-    //                         .'</tr>';
-    //         }
-    //         if($list_anggota->count()<=0){
-    //             $return .= '<tr><td colspan="4" align="center">Tidak ada data anggota</td></tr>';
-    //         }
-
+    // public function TableAnggotaPpm(Request $request)
+    // {   
+    //     // $request->selectedid yang dikirimkan oleh view lebih dari 1 index
+    //     if ($request->selectedid == null) {
+    //         $data = null;
+    //         return response()->json($data);
     //     }else{
-    //         //data belum ada, cek session anggota, jika ada tampilkan data session anggota
-    //         if(Session::has('anggota_ppm')){
-    //             $session_anggota_ppm = Session::get('anggota_ppm');
-    //             //setup data anggota
-    //             foreach($session_anggota_ppm as $i=>$anggota){
-    //                 $user = User::where('id',$anggota['user_id'])->first();
-    //                 $return .= '<tr>'
-    //                         .'<td>'.++$i.'</td>'
-    //                         .'<td>'.$user->full_name_gelar.'</td>'
-    //                         .'<td><a href="#" class="btn btn-sm btn-outline-danger" onclick="function_ppm('.$anggota['user_id'].')" title="hapus anggota"><i class="fa fa-times"></i></a></td>'
-    //                         .'</tr>';
-    //                         // 
-    //             }
-    //             if(count($session_anggota_ppm)<=0){
-    //                 $return .= '<tr><td colspan="4" align="center">Tidak ada data anggota</td></tr>';
-    //             }
+    //         // percobaan
+    //         // $i = 0;
+    //         // foreach ($request->selectedid as $index_user => $value_user ) {
+    //         //     $user = User::where('id',$request->selectedid[$index_user])->whereHas(
+    //         //         'roles', function($q){
+    //         //             $q->where('name', 'Auditor');
+    //         //         }
+    //         //     )->get();
 
+    //         //     $s[$i] = [
+    //         //         $user,
+    //         //     ];
 
-    //         }else{
-    //             //data belum ada, session anggota juga tidak ada
-    //             $return .= '<tr><td colspan="4" align="center">Tidak ada data anggota</td></tr>';
+    //         //     $i++;
+    //         // }
+    //         // dd($s);
+    //         // end percobaan
+
+    //         // json_decode($request->selectedid[$key])
+    //         foreach ($request->selectedid as $key => $value) {
+    //             $user = User::where('id',$request->selectedid[$key])->whereHas(
+    //                 'roles', function($q){
+    //                     $q->where('name', 'Auditor');
+    //                 }
+    //             )->get();
+    //             // $data = [$user[$key]];
+    //             return response()->json([$user[$key]]);
     //         }
-
+    //         // NOTE : return $data setelah diloop menghasilkan 1 index
+    //         // return response()->json($s);
     //     }
-
-    //     $return .= '</table>';
-    //     return $return;
-
     // }
-
-    public function TableAnggotaPpm(Request $request)
-    {   
-        // $request->selectedid yang dikirimkan oleh view lebih dari 1 index
-        foreach ($request->selectedid as $key => $value) {
-            $data = User::where('id',json_decode($request->selectedid[$key]))->whereHas(
-                'roles', function($q){
-                    $q->where('name', 'Auditor');
-                }
-            )->get()->toArray();
-        }
-        // NOTE : return $data setelah diloop menghasilkan 1 index
-        return response()->json($data);
-    }
 }
