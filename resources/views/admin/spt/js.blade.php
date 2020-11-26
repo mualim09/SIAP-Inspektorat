@@ -268,8 +268,7 @@
         //delete save_method;
     });
 
-    $( "#formAnggotaSptModal" ).on('shown.bs.modal', function(){
-        /* Anggota SPT table */
+   /* $( "#formAnggotaSptModal" ).on('shown.bs.modal', function(){       
         //var sptid = $('#spt-id').val();
         var sptid = $('data').attr('spt');
         var anggotaTable = $('#anggota-spt-table').DataTable({            
@@ -305,12 +304,12 @@
             ]
         });
         
-    });
+    });*/
 
-    $('#formAnggotaSptModal').on('hidden.bs.modal', function () {
+    /*$('#formAnggotaSptModal').on('hidden.bs.modal', function () {
     // do something…
         $('#anggota-spt-table').DataTable().clear().destroy();
-    });
+    });*/
 
     
 </script>

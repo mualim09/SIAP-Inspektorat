@@ -1,13 +1,14 @@
 <!-- Penanggungjawab /Pembantu pj-->
+<div id="peserta-spt">
 <div class="form-group row">	
 	<label for="session_pj" class="col-md-2 col-form-label">{{ __('Penanggungjawab') }} </label>
-	<div class="col-md-4">
+	<div class="col-md-4 peserta-spt">
 		<select class="form-control" id="session-pj" name="session_pj">			        			
 			<option class="form-control" value="{{$pj->id}}">{{ $pj->full_name_gelar }}</option>
 		</select>
 	</div>
 	<label for="session_ket" class="col-md-2 col-form-label">{{ __('Ketua') }} </label>
-	<div class="col-md-4">
+	<div class="col-md-4 peserta-spt">
 		<select class="form-control selectize" id="session-ket" name="session_ket">
 			<option value="">{{ __('Ketua') }}</option>
 			@foreach($kets as $ket)
@@ -21,7 +22,7 @@
 <!-- Daltu / Dalnis-->
 <div class="form-group row">	
 	<label for="session_ppj" class="col-md-2 col-form-label">{{ __('Pembantu Penanggungjawab') }} </label>
-	<div class="col-md-4">
+	<div class="col-md-4 peserta-spt">
 		<select class="form-control selectize" id="session-ppj" name="session_ppj">
 			<option value="">{{ __('Pembantu Penanggungjawab') }}</option>
 			@foreach($ppjs as $ppj)
@@ -30,7 +31,7 @@
 		</select>
 	</div>
 	<label for="session_anggota[]" class="col-md-2 col-form-label">{{ __('Anggota') }} </label>
-	<div class="col-md-4">
+	<div class="col-md-4 peserta-spt">
 		<select class="form-control selectize" id="session-anggota-1" name="session_anggota[]">
 			<option value="">{{ __('Anggota') }}</option>
 			@foreach($anggotas as $anggota)
@@ -45,7 +46,7 @@
  <!-- Ketua -->
 <div class="form-group row">	
 	<label for="session_pm" class="col-md-2 col-form-label">{{ __('Pengendali Mutu') }} </label>
-	<div class="col-md-4">
+	<div class="col-md-4 peserta-spt">
 		<select class="form-control selectize" id="session-pm" name="session_pm">
 			<option value="">{{ __('Pengendali Mutu') }}</option>
 			@foreach($pms as $pm)
@@ -54,7 +55,7 @@
 		</select>
 	</div>
 	<label for="session_anggota[]" class="col-md-2 col-form-label">{{ __('Anggota') }} </label>
-	<div class="col-md-4">
+	<div class="col-md-4 peserta-spt">
 		<select class="form-control selectize" id="session-anggota-2" name="session_anggota[]">
 			<option value="">{{ __('Anggota') }}</option>
 			@foreach($anggotas as $anggota)
@@ -68,7 +69,7 @@
  <!-- Anggota -->
 <div class="form-group row">
 	<label for="session_pt" class="col-md-2 col-form-label">{{ __('Pengendali Teknis') }} </label>
-	<div class="col-md-4">
+	<div class="col-md-4 peserta-spt">
 		<select class="form-control selectize" id="session-pt" name="session_pt">
 			<option value="">{{ __('Pengendali Teknis') }}</option>
 			@foreach($pts as $pt)
@@ -78,7 +79,7 @@
 	</div>
 	
 	<label for="session_anggota[]" class="col-md-2 col-form-label">{{ __('Anggota') }} </label>
-	<div class="col-md-4">
+	<div class="col-md-4 peserta-spt">
 		<select class="form-control selectize" id="session-anggota-3" name="session_anggota[]">
 			<option value="">{{ __('Anggota') }}</option>
 			@foreach($anggotas as $anggota)
@@ -87,9 +88,10 @@
 		</select>
 	</div>	
 </div>
+</div>
 
 <script type="text/javascript">
-	$('.selectize').selectize({
+	$('.peserta-spt > .selectize').selectize({
 	   persist: false,
 	   sortField: 'text',
 	   allowEmptyOption: false,

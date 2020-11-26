@@ -130,12 +130,8 @@
 						<small id="tambahanHelp" class="form-text text-muted">Masukkan informasi tambahan mengenai SPT yang akan dibuat. Tekan <span style="color:red;">ENTER</span> untuk ganti baris.</small>
 					</div>
 				</div>
-
-
-				<!-- Hidden form untuk disesuaikan dengan jenis SPT -->
-				<div class="form-group row hidden">
-					@include('admin.spt.include')
-				</div>
+				@include('admin.spt.include.anggota_pengawasan_form')
+				
 
 				<div class="form-group">
 					<div class="col">
@@ -350,7 +346,7 @@ $( "#formModal" ).on('shown.bs.modal', function(){
 
 	/*datatable setup*/
   id_spt = ( typeof $('#formModal').attr('data-id-spt-pengawasan') !== 'undefined' ) ? $('#formModal').attr('data-id-spt-pengawasan') : '';
-  drawTableAnggota(id_spt);
+  //drawTableAnggota(id_spt);
 
 });
 

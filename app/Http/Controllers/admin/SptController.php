@@ -1302,12 +1302,12 @@ class SptController extends Controller
             $spt = Spt::findOrFail($id);
             $filename = ($request->file_spt) ? 'SPT-' . $id . '-' . $request->file_spt->getClientOriginalName() : null ;
             //dd(storage_path()."/spt");
-            if($filename !== null ){
+            /*if($filename !== null ){
                 if (! File::exists(public_path()."/storage/spt")) {
                     File::makeDirectory(public_path()."/storage/spt", 0755, true);
                 }
                 $request->file_spt->move(public_path()."/storage/spt" , $filename);
-            }
+            }*/
             $spt->file = ($filename !== null ) ? $filename : null;
             $spt->nomor = $request->nomor;
             $spt->tgl_register = date('Y-m-d H:i:s',strtotime($request->tgl_register));
