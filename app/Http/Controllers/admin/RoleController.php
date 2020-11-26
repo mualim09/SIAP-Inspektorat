@@ -48,7 +48,7 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name'=>'required|unique:roles|max:40|regex:[A-Za-z1-9 ]',
+            'name'=>'required|unique:roles|max:40|string',
             'permissions' =>'required',
             ]
         );
@@ -108,9 +108,10 @@ class RoleController extends Controller
     public function update(Request $request, $id)
     {
         $role = Role::findOrFail($id);//Get role with the given id
-    //Validate name and permission fields
+        $request->name = Common::cleanInput($request->name);
+    
         $this->validate($request, [
-            'name'=>'required|max:40|regex:[A-Za-z1-9 ]|unique:roles,name,'.$id,
+            'name'=>'required|max:40|string|unique:roles,name,'.$id,
             'permissions' =>'required',
         ]);
 

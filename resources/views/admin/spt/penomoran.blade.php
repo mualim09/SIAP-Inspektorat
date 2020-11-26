@@ -29,10 +29,10 @@
       <div class="modal-body">
         <form class="ajax-form" id="form-penomoran" enctype="multipart/form-data">
             <input type="hidden" name="spt_id" id="spt-id">
-            <!-- <div class="form-group row">
+            <div class="form-group row">
                 <label for="nomor" class="col-md-3 col-form-label text-md-right">{{ __('Nomor')}} </label>
                 <input type="text" name="nomor" class="form-control col-md-8" required placeholder="Nomor SPT" id="nomor-spt">                    
-            </div> -->
+            </div>
 
             <div class="form-group row">                
                 <label for="tgl-register" class="col-md-3 col-form-label text-md-right">{{ __('Tanggal') }}</label>
@@ -63,6 +63,24 @@
               $(".custom-file-input").on("change", function() {
                 var fileName = $(this).val().split("\\").pop();
                 $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+
+                //upload on change
+                var formData = new FormData();
+                var file = this.files[0];
+                var id = $('#spt-id').val();
+                formData.append('formData', file);
+                formData.append('id', id);
+                $.ajax({
+                    url: "{{ route('ajax_upload_spt')}}",  //Server script to process data
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    //Ajax events
+                    success: function(response){
+                        document.getElementById("nomor-spt").value = response;
+                    }
+                });
               });
             </script>
             

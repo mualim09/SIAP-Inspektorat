@@ -470,6 +470,7 @@ class DupakController extends Controller
     public function userPak(Request $request){
         $user_id = ($request->user_id) ? $request->user_id : auth()->user()->id;
         $year = ($request->tahun) ? $request->tahun : date('Y');
+        $dupak['penilai'] = ( auth()->user()->hasRole(['Super Admin', 'Tim Dupak']) ) ? true : false;
         $dupak['user'] = User::where('id',$user_id)->first();
         $dupak['pejabat'] = Pejabat::where('name','Penetap AK')->with(['user'=>function($q){
                     $q->select(['id', 'nip', 'first_name', 'last_name', 'gelar', 'jabatan', 'pangkat']);

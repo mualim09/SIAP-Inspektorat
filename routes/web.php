@@ -196,6 +196,11 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 			Route::delete('session/anggota/delete/{user_id}', 'SptController@deleteSessionAnggotaItem')->name('delete_session_anggota_by_id');
 		});
 
+		Route::group(['middleware'=>['auth', 'role:Super Admin|TU Perencanaan|TU Umum']], function(){
+			Route::post('update-nomor/{id}','SptController@updateNomorSpt')->name('update_nomor_spt');
+			Route::post('upload-spt','SptController@ajaxUpload')->name('ajax_upload_spt');
+		});
+
 		//role TU Umum
 		Route::group(['middleware'=>['auth', 'role:Super Admin|TU Umum']], function(){
 			Route::get('last-data-umum/{jenis_data}', 'SptController@getLastDataUmum')->name('last_data_umum');
@@ -203,8 +208,7 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 
 			Route::get('get-spt-umum-byid/{id}','SptController@getSptUmumbyId')->name('get_spt_umum_byid');
 			Route::get('get-penomoran-umum','SptController@getPenomoranSptUmum')->name('penomoran_umum');
-			Route::get('get-arsip-umum','SptController@getArsipUmum')->name('arsip_spt_umum');
-			Route::post('update-nomor/{id}','SptController@updateNomorSpt')->name('update_nomor_spt');
+			Route::get('get-arsip-umum','SptController@getArsipUmum')->name('arsip_spt_umum');			
 			//Route::post ('update-nomor-umum/{id}','SptController@updateNomorSptUmum')->name('penomoran_spt_umum');
 			Route::post('upload-scan-umum/{id}','SptController@uploadScanSptumum')->name('upload_scan_spt_umum');
 			Route::post('upload-scan/{id}','SptController@uploadScanSpt')->name('upload_scan_spt');

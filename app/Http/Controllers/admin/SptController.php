@@ -1259,8 +1259,24 @@ class SptController extends Controller
             return 'SPT deleted!';
         }
     }
+    
+    public function ajaxUpload(Request $request){        
+        $filename = ($request['formData']) ? 'SPT-' . $request['id'] . '-' . $request['formData']->getClientOriginalName() : null ;
+        if($filename !== null ){
+            if (! File::exists(public_path()."/storage/spt")) {
+                File::makeDirectory(public_path()."/storage/spt", 0755, true);
+            }
+            $request['formData']->move(public_path()."/storage/spt" , $filename);
+        
+            $parser = new \Smalot\PdfParser\Parser();
+            $pdf  = $parser->parseFile(storage_path("app/public/spt/$filename"));     
+            $text = $pdf->getText();
+            preg_match('/\/(.*?)\//', $text, $match);
+            $nomor = (isset($match[1])) ? $match[1] : '';
+            return $nomor;
+        }
+    }
 
-    //remove ZZZ to enable
     public function updateNomorSpt(Request $request){
         $spt_umum = $request->jenis_spt_umum;
         switch ($request->jenis_spt_umum) {
@@ -1293,12 +1309,7 @@ class SptController extends Controller
                 $request->file_spt->move(public_path()."/storage/spt" , $filename);
             }
             $spt->file = ($filename !== null ) ? $filename : null;
-            //$spt->nomor = $request->nomor;
-            $parser = new \Smalot\PdfParser\Parser();
-            $pdf    = $parser->parseFile(storage_path("app/public/spt/$filename"));     
-            $text = $pdf->getText();
-            preg_match('/\/(.*?)\//', $text, $match);
-            $spt->nomor = $match[1];
+            $spt->nomor = $request->nomor;
             $spt->tgl_register = date('Y-m-d H:i:s',strtotime($request->tgl_register));
 
             //setup info_spt untuk tabel dupak
