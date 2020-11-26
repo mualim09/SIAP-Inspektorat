@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Illuminate\Support\Facades\View;
 use Config, File;
+use Carbon\Carbon;
 
 class PpmController extends Controller
 {
@@ -121,12 +122,13 @@ class PpmController extends Controller
         // $ppm = Ppm::create($data);
         // if($ppm) {
             
-            // start fungsi insert detail ppm
-            // $ppm = Ppm::find($ppm->id);
-            // $unsur_dupak = $ppm->jenis_ppm;
-            // $lama = $ppm->lama;
+        //     // start fungsi insert detail ppm
+        //     $ppm_id = Ppm::find($ppm->id);
+        //     $unsur_dupak = $ppm_id->jenis_ppm;
+        //     $lama = $ppm_id->lama;
 
-            if ($request->moderator_narasumber != null && $request->id_anggota_ppm != null) {
+            /*kondisi PENUNJANG (Diklat Teknis Substantif penunjang pengawasan)*/
+            if ($request->moderator_narasumber != null && $request->id_anggota_ppm != null){
                 
                     /* start foreach moderator & narasumber */
                     foreach ($request->moderator_narasumber as $index_moderator => $value_moderator) {
@@ -134,77 +136,82 @@ class PpmController extends Controller
 
                         /*start set moderator ppm*/
                         $get_spt_pengawasan = DetailSpt::where('user_id',$request->moderator_narasumber[$index_moderator])->with('spt')->get();
+
+                        $tgl_ppm = date('Y-m-d H:i:s',strtotime($request['tgl_mulai_ppm']));
                         
-                        $peran = 'Moderator/Narasumber';
+                        $rawq_spt_pengawasan = DB::table('detail_spt')
+                                ->where('user_id','=',$request->moderator_narasumber[$index_moderator])
+                                ->join('spt','detail_spt.spt_id','=','spt.id')
+                                ->whereRaw('"'.Carbon::parse($request->tgl_mulai_ppm).'" between `tgl_mulai` and `tgl_akhir`')
+                                ->get();
+                        dd($tgl_ppm);
+                        die();
 
-                        $nilai_dupak = 0.25;
-                        $hari_efektif_ppm = 1;
-                        $lama_jam_ppm = 3;
-                        $koefisien_moderator = 0.25;
+                        // $hari_efektif_ppm = 1;
+                        // $lama_jam_ppm = 3;
+                        // $koefisien_moderator = 0.038;
+                        // $nilai_dupak = $koefisien_moderator * $lama_jam_ppm;
 
-                        $dupak_moderator_ppm = [
-                            'dupak' => $nilai_dupak,
-                            'lembur' => 0,
-                            'efektif' => $hari_efektif_ppm,
-                            'lama_jam' => $lama_jam_ppm,
-                            'koefisien' => $koefisien_moderator
-                        ];
-                        /*end set*/
+                        // $dupak_moderator_ppm = [
+                        //     'dupak' => $nilai_dupak,
+                        //     'lembur' => 0,
+                        //     'efektif' => $hari_efektif_ppm,
+                        //     'lama_jam' => $lama_jam_ppm,
+                        //     'koefisien' => $koefisien_moderator
+                        // ];
                         
-                        // DB::table('detail_ppm')->insertGetId([
-                        // 'id_ppm' => $ppm->id,
-                        // 'user_id' => $value_moderator,
-                        // 'peran' => $peran,
-                        // 'lama' => $lama,
-                        // 'info_dupak' => json_encode($dupak_moderator_ppm),
-                        // 'unsur_dupak' => $unsur_dupak
-                        // ]);
-                        // dd($dupak_moderator_ppm);
+                        // $save_detail_ppm = DetailPpm::insert(['id_ppm' => $ppm_id->id,'user_id' => $value_moderator,'peran' => $peran,'lama' => $lama,'info_dupak'=>json_encode($dupak_moderator_ppm),'unsur_dupak' => $unsur_dupak]);
+                        // /*end set moderator ppm*/
+                        
 
-                        /*start nilai dupak pengawasan yg terimbas*/
-                        $nilai_dupak_pengawasan = $get_spt_pengawasan[$index_moderator]->info_dupak;
+                        // /*start nilai dupak dari spt pengawasan yg terimbas*/
+                        // $nilai_dupak_pengawasan = $get_spt_pengawasan[$index_moderator]->info_dupak;
 
-                        $nilai_dupak_terimbas = $nilai_dupak_pengawasan['dupak'] - $nilai_dupak;
-                        $hari_efektif_terimbas = $nilai_dupak_pengawasan['efektif'] - $hari_efektif_ppm;
-                        $lama_jam_terimbas = $nilai_dupak_pengawasan['lama_jam'] - $lama_jam_ppm;
-                        // $koefisien_moderator_terimbas = 0.25;
+                        // $nilai_dupak_terimbas = $nilai_dupak_pengawasan['dupak'] - $nilai_dupak;
+                        // $hari_efektif_terimbas = $nilai_dupak_pengawasan['efektif'] - $hari_efektif_ppm;
+                        // $lama_jam_terimbas = $nilai_dupak_pengawasan['lama_jam'] - $lama_jam_ppm + 1;
+                        
+                        // $dupak_moderator_terimbas = [
+                        //     'dupak' => $nilai_dupak_terimbas,
+                        //     'lembur' => 0,
+                        //     'efektif' => $hari_efektif_terimbas,
+                        //     'lama_jam' => $lama_jam_terimbas,
+                        //     'koefisien' => $nilai_dupak_pengawasan['koefisien']
+                        // ];
 
-                        $dupak_moderator_terimbas = [
-                            'dupak' => $nilai_dupak_terimbas,
-                            'lembur' => 0,
-                            'efektif' => $hari_efektif_terimbas,
-                            'lama_jam' => $lama_jam_terimbas,
-                            'koefisien' => $nilai_dupak_pengawasan['koefisien']
-                        ];
-                        // dd($dupak_moderator_ppm);
+                        // $update_pengawasan_terimbas = DetailSpt::where('user_id','=',$request->moderator_narasumber[$index_moderator])->where('spt_id',$rawq_spt_pengawasan[$index_moderator]->spt_id)->update(['info_dupak'=>json_encode($dupak_moderator_terimbas)]);
                         /*end nilai dupak pengawasan yg terimbas*/
                         
                     }
-                    /* end foreach */
+                    /* end foreach moderator & narasumber */
 
                     /* start foreach peserta ppm */
-                    foreach (json_decode($request->id_anggota_ppm) as $index_moderator => $value_moderator) {
+                    // foreach (json_decode($request->id_anggota_ppm) as $index_moderator => $value_moderator) {
 
-                        $peran = 'Peserta';
+                    //     $peran = 'Peserta';
 
-                        $dupak = [
-                            'lama' => '3',
-                            'dupak' => '0,1'
-                        ];
-                        // dd($value_moderator);
-                        // DB::table('detail_ppm')->insertGetId([
-                        // 'id_ppm' => $ppm->id,
-                        // 'user_id' => $value_moderator,
-                        // 'peran' => $peran,
-                        // 'lama' => '1',
-                        // 'info_dupak' => json_encode($dupak),
-                        // 'unsur_dupak' => $unsur_dupak
-                        // ]);
+                    //     $dupak = [
+                    //         'lama' => '3',
+                    //         'dupak' => '0,1'
+                    //     ];
+                    //     // dd($value_moderator);
+                    //     // DB::table('detail_ppm')->insertGetId([
+                    //     // 'id_ppm' => $ppm->id,
+                    //     // 'user_id' => $value_moderator,
+                    //     // 'peran' => $peran,
+                    //     // 'lama' => '1',
+                    //     // 'info_dupak' => json_encode($dupak),
+                    //     // 'unsur_dupak' => $unsur_dupak
+                    //     // ]);
                         
-                    }
-                    /* end foreach */
+                    // }
+                    /* end foreach peserta ppm */
                 }
             // end fungsi insert detail ppm
+                /*kondisi PENGEMBANGAN PROFESI (Diklat Penjenjangan)*/
+                if($request->moderator_narasumber == null && $request->id_anggota_ppm != null){
+
+                }
 
             /*throwing id ppm and file nota dinas*/
             // $this->storeNotaDinas($ppm->id, $request->file_nota_dinas);
