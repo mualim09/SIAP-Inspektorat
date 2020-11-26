@@ -29,6 +29,9 @@ class LoginController extends Controller
     protected $redirectTo = '/';
 
     protected $username;
+
+    protected $maxAttempts = 3;
+    protected $decayMinutes = 1;
     
 
     /**

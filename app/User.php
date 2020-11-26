@@ -28,7 +28,7 @@ class User extends Authenticatable implements HasMedia
      */
 
     protected $fillable = ['first_name','last_name', 'email', 'phone', 'password', 'nip', 'jabatan', 'pangkat','gelar','pendidikan','gelar','sex','jenis_auditor','tempat_lahir','tanggal_lahir', 'ruang'];
-    protected $appends = ['full_name', 'full_name_gelar'];
+    protected $appends = ['full_name', 'full_name_gelar', 'formatted_pangkat'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -134,6 +134,75 @@ class User extends Authenticatable implements HasMedia
 
     public function detailPpm(){
         return $this->belongsTo('App\models\DetailPpm');
+    }
+
+    public function getFormattedPangkatAttribute()
+    {        
+        
+        switch($this->pangkat){
+            //golongan I
+            case 'I/A':
+                $pangkat = 'Juru Muda ('.$this->pangkat.')';
+                break;
+            case 'I/B':
+                $pangkat = 'Juru Muda Tingkat 1 ('.$this->pangkat.')';
+                break;
+            case 'I/C':
+                $pangkat = 'Juru ('.$this->pangkat.')';
+                break;
+            case 'I/D':
+                $pangkat = 'Juru Tingkat 1 ('.$this->pangkat.')';
+                break;
+
+            //golongan II
+            case 'II/A':
+                $pangkat = 'Pengatur Muda ('.$this->pangkat.')';
+                break;
+            case 'II/B':
+                $pangkat = 'Pengatur Muda Tingkat 1 ('.$this->pangkat.')';
+                break;
+            case 'II/C':
+                $pangkat = 'Pengatur ('.$this->pangkat.')';
+                break;
+            case 'II/D':
+                $pangkat = 'Pengatur Tingkat 1 ('.$this->pangkat.')';
+                break;
+            
+            //golongan III
+            case 'III/A':
+                $pangkat = 'Penata Muda ('.$this->pangkat.')';
+                break;
+            case 'III/B':
+                $pangkat = 'Penata Muda Tingkat 1 ('.$this->pangkat.')';
+                break;
+            case 'III/C':
+                $pangkat = 'Penata ('.$this->pangkat.')';
+                break;
+            case 'III/D':
+                $pangkat = 'Penata Tingkat 1 ('.$this->pangkat.')';
+                break;
+
+            //golongan IV
+            case 'IV/A':
+                $pangkat = 'Pembina ('.$this->pangkat.')';
+                break;
+            case 'IV/B':
+                $pangkat = 'Pembina Tingkat 1 ('.$this->pangkat.')';
+                break;
+            case 'IV/C':
+                $pangkat = 'Pembina Utama Muda ('.$this->pangkat.')';
+                break;
+            case 'IV/D':
+                $pangkat = 'Pembina Utama Madya ('.$this->pangkat.')';
+                break;
+            case 'IV/E':
+                $pangkat = 'Pembina Utama ('.$this->pangkat.')';
+                break;
+
+            default :
+                $pangkat = $this->pangkat;
+        }
+        return $pangkat;
     }
 
 }

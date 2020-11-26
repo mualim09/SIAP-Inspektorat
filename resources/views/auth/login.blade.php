@@ -8,6 +8,14 @@
             <div class="col-lg-5 col-md-7">
                 <div class="card bg-secondary shadow border-0">
                     <div class="card-body px-lg-5 py-lg-5">
+                        @if (session('message'))
+                            <div class="alert alert-danger text-center">{{ session('message') }}</div>
+                        @endif
+                        @if(count($errors))
+                            @if(count($errors) == 1 && in_array(__('auth.throttle'), $errors->get('email')))
+                                <div class="alert alert-danger text-center">@lang('auth.throttle')</div>
+                            @endif
+                        @endif 
                         <div class="text-muted text-center mt-2 mb-3"><h2>{{ __('Login Anggota') }}</h2></div>
                         <div class="text-center text-muted mb-4">
                             <small>

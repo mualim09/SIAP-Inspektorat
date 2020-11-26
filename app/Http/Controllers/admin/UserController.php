@@ -266,10 +266,16 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroyz($id)
     {
         $user = User::findOrFail($id); 
         return ($user->delete()) ? 'deleted' :'no data';
+    }
+
+    public function destroy($id){
+        $user = User::findOrFail($id); 
+        $user->user_status = 'nonaktif';
+        $user->save();
     }
 
     public function getData()
@@ -301,7 +307,7 @@ class UserController extends Controller
         $control = '';
         if($user->hasAnyRole(['TU Umum','Super Admin'])){
             $control .= '<a href="javascript:void(0);" onclick="editForm('. $id .')" data-toggle="tooltip" title="Edit Pegawai" class="btn btn-outline-primary btn-sm"><i class="ni ni-single-copy-04"></i></a>';
-            $control .= '<a href="javascript:void(0);" onclick="deleteData('. $id .')" data-toggle="tooltip" title="Hapus Pegawai" class="btn btn-outline-danger btn-sm"><i class="fa fa-times"></i></a>';
+            $control .= '<a href="javascript:void(0);" onclick="deleteData('. $id .')" data-toggle="tooltip" title="Nonaktifkan Pegawai" class="btn btn-outline-danger btn-sm"><i class="fa fa-times"></i></a>';
             $control .= '<a href="#" onclick="showModalLihatSertifikat('.$id.')" data-toggle="tooltip" title="Lihat Sertifikat" class="btn btn-outline-success btn-sm"><i class="ni ni-paper-diploma"></i></a>';
             $control .= '<a href="javascript:void(0);" onclick="insertSertifikat('. $id .')" data-toggle="tooltip" title="Input Sertifikat" class="btn btn-outline-warning btn-sm"><i class="ni ni-single-copy-04"></i></a>';
         }

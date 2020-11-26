@@ -136,7 +136,8 @@
               +'<li class="nav-item"><a data-toggle="tab" class="nav-link" href="#dupak-penunjang">Penunjang</a></li>'
               +'<li class="nav-item"><a data-toggle="tab" class="nav-link" href="#dupak-diklat">Diklat</a></li>'
               +'<li class="nav-item"><a data-toggle="tab" class="nav-link" href="#dupak-lak">LAK</a></li>'
-               +'<li class="nav-item"><a data-toggle="tab" class="nav-link" href="#dupak-pak">PAK</a></li>';
+              +'<li class="nav-item"><a data-toggle="tab" class="nav-link" href="#dupak-dupak">DUPAK</a></li>'
+              +'<li class="nav-item"><a data-toggle="tab" class="nav-link" href="#dupak-pak">PAK</a></li>';
         $('#dupak-tab').html(tab);
 
         //coba versi html biasa
@@ -180,5 +181,11 @@ function printDiv(divName){
 
 </script>
 
-@include('admin.dupak.export_tool')
 @include('admin.dupak.export')
+@include('admin.dupak.pengawasan')
+@include('admin.dupak.pendidikan')
+@include('admin.dupak.diklat')
+@include('admin.dupak.penunjang')
+@include('admin.dupak.lak')
+@include('admin.dupak.dupak')
+@include('admin.dupak.pak')

@@ -68,6 +68,12 @@
                       </div>
                       <div class="clearfix page-break"></div>
 
+                      <div id="dupak-dupak" class="tab-pane fade" role="tabpanel" style="margin-bottom: 30px; page-break-after: always;">
+                        <div class="table-responsive " id="dupak-dupak-wrapper">                            
+                        </div>
+                      </div>
+                      <div class="clearfix page-break"></div>
+
                       <div id="dupak-pak" class="tab-pane fade" role="tabpanel" style="margin-bottom: 30px; page-break-after: always;">
                         <div class="table-responsive " id="dupak-pak-wrapper">                            
                         </div>
