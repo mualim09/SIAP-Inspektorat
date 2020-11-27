@@ -50,8 +50,15 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::member()->get();
-        $roles = ( auth()->user()->hasPermissionTo('Administer roles & permissions') ) ? Role::all() : Role::where('name','!=','Super Admin')->get();
+        //$users = User::active()->get();
+        $users = User::where(function ($q){
+            $q->active();
+        })
+        ->where(function ($q){
+            $q->member();
+        })
+        ->get();
+        $roles = ( auth()->user()->hasPermissionTo('Administer roles & permissions') ) ? Role::all() : Role::whereNotIn('name', ['Super Admin'])->get();
         return view('admin.user.index', ['roles'=>$roles, 'listJabatan' => $this->list_jabatan, 'listPangkat'=>$this->list_pangkat, 'listPendidikan'=>$this->list_pendidikan, 'listRuang'=>$this->listRuang, 'listJabatanRuang'=>$this->listJabatanRuang]);
     }
 
@@ -280,7 +287,14 @@ class UserController extends Controller
 
     public function getData()
     {
-        $users = User::where('email','!=','admin@local.host')->get();
+        //$users = User::active()->get();
+        $users = User::where(function ($q){
+            $q->active();
+        })
+        ->where(function ($q){
+            $q->member();
+        })
+        ->get();
         //dd($users);
         return Datatables::of($users)
                 ->addIndexColumn()

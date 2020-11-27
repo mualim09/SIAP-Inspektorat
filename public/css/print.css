@@ -58,9 +58,13 @@ div:has(> div.no-print) {
 	visibility: hidden;
 	display: none;
 }
-div.no-print{
+div.no-print, .no-print{
 	visibility: hidden;
 	display: none;
+}
+.print-show{
+	visibility: visible;
+	display: inline-block;
 }
 .print-center{
 	text-align: center;

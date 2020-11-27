@@ -34,9 +34,9 @@
             {data: 'ruang_jabatan', name: 'ruang_jabatan', title:'Ruang/Jabatan'},
             {data: 'action', name: 'action', orderable: false, searchable: false,title: 'Action'},
         ],
-        columnDefs: [             
+        columnDefs: [
               { "width": "150px", "targets": 3 },
-              { "searchable": false, "orderable": false, "targets": 0 },            
+              { "searchable": false, "orderable": false, "targets": 0 },
             ],
         "order": [[ 1, 'asc' ]],
         
@@ -50,7 +50,7 @@
             type: "GET",
             dataType: "JSON",
             success: function(data){
-               console.log(data);
+               //console.log(data);
                 $('.ajax-form')[0].reset();
                 $('#id').val(data.id);
                 $('#first_name').val(data.first_name);
@@ -65,14 +65,18 @@
                 $('#tempat-lahir').val(data.tempat_lahir);
                 $('#tanggal-lahir').datepicker('setDate', data.tanggal_lahir);
                 $(data.roles).each(function(i,val){
+                    //console.log(data);
                     $('#role-'+val.id).prop('checked',true);
                     if(val.name == 'Auditor'){
                         $('#jenis-auditor').show('fast');
+                        if(data.jenis_auditor != null){
+                            $('#auditor-'+data.jenis_auditor).prop('checked', true);
+                        }
                     }
                 });
-                if(data.jenis_auditor != null){
-                    $('#auditor-'+data.jenis_auditor).prop('checked', true);
-                }
+                $("select#nama-ruang").val(data.ruang.nama);
+                $("select#jabatan-ruang").val(data.ruang.jabatan);
+                
                 if(data.pendidikan != null){
                     $('#tahun-pendidikan').val(data.pendidikan.tahun);
                     $('#tingkat-pendidikan')[0].selectize.setValue(data.pendidikan.tingkat);

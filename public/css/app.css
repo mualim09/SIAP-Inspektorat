@@ -233,3 +233,8 @@ tr.h-100, #dupak-pengawasan-wrapper > div.h-100, #dupak-pendidikan-wrapper > div
 div.data-user{
   width: 92%;
 }
+
+.hide-from-view{
+  display: none;
+  visibility: hidden;
+}

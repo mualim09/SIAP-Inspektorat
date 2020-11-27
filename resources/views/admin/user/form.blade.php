@@ -162,7 +162,7 @@
 
         <script type="text/javascript">
             //#role-5 is role id for auditor. see role table
-            $('#role-5').change(function() {
+            /*$('#role-5').change(function() {
                 if(this.checked) {
                     $('#jenis-auditor').show('fast');
                     $('#ruang-auditor').show('fast');
@@ -171,10 +171,10 @@
                     $('input[name=jenis_auditor]').prop('checked', false);
                     $('#ruang-auditor').hide('fast');
                 }
-              });
+              });*/
         </script>
 
-        <div class="form-group row" id="jenis-auditor" style="display:none">
+        <div class="form-group row" id="jenis-auditor" >
             <span class="col-md-2 text-md-right">{{ __('Jenis Auditor') }}</span>
             <div class="col-md-10 row">
                 <div class="col-md-3">
@@ -192,7 +192,7 @@
             </div>
         </div>
 
-        <div class="form-group row" id="ruang-auditor" style="display:none">
+        <div class="form-group row" id="ruang-auditor">
             <span class="col-md-2 col-form-label text-md-right labelclass">{{ __('Ruang') }}</span>            
             <div class="col-md-3">
                 <select class="form-control selectize" id="nama-ruang" name="ruang[nama]">

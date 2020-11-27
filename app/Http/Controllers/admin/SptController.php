@@ -1267,12 +1267,11 @@ class SptController extends Controller
                 File::makeDirectory(public_path()."/storage/spt", 0755, true);
             }
             $request['formData']->move(public_path()."/storage/spt" , $filename);
-        
             $parser = new \Smalot\PdfParser\Parser();
-            $pdf  = $parser->parseFile(storage_path("app/public/spt/$filename"));     
+            $pdf  = $parser->parseFile(storage_path("app/public/spt/$filename"));
             $text = $pdf->getText();
-            preg_match('/\/(.*?)\//', $text, $match);
-            $nomor = (isset($match[1])) ? $match[1] : '';
+            preg_match('/\/(.*?)\//', $text, $match);            
+            $nomor = ( isset($match[1]) && is_numeric($match[1]) ) ? $match[1] : '';
             return $nomor;
         }
     }

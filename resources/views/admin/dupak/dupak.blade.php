@@ -86,13 +86,12 @@ function generate_tabel_dupak(dupak_pendidikan, sumDiklat, sumLamaDiklat, sumPen
                 +'</table>';
 
           table += '<div class="col-md-12 col-print-12" style="padding-bottom:15px;display:block"></div>';
-          input_diklat = (true == response.penilai ) ? '<span>Disini input diklat</span>' : '';
-
-
+          //input_diklat = (true == response.penilai ) ? '<span>Inputan lama dari tiap auditor</span>' : '';
+          inputan = '<input type="text" class="col-md-12 no-print" name="input_diklat" id="input-diklat"><span class="hide-from-view print-show">data_ak_lama</span>';
 
           table += '<table class="table table-sm table-bordered ajax-table col-print-12 table-print-border" id="ak-dupak-table">'
                       +'<tr style="text-align: center; font-weight:bold;">'
-                        +'<th>II.</th>'
+                        +'<th style="width:196px;">II.</th>'
                         +'<th colspan="7">UNSUR YANG DINILAI</th>'
                       +'</tr>'
                       +'<tr style="text-align: center; font-weight:bold;">'
@@ -105,12 +104,12 @@ function generate_tabel_dupak(dupak_pendidikan, sumDiklat, sumLamaDiklat, sumPen
                         +'<th colspan="3">TIM PENILAI</th>'
                       +'</tr>'
                       +'<tr style="font-weight: bold;text-align:center;">'
-                        +'<th>LAMA</th>'
-                        +'<th>BARU</th>'
-                        +'<th>JUMLAH</th>'
-                        +'<th>LAMA</th>'
-                        +'<th>BARU</th>'
-                        +'<th>JUMLAH</th>'
+                        +'<th style="width:150px;">LAMA</th>'
+                        +'<th style="width:150px;">BARU</th>'
+                        +'<th style="width:150px;">JUMLAH</th>'
+                        +'<th style="width:150px;">LAMA</th>'
+                        +'<th style="width:150px;">BARU</th>'
+                        +'<th style="width:150px;">JUMLAH</th>'
                       +'</tr>'
                       +'<tr style="font-weight: bold;">'
                         +'<td style="text-align: center">I</td>'
@@ -145,10 +144,30 @@ function generate_tabel_dupak(dupak_pendidikan, sumDiklat, sumLamaDiklat, sumPen
                       +'<tr style="font-weight: bold;">'
                         +'<td></td>'
                         +'<td style="padding-left:20px;">a. Pendidikan</td>'
-                        +'<td></td>' //ambil dupak penilai
+                        +'<td>'+inputan+'</td>' //input form
                         +'<td>'+sumDiklat+'</td>'
                         +'<td></td>' //jumlah lama+baru
-                        +'<td>'+input_diklat+'</td>' //input form
+                        +'<td></td>' 
+                        +'<td></td>'
+                        +'<td></td>'
+                      +'</tr>'
+                      +'<tr style="font-weight: bold;">'
+                        +'<td></td>'
+                        +'<td style="padding-left:20px;">b. Pengawasan</td>'
+                        +'<td>'+inputan+'</td>' //input form
+                        +'<td>'+sumPengawasan+'</td>'
+                        +'<td></td>' //jumlah lama+baru
+                        +'<td></td>' 
+                        +'<td></td>'
+                        +'<td></td>'
+                      +'</tr>'
+                      +'<tr style="font-weight: bold;">'
+                        +'<td></td>'
+                        +'<td style="padding-left:20px;">c. Pengembangan Profesi</td>'
+                        +'<td>'+inputan+'</td>' //input form
+                        +'<td>'+sumPengembangan+'</td>'
+                        +'<td></td>' //jumlah lama+baru
+                        +'<td></td>' 
                         +'<td></td>'
                         +'<td></td>'
                       +'</tr>'

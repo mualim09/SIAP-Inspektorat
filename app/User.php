@@ -112,6 +112,10 @@ class User extends Authenticatable implements HasMedia
         return $query->where('email','!=','admin@local.host');        
     }
 
+    public function scopeActive($q){
+        return $q->where('user_status', 'aktif');
+    }
+
     //relasi ke pejabat
     public function pejabat(){
         return $this->hasMany('App\models\Pejabat');

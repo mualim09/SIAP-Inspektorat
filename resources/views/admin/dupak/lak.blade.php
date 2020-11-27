@@ -87,7 +87,7 @@
           //table breaker
           table += '<tr>'
                   +'<td style="text-align: center;"><strong>II</strong></td>'
-                  +'<td><strong>ANGKA KREDIT PENJENJANGAN</strong></td>'
+                  +'<td><strong>Angka Kredit Penjenjangan</strong></td>'
                   +'<td></td>'
                   +'<td></td>'
                   +'<td></td>'
