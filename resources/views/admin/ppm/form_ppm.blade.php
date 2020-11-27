@@ -144,14 +144,14 @@
                         @foreach($users as $i=>$user)
                             <div class="col-md-2" id="name-user-{{$user->id}}">{{ $user->full_name_gelar }}</div>
                                 <div class="col-md-1">
-                                <input class="form-check-input" name="id_anggota" multiple="multiple" id="id-anggota-{{$user->id}}" type="checkbox" id="checkbooksUsers" value="{{$user->id}}"></div>
+                                <input class="form-check-input" name="id_anggota_ppm[]" multiple="multiple" id="id-anggota-{{$user->id}}" type="checkbox" value="{{$user->id}}"></div>
                                 <?php $i++ ?>
                                 @if($i%4 == 0)
                                     </div><div class="row">
                                 @endif
                         @endforeach
                     </div>
-                    <input type="hidden" name="id_anggota_ppm" id="anggota_ppm">
+                    <!-- <input type="hidden" name="id_anggota_ppm" id="anggota_ppm"> -->
                 </div>
                 <!-- <div class="col">
                     <table id="tabel-anggota-ppm" class="col"></table>
@@ -406,7 +406,7 @@ $("#form-ppm").validate({
 
     submitHandler: function(form){        
         var anggota_id = []; //array user id
-        $("input:checkbox[name=id_anggota]:checked").each(function(){
+        $("input:checkbox[type=checkbox]:checked").each(function(){
             anggota_id.push($(this).val()); //get value anggota id checked
         });
         var anggota_array = JSON.stringify(anggota_id);
