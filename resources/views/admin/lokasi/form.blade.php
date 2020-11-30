@@ -44,7 +44,7 @@
 		        <div class="form-group row">
 					<label for="kecamatan_spt_id" class="col-lg-4 col-form-label text-md-right">{{ __('Kecamatan') }} </label>
 		        	<div class="col-md-7">
-					    <select class="form-control selectize" id="pangkat" name="kecamatan" placeholder="Cari Jenis SPT">
+					    <select class="form-control selectize" id="pangkat" name="kecamatan">
 		                    <option value="">{{ __('Pilih Kecamatan') }}</option>
 							<option class="form-control" value="Kecamatan Sidoarjo" >Kecamatan Sidoarjo</option>
 							<option class="form-control" value="Kecamatan Candi" >Kecamatan Candi</option>
@@ -120,7 +120,7 @@
 	$('#pangkat').selectize({    
 	   /*sortField: 'text',*/
 	   allowEmptyOption: false,
-	   placeholder: 'Pangkat Pegawai',
+	   placeholder: 'Pilih Kecamatan',
 	   create: false,
 	   onchange: function(value){
 	    

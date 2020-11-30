@@ -67,12 +67,12 @@ class LokasiController extends Controller
 
                 //show bad words found
                 if(strpos($string, $word) !== false && $word == 'Desa'){
-                    $hasil = "$string Kabupaten Sidoarjo";
+                    $hasil = "$string"; /*Kabupaten Sidoarjo*/
                     // dd($hasil);
                 }elseif(strpos($string, $word) !== false && $word == 'Kelurahan'){
-                    $hasil = "$string Kabupaten Sidoarjo";
+                    $hasil = "$string "; /*Kabupaten Sidoarjo*/
                 }elseif (strpos($string, $word) !== false && $word == 'Kecamatan') {
-                    $hasil = "$string Kabupaten Sidoarjo";
+                    $hasil = "$string "; /*Kabupaten Sidoarjo*/
                 }else{
                     $hasil = 'error';
                 }
@@ -85,6 +85,7 @@ class LokasiController extends Controller
         $data->nama_lokasi  = Common::cleanInput($hasil);
         $data->jenis_lokasi = Common::cleanInput($req['kateg_lokasi']);
         $data->sebutan_pimpinan = Common::cleanInput($req['sebutan_pimpinan']);
+        $data->kecamatan = Common::cleanInput($req['kecamatan']);
         $data->save();
     }
 
