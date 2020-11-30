@@ -171,7 +171,7 @@ class SptController extends Controller
             if($request->pt){
                 DB::table('detail_spt')->insertGetId([
                     'spt_id' => $spt->id,
-                    'user_id' => $request->pm,
+                    'user_id' => $request->pt,
                     'peran' => 'Pengendali Teknis',
                     'unsur_dupak' => 'pengawasan',
                 ]);

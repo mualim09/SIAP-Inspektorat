@@ -95,7 +95,7 @@
                         if(item.peran == 'Pengendali Teknis'){
                             $('#session-pt')[0].selectize.setValue(item.user_id);
                         }
-                        if(item.peran == 'Ketua'){
+                        if(item.peran == 'Ketua Tim'){
                             $('#session-ket')[0].selectize.setValue(item.user_id);
                         }
                         if(item.peran == 'Anggota'){
