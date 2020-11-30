@@ -897,7 +897,7 @@ class SptController extends Controller
         $spt = Spt::findOrFail($id);
         $sort_detail = implode(",",$this->list_peran);
         $detail_spt = DetailSpt::where('spt_id','=',$id)->with(['spt','user'])
-            ->orderByRaw(DB::raw("FIELD(peran,'Penanggungjawab', 'Pembantu Penanggungjawab', 'Pengendali Mutu', 'Pengendali Teknis', 'Ketua Tim', 'Anggota Tim')"))->get();
+            ->orderByRaw(DB::raw("FIELD(peran,'Penanggungjawab', 'Pembantu Penanggungjawab', 'Pengendali Mutu', 'Pengendali Teknis', 'Ketua Tim', 'Anggota')"))->get();
         $template_name = 'pdfsplit'; // default template name
 
         //untuk debug html saja (tanpa pdf)
