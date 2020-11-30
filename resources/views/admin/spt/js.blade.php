@@ -197,7 +197,9 @@
             var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             var id = $('#id').val();
             var pj = $('#session-pj option:selected').val(), ppj = $('#session-ppj option:selected').val(), pm = $('#session-pm option:selected').val(), pt = $('#session-pt option:selected').val();
-            var ket = $('#session-ket option:selected').val(), a1 = $('#session-anggota-1 option:selected').val(), a2 = $('#session-anggota-2 option:selected').val(), a3 = $('#session-anggota-3 option:selected').val();
+            var ket = $('#session-ket option:selected').val();
+            var a1 = $('#session-anggota-1 option:selected').val(), a2 = $('#session-anggota-2 option:selected').val(), a3 = $('#session-anggota-3 option:selected').val(), a4 = $('#session-anggota-4 option:selected').val(), a5 = $('#session-anggota-5 option:selected').val();
+            
             //save_method = (id == '') ? 'new' : save_method;
             base_url = "spt";
             var url_prefix = (window.location.pathname == '/admin') ? 'admin/spt/' : 'spt/';
@@ -210,7 +212,7 @@
             $.ajax({
                 url: url,
                 type: type,
-                data: {jenis_spt_id:jenis_spt_id, lokasi_id:lokasi_id, tgl_mulai:tgl_mulai, tgl_akhir:tgl_akhir, lama:lama, tambahan:tambahan, info:info, pj:pj, ppj:ppj, pm:pm, pt:pt, ket:ket, a1:a1, a2:a2, a3:a3, _method: method},
+                data: {jenis_spt_id:jenis_spt_id, lokasi_id:lokasi_id, tgl_mulai:tgl_mulai, tgl_akhir:tgl_akhir, lama:lama, tambahan:tambahan, info:info, pj:pj, ppj:ppj, pm:pm, pt:pt, ket:ket, a1:a1, a2:a2, a3:a3, a4: a4, a5:a5, _method: method},
                 //data: $('#spt-form').serialize(),
                 //dataType: 'json',
 
