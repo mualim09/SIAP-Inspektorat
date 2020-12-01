@@ -123,7 +123,7 @@ class UserController extends Controller
             //'sertifikat' => $request['sertifikat'],
             'jenis_auditor' => $request['jenis_auditor'],
             'tempat_lahir' => $request['tempat_lahir'],
-            'tanggal_lahir' => date('Y-m-d H:i:s',strtotime($request['tanggal_lahir'])),
+            'tanggal_lahir' => date('Y-m-d',strtotime($request['tanggal_lahir'])),
         ];
         $nama_ruang = $request['ruang']['nama'];
         $jabatan_ruang = $request['ruang']['jabatan'];
@@ -233,7 +233,7 @@ class UserController extends Controller
         //$user->sertifikat = $request['sertifikat'];
         $user->jenis_auditor = $request['jenis_auditor'];
         $user->tempat_lahir = $request['tempat_lahir'];
-        $user->tanggal_lahir = date('Y-m-d H:i:s',strtotime($request['tanggal_lahir']));
+        $user->tanggal_lahir = date('Y-m-d',strtotime($request['tanggal_lahir']));
         //ruang dan jabatan irban
         $nama_ruang = $request['ruang']['nama'];
         $jabatan_ruang = $request['ruang']['jabatan'];

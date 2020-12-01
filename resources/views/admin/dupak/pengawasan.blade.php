@@ -82,10 +82,13 @@ end table dupak pengawasan -->
             target= "_self";
             link = '<td rowspan="2">SPT No.700/'+ item.spt.nomor +'/438.4/'+year+'<br/><br/></td>';
           }
+
+          lokasi_spt =  ( typeof item.spt !== 'undefined' && item.spt.lokasi_spt != null ) ? ' di '+item.spt.lokasi_spt : '';
+          
           table += '<tr>'
           +'<td rowspan="2">' + n + '</td>'
           +'<td rowspan="2"></td>'
-          +'<td rowspan="2">'+ item.spt.kegiatan.sebutan +'</td>'
+          +'<td rowspan="2">'+ item.spt.kegiatan.name +lokasi_spt+'</td>'
           //+'<td>' + item.spt.periode + '<br />' + item.spt.lama + '</td>'
           +'<td colspan="2" style="text-align: center;">' + item.spt.periode + '</td>'
           +'<td rowspan="2" style="text-align: center">'+ item.info_dupak.koefisien +'</td>'

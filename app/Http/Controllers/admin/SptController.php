@@ -1437,7 +1437,7 @@ class SptController extends Controller
             $this->createEventSpt($sptumum, true);
             return $sptumum;
         }
-        return false;
+        //return false;
     }
 
     //test retrieve nomor spt from pdf file
@@ -1759,7 +1759,7 @@ class SptController extends Controller
                 }
             break;
 
-            case 'Anggota Tim' :
+            case 'Anggota' :
                 if('Auditor Muda' == $jabatan) {
                     //$dupak = 0.01 * $lama_jam;
                     $dupak = [

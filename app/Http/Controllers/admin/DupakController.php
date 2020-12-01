@@ -37,37 +37,6 @@ class DupakController extends Controller
         return view('admin.dupak.index');
     }
 
-    public function testExport(){
-      //return Excel::download(new DupakExport, 'test_dupak.xlsx');
-      //return Excel::export(new DupakExport, 'users.xlsx');
-      //return (new DupakExport)->export('dupak.xlsx');
-      $filepath = public_path()."/storage/export";
-      //dd($filepath);
-      if (! File::exists($filepath)) {
-          File::makeDirectory(public_path()."/storage/export", 0755, true);
-      }
-
-      $spreadsheet = new Spreadsheet();
-      $sheet = $spreadsheet->getActiveSheet();
-      $sheet->setCellValue('A1', 'Hello World !');
-
-      $writer = new Xlsx($spreadsheet);
-      ob_end_clean();
-      $writer->save($filepath.'/dupak.xlsx');
-      // header('Content-Type: application/vnd.ms-excel');
-      // header('Content-Disposition: attachment; filename="file.xlsx"');
-      //ob_end_clean(); // this is solution
-      //header('Content-Description: File Transfer');
-      header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-      //header("Content-Transfer-Encoding: Binary");
-      header("Content-disposition: attachment; filename=\"" . basename($filepath.'/dupak.xlsx') . "\"");
-      //header('Content-Transfer-Encoding: binary');
-      //header('Expires: 0');
-      //header('Cache-Control: must-revalidate');
-      //header('Pragma: public');
-      readfile($filepath.'/dupak.xlsx');
-
-    }
 
     public function getData(Request $request) //tradisional
     {

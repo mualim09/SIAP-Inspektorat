@@ -39,14 +39,15 @@
           +'<div class="h-20"></div>'
           +'</div>';
          
-        table = '<table class="table table-sm table-bordered ajax-table col-print-12 table-print-border" id="dupak-lak-table">'       
+        table = '<div class="table-responsive-sm">'
+              +'<table class="table table-sm table-bordered ajax-table col-print-12 table-print-border col-md-12" id="dupak-lak-table">'       
               +'<tr style="background: #ccc; text-align: center">'
-                +'<th rowspan="2">No.</th>'
-                +'<th rowspan="2">Uraian Sub Unsur</th>'
-                +'<th colspan="2">Jumlah Angka Kredit</th>'
-                +'<th colspan="2">Jumlah Hari</th>'
-                +'<th rowspan="2">Perbedaan</th>'
-                +'<th rowspan="2">Ket Perbedaan</th>'
+                +'<th rowspan="2" class="col-md-1">No.</th>'
+                +'<th rowspan="2" class="col-md-3">Uraian Sub Unsur</th>'
+                +'<th colspan="2" class="col-md-2">Jumlah Angka Kredit</th>'
+                +'<th colspan="2" class="col-md-2">Jumlah Hari</th>'
+                +'<th rowspan="2" class="col-md-2">Perbedaan</th>'
+                +'<th rowspan="2" class="col-md-2">Ket Perbedaan</th>'
               +'</tr>'
               +'<tr style="background: #ccc; text-align: center">'
                   +'<th>Diusulkan</th>'
@@ -162,10 +163,11 @@
           var sumPengawasan = 0, sumLamaPengawasan = 0;
           if(response.pengawasan.length > 0){                        
             $.each(response.pengawasan, function(i,item){
-              n = i+1
+              n = i+1;
+              lokasi_spt =  ( typeof item.spt !== 'undefined' && item.spt.lokasi_spt != null ) ? ' di '+item.spt.lokasi_spt : '';
               table += '<tr>'
                 +'<td></td>' //pengawasan[0].spt.kegiatan.sebutan
-                +'<td style="padding-left:50px;">'+n+'. '+item.spt.kegiatan.sebutan+'</td>'
+                +'<td style="padding-left:50px;">'+n+'. '+item.spt.kegiatan.name+lokasi_spt+'</td>'
                 +'<td style="text-align: center">'+item.info_dupak.dupak+'</td>'
                 +'<td></td>'
                 +'<td style="text-align: center">'+item.spt.lama+'</td>'
@@ -299,7 +301,7 @@
                   +'</tr>';
 
         //penutup tabel
-        table +='</table>';
+        table +='</table></div>';
 
         var penilai = new Object(), inspektur = new Object();
         if(response.pejabat){

@@ -28,7 +28,7 @@ class Spt extends Model
 
     public function getKegiatanAttribute(){
       $keg_id = $this->jenis_spt_id;
-      $keg = JenisSpt::select('sebutan')->where('id', $keg_id)->first();
+      $keg = JenisSpt::select(['name', 'sebutan'])->where('id', $keg_id)->first();
       return $keg;
     }
 
