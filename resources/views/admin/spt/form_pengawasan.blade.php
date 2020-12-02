@@ -116,7 +116,7 @@
 						<select class="form-control selectize" id="lokasi-id" name="lokasi_id" placeholder="Pilih Lokasi">
 							<option value="">{{ __('Pilih Lokasi') }}</option>
 							@foreach($listLokasi as $lokasi)
-							<option id="lokasi-{{$lokasi->id}}" class="form-control" value="{{$lokasi->id}}" >{{ $lokasi->nama_lokasi }}</option>
+							<option id="lokasi-{{$lokasi->id}}" class="form-control" value="{{$lokasi->id}}" >{{ $lokasi->lokasi }}</option>
 							@endforeach
 						</select>
 					</div>
