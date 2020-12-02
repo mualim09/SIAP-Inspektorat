@@ -708,7 +708,8 @@ class SptController extends Controller
                 })
                 ->addColumn('ringkasan', function($col){
                     $tambahan = (!is_null($col->tambahan) ) ? '<br /> <small class="text-muted"> ' . Common::cutText($col->tambahan, 2, 70) . '</small>' : '';
-                    return $col->jenisSpt->name . $tambahan ;
+                    $lokasi = (!is_null($col->lokasi_id) ) ? '<br /> <small class="text-muted">di ' . $col->lokasi_spt . '</small>' : '';
+                    return $col->jenisSpt->name . $tambahan . $lokasi;
                     /*$tambahan = (!is_null($col->tambahan) ) ? Common::cutText($col->tambahan, 2) : '';
                     $ringkasan = [
                         'jenis' => $col->jenisSpt->nama_sebutan,
