@@ -6,8 +6,13 @@
 		<select class="form-control" id="session-pj" name="session_pj">			        			
 			<option class="form-control" value="{{$pj->id}}">{{ $pj->full_name_gelar }}</option>
 		</select>
-	</div>
-	
+	</div>	
+		
+</div>
+
+
+<!-- 2-->
+<div class="form-group row">
 	<label for="session_ppj" class="col-md-2 col-form-label text-right">{{ __('Pembantu Penanggungjawab') }} </label>
 	<div class="col-md-4 peserta-spt">
 		<select class="form-control selectize" id="session-ppj" name="session_ppj">
@@ -17,12 +22,6 @@
 			@endforeach
 		</select>
 	</div>
-		
-</div>
-
-
-<!-- 2-->
-<div class="form-group row">	
 	<label for="session_pm" class="col-md-2 col-form-label text-right">{{ __('Pengendali Mutu') }} </label>
 	<div class="col-md-4 peserta-spt">
 		<select class="form-control selectize" id="session-pm" name="session_pm">
@@ -31,7 +30,12 @@
 			<option class="form-control selectize" value="{{$pm->id}}">{{ $pm->full_name_gelar }}</option>
 			@endforeach
 		</select>
-	</div>
+	</div>	
+</div>
+
+
+ <!-- 3 -->
+<div class="form-group row">
 	<label for="session_pt" class="col-md-2 col-form-label text-right">{{ __('Pengendali Teknis') }} </label>
 	<div class="col-md-4 peserta-spt">
 		<select class="form-control selectize" id="session-pt" name="session_pt">
@@ -41,12 +45,6 @@
 			@endforeach
 		</select>
 	</div>
-	
-</div>
-
-
- <!-- 3 -->
-<div class="form-group row">	
 	<label for="session_ket" class="col-md-2 col-form-label text-right">{{ __('Ketua') }} </label>
 	<div class="col-md-4 peserta-spt">
 		<select class="form-control selectize" id="session-ket" name="session_ket">
