@@ -1599,30 +1599,29 @@ class SptController extends Controller
             }
 
     }*/
+    public function hitungDupakKhusus($user_id,$peran,$lama_jam){
+        //perhitungan AK untuk SPT berindikasi tindak pidana korupsi
+    }
 
     public function hitungDupak($user_id,$peran,$lama_jam){
         $user = User::findOrFail($user_id,['jabatan']);
         $jabatan = $user->jabatan;
-
-        //coba penyesuaian dari yogi untuk jenis SPT kategori A (Sidak, Kasus, AKIP, Lakip, Monev)/ bukan audit khusus berindikasi tindak pidana korupsi
+        //coba penyesuaian untuk jenis SPT kategori A (Sidak, Kasus, AKIP, Lakip, Monev)/ bukan audit khusus berindikasi tindak pidana korupsi
         switch($peran){
             case 'Pengendali Mutu' :
                 if ('Auditor Utama' == $jabatan ) {
-                    //$dupak = 0.04 * $lama_jam;
                     $dupak = [
                         'koef' => 0.04,
                         'nilai'=> 0.04 * $lama_jam
                     ];
                 }
                 elseif ('Auditor Madya' == $jabatan) {
-                    //$dupak = 0.032 * $lama_jam;
                     $dupak = [
                         'koef' => 0.032,
                         'nilai'=> 0.032 * $lama_jam
                     ];
                 }
                 else {
-                    //$dupak = 0;
                     $dupak = [
                         'koef' => 0,
                         'nilai'=> 0
@@ -1632,28 +1631,24 @@ class SptController extends Controller
 
             case 'Pengendali Teknis' :
                 if ('Auditor Utama' == $jabatan ) {
-                    //$dupak = 0.03 * $lama_jam;
                     $dupak = [
                         'koef' => 0.03,
                         'nilai'=> 0.03 * $lama_jam
                     ];
                 }
                 elseif('Auditor Madya' == $jabatan) {
-                    //$dupak = 0.032 * $lama_jam;
                     $dupak = [
                         'koef' => 0.032,
                         'nilai'=> 0.032 * $lama_jam
                     ];
                 }
                 elseif('Auditor Muda' == $jabatan) {
-                    //$dupak =  0.024 * $lama_jam;
                     $dupak = [
                         'koef' => 0.024,
                         'nilai'=> 0.024 * $lama_jam
                     ];
                 }
                 else {
-                    //$dupak = 0;
                     $dupak = [
                         'koef' => 0,
                         'nilai'=> 0
@@ -1663,28 +1658,24 @@ class SptController extends Controller
 
             case 'Ketua Tim' :
                 if('Auditor Madya' == $jabatan) {
-                    //$dupak = 0.02 * $lama_jam;
                     $dupak = [
                         'koef' => 0.02,
                         'nilai'=> 0.02 * $lama_jam
                     ];
                 }
                 elseif('Auditor Muda' == $jabatan) {
-                    //$dupak = 0.02 * $lama_jam;
                     $dupak = [
                         'koef' => 0.02,
                         'nilai'=> 0.02 * $lama_jam
                     ];
                 }
                 elseif('Auditor Pertama' == $jabatan) {
-                    //$dupak = 0.016 * $lama_jam;
                     $dupak = [
                         'koef' => 0.016,
                         'nilai'=> 0.016 * $lama_jam
                     ];
                 }
                 else {
-                    //$dupak = 0;
                     $dupak = [
                         'koef' => 0,
                         'nilai'=> 0
@@ -1693,29 +1684,43 @@ class SptController extends Controller
             break;
 
             case 'Anggota' :
-                if('Auditor Muda' == $jabatan) {
-                    //$dupak = 0.01 * $lama_jam;
+                if('Auditor Madya' == $jabatan) {
+                    $dupak = [
+                        'koef' => 0.01,
+                        'nilai'=> 0.01 * $lama_jam
+                    ];
+                }
+                elseif('Auditor Muda' == $jabatan) {
                     $dupak = [
                         'koef' => 0.01,
                         'nilai'=> 0.01 * $lama_jam
                     ];
                 }
                 elseif('Auditor Pertama' == $jabatan) {
-                    //$dupak = 0.01 * $lama_jam;
+                    $dupak = [
+                        'koef' => 0.01,
+                        'nilai'=> 0.01 * $lama_jam
+                    ];
+                }
+                elseif('Auditor Penyelia'== $jabatan){
+                    $dupak = [
+                        'koef' => 0.02,
+                        'nilai'=> 0.02 * $lama_jam
+                    ];
+                }
+                elseif('Auditor Pelaksana Lanjutan' == $jabatan) {
                     $dupak = [
                         'koef' => 0.01,
                         'nilai'=> 0.01 * $lama_jam
                     ];
                 }
                 elseif('Auditor Pelaksana' == $jabatan) {
-                    //$dupak = 0.004 * $lama_jam;
                     $dupak = [
                         'koef' => 0.004,
                         'nilai'=> 0.004 * $lama_jam
                     ];
                 }
                 else {
-                    //$dupak = 0;
                     $dupak = [
                         'koef' => 0,
                         'nilai'=> 0
@@ -1724,7 +1729,6 @@ class SptController extends Controller
             break;
 
             default:
-                //$dupak = 0;
                 $dupak = [
                     'koef' => 0,
                     'nilai'=> 0

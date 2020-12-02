@@ -22,7 +22,7 @@ use Session;
 
 class UserController extends Controller
 {
-    private $list_jabatan = ['Inspektur Kabupaten', 'Sekertaris', 'Inspektur Pembantu Wilayah I', 'Inspektur Pembantu Wilayah II', 'Inspektur Pembantu Wilayah III', 'Inspektur Pembantu Wilayah IV', 'Auditor Utama', 'Auditor Madya', 'Auditor Muda', 'Auditor Pertama', 'Auditor', 'Staff / Fungsional', 'Kasubag Evaluasi dan Pelaporan', 'Kasubag Perencanaan', 'Kasubag Administrasi dan Umum', 'Pengadministrasi Umum'];
+    private $list_jabatan = ['Inspektur Kabupaten', 'Sekertaris', 'Inspektur Pembantu Wilayah I', 'Inspektur Pembantu Wilayah II', 'Inspektur Pembantu Wilayah III', 'Inspektur Pembantu Wilayah IV', 'Auditor Utama', 'Auditor Madya', 'Auditor Muda', 'Auditor Pertama', 'Auditor Penyelia', 'Auditor Pelaksana Lanjutan', 'Auditor Pelaksana', 'Auditor', 'PENGOLAH DATA','Staff / Fungsional', 'Kasubag Evaluasi dan Pelaporan', 'Kasubag Perencanaan', 'Kasubag Administrasi dan Umum', 'Pengadministrasi Umum'];
 
     private $list_pangkat = ['I/A', 'I/B', 'I/C', 'I/D', 'II/A', 'II/B', 'II/C', 'II/D', 'III/A', 'III/B', 'III/C', 'III/D', 'IV/A', 'IV/B', 'IV/C', 'IV/D'];
     
