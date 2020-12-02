@@ -14,7 +14,7 @@
 				<input type="hidden" name="id" id="id">
 				@csrf
 				<div class="form-group row">
-					<label for="jenis_spt_id" class="col-md-2 col-form-label">{{ __('Jenis SPT') }} </label>
+					<label for="jenis_spt_id" class="col-md-2 col-form-label text-right">{{ __('Jenis SPT') }} </label>
 					<div class="col">
 						<select class="form-control" id="jenis-spt" name="jenis_spt" placeholder="Cari Jenis SPT">
 							@foreach($jenis_spt as $jenis)
@@ -39,18 +39,18 @@
 				</div>
 
 				<div class="form-group row">
-				    <label for="tgl-mulai" class="col-md-2 col-form-label">{{ __('Mulai') }}</label>
+				    <label for="tgl-mulai" class="col-md-2 col-form-label text-right">{{ __('Mulai') }}</label>
 				    <div class="col-md-4">
 						<input type="text" class="form-control datepicker" name="tgl_mulai" id="tgl-mulai" autocomplete="off" placeholder="{{ __('Tanggal Mulai')}}">
 					</div>
-					<label for="tgl-akhir" class="col-md-2 col-form-label">{{ __('Berakhir') }}</label>
+					<label for="tgl-akhir" class="col-md-2 col-form-label text-right">{{ __('Berakhir') }}</label>
 				    <div class="col-md-4">
 						<input type="text" class="form-control datepicker" name="tgl_akhir" id="tgl-akhir" autocomplete="off" placeholder="{{ __('Tanggal Akhir')}}" disabled="true">
 					</div>
 				</div>
 
 				<div class="form-group row">
-				    <label for="tgl-mulai" class="col-md-2 col-form-label">{{ __('Lama') }}</label>
+				    <label for="tgl-mulai" class="col-md-2 col-form-label text-right">{{ __('Lama') }}</label>
 				    <div class="col-md-4">
 						<input type="text" class="form-control" name="lama" id="lama" autocomplete="off" placeholder="{{ __('Lama')}}">
 					</div>
@@ -111,7 +111,7 @@
 				</script>
 
 				<div class="form-group row" id="input-lokasi-container" style="display:none">
-				    <label for="lokasi" class="col-md-2 col-form-label">{{ __('Lokasi') }} </label>
+				    <label for="lokasi" class="col-md-2 col-form-label text-right">{{ __('Lokasi') }} </label>
 					<div class="col">
 						<select class="form-control selectize" id="lokasi-id" name="lokasi_id" placeholder="Pilih Lokasi">
 							<option value="">{{ __('Pilih Lokasi') }}</option>
@@ -124,7 +124,7 @@
 
 
 				<div class="form-group row" id="input-tambahan-container" style="display:none">
-				    <label for="tambahan" class="col-md-2 col-form-label">{{ __('Tambahan') }} </label>
+				    <label for="tambahan" class="col-md-2 col-form-label text-right">{{ __('Tambahan') }} </label>
 					<div class="col">
 						<textarea name="tambahan" id="tambahan" class="form-control" ></textarea>
 						<small id="tambahanHelp" class="form-text text-muted">Masukkan informasi tambahan mengenai SPT yang akan dibuat. Tekan <span style="color:red;">ENTER</span> untuk ganti baris.</small>

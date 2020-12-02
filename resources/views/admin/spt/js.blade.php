@@ -58,7 +58,7 @@
             type: "GET",
             dataType: "JSON",
             success: function(data){                
-                $('#spt-form')[0].reset();                
+                $('#spt-form')[0].reset();
 
                 //variabel jenis spt               
                 lokasi = (data.jenis_spt.input_lokasi == true) ? data.lokasi_id : '';
@@ -84,6 +84,7 @@
 
                 //set anggota spt
                 if(data.detail_spt.length>0){
+                    //set var anggota type array
                     anggota = [];
                     $.each(data.detail_spt, function(i,item){
                         if(item.peran == 'Pembantu Penanggungjawab'){
@@ -98,14 +99,13 @@
                         if(item.peran == 'Ketua Tim'){
                             $('#session-ket')[0].selectize.setValue(item.user_id);
                         }
+                        //jika peran adalah anggota, push arr_var anggota berisi user id (item.user_id)
                         if(item.peran == 'Anggota'){
-                            anggota.push(item);
+                            anggota.push(item.user_id);
                         }
-                    });
-                    $.each(anggota, function(i, item){
-                        n = i+1;
-                        $('#session-anggota-'+n)[0].selectize.setValue(item.user_id);
-                    });
+                    }); 
+                    //set select value anggota berisi arr_var anggota                  
+                    $('#session-anggota')[0].selectize.setValue(anggota);                    
                 }
                 $('#formModal').modal('show');
                 $('#formModal').attr('data-id-spt-pengawasan', data.id);
@@ -197,8 +197,8 @@
             var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             var id = $('#id').val();
             var pj = $('#session-pj option:selected').val(), ppj = $('#session-ppj option:selected').val(), pm = $('#session-pm option:selected').val(), pt = $('#session-pt option:selected').val();
-            var ket = $('#session-ket option:selected').val();
-            var a1 = $('#session-anggota-1 option:selected').val(), a2 = $('#session-anggota-2 option:selected').val(), a3 = $('#session-anggota-3 option:selected').val(), a4 = $('#session-anggota-4 option:selected').val(), a5 = $('#session-anggota-5 option:selected').val();
+            var ket = $('#session-ket option:selected').val();            
+            var anggota_id = $('#session-anggota').val();
             
             //save_method = (id == '') ? 'new' : save_method;
             base_url = "spt";
@@ -212,7 +212,7 @@
             $.ajax({
                 url: url,
                 type: type,
-                data: {jenis_spt_id:jenis_spt_id, lokasi_id:lokasi_id, tgl_mulai:tgl_mulai, tgl_akhir:tgl_akhir, lama:lama, tambahan:tambahan, info:info, pj:pj, ppj:ppj, pm:pm, pt:pt, ket:ket, a1:a1, a2:a2, a3:a3, a4: a4, a5:a5, _method: method},
+                data: {jenis_spt_id:jenis_spt_id, lokasi_id:lokasi_id, tgl_mulai:tgl_mulai, tgl_akhir:tgl_akhir, lama:lama, tambahan:tambahan, info:info, pj:pj, ppj:ppj, pm:pm, pt:pt, ket:ket, anggota_id:anggota_id, _method: method},
                 //data: $('#spt-form').serialize(),
                 //dataType: 'json',
 

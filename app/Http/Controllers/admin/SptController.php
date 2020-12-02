@@ -134,7 +134,6 @@ class SptController extends Controller
             'info' => $request['info'],
         ];
 
-
         $spt = Spt::create($data);
         if($spt) {
 
@@ -186,50 +185,16 @@ class SptController extends Controller
                 ]);
             }
 
-            if($request->a1){
-                DB::table('detail_spt')->insertGetId([
-                    'spt_id' => $spt->id,
-                    'user_id' => $request->a1,
-                    'peran' => 'Anggota',
-                    'unsur_dupak' => 'pengawasan',
-                ]);
+            if($request->anggota_id){
+                foreach($request->anggota_id as $anggota_id){
+                    DB::table('detail_spt')->insertGetId([
+                        'spt_id' => $spt->id,
+                        'user_id' => $anggota_id,
+                        'peran' => 'Anggota',
+                        'unsur_dupak' => 'pengawasan',
+                    ]);
+                }
             }
-
-            if($request->a2){
-                DB::table('detail_spt')->insertGetId([
-                    'spt_id' => $spt->id,
-                    'user_id' => $request->a2,
-                    'peran' => 'Anggota',
-                    'unsur_dupak' => 'pengawasan',
-                ]);
-            }
-
-            if($request->a3){
-                DB::table('detail_spt')->insertGetId([
-                    'spt_id' => $spt->id,
-                    'user_id' => $request->a3,
-                    'peran' => 'Anggota',
-                    'unsur_dupak' => 'pengawasan',
-                ]);
-            }
-            if($request->a4){
-                DB::table('detail_spt')->insertGetId([
-                    'spt_id' => $spt->id,
-                    'user_id' => $request->a4,
-                    'peran' => 'Anggota',
-                    'unsur_dupak' => 'pengawasan',
-                ]);
-            }
-            if($request->a5){
-                DB::table('detail_spt')->insertGetId([
-                    'spt_id' => $spt->id,
-                    'user_id' => $request->a5,
-                    'peran' => 'Anggota',
-                    'unsur_dupak' => 'pengawasan',
-                ]);
-            }
-                
-
             /*//user id pembuat spt
             $info['user_id'] = $user->id;
             $info['type'] = 'spt';
@@ -638,53 +603,21 @@ class SptController extends Controller
                 ]);
             }
 
-            if($request->a1){
-                DB::table('detail_spt')->insertGetId([
-                    'spt_id' => $id,
-                    'user_id' => $request->a1,
-                    'peran' => 'Anggota',
-                    'unsur_dupak' => 'pengawasan',
-                ]);
+            if($request->anggota_id){
+                foreach($request->anggota_id as $anggota_id){
+                    DB::table('detail_spt')->insertGetId([
+                        'spt_id' => $id,
+                        'user_id' => $anggota_id,
+                        'peran' => 'Anggota',
+                        'unsur_dupak' => 'pengawasan',
+                    ]);
+                }
             }
 
-            if($request->a2){
-                DB::table('detail_spt')->insertGetId([
-                    'spt_id' => $id,
-                    'user_id' => $request->a2,
-                    'peran' => 'Anggota',
-                    'unsur_dupak' => 'pengawasan',
-                ]);
-            }
+            
 
-            if($request->a3){
-                DB::table('detail_spt')->insertGetId([
-                    'spt_id' => $id,
-                    'user_id' => $request->a3,
-                    'peran' => 'Anggota',
-                    'unsur_dupak' => 'pengawasan',
-                ]);
-            }
-
-            if($request->a4){
-                DB::table('detail_spt')->insertGetId([
-                    'spt_id' => $id,
-                    'user_id' => $request->a4,
-                    'peran' => 'Anggota',
-                    'unsur_dupak' => 'pengawasan',
-                ]);
-            }
-
-            if($request->a5){
-                DB::table('detail_spt')->insertGetId([
-                    'spt_id' => $id,
-                    'user_id' => $request->a5,
-                    'peran' => 'Anggota',
-                    'unsur_dupak' => 'pengawasan',
-                ]);
-            }
-
-            //update event SPT
-            $user = auth()->user();
+            //update event SPT dipindah saat register baru memasukkan event (event valid)
+           /* $user = auth()->user();
             $event = Event::where('info->spt_id',$id)->update([
                'title' => $jenis_spt->sebutan,
                'start' => $updated_spt->tgl_mulai,
@@ -695,7 +628,7 @@ class SptController extends Controller
                            'jenis'=>'pengawasan',
                            'spt_id' => $id
                       ])
-            ]);
+            ]);*/
             /*$event->title = $jenis_spt->sebutan;
             $event->start = $updated_spt->tgl_mulai;
             $event->end = $updated_spt->tgl_akhir;
