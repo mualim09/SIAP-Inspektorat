@@ -14,6 +14,7 @@
       <breadcrumb-item active>/ PPM</a></breadcrumb-item>
     </breadcrumb>
     
+
     <div class="col-md-12 dashboard-bg-color">
     <div class="card">
         <div class="card-header"> 
@@ -22,18 +23,31 @@
             <li class="nav-item ml-auto">
                 <button id="btn-input-ppm" type="button" class="btn btn-outline-success btn-sm" data-toggle="modal" data-target="#formPpm" style="margin-bottom: 20px;">{{ __('Tambah PPM') }}</button>
             </li>
-
           </ul>
         </div>
         <div class="card-body">
           <div class="tab-content mt-3">
           <!-- content -->
+          @if($errors->any())
+            <h5>{{$errors->first()}}</h5>
+          @endif
+          @if(Session::has('msg'))
+          <div class="col-sm-12">
+              <div class="alert  alert-success alert-dismissible fade show" role="alert">
+                {{Session::get('msg')}}
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+              </div>
+          </div>
+          @endif
             @yield('content_ppm')
             @include('admin.ppm.form_ppm')
           </div>
         </div>
     </div>     
   </div>
+
 
   <script type="text/javascript">
     $('#spt-list a').on('click', function (e) {
@@ -42,6 +56,7 @@
     });
     //show the first tab
     $('.nav-tabs a:first').tab('show')
+
   </script>
 
 </div>

@@ -23,7 +23,34 @@
         <form id="form-ppm" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="id_ppm" id="id-ppm">
-            <input type="hidden" name="unsur_ppm" id="unsur-ppm" value="Pengembangan Profesi">
+            <!-- <input type="hidden" name="unsur_ppm" id="unsur-ppm" value="Pengembangan Profesi"> -->
+
+            <div class="form-group row">
+                <label for="dasar" class="col-md-2 col-form-label ">{{ __('Jenis PPM') }}</label>
+                <div class="col-md-10">
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" class="custom-control-input" id="jenis-ppm2" name="unsur_ppm" value="Studi Banding" disabled="">
+                        <label class="custom-control-label" for="jenis-ppm2">Studi Banding</label>
+                    </div>
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" class="custom-control-input" id="jenis-ppm3" name="unsur_ppm" value="Konverensi/Kongres">
+                        <label class="custom-control-label" for="jenis-ppm3">Konverensi/Kongres</label>
+                    </div>
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" class="custom-control-input" id="jenis-ppm4" name="unsur_ppm" value="Workshop">
+                        <label class="custom-control-label" for="jenis-ppm4">Workshop</label>
+                    </div>
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" class="custom-control-input" id="jenis-ppm5" name="unsur_ppm" value="Pelatihan Kantor Sendiri" disabled="">
+                        <label class="custom-control-label" for="jenis-ppm5">Pelatihan Kantor Sendiri</label>
+                    </div>
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" class="custom-control-input" id="jenis-ppm1" name="unsur_ppm" value="Diklat Penjenjangan">
+                        <label class="custom-control-label" for="jenis-ppm1">Diklat Penjenjangan</label>
+                    </div>
+                    <small id="infoDasarHelp" class="form-text text-muted">Silahkan pilih Jenis PPM yang dibutuhkan.</small>
+                </div>
+            </div>
 
             <!-- start input kegiatan -->
             <div class="form-group row">
@@ -91,7 +118,7 @@
             <!-- end lama ppm -->
 
             <!-- start select narasumber/moderator  -->
-            <div class="form-group row">
+            <div class="form-group row" id="moderator_id">
                 <label for="kegiatan" class="col-md-2 col-form-label ">{{ __('Narasumber/Moderator') }}</label>
                 <div class="col-md-6">
                         <select class="selectize" name="moderator_narasumber[]" multiple="multiple" id="morator-narasumber-id">
@@ -122,7 +149,8 @@
                         $("#name-user-"+item).css({ 'color': '#525f7f'});
                        },
                     });
-                    console.log($('#formPpm').modal('hide') == true);
+                    // di hide
+                    // console.log($('#formPpm').modal('hide') == true);
                     /*if(){   
                         $('#morator-narasumber-id').selectize({
                             onChange(item){
@@ -308,6 +336,21 @@
 
 <!-- start javascript -->
 <script type="text/javascript">
+/*jquery hide selectize moderator for ppm Studi Banding & Diklat Penjenjangan*/
+$(function() {
+    $('#moderator_id').hide(); 
+    $('input[type="radio"]').click(function(){
+        var inputValue = $(this).attr("value");
+        // console.log(inputValue != 'Studi Banding' && inputValue != 'Diklat Penjenjangan');
+        if(inputValue != 'Studi Banding' && inputValue != 'Diklat Penjenjangan') {
+            $('#moderator_id').show('fast'); 
+        } else {
+            $('#moderator_id').hide('fast'); 
+        } 
+    });
+});
+
+
 
 $.ajaxSetup({
     headers: {
