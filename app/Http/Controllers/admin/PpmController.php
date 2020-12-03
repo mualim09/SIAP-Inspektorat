@@ -318,12 +318,12 @@ class PpmController extends Controller
                     // dd($checking_date_workshop_m == true && ($tgl_m_ppm_workshop_m >= $tgl_m_spt_workshop_m) && ($tgl_m_ppm_workshop_m <= $tgl_a_spt_workshop_m) && (count($getdate_spt_workshop) >= 2) == false);
                     if ($checking_date_workshop_m == true && ($tgl_m_ppm_workshop_m >= $tgl_m_spt_workshop_m) && ($tgl_m_ppm_workshop_m <= $tgl_a_spt_workshop_m) && (count($getdate_spt_workshop) >= 2) == false) {
                         
-                        $ppm = Ppm::create($data);
-                        if($ppm) {
+                        // $ppm = Ppm::create($data);
+                        // if($ppm) {
                             
                             /*start fungsi insert detail ppm*/
-                            $ppm_id = Ppm::find($ppm->id);
-                            $lama = $ppm_id->lama;
+                            // $ppm_id = Ppm::find($ppm->id);
+                            // $lama = $ppm_id->lama;
                             // $tgl_ppm = date('Y-m-d H:i:s',strtotime($request['tgl_mulai_ppm']));
 
                             $hari_efektif_workshop = 1;
@@ -366,11 +366,12 @@ class PpmController extends Controller
                                 // dd($getdate_spt_workshop);
                             }
 
-                            $update_pengawasan_terimbas = DetailSpt::where('user_id','=',$getdate_spt_workshop[$i]->user_id->where('spt_id',$getdate_spt_workshop[$i]->spt_id)->update(['info_dupak'=>json_encode($dupak_moderator_terimbas)]);
+                            // $update_pengawasan_terimbas = DetailSpt::where('user_id','=',$getdate_spt_workshop[$i]->user_id->where('spt_id',$getdate_spt_workshop[$i]->spt_id)->update(['info_dupak'=>json_encode($dupak_moderator_terimbas_p)]);
+                            $update_pengawasan_terimbas = DetailSpt::where('user_id',$getdate_spt_workshop[$i]->user_id)->where('spt_id',$getdate_spt_workshop[$i]->spt_id)->update(['info_dupak'=>$dupak_moderator_terimbas_p]);
                             /*end nilai dupak workshop yg terimbas*/
 
                             // $return_moderator_succ = 'data moderator';
-                        }
+                        // }
 
                         $return_moderator_workshop_succ = 'data moderator';
                     }else{
