@@ -58,7 +58,8 @@
     <script type="text/javascript">
         var table = $('#tabel-ppm').DataTable({        
             'pageLength': 10,
-            dom: '<"col-md-12 row"<"col-md-6"B><"col"f>>rtlp',
+            autoWidth: false,
+            // dom: '<"col-md-12 row"<"col-md-6"B><"col"f>>rtlp',
             buttons:[ {extend:'excel', title:'Daftar SPT'}, {extend:'pdf', title:'Daftar SPT'} ],
             language: {
                 paginate: {
@@ -79,10 +80,27 @@
                 },
                 {data: 'kegiatan', name: 'kegiatan', 'title': "{{ __('Kegiatan') }}"},
                 {data: 'lama', name: 'lama', 'title': "{{ __('Lama') }}"},
+                {data: 'jenis_ppm', name: 'jenis_ppm', 'title': "{{ __('Jenis PPM') }}"},
                 // {data: 'nota', name: 'nota', 'title': "{{ __('Nota Dinas') }}"},
                 {data: 'action', name: 'action', 'orderable': false, 'searchable': false, 'title': "{{ __('Action') }}", 'exportable' : false,'printable': false},
             ],        
-            "order": [[ 1, 'asc' ]],
+            columnDefs : [
+              {"width": '2%', "targets": 0},
+              // {"width": '5%', "targets": 2},
+              {"width": '19%', "targets": 1},
+              {
+                "width": '10%', 
+                "targets": 2,
+                //"data" : null,
+                /*"render": function ( data, type, row, meta ) {
+                  tambahan = (data.tambahan.length > 0 ) ? '<br/><small class="text-muted">'+data.tambahan+'</small>' : ''
+                  return data.jenis+tambahan;
+                }*/
+              },
+              {"width": '20%', "targets": 3},
+              {"width": '5%', "targets": 4},
+              // {"width": '15%', "targets": 6},
+            ]
         });
 
         // show modal list anggota ppm
