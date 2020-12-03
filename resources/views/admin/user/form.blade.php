@@ -174,7 +174,7 @@
               });*/
         </script>
 
-        <div class="form-group row" id="jenis-auditor" >
+        <!-- <div class="form-group row" id="jenis-auditor" >
             <span class="col-md-2 text-md-right">{{ __('Jenis Auditor') }}</span>
             <div class="col-md-10 row">
                 <div class="col-md-3">
@@ -190,7 +190,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <div class="form-group row" id="ruang-auditor">
             <span class="col-md-2 col-form-label text-md-right labelclass">{{ __('Ruang') }}</span>            
