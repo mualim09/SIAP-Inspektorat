@@ -7,9 +7,12 @@ use App\User, App\models\Pejabat;
 
 class Dupak extends Model
 {
-    protected $fillable = ['user_id', 'dupak', 'unsur_dupak','status', 'info_spt','created_at','updated_at'];
+    protected $fillable = ['user_id', 'dupak', 'unsur_dupak','status', 'info_spt'];
     protected $table = 'dupak';
     protected $appends = ['irban_kepala','user_dupak'];
+     protected $casts = [
+        'info_spt' => 'array',
+    ];
 
     public function getIrbanKepalaAttribute(){
       $user_id = $this->user_id;

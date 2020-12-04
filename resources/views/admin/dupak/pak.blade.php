@@ -10,9 +10,7 @@ function generate_tabel_pak(dupak_pendidikan, sumDiklat, sumLamaDiklat, sumPenga
       type: "GET",
       dataType: "JSON",
       data: {user_id: user_id, semester: semester, tahun: tahun},
-      success: function(response){
-        console.log(response.user);
-        
+      success: function(response){        
           nama_user = ('undefined' !== response.user.full_name_gelar) ? response.user.full_name_gelar : '';
           nip_user = ('undefined' !== response.user.nip) ? response.user.nip : '';
           jabatan_user = ('undefined' !== response.user.jabatan) ? response.user.jabatan : '';

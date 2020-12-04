@@ -447,5 +447,22 @@ class DupakController extends Controller
         return $dupak;
     }
 
+    public function dupakLama(Request $request){
+        $user_id = ($request->user_id) ? $request->user_id : auth()->user()->id;
+        $year = ($request->tahun) ? $request->tahun : date('Y');
+        //$dupak['penilai'] = ( auth()->user()->hasRole(['Super Admin', 'Tim Dupak']) ) ? true : false;
+        //$dupak['user'] = User::where('id',$user_id)->first();
+        $dupak['user'] = User::with(['dupak'=> function($q){
+                    $q->where('status', 'lama');
+                }])->where('id', $user_id)->first();
+        $dupak['pejabat'] = Pejabat::where('name','Penetap AK')->with(['user'=>function($q){
+                    $q->select(['id', 'nip', 'first_name', 'last_name', 'gelar', 'jabatan', 'pangkat']);
+                }])->get();
+        //$dupak['ak_lama'] = Dupak::where('status', 'lama')->where('user_id', $user_id)->get();DB::select('select * from users where active = ?', [1]);
+        //$dupak['ak_lama'] = DB::select("select * from dupak where user_id = $user_id ");
+        //dd($dupak['ak_lama']);
+        return $dupak;
+    }
+
 
 }
