@@ -59,10 +59,13 @@ class PejabatController extends Controller
         $penetap_ak = User::whereHas('pejabat', function($q){
             $q->where('name','Penetap AK')->whereNull('status');
         })->first();
-        
-        // dd((!is_null($ketua_penilai_ak)) ? true : false);
+
+        $data_user_ppm = User::whereHas('pejabat', function($q){
+            $q->where('name','PPM');
+        })->get();
         $users = User::all();
-        // dd($ketua_penilai_ak);
+        // dd((empty($data_user_ppm)) ? $data_user_ppm : $users);
+        // dd(empty($data_user_ppm));
         /*return view('admin.pejabat.index')->with([
             'inspektur' => (!is_null($plt_inspektur)) ? $plt_inspektur : $inspektur,
             'sekretaris' => (!is_null($plt_sekretaris)) ? $plt_sekretaris : $sekretaris,
@@ -109,6 +112,11 @@ class PejabatController extends Controller
                 'user'=>(!is_null($penetap_ak)) ? $penetap_ak : $penetap_ak_default,
                 'is_plt'=>(!is_null($penetap_ak)) ? true : false
             ],
+            /*sementara butuh di koreksi kembali*/
+            'data_user_ppm'=> [
+                'user'=>(empty($data_user_ppm)) ? $users : $data_user_ppm,
+                'ppm_is_null'=>(!is_null($data_user_ppm)) ? true : false
+            ],
             'users'=>$users
         ]);
     }
@@ -120,7 +128,8 @@ class PejabatController extends Controller
      */
     public function submit(Request $request)
     {
-        // dd($request);
+        // dd($request->select_ppm);
+        /* $request->select_ppm datanya array */
         $inspektur = User::where('jabatan', 'Inspektur Kabupaten')->select(['id' ,'first_name','last_name'])->first();
         $sekretaris = User::where('jabatan', 'Sekertaris')->select(['id' ,'first_name','last_name'])->first();
         $irban_i_default = User::where('jabatan', 'Inspektur Pembantu Wilayah I')->select(['id' ,'first_name','last_name','ruang->nama as nama_ruang'])->first();
@@ -130,6 +139,7 @@ class PejabatController extends Controller
         $ketua_penilai_ak_default = User::all();
         $penyusun_ak_default = User::where('jabatan', 'Inspektur Kabupaten')->select(['id' ,'first_name','last_name'])->first();
         $penetap_ak_default = User::where('jabatan', 'Inspektur Kabupaten')->select(['id' ,'first_name','last_name'])->first();
+        $ppm_user_default = User::all();
         // dd($request->ketua_penilaian_ak === $ketua_penilai_ak_default);
 
         //$plt_inspektur = Pejabat::where('name', 'Inspektur Kabupaten')->with('user:id,first_name,last_name')->first();
@@ -170,8 +180,11 @@ class PejabatController extends Controller
         $cek_ketua_penilai_ak = Pejabat::where('name','Ketua Penilai AK')->count();
         $cek_penyusun_ak = Pejabat::where('name','Penyusun AK')->count();
         $cek_penetap_ak = Pejabat::where('name','Penetap AK')->count();
+        $cek_ppm = Pejabat::where('name','PPM')->count();
+        $array_ppm_view = ($request->select_ppm != null) ? count($request->select_ppm) : 0;
+         // dd(($cek_ppm == $array_ppm_view) ? true : false);
+        $compare_ppm = ($cek_ppm == $array_ppm_view) ? true : false; /*jika true maka data array ppm sama jadi hanya diupdate jika tidak sama maka insert ulang*/
 
-         //dd($inspektur['id']);
         // die();
         
         /* if($request->inspektur !== $inspektur->id && $request->sekretaris !== $sekretaris->id && $request->irban_i !== $irban_i_default->id && $request->irban_ii !== $irban_ii_default->id && $request->irban_iii !== $irban_iii_default->id && $request->irban_iv !== $irban_iv_default->id && $request->ketua_penilaian_ak !== $ketua_penilai_ak_default)*/
@@ -179,10 +192,11 @@ class PejabatController extends Controller
         if($request->inspektur !== $inspektur['id'] && $request->sekretaris !== $sekretaris['id'] && $request->irban_i !== $irban_i_default['id'] && $request->irban_ii !== $irban_ii_default['id'] && $request->irban_iii !== $irban_iii_default['id'] && $request->irban_iv !== $irban_iv_default['id'] && $request->ketua_penilaian_ak !== $ketua_penilai_ak_default){
 
 
-            if($cek_pejabat>0 && $cek_pejabat_sekretaris>0 && $cek_pejabat_irban_i>0 && $cek_pejabat_irban_ii>0 && $cek_pejabat_irban_iii>0 && $cek_pejabat_irban_iv>0 && $cek_ketua_penilai_ak>0){
+            if($cek_pejabat>0 && $cek_pejabat_sekretaris>0 && $cek_pejabat_irban_i>0 && $cek_pejabat_irban_ii>0 && $cek_pejabat_irban_iii>0 && $cek_pejabat_irban_iv>0 && $cek_ketua_penilai_ak>0 && $compare_ppm == false){
                 //query update tabel pejabat 'semua pejabat'
 
                 ($request->ketua_penilaian_ak == null) ? $ketua_penilaian_ak = null : $ketua_penilaian_ak = $request->ketua_penilaian_ak;
+                ($request->select_ppm == null) ? $anggota_ppm = null : $anggota_ppm = $request->select_ppm;
 
                 if($request->inspektur != null){
                     if (json_decode($request->inspektur) === $inspektur['id']) {
@@ -247,11 +261,34 @@ class PejabatController extends Controller
                         $update_penyusun = Pejabat::where('id','9')->update(['user_id'=>$request->penetap_ak,'name'=>'Penetap AK']);
                     }
                     $update = $update_penyusun;
-                }
+                }if($request->select_ppm != null || $request->select_ppm == null){
+                    // if ($anggota_ppm != null && $request->select_ppm == null) {
+                        
+                        $dataPPM = Pejabat::where('name','PPM')->get();
+                        foreach ($dataPPM as $dataPPM_index => $dataPPM_value) {
+                            $id_ppm = $dataPPM[$dataPPM_index];
+                            $delete_data_first = Pejabat::where('id',$id_ppm->id)->where('name','PPM')->delete();
+                        }
+                        if($anggota_ppm != null){
+                            foreach ($anggota_ppm as $index_ppm => $value_ppm) {
+                                /*json_decode($anggota_ppm[$index_ppm])*/
+                                if ($compare_ppm == true) {
+                                    $update_ketua_penilai = Pejabat::insert(['user_id'=>$request->ketua_penilaian_ak,'name'=>'PPM']);
+                                }else{
+                                    // $delete_data_first = Pejabat::where('id',$id_ppm->id)->where('name','PPM')->delete();
+                                    $update_ketua_penilai = Pejabat::insert(['user_id'=>json_decode($anggota_ppm[$index_ppm]),'name'=>'PPM']);
+                                }
+                                $update = $update_ketua_penilai;
+                            }
+                        }
+                    // }else{
+                    //     $update_ketua_penilai = 'user kosong';
+                    // }
+               }
 
                 return $update.' pejabat has been Update !';
 
-            }else{
+            }if($cek_pejabat==0 && $cek_pejabat_sekretaris==0 && $cek_pejabat_irban_i==0 && $cek_pejabat_irban_ii==0 && $cek_pejabat_irban_iii==0 && $cek_pejabat_irban_iv==0 && $cek_ketua_penilai_ak==0 && $cek_ppm==0){
                 //query insert pejabat semua
                 if($request->inspektur != null){
                     if (json_decode($request->inspektur) === $inspektur['id']) {
@@ -291,9 +328,9 @@ class PejabatController extends Controller
                     }
                 }if($cek_ketua_penilai_ak<1){
                     if ($request->ketua_penilaian_ak == null) {
-                        $save2 = Pejabat::insert(['user_id'=>'99991','name'=>'Ketua Penilai AK']);
+                        $save = Pejabat::insert(['user_id'=>'99991','name'=>'Ketua Penilai AK']);
                     }else{
-                        $save2 = Pejabat::insert(['user_id'=>$request->ketua_penilaian_ak,'name'=>'Ketua Penilai AK']);
+                        $save = Pejabat::insert(['user_id'=>$request->ketua_penilaian_ak,'name'=>'Ketua Penilai AK']);
                     }
                 }if ($request->penyusun_ak != null) {
                     if (json_decode($request->penyusun_ak) === $penyusun_ak_default['id']) {
@@ -306,6 +343,15 @@ class PejabatController extends Controller
                         $save = Pejabat::insert(['user_id'=>$request->penetap_ak,'name'=>'Penetap AK']);
                     }else{
                         $save = Pejabat::insert(['user_id'=>$request->penetap_ak,'name'=>'Penetap AK']);
+                    }
+                }if ($cek_ppm == 0) {
+                    for ($i=0; $i < count($request->select_ppm); $i++) {
+                        // dd($request->ketua_penilaian_ak == null);
+                        if ($request->select_ppm == null) {
+                            $save = Pejabat::insert(['user_id'=>json_decode($request->select_ppm[$i]),'name'=>'PPM']);
+                        }else{
+                            $save = Pejabat::insert(['user_id'=>json_decode($request->select_ppm[$i]),'name'=>'PPM']);
+                        }
                     }
                 }
                 return $save.' pejabat has been save !';

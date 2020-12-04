@@ -11,15 +11,15 @@
     </breadcrumb>
 	<div class="row">
         <div class="col">
-            <div class="card shadow">
-                <div class="card-header bg-transparent text-center">
+            <!-- <div class="card shadow"> -->
+                <!-- <div class="card-header bg-transparent text-center">
                     <h1 class="">{{ __('Penunjukan Pejabat') }}</h1>
-                </div>
+                </div> -->
                 <div class="alert"></div>
-                <div class="card-body">
+                <!-- <div class="card-body"> -->
                     @include('admin.pejabat.form')
-                </div>
-            </div>
+                <!-- </div> -->
+            <!-- </div> -->
         </div>
     </div>
 </div>
