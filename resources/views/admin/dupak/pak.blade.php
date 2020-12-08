@@ -1,5 +1,5 @@
 <script type="text/javascript">
-function generate_tabel_pak(dupak_pendidikan, sumDiklat, sumLamaDiklat, sumPengawasan, sumLamaPengawasan, sumPengembangan, sumLamaPengembangan, sumPenunjang, sumLamaPenunjang){    
+function generate_tabel_pak(dupak_pendidikan, data_diklat_lama, sumDiklat, sumUpdateDiklat, data_pengembangan_lama, sumPengembangan, sumUpdatePengembangan, data_pengawasan_lama, sumPengawasan, sumUpdatePengawasan, data_penunjang_lama, sumPenunjang, sumUpdatePenunjang, sum_ak_lama, sum_ak_baru, sum_sum, sum_penjenjangan_lama, sum_penjenjangan_baru, sum_penjenjangan, sum_total_lama, sum_total_baru, sum_total_jumlah){    
     var user_id = ( $( "#user-id" ).length ) ? $("#user-id option:selected").val() : "{{ Auth::user()->id }}";
     var semester = $('#semester option:selected').val();
     var tahun = $('#tahun').val();
@@ -22,7 +22,7 @@ function generate_tabel_pak(dupak_pendidikan, sumDiklat, sumLamaDiklat, sumPenga
           //setup variabel pejabat penetap ak [0].user.full_name_gelar
           nama_pejabat_pak = ('undefined' !== response.pejabat[0].user.full_name_gelar) ? response.pejabat[0].user.full_name_gelar : ''
           nip_pejabat_pak = ('undefined' !== response.pejabat[0].user.nip) ? response.pejabat[0].user.nip : '';
-          pangkat_pejabat_pak = ('undefined' !== response.pejabat[0].user.pangkat) ? response.pejabat[0].user.pangkat : '';
+          pangkat_pejabat_pak = ('undefined' !== response.pejabat[0].user.formatted_pangkat) ? response.pejabat[0].user.formatted_pangkat : '';
           jabatan_pejabat_pak = ('undefined' !== response.pejabat[0].user.jabatan) ? response.pejabat[0].user.jabatan : '';
           var header = '<div class="col-print-12 col-md-12"><h3 class="print-center text-center">PENETAPAN ANGKA KREDIT JABATAN FUNGSIONAL AUDITOR</h3></div>'
                 +'<div class="row">'
@@ -82,8 +82,9 @@ function generate_tabel_pak(dupak_pendidikan, sumDiklat, sumLamaDiklat, sumPenga
                   +'<td>'+unit_kerja+'</td>'
                 +'</tr>'
                 +'</table>';
+          table += '<div class="h-10" style="margin-bottom:15px;"></div>';
 
-          table += '<div class="h-10" style="margin-bottom:15px;"></div>'
+          /*dupak_pendidikan, data_diklat_lama, sumDiklat, sumUpdateDiklat, data_pengembangan_lama, sumPengembangan, sumUpdatePengembangan, data_pengawasan_lama, sumPengawasan, sumUpdatePengawasan, data_penunjang_lama, sumPenunjang, sumUpdatePenunjang, sum_ak_lama, sum_ak_baru, sum_sum, sum_penjenjangan_lama, sum_penjenjangan_baru, sum_penjenjangan, sum_total_lama, sum_total_baru, sum_total_jumlah*/
 
           table += '<table class="table table-sm table-bordered ajax-table col-print-12 table-print-border" id="ak-pak-table">'
                       +'<tr style="text-align: center">'
@@ -112,7 +113,7 @@ function generate_tabel_pak(dupak_pendidikan, sumDiklat, sumLamaDiklat, sumPenga
                         +'<td>0</td>'
                         +'<td>'+dupak_pendidikan+'</td>'
                         +'<td>'+dupak_pendidikan+'</td>'
-                      +'</tr>';
+                      +'</tr>'
                       +'<tr style="font-weight: bold;">'
                         +'<td style="text-align: center">II</td>'
                         +'<td>ANGKA KREDIT</td>'
@@ -120,25 +121,112 @@ function generate_tabel_pak(dupak_pendidikan, sumDiklat, sumLamaDiklat, sumPenga
                         +'<td></td>'
                         +'<td></td>'
                         +'<td></td>'
-                      +'</tr>';
+                      +'</tr>'
                       +'<tr style="font-weight: bold;">'
-                        +'<td style="text-align: right">A</td>'
+                        +'<td style="text-align: right">A.</td>'
                         +'<td>UNSUR UTAMA</td>'
                         +'<td></td>'
                         +'<td></td>'
                         +'<td></td>'
                         +'<td></td>'
-                      +'</tr>';
-                      +'<tr style="font-weight: bold;">'
+                      +'</tr>'
+                      +'<tr>'
                         +'<td></td>'
                         +'<td style="padding-left:20px;">a. Pendidikan</td>'
+                        +'<td>'+data_diklat_lama.toFixed(3)+'</td>'
+                        +'<td>'+sumDiklat.toFixed(3)+'</td>'
+                        +'<td>'+sumUpdateDiklat.toFixed(3)+'</td>'
                         +'<td></td>'
-                        +'<td>'+sumDiklat+'</td>'
+                      +'</tr>'
+                      +'<tr>'
                         +'<td></td>'
+                        +'<td style="padding-left:20px;">b. Pengawasan</td>'
+                        +'<td>'+data_pengawasan_lama.toFixed(3)+'</td>'
+                        +'<td>'+sumPengawasan.toFixed(3)+'</td>'
+                        +'<td>'+sumUpdatePengawasan.toFixed(3)+'</td>'
                         +'<td></td>'
-                      +'</tr>';
+                      +'</tr>'
+                      +'<tr>'
+                        +'<td></td>'
+                        +'<td style="padding-left:20px;">c. Pengembangan Profesi</td>'
+                        +'<td>'+data_pengembangan_lama.toFixed(3)+'</td>'
+                        +'<td>'+sumPengembangan.toFixed(3)+'</td>'
+                        +'<td>'+sumUpdatePengembangan.toFixed(3)+'</td>'
+                        +'<td></td>'
+                      +'</tr>'
+                      +'<tr style="font-weight: bold;">'
+                        +'<td></td>'
+                        +'<td style="text-align:right;">JUMLAH</td>'
+                        +'<td>'+sum_ak_lama.toFixed(3)+'</td>'
+                        +'<td>'+sum_ak_baru.toFixed(3)+'</td>'
+                        +'<td>'+sum_sum.toFixed(3)+'</td>'
+                        +'<td></td>'
+                      +'</tr>'
+                      +'<tr style="font-weight: bold;">'
+                        +'<td style="text-align: right">B.</td>'
+                        +'<td>UNSUR PENUNJANG</td>'
+                        +'<td>'+data_penunjang_lama.toFixed(3)+'</td>'
+                        +'<td>'+sumPenunjang.toFixed(3)+'</td>'
+                        +'<td>'+sumUpdatePenunjang.toFixed(3)+'</td>'
+                        +'<td></td>'
+                      +'</tr>'
+                      +'<tr style="font-weight: bold;">'
+                        +'<td style="text-align: right"></td>'
+                        +'<td>JUMLAH AK PENJENJANGAN</td>' 
+                        +'<td>'+sum_penjenjangan_lama.toFixed(3)+'</td>'
+                        +'<td>'+sum_penjenjangan_baru.toFixed(3)+'</td>'
+                        +'<td>'+sum_penjenjangan.toFixed(3)+'</td>'
+                        +'<td></td>'
+                      +'</tr>'
+                      +'<tr style="font-weight: bold;">'
+                        +'<td colspan="2">JUMLAH (I+II)</td>'
+                         +'<td>'+sum_total_lama.toFixed(3)+'</td>'
+                        +'<td>'+sum_total_baru.toFixed(3)+'</td>'
+                        +'<td>'+sum_total_jumlah.toFixed(3)+'</td>'
+                        +'<td></td>'
+                      +'</tr>'
+                      +'<tr>'
+                        +'<td colspan="6">'
+                          +'Dapat/Tidak dapat dipertimbangkan untuk dinaikkan dalam :<br/>'
+                          +'Jabatan : ....................TMT : ............ dengan mempertimbangkan sertifikasi dan persyaratan <br/>'
+                          +'Pangkat/Gol. : .................. TMT : ...........'
+                        +'</td>'
+                      +'</tr>'
+                      +'</table>';
 
-          $("#dupak-pak-wrapper").html(header+table);
+          sign_column = '<div class="d-none">'
+            +'<div class="row">'
+              +'<div class="col-md-8 col-print-8"></div>'
+              +'<div class="col-md-4 col-print-4">Ditetapkan di : Sidoarjo</div>'
+            +'</div>'
+            +'<div class="row">'
+              +'<div class="col-md-8 col-print-8"></div>'
+              +'<div class="col-md-4 col-print-4">Pada Tanggal : _________'+tahun+'</div>'
+            +'</div>'
+            +'<div class="row">'
+              +'<div class="col-md-8 col-print-8"></div>'
+              +'<div class="col-md-4 col-print-4">Inspektur</div>'
+            +'</div>'
+            +'<div class="row">'
+              +'<div class="col-md-8 col-print-8"></div>'
+              +'<div class="col-md-4 col-print-4">Selaku Pejabat yang berwenang menetapkan Angka Kredit</div>'
+            +'</div>'
+            +'<div class="h-100"></div>' //separator ttd atasan
+            +'<div class="row">'
+              +'<div class="col-md-8 col-print-8"></div>'
+              +'<div class="col-md-4 col-print-4"><strong>'+nama_pejabat_pak+'</strong></div>'
+            +'</div>'
+            +'<div class="row">'
+              +'<div class="col-md-8 col-print-8"></div>'
+              +'<div class="col-md-4 col-print-4">'+pangkat_pejabat_pak+'</div>'
+            +'</div>'
+            +'<div class="row">'
+              +'<div class="col-md-8 col-print-8"></div>'
+              +'<div class="col-md-4 col-print-4">'+nip_pejabat_pak+'</div>'
+            +'</div>'
+            +'</div>'; //close div d-none
+
+          $("#dupak-pak-wrapper").html(header+table+sign_column);
         
       },
       error: function(error){}

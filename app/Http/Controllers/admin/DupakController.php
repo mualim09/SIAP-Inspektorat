@@ -455,13 +455,34 @@ class DupakController extends Controller
         $dupak['user'] = User::with(['dupak'=> function($q){
                     $q->where('status', 'lama');
                 }])->where('id', $user_id)->first();
-        $dupak['pejabat'] = Pejabat::where('name','Penetap AK')->with(['user'=>function($q){
+        $dupak['pejabat'] = Pejabat::where('name','Inspektur Kabupaten')->with(['user'=>function($q){
                     $q->select(['id', 'nip', 'first_name', 'last_name', 'gelar', 'jabatan', 'pangkat']);
                 }])->get();
         //$dupak['ak_lama'] = Dupak::where('status', 'lama')->where('user_id', $user_id)->get();DB::select('select * from users where active = ?', [1]);
         //$dupak['ak_lama'] = DB::select("select * from dupak where user_id = $user_id ");
         //dd($dupak['ak_lama']);
         return $dupak;
+    }
+
+    public function submitDupakLama(Request $request){
+//user_id: user_id, semester:semester, tahun:tahun, diklat: val_diklat, pengembangan: val_pengembangan, penunjang:val_penunjang, pengawasan:val_pengawasan
+        //find and update diklat lama
+        $diklat = Dupak::updateOrCreate(
+            ['user_id'=>$request->user_id, 'unsur_dupak'=> 'diklat', 'status'=>'lama'],
+            ['dupak'=>$request->diklat]
+        );
+        $penunjang = Dupak::updateOrCreate(
+            ['user_id'=>$request->user_id, 'unsur_dupak'=> 'penunjang', 'status'=>'lama'],
+            ['dupak'=>$request->penunjang]
+        );
+        $pengawasan = Dupak::updateOrCreate(
+            ['user_id'=>$request->user_id, 'unsur_dupak'=> 'pengawasan', 'status'=>'lama'],
+            ['dupak'=>$request->pengawasan]
+        );
+        $pengembangan = Dupak::updateOrCreate(
+            ['user_id'=>$request->user_id, 'unsur_dupak'=> 'pengembangan', 'status'=>'lama'],
+            ['dupak'=>$request->pengembangan]
+        );
     }
 
 

@@ -238,3 +238,6 @@ div.data-user{
   display: none;
   visibility: hidden;
 }
+div.selectize-input{
+  z-index: 0 !important;
+}

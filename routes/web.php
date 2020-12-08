@@ -302,6 +302,7 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
     	Route::get('lama', 'DupakController@dupakLama')->name('dupak_lama');
 		Route::get('user/{id}', 'DupakController@dupakUser')->name('get_dupak_user');
 		Route::post('store/penunjang', 'DupakController@storePenunjang')->name('store_dupak_penunjang');
+		Route::post('submit-dupak-lama', 'DupakController@submitDupakLama')->name('submit_dupak_lama');
 	});
 
 	Route::group(['prefix'=>'lokasi', 'middleware'=> ['role:Super Admin']],function(){

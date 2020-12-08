@@ -78,6 +78,7 @@ div.no-print, .no-print{
 .page-break{
 	page-break-after: always !important;
 }
+tr.avoid-after { page-break-inside:avoid; page-break-after:avoid; page-break-before: auto;}
 /*table{
 	page-break-before: always !important;
 }*/

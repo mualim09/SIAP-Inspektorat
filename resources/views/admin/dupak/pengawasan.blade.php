@@ -45,7 +45,7 @@ end table dupak pengawasan -->
 
               table += '<tr style="background: #ccc; text-align: center">'
                   +'<th rowspan="2">No.</th>' //1
-                  +'<th colspan="2">Uraian Kegiatan</th>' //2
+                  +'<th colspan="2" style="width:35%">Uraian Kegiatan</th>' //2
                   +'<th rowspan="2" colspan="2">Tgl Jml Hari Efektif</th>' //3
                   +'<th rowspan="2">Satuan AK</th>'
                   +'<th rowspan="2">Jumlah Jam</th>'
