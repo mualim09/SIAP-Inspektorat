@@ -192,7 +192,7 @@ class PejabatController extends Controller
         if($request->inspektur !== $inspektur['id'] && $request->sekretaris !== $sekretaris['id'] && $request->irban_i !== $irban_i_default['id'] && $request->irban_ii !== $irban_ii_default['id'] && $request->irban_iii !== $irban_iii_default['id'] && $request->irban_iv !== $irban_iv_default['id'] && $request->ketua_penilaian_ak !== $ketua_penilai_ak_default){
 
 
-            if($cek_pejabat>0 && $cek_pejabat_sekretaris>0 && $cek_pejabat_irban_i>0 && $cek_pejabat_irban_ii>0 && $cek_pejabat_irban_iii>0 && $cek_pejabat_irban_iv>0 && $cek_ketua_penilai_ak>0 && $compare_ppm == false){
+            if($cek_pejabat>0 && $cek_pejabat_sekretaris>0 && $cek_pejabat_irban_i>0 && $cek_pejabat_irban_ii>0 && $cek_pejabat_irban_iii>0 && $cek_pejabat_irban_iv>0 && $cek_ketua_penilai_ak>0 /*&& $compare_ppm == false*/){
                 //query update tabel pejabat 'semua pejabat'
 
                 ($request->ketua_penilaian_ak == null) ? $ketua_penilaian_ak = null : $ketua_penilaian_ak = $request->ketua_penilaian_ak;
@@ -280,10 +280,9 @@ class PejabatController extends Controller
                                 }
                                 $update = $update_ketua_penilai;
                             }
-                        }
-                    // }else{
-                    //     $update_ketua_penilai = 'user kosong';
-                    // }
+                        }/*else{
+                            $update_ketua_penilai = 'user kosong';
+                        }*/
                }
 
                 return $update.' pejabat has been Update !';

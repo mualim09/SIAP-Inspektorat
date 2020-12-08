@@ -49,7 +49,7 @@
                         <a class="dropdown-item" href="{{ route('calendar')}}"><i class="ikon ni ni-calendar-grid-58"></i><span id="menu_id" class="nav-link-inner--text">{{ __('Calendar') }}</span></a>
                         @endhasanyrole
                         @hasanyrole('Super Admin|TU Umum')
-                        <!-- <a class="dropdown-item" href="{{ route('satgas_ppm')}}"><i class="ikon fa fa-hand-point-right"></i><span id="menu_id" class="nav-link-inner--text">{{ __('Penunjukan Pejabat') }}</span></a> -->
+                        <a class="dropdown-item" href="{{ route('satgas_ppm')}}"><i class="ikon fa fa-hand-point-right"></i><span id="menu_id" class="nav-link-inner--text">{{ __('Penunjukan Pejabat') }}</span></a>
                         @endhasanyrole
 
                         <!-- @if(auth()->user()->menuPpm() === true || auth()->user()->hasAnyRole(['Super Admin']))

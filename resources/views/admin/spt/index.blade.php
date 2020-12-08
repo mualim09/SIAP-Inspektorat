@@ -13,6 +13,7 @@
 {{-- Hanya Auditor yang berhak mengakses list SPT yang akan diberikan penomoran--}}
 @hasanyrole('Auditor')
     @include('admin.laporan.pemeriksaan_kka.index_kka')
+    @include('admin.ppm.tb_ppm')
 @endhasanyrole
 
 @if(auth()->user()->hasRole('Inspektur'))
@@ -39,6 +40,8 @@
             @yield('nav_tab_spt_umum')
             @yield('nav_tab_arsip')
             @yield('nav_table_inspektur')
+            @yield('nav_ppm')
+            
 
             <!-- tombol tambah spt berdasarkan role -->
             <li class="nav-item ml-auto">
@@ -48,6 +51,14 @@
             @hasanyrole('Super Admin|TU Umum')
                 <button id="btn-new-spt-umum" type="button" class="btn btn-outline-success btn-sm" data-toggle="modal" data-target="#formSptUmum">{{ __('Tambah SPT Umum') }}</button>
             @endhasrole
+            @hasanyrole('Auditor')
+              @foreach(auth()->user()->menuPpm() as $ppm)
+              @if((auth()->user()->id == $ppm->id) ? true : false === true)
+                
+              @endif
+              @endforeach
+            @endhasanyrole
+
             </li>            
             <!-- end tombol tambah spt -->
 
@@ -61,6 +72,7 @@
             @yield('content_auditor')
             @yield('content_inspektur')
             @yield('tab_content_ppm')
+            @yield('content_ppm')
           </div>
         </div>
     </div>     
@@ -79,6 +91,7 @@
   @yield('js_umum')
   @yield('js_arsip')
   @yield('js_tabel_inspektur')
+  @yield('js_ppm')
 
 </div>
 <!-- core spt js and form -->

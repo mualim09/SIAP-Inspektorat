@@ -1,10 +1,64 @@
 @section('nav_ppm')
+@foreach(auth()->user()->menuPpm() as $ppm)
+@if((auth()->user()->id == $ppm->id) ? true : false === true)
+@hasanyrole('Auditor')
+<li class="nav-item">
+  <a class="nav-link" id="ppm-nav" href="#ppm-tab" role="tab" aria-controls="ppm-tab" aria-selected="false">SATGAS PPM</a>
+</li>
+<script type="text/javascript">
+  /*disable button tambah ppm*/
+  $('.nav-link').click(
+     function() {
+      $this = $(this);
+      
+      var ctest = $('#ppm-nav').hasClass('active');
+      if (ctest == true) {
+        $('#btn-input-ppm').hide('fast');
+      }
+      if (ctest != true) {
+        $('#btn-input-ppm').show('fast');
+      }
+      // console.log(ctest);
+      }
+    );
+
+</script>
+@endhasanyrole
+@endif
+@endforeach
+
+@hasanyrole('Super Admin|TU Umum')
 <!-- <li class="nav-item">
   <a class="nav-link"  href="#ppm-tab" role="tab" aria-controls="ppm-tab" aria-selected="false">Data PPM</a>
 </li> -->
+@endhasanyrole
+
 @endsection
 
+
+
 @section('content_ppm')
+@hasanyrole('Auditor')
+
+<div class="tab-pane" id="ppm-tab" role="tabpanel" aria-labelledby="ppm-tab">
+  <h4 class="text-center">{{ __('Data Program Pelatihan Mandiri') }}</h4>
+<div class="modal-body">           
+    <div class="card-body table-responsive">
+        <div class="table-responsive">
+            <!-- start tabel data ppm -->
+            <div class="table-responsive">
+                <table id="tabel-ppm" class="table table-striped table-sm ajax-table" style="border-collapse: collapse;margin: 0;padding: 0;width: 100%;">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <!-- end tabel -->
+        </div>
+    </div>
+</div>
+</div>
+@endhasanyrole
+@hasanyrole('Super Admin|TU Umum')
 <!-- <div class="tab-pane" id="ppm-tab" role="tabpanel" aria-labelledby="ppm-tab"> -->
   <h4 class="text-center">{{ __('Data Program Pelatihan Mandiri') }}</h4>
 <div class="modal-body">           
@@ -22,6 +76,7 @@
     </div>
 </div>
 <!-- </div> -->
+@endhasanyrole
 
 <!-- modal list anggota -->
 <div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="mySmallModalPemeriksaan" aria-hidden="true" id="modalListAnggotaPpm">

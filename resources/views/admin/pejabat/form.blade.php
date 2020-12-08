@@ -219,42 +219,45 @@
             <div class="col-md-7">
                 <select class="form-control selectize" id="ppm-id" name="select_ppm[]" multiple="multiple">
                     <option value="">{{ __('Pilih PPM') }}</option>
-                    <!-- sementara seperti ini karena mengirimkan dan menerima data dlm bentuk array -->
-                    <!-- $ppm['ppm_is_null'] == true maka akan ada data ppm jika sebaliknya maka blm ada ppm -->
-                      @foreach($users as $user)
+                      @foreach($users as $index_user => $user)
                         <?php
-                            $selected_ppm = (!is_null($data_user_ppm['user'])) ? 'selected' : '';
+                          // dd(array_diff($users, $data_user_ppm['user']));
+                            // $selected_ppm = (!is_null($data_user_ppm['user'])) ? 'selected' : '';
                         ?>
-                        <option class="form-control selectize" value="{{$user->id}}" {{ $selected_ppm }} >{{ $user->full_name_gelar }}</option>
+                        <option class="form-control selectize" value="{{$user->id}}">{{$user->full_name_gelar }}</option>
                       @endforeach
 
                 </select>
                 <script type="text/javascript">
+                  var options = {!! $data_user_ppm['user'] !!};
+
+
+                  const items = options.map(x => x.full_name_gelar);
+                  // console.log(items);
                   $('#ppm-id').selectize({
-                     /*sortField: 'text',*/
-                     allowEmptyOption: false,
                      placeholder: 'Tunjuk Anggota PPM',
-                     create: false
-
-                     // onchange: function(value){
-                     //  console.log(value);
-                     // },
+                     items: items,
+                     // valueField: 'name',
+                     labelField: 'name',
+                     searchField: ['name'],
+                     allowEmptyOption: false,
+                     persist: false,
+                     createOnBlur: true,
+                     maxItems: 10,
+                     create: true,
 
                     });
-                  var data_ppm = {!! $data_user_ppm['user'] !!};
-                    $.each(data_ppm, function(index, val) {
-                      // if(data_ppm < 50){
-                        // console.log(data_ppm[index].full_name_gelar)
-                        /* iterate through array or object */
-                        // $('#ppm-id')[0].selectize.clear();
-                        var $select = $("#ppm-id").selectize();
-                        var selectize = $select[0].selectize;
-                        selectize.setValue(data_ppm[index].full_name_gelar);
-                        // $('#ppm-id')[0].selectize.setValue(data_ppm[index]);
-                      // }
-                    });
+                  
+                  var $select_country = $('#ppm-id ').selectize();
+                  $select_country[0].selectize.clear();
+                  // var vectordividido_country = event.options.split(",");
+                  for (var i = 0; i < options.length; i++) {
+                    // console.log(options[i].full_name_gelar);
+                       // $select_country[0].selectize.setValue(options[i].full_name_gelar);
+                       $select_country[0].selectize.addItem(options[i].id);
+                  }
                 </script>
-                <!-- belum bisa update karena -->                     
+                                    
             </div>
           </div>
 

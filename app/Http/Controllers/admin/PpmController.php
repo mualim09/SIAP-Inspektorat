@@ -36,6 +36,7 @@ class PpmController extends Controller
                 $q->where('name', 'Auditor');
             }
         )->get();
+        // dd(auth()->user()->hasAnyRole(['Super Admin']));
         return view('admin.ppm.index',['listAnggota'=>$listAnggota,'users'=>$users]);
     }
 
