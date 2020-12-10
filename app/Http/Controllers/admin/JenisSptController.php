@@ -57,7 +57,7 @@ class JenisSptController extends Controller
         $this->validate($request,[
             'sebutan' => 'string|min:3|max:191',
             'name' => 'required|string|max:191|min:3',
-            'dasar' => 'required|string|min:10',
+            'dasar' => 'string|nullable',
             //'isi' => 'required|string|min:10',
             //'kategori' => 'required|string|min:5',
             'kode_kelompok' => 'required|string|min:3|max:20',
@@ -121,7 +121,7 @@ class JenisSptController extends Controller
         $this->validate($request,[
             'name' => 'required|string|max:255|min:3',
             'sebutan' => 'string|min:3|max:191',
-            'dasar' => 'required|string|min:10',
+            'dasar' => 'string|nullable',
             'kode_kelompok' => 'required|string|min:3',
             'input' => 'nullable',
             'radio' => 'nullable'
@@ -224,8 +224,6 @@ class JenisSptController extends Controller
                         '</div>';
         }
         return $return;
-    }
-
-   
+    }   
 
 }

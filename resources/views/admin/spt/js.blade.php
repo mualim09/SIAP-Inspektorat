@@ -59,10 +59,12 @@
             dataType: "JSON",
             success: function(data){                
                 $('#spt-form')[0].reset();
+                console.log(data.info.dasar);
 
                 //variabel jenis spt               
                 lokasi = (data.jenis_spt.input_lokasi == true) ? data.lokasi_id : '';
-                tambahan = (data.jenis_spt.input_tambahan == true) ? data.tambahan : '';                
+                tambahan = (data.jenis_spt.input_tambahan == true) ? data.tambahan : '';
+                dasar = ('undefined' !== typeof data.info.dasar) ? data.info.dasar : '';
                 input_lokasi = data.jenis_spt.input.lokasi;
                 input_tambahan = data.jenis_spt.input.tambahan;
                 cek_radio = data.jenis_spt.cek_radio;
@@ -191,9 +193,11 @@
             var lama = $('#lama').val();
             var lokasi_id = ($('#input-lokasi').val() == 1 ) ? $('#lokasi-id').val() : null ;
             var tambahan = $('#tambahan').val();
+            var dasar = ( $('#input-dasar').val().length>0 ) ? '"dasar":"'+$('#input-dasar').val()+'"' : '"dasar":'+null;
+            //alert(dasar);
             var lanjutan = ( typeof $('.info-lanjutan:checked').val() !== 'undefined' ) ? '"lanjutan":"'+$('.info-lanjutan:checked').val()+'"' : '"lanjutan":'+null;
             var input_radio = ( typeof $('input[name=radio_input]:checked').val() !== 'undefined' ) ? '"radio":"'+$('input[name=radio_input]:checked').val()+'"' : '"radio":'+null;
-            var info = JSON.parse('{'+lanjutan+','+input_radio+'}');
+            var info = JSON.parse('{'+lanjutan+','+input_radio+','+dasar+'}');
             var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             var id = $('#id').val();
             var pj = $('#session-pj option:selected').val(), ppj = $('#session-ppj option:selected').val(), pm = $('#session-pm option:selected').val(), pt = $('#session-pt option:selected').val();

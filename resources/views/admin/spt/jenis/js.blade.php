@@ -115,7 +115,6 @@
         ignore: ":hidden, [contenteditable='true']:not([name])",
         rules: {
             name : {required: true, minlength: 3},
-            dasar: {required: true, minlength: 10},
             kode_kelompok: {required: true, minlength: 1}
         },
         submitHandler: function(form){

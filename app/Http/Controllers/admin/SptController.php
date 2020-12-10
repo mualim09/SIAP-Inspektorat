@@ -895,9 +895,12 @@ class SptController extends Controller
         //dd(storage_path('spt\template-spt.docx'));
         $spt = Spt::findOrFail($id);
         $sort_detail = implode(",",$this->list_peran);
+        //dd($spt->info['dasar']);
+        //$info = json_decode($spt->info);
+        //$dasar = ($spt->jenisSpt->dasar != '' || !is_null($spt->jenisSpt->dasar)) ? $spt->jenisSpt->dasar : ($spt->info['dasar'] != null) ? $spt->info['dasar'] : 'Tidak ada dasar SPT.';
         $detail_spt = DetailSpt::where('spt_id','=',$id)->with(['spt','user'])
             ->orderByRaw(DB::raw("FIELD(peran,'Penanggungjawab', 'Pembantu Penanggungjawab', 'Pengendali Mutu', 'Pengendali Teknis', 'Ketua Tim', 'Anggota')"))->get();
-        $template_name = (File::exists(storage_path("spt/template-spt.docx"))) ? storage_path('spt\template-spt.docx') : 'tidak ada'; // default template name        
+        $template_name = (File::exists(storage_path("spt/template-spt.docx"))) ? storage_path('spt/template-spt.docx') : 'tidak ada'; // default template name        
         $phpWord = new \PhpOffice\PhpWord\PhpWord();
         $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($template_name);
         $default_font = [
@@ -906,7 +909,16 @@ class SptController extends Controller
         ];
 
         //setup variabel
-        $dasar_spt = array_filter(explode("\n",strip_tags($spt->jenisSpt->dasar))); //explode by new line (ENTER)
+        if($spt->jenisSpt->dasar != ''){
+            $dasar = $spt->jenisSpt->dasar;
+        }
+        elseif($spt->info['dasar'] != null){
+            $dasar = $spt->info['dasar'];
+        }else{
+            $dasar = 'Tidak ada dasar SPT.';
+        }
+        $dasar_spt = array_filter(explode("\n",strip_tags($dasar))); //explode by new line (ENTER)
+        //dd(count($dasar_spt));
         $lanjutan = ($spt->info_lanjutan !== 'undefined') ? 'lanjutan' : '';
         $lokasi = ($spt->jenisSpt->input_lokasi == true) ? 'di '.$spt->lokasi_spt.' Kabupaten Sidoarjo.' : '';
         $tambahan = ($spt->jenisSpt->inputTambahan == true) ? $spt->tambahan : '';
@@ -939,7 +951,13 @@ class SptController extends Controller
                 $tabel_dasar->addCell(300)->addText(++$i, $default_font); //nomer
                 $tabel_dasar->addCell(7700)->addText($dasar2, $default_font);
             }
-        }else{
+        }elseif( is_array($dasar_spt) && count($dasar_spt)<=1){ //if accidentally pressed 1 enter
+           $tabel_dasar->addRow();
+           $tabel_dasar->addCell(900)->addText('Dasar', $default_font);
+           $tabel_dasar->addCell(100)->addText(':', $default_font);
+           $tabel_dasar->addCell(8000)->addText($dasar_spt[0], $default_font);
+        }
+        else{
            $tabel_dasar->addRow();
            $tabel_dasar->addCell(900)->addText('Dasar', $default_font);
            $tabel_dasar->addCell(100)->addText(':', $default_font);
@@ -2249,6 +2267,12 @@ class SptController extends Controller
         $return .= '</table>';
         return $return;
 
+    }
+
+    public function cekDasarSpt(Request $request){
+        $id = $request->id;
+        $dasar = JenisSpt::select('dasar')->where('id', $id)->first();
+        return $dasar;
     }
 
 

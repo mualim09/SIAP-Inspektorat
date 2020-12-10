@@ -38,6 +38,14 @@
 				<div class="col-md-8 offset-md-2" id="radio-tambahan" style="display: none;">
 				</div>
 
+				<div class="form-group row" id="input-dasar-container" style="display:none">
+				    <label for="input_dasar" class="col-md-2 col-form-label text-right">{{ __('Dasar') }} </label>
+					<div class="col">
+						<textarea name="input_dasar" id="input-dasar" class="form-control" ></textarea>
+						<small id="input_dasarHelp" class="form-text text-muted">Masukkan DASAR SPT yang akan dibuat. Tekan <span style="color:red;">ENTER</span> untuk ganti baris.</small>
+					</div>
+				</div>
+
 				<div class="form-group row">
 				    <label for="tgl-mulai" class="col-md-2 col-form-label text-right">{{ __('Mulai') }}</label>
 				    <div class="col-md-4">
@@ -230,6 +238,30 @@
 	   		$('#tambahan').val('');
 	   	}
 
+	   	if('undefined' !== typeof id_jenis_spt){
+	   		//cek dasar spt dari jenis spt, jika null tampilkan textbox dasar spt
+	   		
+	   		$.ajax({
+	   			url : "{{ route('cek_dasar_spt') }}",
+	   			type: "GET",
+		    	//dataType: "JSON",
+		    	data: {id: id_jenis_spt }, 
+	   			success: function(response){
+	   				//console.log(response);
+	   				if('undefined' !== typeof response.dasar && '' === response.dasar){
+	   					$('#input-dasar-container').show('fast');
+	   				}else{
+	   					$('#input-dasar-container').hide('fast');
+	   					$('#input-dasar').val('');
+	   				}
+	   				
+	   			},
+	   			error: function(error){
+	   				console.log(error);
+	   			}
+	   		});
+	   	}
+
 	   },
     });
 
@@ -239,6 +271,15 @@
     		element_tambahan.value = data_tambahan;
     	}else{
     		element_tambahan.value = '';
+    	}
+    }
+
+    function setDasar(dasar){
+    	var element = document.getElementById('input-dasar');
+    	if(dasar !== '') {
+    		element.value = dasar;
+    	}else{
+    		element.value = '';
     	}
     }
 
@@ -326,6 +367,14 @@ $( "#formModal" ).on('shown.bs.modal', function(){
 	}
 	//tambahan end
 
+	//dasar
+	if(dasar != '' && save_method == 'edit'){
+		//$('#tambahan').text(tambahan);
+		$('#input-dasar-container').show('fast');
+		if(typeof dasar !== 'undefined')
+		{setDasar(dasar);}
+	}
+
 	//lokasi start
 	if(typeof lokasi !== 'undefined' && save_method == 'edit'){
 		select_lokasi[0].selectize.setValue(lokasi);
@@ -355,6 +404,7 @@ $( "#formModal" ).on('shown.bs.modal', function(){
 		$('#spt-form')[0].reset();
 		$('#id').val('');
 		$('#tambahan').val('');
+		$('#input-dasar').val('');
 		select_lokasi[0].selectize.clear();
 		save_method = null;
 		//$('#list-anggota-session').DataTable().clear().destroy();

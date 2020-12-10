@@ -167,6 +167,9 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 	//admin index will be spt
 	Route::get('','SptController@index')->name('admin');
 
+	//cek dasar spt
+	Route::get('spt/dasar-spt','SptController@cekDasarSpt')->name('cek_dasar_spt');
+
 	//spt route
 	//url prefix admin/spt
 	Route::group(['prefix'=>'spt', 'middleware' => ['auth','permission:Access admin page']], function(){
