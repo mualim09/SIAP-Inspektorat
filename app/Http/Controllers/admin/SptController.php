@@ -17,7 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\models\Spt;
-use App\models\SptUmum;
+use App\models\SptUmum, App\models\Pejabat;
 use App\models\JenisSpt;
 use App\models\DetailSpt;
 use App\models\Lokasi, App\models\DetailKuota;
@@ -63,7 +63,7 @@ class SptController extends Controller
         $pj = User::whereHas('pejabat', function($q){
             $q->where( 'name','Inspektur Kabupaten');
         })->first();
-
+        $user_ppm = User::select(['id','first_name','last_name', 'gelar'])->whereNotNull('jenis_auditor')->whereNotIn('jabatan', ['Inspektur Pembantu Wilayah I','Inspektur Pembantu Wilayah II','Inspektur Pembantu Wilayah III','Inspektur Pembantu Wilayah IV'])->get();
         $ppjs = User::whereHas('pejabat', function($q){
             $q->where('name','like', 'Inspektur Pembantu%');
         })->get();
@@ -75,8 +75,10 @@ class SptController extends Controller
                 ->where('email','!=','admin@local.host')
                 ->orderBy('ruang->nama','asc')
                 ->get();
+                
         return view('admin.spt.index',
             [
+            'user_ppm' =>$user_ppm,
             'spt'=>$spt,
             'jenis_spt'=>$jenisSpt,
             'listAnggota'=>$listAnggota,
@@ -88,7 +90,7 @@ class SptController extends Controller
             'anggotas'=>$anggotas,
             //'checkbox'=>$checkbox,
             'listPeran'=>$this->list_peran,
-            'listLokasi' => $listLokasi
+            'listLokasi' => $listLokasi,
             ]
         );
     }
