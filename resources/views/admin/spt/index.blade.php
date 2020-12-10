@@ -54,11 +54,11 @@
             @hasanyrole('Auditor')
               @foreach(auth()->user()->menuPpm() as $ppm)
               @if((auth()->user()->id == $ppm->id) ? true : false === true)
-                
+                @include('admin.spt.include.satgas_ppm_form')
               @endif
               @endforeach
             @endhasanyrole
-
+            
             </li>            
             <!-- end tombol tambah spt -->
 

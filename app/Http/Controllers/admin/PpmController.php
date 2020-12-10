@@ -115,6 +115,7 @@ class PpmController extends Controller
     public function storePpm(Request $request)
     {
         // dd($request);
+        // Pelatihan Kantor Sendiri
         $user = auth()->user();
         $this->validate($request, [
             'kegiatan_ppm'=> 'required',
@@ -137,410 +138,155 @@ class PpmController extends Controller
         // m(biasanya diakhir variable) = moderator (misal : getdata_workshop_m)
         // p(biasanya diakhir variable) = peserta (misal : get_data_p_workshop)
 
-        /*kondisi untuk Konverensi/Kongres(per kegiatan), Workshop(per kegiatan), & Pelatihan Kantor Sendiri(per kegiatan)*/
-        if($request->moderator_narasumber != null && $request->id_anggota_ppm != null){
-            if ($request->unsur_ppm == 'Konverensi/Kongres'){
-                    /* start foreach moderator & narasumber */
-                    foreach ($request->moderator_narasumber as $index_moderator => $value_moderator) {
-                        $peran = 'Moderator / Narasumber';
+        if ($request->unsur_ppm == 'Pelatihan Kantor Sendiri'){
+            /*fungsi workshop*/
+            foreach ($request->moderator_narasumber as $index_m_pelatihan => $value_m_Workshop) {
+                // $get_spt_workshop = DetailSpt::where('user_id',$request->moderator_narasumber[$index_m_Workshop])->with('spt')->get();
 
-                        /*start set moderator ppm*/
-                        $get_spt_pengawasan = DetailSpt::where('user_id',$request->moderator_narasumber[$index_moderator])->with('spt')->get();
+                /*blm bisa menolak input data yg sama > 2*/
+                // $cekPpm_lebih_dari_1 = Ppm::where('tgl_mulai',date('Y-m-d H:i:s',strtotime($request['tgl_mulai_ppm'])))->with('detail_ppm')->get();
 
-                        
-                        $query_between_date_spt = DB::table('detail_spt')
-                                ->where('user_id','=',$request->moderator_narasumber[$index_moderator])
-                                ->join('spt','detail_spt.spt_id','=','spt.id')
-                                ->whereRaw('"'.Carbon::parse($request->tgl_mulai_ppm).'" between `tgl_mulai` and `tgl_akhir`')
-                                ->get();
-
-                        // note : query untuk check apakah ppm sudah ada pada tabel ppm (maks 2 data) jika lebih maka rejected querynya sama seperti query_between_date_spt
-
-                        $checking_date_ppm_with_spt = Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s',strtotime($request['tgl_mulai_ppm'])))->between($query_between_date_spt[$index_moderator]->tgl_mulai,$query_between_date_spt[$index_moderator]->tgl_akhir); /*mengecek apakah tgl_ppm ada pada range tgl_mulai spt dan tgl akhir spt*/
-                        $tgl_mulai_spt = Carbon::parse($query_between_date_spt[$index_moderator]->tgl_mulai)->format('d/m/Y');
-                        $tgl_akhir_spt = Carbon::parse($query_between_date_spt[$index_moderator]->tgl_akhir)->format('d/m/Y');
-                        $tgl_mulai_ppm = Carbon::parse(date('Y-m-d H:i:s',strtotime($request['tgl_mulai_ppm'])))->format('d/m/Y');
-                        // dd(($tgl_mulai_ppm >= $tgl_mulai_spt) && ($tgl_mulai_ppm <= $tgl_akhir_spt) && (count($query_between_date_spt) >= 2) == false);
-
-                        if ($checking_date_ppm_with_spt == true && ($tgl_mulai_ppm >= $tgl_mulai_spt) && ($tgl_mulai_ppm <= $tgl_akhir_spt) && (count($query_between_date_spt) >= 2) == false) {
-                            $ppm = Ppm::create($data);
-                            if($ppm) {
-                                
-                                /*start fungsi insert detail ppm*/
-                                $ppm_id = Ppm::find($ppm->id);
-                                $lama = $ppm_id->lama;
-                                $tgl_ppm = date('Y-m-d H:i:s',strtotime($request['tgl_mulai_ppm']));
-
-                                $hari_efektif_ppm = 1;
-                                $lama_jam_ppm = 3;
-                                $koefisien_moderator = 1;
-                                $nilai_dupak = $koefisien_moderator * $lama_jam_ppm;
-                                $unsur_dupak = 'Diklat Teknis Substantif penunjang pengawasan';
-
-                                $dupak_moderator_ppm = [
-                                    'dupak' => $nilai_dupak,
-                                    'lembur' => 0,
-                                    'efektif' => $hari_efektif_ppm,
-                                    'lama_jam' => $lama_jam_ppm,
-                                    'koefisien' => $koefisien_moderator
-                                ];
-                                
-                                $save_detail_ppm = DetailPpm::insert(['id_ppm' => $ppm_id->id,'user_id' => $value_moderator,'peran' => $peran,'lama' => $lama,'info_dupak'=>json_encode($dupak_moderator_ppm),'unsur_dupak' => $unsur_dupak]);
-                                /*end set moderator ppm*/
-                                
-
-                                /*start nilai dupak dari spt pengawasan yg terimbas*/
-                                $nilai_dupak_pengawasan = $get_spt_pengawasan[$index_moderator]->info_dupak;
-
-                                $hari_efektif_terimbas = $nilai_dupak_pengawasan['efektif'];
-                                $lama_jam_terimbas = $nilai_dupak_pengawasan['lama_jam'] - 2;
-                                $nilai_dupak_terimbas = $nilai_dupak_pengawasan['koefisien'] * $lama_jam_terimbas;
-                                
-                                $dupak_moderator_terimbas = [
-                                    'dupak' => $nilai_dupak_terimbas,
-                                    'lembur' => 0,
-                                    'efektif' => $hari_efektif_terimbas,
-                                    'lama_jam' => $lama_jam_terimbas,
-                                    'koefisien' => $nilai_dupak_pengawasan['koefisien']
-                                ];
-                                // track dupak pengawasan yang terimbas
-                                // dd($dupak_moderator_terimbas);
-
-                                $update_pengawasan_terimbas = DetailSpt::where('user_id','=',$request->moderator_narasumber[$index_moderator])->where('spt_id',$query_between_date_spt[$index_moderator]->spt_id)->update(['info_dupak'=>json_encode($dupak_moderator_terimbas)]);
-                                /*end nilai dupak pengawasan yg terimbas*/
-                                $return_moderator_succ = 'data moderator';
-                            }
-                            /*throwing id ppm and file nota dinas*/
-                            // $this->storeNotaDinas($ppm->id, $request->file_nota_dinas);
-
-                            // return $ppm;
-                        }else{
-                            $return_moderator_failed = 'data moderator';
-                        }
-                        
-                    }
-                    /* end foreach moderator & narasumber */
-
-                    /* start foreach peserta ppm */
-                    foreach ($request->id_anggota_ppm as $index_peserta => $value_peserta) {
-
-                        $query_between_date_spt_peserta = DB::table('detail_spt')
-                                ->where('user_id','=',$request->id_anggota_ppm[$index_peserta])
-                                ->join('spt','detail_spt.spt_id','=','spt.id')
-                                // ->whereRaw('"'.Carbon::parse($request->tgl_mulai_ppm).'" between `tgl_mulai` and `tgl_akhir`')
-                                ->get();
-                                // dd($query_between_date_spt_peserta);
-                        
-                        $checking_date_ppm_with_spt_peserta = Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s',strtotime($request['tgl_mulai_ppm'])))->between($query_between_date_spt_peserta[$index_peserta]->tgl_mulai,$query_between_date_spt_peserta[$index_peserta]->tgl_akhir); /*mengecek apakah tgl_ppm ada pada range tgl_mulai spt dan tgl akhir spt*/
-                        $tgl_mulai_spt_p = Carbon::parse($query_between_date_spt_peserta[$index_peserta]->tgl_mulai)->format('d/m/Y');
-                        $tgl_akhir_spt_p = Carbon::parse($query_between_date_spt_peserta[$index_peserta]->tgl_akhir)->format('d/m/Y');
-                        $tgl_mulai_ppm_p = Carbon::parse(date('Y-m-d H:i:s',strtotime($request['tgl_mulai_ppm'])))->format('d/m/Y');
-
-                        /*start cek tanggal ppm apakah ada dalam range tgl mulai & akhir spt (diubah)*/
-                        if ($checking_date_ppm_with_spt_peserta == true && ($tgl_mulai_ppm_p >= $tgl_mulai_spt_p) && ($tgl_mulai_ppm_p <= $tgl_akhir_spt_p) && (count($query_between_date_spt_peserta) >= 2) == false) {
-
-                            // if ($request->moderator_narasumber != null) { /*agar tidak ke stack di Penjenjangan*/
-                            
-                                /* start nilai dupak ppm peserta */
-                                $peran_peserta = 'Peserta';
-                                $hari_efektif_ppm_peserta = 1;
-                                $lama_jam_ppm_peserta = 3;
-                                $koefisien_peserta = 0.018;
-                                $nilai_dupak_peserta = $koefisien_peserta * $lama_jam_ppm_peserta;
-                                $unsur_dupak_peserta = 'Diklat Teknis Substantif penunjang pengawasan';
-                                
-                                $dupak_peserta_ppm = [
-                                    'dupak' => $nilai_dupak_peserta,
-                                    'lembur' => 0,
-                                    'efektif' => $hari_efektif_ppm_peserta,
-                                    'lama_jam' => $lama_jam_ppm_peserta,
-                                    'koefisien' => $koefisien_peserta
-                                ];
-
-                                $save_detail_ppm = DetailPpm::insert(['id_ppm' => $ppm_id->id,'user_id' => json_decode($peserta_id[$index_peserta]),'peran' => $peran_peserta,'lama' => $lama,'info_dupak'=>json_encode($dupak_peserta_ppm),'unsur_dupak' => $unsur_dupak_peserta]);
-
-                                /* end nilai dupak ppm peserta */
-
-
-                                /*start looping peserta yang terkait dalam ppm untuk diambil indexnya*/
-                                foreach ($query_between_date_spt_peserta as $index_peserta_ppm => $value_peserta_ppm) {
-                                    
-                                    /* start nilai dupak pengawasan peserta yang terimbas */
-                                    $nilai_dupak_pengawasan_peserta = $query_between_date_spt_peserta[$index_peserta_ppm]->info_dupak;
-                                    $hari_efektif_terimbas_peserta = json_decode($query_between_date_spt_peserta[$index_peserta_ppm]->info_dupak)->efektif;
-                                    if(count($query_between_date_spt_peserta) > 1){
-                                        $lama_jam_terimbas_peserta = json_decode($query_between_date_spt_peserta[$index_peserta_ppm]->info_dupak)->lama_jam - 4;
-                                    }else{
-                                        $lama_jam_terimbas_peserta = json_decode($query_between_date_spt_peserta[$index_peserta_ppm]->info_dupak)->lama_jam - 2;
-                                    }
-                                    $nilai_dupak_terimbas_peserta = json_decode($query_between_date_spt_peserta[$index_peserta_ppm]->info_dupak)->koefisien * $lama_jam_terimbas_peserta;
-                                    $dupak_peserta_terimbas = [
-                                        'dupak' => $nilai_dupak_terimbas_peserta,
-                                        'lembur' => 0,
-                                        'efektif' => $hari_efektif_terimbas_peserta,
-                                        'lama_jam' => $lama_jam_terimbas_peserta,
-                                        'koefisien' => json_decode($query_between_date_spt_peserta[$index_peserta_ppm]->info_dupak)->koefisien
-                                    ];
-                                    
-                                    $update_pengawasan_terimbas_peserta = DetailSpt::where('user_id',json_decode(json_decode($request->id_anggota_ppm)[$index_peserta]))->where('spt_id',$query_between_date_spt_peserta[$index_peserta_ppm]->spt_id)->update(['info_dupak'=>json_encode($dupak_peserta_terimbas)]);
-                                    // dd($dupak_peserta_terimbas);
-                                    /* end nilai dupak pengawasan peserta yang terimbas */
-                                }
-                                /*end looping peserta yang terkait dalam ppm untuk diambil indexnya*/
-
-                                if (isset($ppm)) {
-                                    $this->storeNotaDinas($ppm->id, $request->file_nota_dinas);
-                                }
-                                return redirect()->back()->with('msg','Data '.$return_moderator_succ.' dan Peserta berhasil diinputkan!');
-                                // return redirect()->back()->withSuccess(['Data '.$return_moderator_succ.' dan Peserta berhasil diinputkan!']);
-                            // }
-                        }else{
-                            return redirect()->back()->withErrors(['Maaf '.$return_moderator_failed.' dan data peserta KONVERENSI/KONGRES yang anda masukkan sudah ada!']);
-                        }
-                        /*end cek tanggal ppm apakah ada dalam range tgl mulai & akhir spt*/ 
-                    }
-                    /* end foreach peserta ppm */
-            }
-            if ($request->unsur_ppm == 'Workshop'){
-                /*fungsi workshop*/
-                foreach ($request->moderator_narasumber as $index_m_Workshop => $value_m_Workshop) {
-                    // $get_spt_workshop = DetailSpt::where('user_id',$request->moderator_narasumber[$index_m_Workshop])->with('spt')->get();
-                            
-                    $getdate_spt_workshop = DB::table('detail_spt')
-                            ->where('user_id','=',$request->moderator_narasumber[$index_m_Workshop])
-                            ->join('spt','detail_spt.spt_id','=','spt.id')
-                            ->whereRaw('"'.Carbon::parse($request->tgl_mulai_ppm).'" between `tgl_mulai` and `tgl_akhir`')
-                            ->get();
-
-                    $checking_date_workshop_m = Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s',strtotime($request['tgl_mulai_ppm'])))->between($getdate_spt_workshop[$index_m_Workshop]->tgl_mulai,$getdate_spt_workshop[$index_m_Workshop]->tgl_akhir); /*mengecek apakah tgl_ppm ada pada range tgl_mulai spt dan tgl akhir spt*/
-                    $tgl_m_spt_workshop_m = Carbon::parse($getdate_spt_workshop[$index_m_Workshop]->tgl_mulai)->format('d/m/Y');
-                    $tgl_a_spt_workshop_m = Carbon::parse($getdate_spt_workshop[$index_m_Workshop]->tgl_akhir)->format('d/m/Y');
-                    $tgl_m_ppm_workshop_m = Carbon::parse(date('Y-m-d H:i:s',strtotime($request['tgl_mulai_ppm'])))->format('d/m/Y');
-                    // dd($checking_date_workshop_m == true && ($tgl_m_ppm_workshop_m >= $tgl_m_spt_workshop_m) && ($tgl_m_ppm_workshop_m <= $tgl_a_spt_workshop_m) && (count($getdate_spt_workshop) >= 2) == false);
-                    if ($checking_date_workshop_m == true && ($tgl_m_ppm_workshop_m >= $tgl_m_spt_workshop_m) && ($tgl_m_ppm_workshop_m <= $tgl_a_spt_workshop_m) && (count($getdate_spt_workshop) >= 2) == false) {
-                        
-                        // $ppm = Ppm::create($data);
-                        // if($ppm) {
-                            
-                            /*start fungsi insert detail ppm*/
-                            // $ppm_id = Ppm::find($ppm->id);
-                            // $lama = $ppm_id->lama;
-                            // $tgl_ppm = date('Y-m-d H:i:s',strtotime($request['tgl_mulai_ppm']));
-
-                            $hari_efektif_workshop = 1;
-                            $lama_jam_workshop = 3;
-                            $koefisien_workshop_m = 0.75;
-                            $nilai_dupak_workshop = $koefisien_workshop_m * $lama_jam_workshop;
-
-                            $dupak_workshop_m = [
-                                'dupak' => $nilai_dupak_workshop,
-                                'lembur' => 0,
-                                'efektif' => $hari_efektif_workshop,
-                                'lama_jam' => $lama_jam_workshop,
-                                'koefisien' => $koefisien_workshop_m
-                            ];
-                            // dd($dupak_workshop_m);
-                            $save_detail_ppm = DetailPpm::insert(['id_ppm' => $ppm_id->id,'user_id' => $request->moderator_narasumber[$index_m_Workshop],'peran' => $peran,'lama' => $lama,'info_dupak'=>json_encode($dupak_workshop_m),'unsur_dupak' => $request->unsur_ppm]);
-                            /*end set moderator ppm*/
-                            
-
-                            /*start nilai dupak dari spt workshop yg terimbas*/
-                            foreach ($getdate_spt_workshop as $i => $v) {
-                                
-                                $nilai_dupak_workshop = $getdate_spt_workshop[$i]->info_dupak;
-                                // nilai_dupak_pengawasan
-                                $hari_efektif_terimbas_workshop = json_decode($nilai_dupak_workshop)->efektif;
-                                if ((count($getdate_spt_workshop) > 1)) {
-                                    $lama_jam_terimbas_workshop = json_decode($nilai_dupak_workshop)->lama_jam - 4;
-                                }else{
-                                    $lama_jam_terimbas_workshop = json_decode($nilai_dupak_workshop)->lama_jam - 2;
-                                }
-                                $nilai_dupak_terimbas_workshop = json_decode($nilai_dupak_workshop)->koefisien * $lama_jam_terimbas_workshop;
-                                
-                                $dupak_moderator_terimbas_p = [
-                                    'dupak' => $nilai_dupak_terimbas_workshop,
-                                    'lembur' => 0,
-                                    'efektif' => $hari_efektif_terimbas_workshop,
-                                    'lama_jam' => $lama_jam_terimbas_workshop,
-                                    'koefisien' => json_decode($nilai_dupak_workshop)->koefisien
-                                ];
-                                // dd($getdate_spt_workshop);
-                            }
-
-                            // $update_pengawasan_terimbas = DetailSpt::where('user_id','=',$getdate_spt_workshop[$i]->user_id->where('spt_id',$getdate_spt_workshop[$i]->spt_id)->update(['info_dupak'=>json_encode($dupak_moderator_terimbas_p)]);
-                            $update_pengawasan_terimbas = DetailSpt::where('user_id',$getdate_spt_workshop[$i]->user_id)->where('spt_id',$getdate_spt_workshop[$i]->spt_id)->update(['info_dupak'=>$dupak_moderator_terimbas_p]);
-                            /*end nilai dupak workshop yg terimbas*/
-
-                            // $return_moderator_succ = 'data moderator';
-                        // }
-
-                        $return_moderator_workshop_succ = 'data moderator';
-                    }else{
-                        $return_moderator_workshop_fail = 'Maaf data moderator';
-                    }
-
-                }
-
-                foreach ($request->id_anggota_ppm as $index_p_Workshop => $value_p_Workshop) {
-                    
-                    $getdate_peserta_workshop = DB::table('detail_spt')
-                            ->where('user_id','=',$request->id_anggota_ppm[$index_p_Workshop])
-                            ->join('spt','detail_spt.spt_id','=','spt.id')
-                            ->whereRaw('"'.Carbon::parse($request->tgl_mulai_ppm).'" between `tgl_mulai` and `tgl_akhir`')
-                            ->get();
-                    $checking_date_workshop_p = Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s',strtotime($request['tgl_mulai_ppm'])))->between($getdate_peserta_workshop[$index_p_Workshop]->tgl_mulai,$getdate_peserta_workshop[$index_p_Workshop]->tgl_akhir); /*mengecek apakah tgl_ppm ada pada range tgl_mulai spt dan tgl akhir spt*/
-                    $tgl_m_spt_workshop_p = Carbon::parse($getdate_peserta_workshop[$index_p_Workshop]->tgl_mulai)->format('d/m/Y');
-                    $tgl_a_spt_workshop_p = Carbon::parse($getdate_peserta_workshop[$index_p_Workshop]->tgl_akhir)->format('d/m/Y');
-                    $tgl_m_ppm_workshop_p = Carbon::parse(date('Y-m-d H:i:s',strtotime($request['tgl_mulai_ppm'])))->format('d/m/Y');
-                    // dd($checking_date_workshop_p == true && ($tgl_m_ppm_workshop_p >= $tgl_m_spt_workshop_p) && ($tgl_m_ppm_workshop_p <= $tgl_a_spt_workshop_p) && (count($getdate_peserta_workshop) >= 2) == false);
-                    if ($checking_date_workshop_p == true && ($tgl_m_ppm_workshop_p >= $tgl_m_spt_workshop_p) && ($tgl_m_ppm_workshop_p <= $tgl_a_spt_workshop_p) && (count($getdate_peserta_workshop) >= 2) == false) {
-                        # code...
-                        /*BELUM ada*/
-                        if (isset($ppm)) {
-                            $this->storeNotaDinas($ppm->id, $request->file_nota_dinas);
-                        }
-                        return redirect()->back()->with('msg','Data '.$return_moderator_workshop_succ.' dan Peserta WORKSHOP berhasil diinputkan!');
-                    }else{
-                        return redirect()->back()->withErrors(['Maaf '.$return_moderator_workshop_fail.' dan data peserta WORKSHOP yang anda masukkan sudah ada!']);
-                    }
-                }
-                /*alasan di bedakan foreachnya karena sudah berbeda index / data arraynya antara moderator dengan peserta*/
-            }
-        }
-
-        /*kondisi untuk Studi Banding(per kegiatan) & Diklat Penjenjangan(per jam)*/ 
-        if($request->moderator_narasumber == null && $request->id_anggota_ppm != null){
-            /*loop peserta to get their index*/
-            foreach ($request->id_anggota_ppm as $index_anggota_same_ppm => $value_anggota_same_ppm) {
-                $cek_date_spt_anggota = DB::table('detail_spt')
-                                ->where('user_id','=',$request->id_anggota_ppm[$index_anggota_same_ppm])
-                                ->join('spt','detail_spt.spt_id','=','spt.id')
-                                ->whereRaw('"'.Carbon::parse($request->tgl_mulai_ppm).'" between `tgl_mulai` and `tgl_akhir`')
-                                ->get();
-                $cek_ppm_anggota = DB::table('detail_ppm')
-                           ->where('user_id','=',$request->id_anggota_ppm[$index_anggota_same_ppm])
-                           ->where('tgl_mulai','=',date('Y-m-d H:i:s',strtotime($request['tgl_mulai_ppm'])))
-                           ->join('ppm','detail_ppm.id_ppm','=','ppm.id')
-                           ->select('detail_ppm.*','ppm.*','detail_ppm.id as id_ppms')
-                           ->get();
-
-                foreach ($cek_date_spt_anggota as $key_spt_peserta => $value_spt_peserta) {
-                    $get_date_spt_by_index = $cek_date_spt_anggota[$key_spt_peserta];
-                    $mulai_date_spt_by_index = Carbon::parse($get_date_spt_by_index->tgl_mulai)->format('d/m/Y');
-                    $akhir_date_spt_by_index = Carbon::parse($get_date_spt_by_index->tgl_akhir)->format('d/m/Y');
-                }
-
-                foreach ($cek_ppm_anggota as $key_ppm_peserta => $value_ppm_peserta) {
-                    $get_data_ppm_loop_by_index = $cek_ppm_anggota[$key_ppm_peserta];
-                    $date_peserta_by_index = Carbon::parse($get_data_ppm_loop_by_index->tgl_mulai)->format('d/m/Y');
-                }
-                // ($date_peserta_by_index >= $mulai_date_spt_by_index) && ($date_peserta_by_index <= $akhir_date_spt_by_index)
-                // dd((count($cek_ppm_anggota) > 2) == false);
-                if (($date_peserta_by_index >= $mulai_date_spt_by_index) && ($date_peserta_by_index <= $akhir_date_spt_by_index) && (count($cek_ppm_anggota) >= 2) == false && (count($cek_date_spt_anggota) >= 2) == false) {
-                    
+                // dd($cekPpm_lebih_dari_1);
+                $getdate_spt_pelatihan = DB::table('detail_spt')
+                        ->where('user_id','=',$request->moderator_narasumber[$index_m_pelatihan])
+                        ->join('spt','detail_spt.spt_id','=','spt.id')
+                        ->whereRaw('"'.Carbon::parse($request->tgl_mulai_ppm).'" between `tgl_mulai` and `tgl_akhir`')
+                        ->get();
+                // dd($getdate_spt_pelatihan);
+                $checking_date_workshop_m = Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s',strtotime($request['tgl_mulai_ppm'])))->between($getdate_spt_pelatihan[$index_m_pelatihan]->tgl_mulai,$getdate_spt_pelatihan[$index_m_pelatihan]->tgl_akhir); /*mengecek apakah tgl_ppm ada pada range tgl_mulai spt dan tgl akhir spt*/
+                $tgl_m_spt_workshop_m = Carbon::parse($getdate_spt_pelatihan[$index_m_pelatihan]->tgl_mulai)->format('d/m/Y');
+                $tgl_a_spt_workshop_m = Carbon::parse($getdate_spt_pelatihan[$index_m_pelatihan]->tgl_akhir)->format('d/m/Y');
+                $tgl_m_ppm_workshop_m = Carbon::parse(date('Y-m-d H:i:s',strtotime($request['tgl_mulai_ppm'])))->format('d/m/Y');
+                // dd(count($getdate_spt_pelatihan));
+                // dd($checking_date_workshop_m == true && ($tgl_m_ppm_workshop_m >= $tgl_m_spt_workshop_m) && ($tgl_m_ppm_workshop_m <= $tgl_a_spt_workshop_m) && (count($getdate_spt_pelatihan) >= 2) == false);
+                if ($checking_date_workshop_m == true && ($tgl_m_ppm_workshop_m >= $tgl_m_spt_workshop_m) && ($tgl_m_ppm_workshop_m <= $tgl_a_spt_workshop_m) && (count($getdate_spt_pelatihan) >= 2) == false) {
                     $ppm = Ppm::create($data);
                     if($ppm) {
                         
                         /*start fungsi insert detail ppm*/
                         $ppm_id = Ppm::find($ppm->id);
                         $lama = $ppm_id->lama;
-                        $tgl_ppm = date('Y-m-d H:i:s',strtotime($request['tgl_mulai_ppm']));
 
-                        /*kondisi PENGEMBANGAN PROFESI (Diklat Penjenjangan)*/
-                        if ($request->unsur_ppm == 'Diklat Penjenjangan') {
+                        $hari_efektif_workshop = 1;
+                        $lama_jam_workshop = 3;
+                        $koefisien_workshop_m = 0.25;
+                        $nilai_dupak_workshop = $koefisien_workshop_m * $lama_jam_workshop;
+                        $peran = 'Moderator';
+
+                        $dupak_workshop_m = [
+                            'lama_jam' => $lama_jam_workshop,
+                            'efektif' => $hari_efektif_workshop,
+                            'lembur' => 0,
+                            'dupak' => $nilai_dupak_workshop,
+                            'koefisien' => $koefisien_workshop_m
+                        ];
+                        // dd($dupak_workshop_m);
+                        $save_detail_ppm = DetailPpm::insert(['id_ppm' => $ppm_id->id,'user_id' => $request->moderator_narasumber[$index_m_pelatihan],'peran' => $peran,'lama' => $lama,'info_dupak'=>json_encode($dupak_workshop_m),'unsur_dupak' => $request->unsur_ppm]);
+                        /*end set moderator ppm*/
+                        
+
+                        /*start nilai dupak dari spt workshop yg terimbas*/
+                        foreach ($getdate_spt_pelatihan as $i => $v) {
                             
-                            $peran_peserta_penjenjangan = 'Peserta';
-                            foreach ($request->id_anggota_ppm as $index_peserta_penjenjangan => $value_peserta_penjenjangan) {
-                                /* start nilai dupak ppm peserta */
-                                $between_date_spt_peserta_penjenjangan = DB::table('detail_spt')
-                                                                ->where('user_id','=',$request->id_anggota_ppm[$index_peserta_penjenjangan])
-                                                                ->join('spt','detail_spt.spt_id','=','spt.id')
-                                                                ->whereRaw('"'.Carbon::parse($request->tgl_mulai_ppm).'" between `tgl_mulai` and `tgl_akhir`')
-                                                                ->get();/* GET RANGE DATE SPT */
-                                foreach ($between_date_spt_peserta_penjenjangan as $key => $value) {
-                                    // $checking_date_ppm_with_spt = Carbon::createFromFormat('Y-m-d H:i:s', $tgl_ppm)->between($between_date_spt_peserta_penjenjangan[$key]->tgl_mulai,$between_date_spt_peserta_penjenjangan[$key]->tgl_akhir);
-                                    $dates = array();
-                                    $current = strtotime( $between_date_spt_peserta_penjenjangan[$key]->tgl_mulai );
-                                    $last = strtotime( $between_date_spt_peserta_penjenjangan[$key]->tgl_akhir );
-                                    $format = 'Y/m/d';
-                                    $step = '+1 day';
-                                    
-                                    while( $current <= $last ) {
-
-                                        $dates[] = date( $format, $current );
-                                        $current = strtotime( $step, $current );
-                                    }
-
-                                    $date_ppm = date('Y/m/d',strtotime($request['tgl_mulai_ppm']));
-                                    $range_date_spt_ada_ppmnya = in_array($date_ppm,$dates);
-                                    /*cek apakah date_ppm ada di range spt jika ada akan mengurangi dupak pengawasan*/
-                                    if ($range_date_spt_ada_ppmnya == true) {
-
-                                        $data_ppm = DB::table('detail_ppm')
-                                                    ->where('user_id','=',$request->id_anggota_ppm[$index_peserta_penjenjangan])
-                                                    ->join('ppm','detail_ppm.id_ppm','=','ppm.id')
-                                                    ->get();
-                                        
-                                            /*penjenjangan belum terimbas*/
-                                            $hari_efektif_ppm_peserta_penjenjangan = 1;
-                                            $lama_jam_ppm_peserta_penjenjangan = 3;
-                                            $koefisien_peserta_penjenjangan = 0.015;
-                                            $nilai_dupak_peserta_penjenjangan = $koefisien_peserta_penjenjangan * $lama_jam_ppm_peserta_penjenjangan;
-                                            $unsur_dupak_peserta_penjenjangan = 'Diklat Penjenjangan';
-
-                                            /*penjenjangan belum terimbas*/
-                                            $dupak_peserta_ppm_penjenjangan = [
-                                                'dupak' => $nilai_dupak_peserta_penjenjangan,
-                                                'lembur' => 0,
-                                                'efektif' => $hari_efektif_ppm_peserta_penjenjangan,
-                                                'lama_jam' => $lama_jam_ppm_peserta_penjenjangan,
-                                                'koefisien' => $koefisien_peserta_penjenjangan
-                                            ];
-
-                                            $save_detail_ppm_penjenjangan = DetailPpm::insert(['id_ppm' => $ppm_id->id,'user_id' => json_decode($request->id_anggota_ppm[$index_peserta_penjenjangan]),'peran' => $peran_peserta_penjenjangan,'lama' => $lama,'info_dupak'=>json_encode($dupak_peserta_ppm_penjenjangan),'unsur_dupak' => $unsur_dupak_peserta_penjenjangan]);
-                                            /*end foreach between_date_spt_peserta_penjenjangan*/
-
-                                            foreach ($between_date_spt_peserta_penjenjangan as $index_penjenjangan_terimbas => $value_penjenjangan_terimbas) {
-                                            $hari_efektif_ppm_peserta_penjenjangan_terimbas = json_decode($between_date_spt_peserta_penjenjangan[$index_penjenjangan_terimbas]->info_dupak)->efektif;
-                                            if ($data_ppm>'1') {
-                                                $lama_jam_ppm_peserta_penjenjangan_terimbas = json_decode($between_date_spt_peserta_penjenjangan[$index_penjenjangan_terimbas]->info_dupak)->lama_jam - 4;
-                                            }else{
-                                                $lama_jam_ppm_peserta_penjenjangan_terimbas = json_decode($between_date_spt_peserta_penjenjangan[$index_penjenjangan_terimbas]->info_dupak)->lama_jam - 2;
-                                            }
-                                            $koefisien_peserta_penjenjangan_terimbas = json_decode($between_date_spt_peserta_penjenjangan[$index_penjenjangan_terimbas]->info_dupak)->koefisien;
-                                            $nilai_dupak_peserta_penjenjangan_terimbas = $koefisien_peserta_penjenjangan_terimbas * $lama_jam_ppm_peserta_penjenjangan_terimbas;
-
-                                                $unsur_dupak_peserta_penjenjangan_terimbas = 'Diklat Penjenjangan';
-
-                                                $dupak_peserta_ppm_penjenjangan_terimbas = [
-                                                    'dupak' => $nilai_dupak_peserta_penjenjangan_terimbas,
-                                                    'lembur' => 0,
-                                                    'efektif' => $hari_efektif_ppm_peserta_penjenjangan_terimbas,
-                                                    'lama_jam' => $lama_jam_ppm_peserta_penjenjangan_terimbas,
-                                                    'koefisien' => $koefisien_peserta_penjenjangan_terimbas
-                                                ];
-                                                
-                                                $update_pengawasan_terimbas_peserta = DetailSpt::where('user_id',$between_date_spt_peserta_penjenjangan[$index_penjenjangan_terimbas]->user_id)->where('spt_id',$between_date_spt_peserta_penjenjangan[$index_penjenjangan_terimbas]->spt_id)->update(['info_dupak'=>json_encode($dupak_peserta_ppm_penjenjangan_terimbas)]);
-                                                
-                                                // dd($update_pengawasan_terimbas_peserta);
-                                            }
-                                    }
-                                    
-                                }
+                            $nilai_dupak_workshop = $getdate_spt_pelatihan[$i]->info_dupak;
+                            // nilai_dupak_pengawasan
+                            $hari_efektif_terimbas_workshop = json_decode($nilai_dupak_workshop)->efektif;
+                            if (count($getdate_spt_pelatihan) > 1) {
+                                $lama_jam_terimbas_workshop = json_decode($nilai_dupak_workshop)->lama_jam - 4;
+                            }else{
+                                $lama_jam_terimbas_workshop = json_decode($nilai_dupak_workshop)->lama_jam - 2;
                             }
-
+                            $nilai_dupak_terimbas_workshop = json_decode($nilai_dupak_workshop)->koefisien * $lama_jam_terimbas_workshop;
+                            
+                            $dupak_moderator_terimbas_p = [
+                                'lama_jam' => $lama_jam_terimbas_workshop,
+                                'efektif' => $hari_efektif_terimbas_workshop,
+                                'lembur' => 0,
+                                'dupak' => $nilai_dupak_terimbas_workshop,
+                                'koefisien' => json_decode($nilai_dupak_workshop)->koefisien
+                            ];
+                            // dd($dupak_moderator_terimbas_p);
                         }
-                        // end fungsi insert detail ppm & update detail spt
+                            $update_pengawasan_terimbas = DetailSpt::where('user_id','=',$request->moderator_narasumber[$index_m_pelatihan])->where('spt_id',$getdate_spt_pelatihan[$i]->spt_id)->update(['info_dupak'=>json_encode($dupak_moderator_terimbas_p)]);
 
-                        /*throwing id ppm and file nota dinas*/
+                        /*end nilai dupak workshop yg terimbas*/
+
+                        // $return_moderator_succ = 'data moderator';
+                    }
+
+                    $return_moderator_workshop_succ = 'data moderator';
+                }else{
+                    $return_moderator_workshop_fail = 'Maaf data moderator';
+                }
+
+            }
+
+            foreach ($request->id_anggota_ppm as $index_p_pelatihan => $value_p_Workshop) {
+                
+                $getdate_peserta_pelatihan = DB::table('detail_spt')
+                        ->where('user_id','=',$request->id_anggota_ppm[$index_p_pelatihan])
+                        ->join('spt','detail_spt.spt_id','=','spt.id')
+                        ->whereRaw('"'.Carbon::parse($request->tgl_mulai_ppm).'" between `tgl_mulai` and `tgl_akhir`')
+                        ->get();
+                        // dd($getdate_peserta_pelatihan);
+                $checking_date_pelatihan_p = Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s',strtotime($request['tgl_mulai_ppm'])))->between($getdate_peserta_pelatihan[$index_p_pelatihan]->tgl_mulai,$getdate_peserta_pelatihan[$index_p_pelatihan]->tgl_akhir); /*mengecek apakah tgl_ppm ada pada range tgl_mulai spt dan tgl akhir spt*/
+                $tgl_m_spt_workshop_p = Carbon::parse($getdate_peserta_pelatihan[$index_p_pelatihan]->tgl_mulai)->format('d/m/Y');
+                $tgl_a_spt_workshop_p = Carbon::parse($getdate_peserta_pelatihan[$index_p_pelatihan]->tgl_akhir)->format('d/m/Y');
+                $tgl_m_ppm_workshop_p = Carbon::parse(date('Y-m-d H:i:s',strtotime($request['tgl_mulai_ppm'])))->format('d/m/Y');
+                // dd($checking_date_pelatihan_p == true && ($tgl_m_ppm_workshop_p >= $tgl_m_spt_workshop_p) && ($tgl_m_ppm_workshop_p <= $tgl_a_spt_workshop_p));
+                if ($checking_date_pelatihan_p == true && ($tgl_m_ppm_workshop_p >= $tgl_m_spt_workshop_p) && ($tgl_m_ppm_workshop_p <= $tgl_a_spt_workshop_p)) {
+                    /*BELUM ada*/
+                    if (isset($ppm)) {
                         $this->storeNotaDinas($ppm->id, $request->file_nota_dinas);
 
-                        return $ppm;
+                        $hari_efektif_workshop_p = 1;
+                        $lama_jam_workshop_p = 3;
+                        $koefisien_workshop_p = 0.01;
+                        $nilai_dupak_workshop_p = $koefisien_workshop_p * $lama_jam_workshop_p;
+                        $peran_p = 'Peserta';
+
+                        $dupak_pelatihan_p = [
+                            'lama_jam' => $lama_jam_workshop_p,
+                            'efektif' => $hari_efektif_workshop_p,
+                            'lembur' => 0,
+                            'dupak' => $nilai_dupak_workshop_p,
+                            'koefisien' => $koefisien_workshop_p
+                        ];
+                        // dd($dupak_pelatihan_p);
+                        $save_detail_ppm = DetailPpm::insert(['id_ppm' => $ppm_id->id,'user_id' => $request->id_anggota_ppm[$index_p_pelatihan],'peran' => $peran_p,'lama' => $lama,'info_dupak'=>json_encode($dupak_pelatihan_p),'unsur_dupak' => $request->unsur_ppm]);
+                        
+                        /*peserta dupak terimbas */
+                        foreach ($getdate_peserta_pelatihan as $i => $v) {
+                            $nilai_dupak_pelatihan = $getdate_peserta_pelatihan[$i]->info_dupak;
+                            // // nilai_dupak_pengawasan
+                            $hari_efektif_terimbas_pelatihan = json_decode($nilai_dupak_pelatihan)->efektif;
+                            // if (count($getdate_spt_pelatihan) > 1) {
+                                // $lama_jam_terimbas_pelatihan = json_decode($nilai_dupak_pelatihan)->lama_jam - 4;
+                            // }else{
+                                $lama_jam_terimbas_pelatihan = json_decode($nilai_dupak_pelatihan)->lama_jam - 2;
+                            // }
+                            $nilai_dupak_terimbas_pelatihan = json_decode($nilai_dupak_pelatihan)->koefisien * $lama_jam_terimbas_pelatihan;
+                            $koefisien_terimbas_pelatihan = json_decode($nilai_dupak_pelatihan)->koefisien;
+
+                            $dupak_terimbas_pelatihan_p = [
+                                'lama_jam' => $lama_jam_terimbas_pelatihan,
+                                'efektif' => $hari_efektif_terimbas_pelatihan,
+                                'lembur' => 0,
+                                'dupak' => $nilai_dupak_terimbas_pelatihan,
+                                'koefisien' => $koefisien_terimbas_pelatihan
+                            ];
+                            // dd($koefisien_terimbas_pelatihan);
+                            $update_pengawasan_terimbas = DetailSpt::where('user_id','=',$request->id_anggota_ppm[$index_p_pelatihan])->where('spt_id',$getdate_peserta_pelatihan[$i]->spt_id)->update(['info_dupak'=>json_encode($dupak_terimbas_pelatihan_p)]);
+                        }
+
+
                     }
+                    return redirect()->back()->with('msg','Data '.$return_moderator_workshop_succ.' dan Peserta WORKSHOP berhasil diinputkan!');
                 }else{
-                    return redirect()->back()->withErrors(['Maaf data yang anda masukkan sudah ada!']);
+                    return redirect()->back()->withErrors(['Maaf '.$return_moderator_workshop_fail.' dan data peserta WORKSHOP yang anda masukkan sudah ada!']);
                 }
             }
+            /*alasan di bedakan foreachnya karena sudah berbeda index / data arraynya antara moderator dengan peserta*/
         }
     }
 
