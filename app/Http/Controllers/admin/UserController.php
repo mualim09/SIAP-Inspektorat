@@ -85,44 +85,41 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'first_name'=>'required|string|max:255|min:3',
             'email' =>'required|string|email|max:255|min:3|unique:users',
-            'phone' =>'string',
-            'last_name'=>'string',
+            'phone' =>'string|nullable',
+            'last_name'=>'string|nullable',
             'email' =>'required|email|max:255|min:3|unique:users',
             'password'=>'required|min:6|confirmed',
             'nip' => 'required|unique:users',
-            'jabatan' => 'string',
-            'pangkat' => 'string',
-            'gelar' => 'string',
+            'jabatan' => 'string|nullable',
+            'pangkat' => 'string|nullable',
+            'gelar' => 'string|nullable',
             'sex' => 'required',
             'image' => 'mimes:jpeg,jpg,JPG,JPEG',
-            'jenis_auditor' => 'string',
-            'tempat_lahir' => 'string',
-            'tanggal_lahir'=>'date_format:"d-m-Y"',
+            'jenis_auditor' => 'string|nullable',
+            'tempat_lahir' => 'string|nullable',
+            'tanggal_lahir'=>'date_format:"d-m-Y"|nullable',
         ]);
 
         if ($validator->fails()){
             return $validator->errors();
-        }
-
-        
-        
+        }        
 
         $data = [
-            'first_name' => $request['first_name'],
-            'last_name' => $request['last_name'],
-            'phone' => $request['phone'],
-            'email' => $request['email'],
+            'first_name' => strip_tags($request['first_name']),
+            'last_name' => strip_tags($request['last_name']),
+            'phone' => strip_tags($request['phone']),
+            'email' => strip_tags($request['email']),
             'pendidikan' => $request['pendidikan'],
             'sex' => $request['sex'],
-            'password' => $request['password'],
-            'nip' => $request['nip'],
+            'password' => strip_tags($request['password']),
+            'nip' => strip_tags($request['nip']),
             'jabatan' => $request['jabatan'],
             'pangkat' => $request['pangkat'],
             'gelar' => $request['gelar'],
             'ruang' => $request['ruang'],
             //'sertifikat' => $request['sertifikat'],
             'jenis_auditor' => $request['jenis_auditor'],
-            'tempat_lahir' => $request['tempat_lahir'],
+            'tempat_lahir' => strip_tags($request['tempat_lahir']),
             'tanggal_lahir' => date('Y-m-d',strtotime($request['tanggal_lahir'])),
         ];
         $nama_ruang = $request['ruang']['nama'];
@@ -219,9 +216,9 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);//Get role with the given id
 
-        $user->first_name = $request['first_name'];
-        $user->last_name = $request['last_name'];
-        $user->phone = $request['phone'];
+        $user->first_name = strip_tags($request['first_name']);
+        $user->last_name = strip_tags($request['last_name']);
+        $user->phone = strip_tags($request['phone']);
         $user->email = $request['email'];
         $user->pendidikan = $request['pendidikan'];
         $user->sex = $request['sex'];

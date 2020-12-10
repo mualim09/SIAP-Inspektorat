@@ -56,8 +56,13 @@ class User extends Authenticatable implements HasMedia
     }
 
     public function getFullNameGelarAttribute(){
-        $user = ucfirst($this->first_name) . ' ' . ucfirst($this->last_name) . ', ' .$this->gelar;
+        $first_name = ucfirst($this->first_name);
+        $last_name = ($this->last_name != null ) ? ' '.ucfirst($this->last_name) : '';
+        $gelar = ($this->gelar != null) ? ', '.$this->gelar : '';
+        //$user = ucfirst($this->first_name) . ' ' . ucfirst($this->last_name) . ', ' .$this->gelar;
+        $user = $first_name.$last_name.$gelar;
         return str_replace( ', , ', ', ', $user);
+        /*return preg_replace('~(?>@|\G(?<!^)[^@]*)\K@*~', '', $user);*/
     }
 
 
