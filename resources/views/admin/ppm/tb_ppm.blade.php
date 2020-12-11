@@ -121,6 +121,41 @@
             "order": [[ 1, 'asc' ]],
         });
     }
+
+    function hapus_ppm(id){   /*modal belum bisa menghapus cache pada modal*/
+      // console.log(id); /*parameter id ada isinya */
+      save_method = 'delete';
+      var csrf_token = $('meta[name="csrf-token"]').attr('content');
+      $.confirm({
+          title: "{{ __('Hapus data PPM') }}",
+          content: "{{ __('Apakah anda yakin ingin menghilangkan data PPM ini?') }}",
+          buttons: {
+              delete: {
+                  btnClass: 'btn-danger',
+                  action: function(){  /*button action confirm*/
+                      // console.log('jalan');
+                      url = (window.location.pathname == '/admin' || window.location.pathname == '/public/admin') ? "{{url('admin/ppm/delete/data-ppm/')}}" +'/'+id : 'admin/ppm/delete/data-ppm/'+id;
+
+                      $.ajax({
+                          url: url,
+                          type: "delete",
+                          data: {_method: 'delete', '_token' : csrf_token },
+                          success: function(data){
+                              // table.ajax.reload();
+                              $('#tabel-ppm').DataTable().ajax.reload();
+                              // $('#form-session-anggota-ppm')[0].reset();
+                              // location.reload();
+                          }
+                      });
+
+                  },
+              },
+                  cancel: function(){ /*button cancel confirm*/
+                      $.alert('Dibatalkan!');
+                  }
+          }
+      });
+  };
   </script>
 
   @endhasanyrole
