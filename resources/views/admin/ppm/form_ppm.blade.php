@@ -24,8 +24,9 @@
             @csrf
             <input type="hidden" name="id_ppm" id="id-ppm">
             <!-- <input type="hidden" name="unsur_ppm" id="unsur-ppm" value="Pengembangan Profesi"> -->
+            <input type="hidden" name="unsur_ppm" id="unsur-ppm" value="Pelatihan Kantor Sendiri">
 
-            <div class="form-group row">
+            <!-- <div class="form-group row">
                 <label for="dasar" class="col-md-2 col-form-label ">{{ __('Jenis PPM') }}</label>
                 <div class="col-md-10">
                     <div class="custom-control custom-radio custom-control-inline">
@@ -50,7 +51,7 @@
                     </div>
                     <small id="infoDasarHelp" class="form-text text-muted">Silahkan pilih Jenis PPM yang dibutuhkan.</small>
                 </div>
-            </div>
+            </div> -->
 
             <!-- start input kegiatan -->
             <div class="form-group row">
@@ -337,7 +338,7 @@
 <!-- start javascript -->
 <script type="text/javascript">
 /*jquery hide selectize moderator for ppm Studi Banding & Diklat Penjenjangan*/
-$(function() {
+/*$(function() {
     $('#moderator_id').hide(); 
     $('input[type="radio"]').click(function(){
         var inputValue = $(this).attr("value");
@@ -348,7 +349,7 @@ $(function() {
             $('#moderator_id').hide('fast'); 
         } 
     });
-});
+});*/
 
 
 

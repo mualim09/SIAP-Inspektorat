@@ -159,13 +159,20 @@ class PpmController extends Controller
                 $tgl_m_ppm_workshop_m = Carbon::parse(date('Y-m-d H:i:s',strtotime($request['tgl_mulai_ppm'])))->format('d/m/Y');
                 // dd(count($getdate_spt_pelatihan));
                 // dd($checking_date_workshop_m == true && ($tgl_m_ppm_workshop_m >= $tgl_m_spt_workshop_m) && ($tgl_m_ppm_workshop_m <= $tgl_a_spt_workshop_m) && (count($getdate_spt_pelatihan) >= 2) == false);
-                if ($checking_date_workshop_m == true && ($tgl_m_ppm_workshop_m >= $tgl_m_spt_workshop_m) && ($tgl_m_ppm_workshop_m <= $tgl_a_spt_workshop_m) && (count($getdate_spt_pelatihan) >= 2) == false) {
-                    $ppm = Ppm::create($data);
-                    if($ppm) {
-                        
-                        /*start fungsi insert detail ppm*/
+                if ($checking_date_workshop_m == true && ($tgl_m_ppm_workshop_m >= $tgl_m_spt_workshop_m) && ($tgl_m_ppm_workshop_m <= $tgl_a_spt_workshop_m)) {
+                    
+                    $tgl_ppm = date('Y-m-d H:i:s',strtotime($request['tgl_mulai_ppm']));
+                    /*cek tb detail_ppm dan ppm jika tanggal ppm dan user sama > 2 / <= 2 maka akan menolak insert*/
+                    $check_same_ppm_m = DetailPpm::where('user_id',$request->moderator_narasumber[$index_m_pelatihan])->whereHas('ppm', function($q) use ($tgl_ppm){
+                        $q->where('tgl_mulai','=', $tgl_ppm);
+                    })->get();
+                    // dd(count($check_same_ppm_m) <= 2);
+                    if(count($check_same_ppm_m) < 2) {
+                        $ppm = Ppm::create($data);
                         $ppm_id = Ppm::find($ppm->id);
                         $lama = $ppm_id->lama;
+                        
+                        /*start fungsi insert detail ppm*/
 
                         $hari_efektif_workshop = 1;
                         $lama_jam_workshop = 3;
@@ -191,7 +198,7 @@ class PpmController extends Controller
                             $nilai_dupak_workshop = $getdate_spt_pelatihan[$i]->info_dupak;
                             // nilai_dupak_pengawasan
                             $hari_efektif_terimbas_workshop = json_decode($nilai_dupak_workshop)->efektif;
-                            if (count($getdate_spt_pelatihan) > 1) {
+                            if (count($check_same_ppm_m) > 1) {
                                 $lama_jam_terimbas_workshop = json_decode($nilai_dupak_workshop)->lama_jam - 4;
                             }else{
                                 $lama_jam_terimbas_workshop = json_decode($nilai_dupak_workshop)->lama_jam - 2;
@@ -212,17 +219,21 @@ class PpmController extends Controller
                         /*end nilai dupak workshop yg terimbas*/
 
                         // $return_moderator_succ = 'data moderator';
+                        $return_moderator_workshop_succ = 'data moderator';
+                    }else{
+                        $return_moderator_workshop_fail = 'Maaf data moderator';
                     }
-
-                    $return_moderator_workshop_succ = 'data moderator';
-                }else{
-                    $return_moderator_workshop_fail = 'Maaf data moderator';
                 }
-
             }
 
             foreach ($request->id_anggota_ppm as $index_p_pelatihan => $value_p_Workshop) {
-                
+
+                $tgl_ppm_p = date('Y-m-d H:i:s',strtotime($request['tgl_mulai_ppm']));
+                $check_same_ppm_p = DetailPpm::where('user_id',$request->id_anggota_ppm[$index_p_pelatihan])->whereHas('ppm', function($q) use ($tgl_ppm_p){
+                        $q->where('tgl_mulai','=', $tgl_ppm_p);
+                    })->get();
+                    // dd($check_same_ppm_p);
+
                 $getdate_peserta_pelatihan = DB::table('detail_spt')
                         ->where('user_id','=',$request->id_anggota_ppm[$index_p_pelatihan])
                         ->join('spt','detail_spt.spt_id','=','spt.id')
@@ -230,13 +241,14 @@ class PpmController extends Controller
                         ->get();
                         // dd($getdate_peserta_pelatihan);
                 $checking_date_pelatihan_p = Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s',strtotime($request['tgl_mulai_ppm'])))->between($getdate_peserta_pelatihan[$index_p_pelatihan]->tgl_mulai,$getdate_peserta_pelatihan[$index_p_pelatihan]->tgl_akhir); /*mengecek apakah tgl_ppm ada pada range tgl_mulai spt dan tgl akhir spt*/
-                $tgl_m_spt_workshop_p = Carbon::parse($getdate_peserta_pelatihan[$index_p_pelatihan]->tgl_mulai)->format('d/m/Y');
-                $tgl_a_spt_workshop_p = Carbon::parse($getdate_peserta_pelatihan[$index_p_pelatihan]->tgl_akhir)->format('d/m/Y');
-                $tgl_m_ppm_workshop_p = Carbon::parse(date('Y-m-d H:i:s',strtotime($request['tgl_mulai_ppm'])))->format('d/m/Y');
-                // dd($checking_date_pelatihan_p == true && ($tgl_m_ppm_workshop_p >= $tgl_m_spt_workshop_p) && ($tgl_m_ppm_workshop_p <= $tgl_a_spt_workshop_p));
-                if ($checking_date_pelatihan_p == true && ($tgl_m_ppm_workshop_p >= $tgl_m_spt_workshop_p) && ($tgl_m_ppm_workshop_p <= $tgl_a_spt_workshop_p)) {
+                // $tgl_m_spt_workshop_p = Carbon::parse($getdate_peserta_pelatihan[$index_p_pelatihan]->tgl_mulai)->format('d/m/Y');
+                // $tgl_a_spt_workshop_p = Carbon::parse($getdate_peserta_pelatihan[$index_p_pelatihan]->tgl_akhir)->format('d/m/Y');
+                // $tgl_m_ppm_workshop_p = Carbon::parse(date('Y-m-d H:i:s',strtotime($request['tgl_mulai_ppm'])))->format('d/m/Y');
+                // dd($checking_date_pelatihan_p);
+                if ($checking_date_pelatihan_p == true) {
                     /*BELUM ada*/
-                    if (isset($ppm)) {
+                    if (count($check_same_ppm_p) < 2) {
+                        
                         $this->storeNotaDinas($ppm->id, $request->file_nota_dinas);
 
                         $hari_efektif_workshop_p = 1;
@@ -260,11 +272,11 @@ class PpmController extends Controller
                             $nilai_dupak_pelatihan = $getdate_peserta_pelatihan[$i]->info_dupak;
                             // // nilai_dupak_pengawasan
                             $hari_efektif_terimbas_pelatihan = json_decode($nilai_dupak_pelatihan)->efektif;
-                            // if (count($getdate_spt_pelatihan) > 1) {
-                                // $lama_jam_terimbas_pelatihan = json_decode($nilai_dupak_pelatihan)->lama_jam - 4;
-                            // }else{
+                            if (count($check_same_ppm_p) > 1) {
+                               $lama_jam_terimbas_pelatihan = json_decode($nilai_dupak_pelatihan)->lama_jam - 4;
+                            }else{
                                 $lama_jam_terimbas_pelatihan = json_decode($nilai_dupak_pelatihan)->lama_jam - 2;
-                            // }
+                            }
                             $nilai_dupak_terimbas_pelatihan = json_decode($nilai_dupak_pelatihan)->koefisien * $lama_jam_terimbas_pelatihan;
                             $koefisien_terimbas_pelatihan = json_decode($nilai_dupak_pelatihan)->koefisien;
 
@@ -278,12 +290,11 @@ class PpmController extends Controller
                             // dd($koefisien_terimbas_pelatihan);
                             $update_pengawasan_terimbas = DetailSpt::where('user_id','=',$request->id_anggota_ppm[$index_p_pelatihan])->where('spt_id',$getdate_peserta_pelatihan[$i]->spt_id)->update(['info_dupak'=>json_encode($dupak_terimbas_pelatihan_p)]);
                         }
-
-
+                        return redirect()->back()->with('msg','Data '.$return_moderator_workshop_succ.' dan Peserta Pelatihan Kantor Sendiri berhasil diinputkan!');
+                    }else{
+                        
+                        return redirect()->back()->withErrors(['Maaf '.$return_moderator_workshop_fail.' dan data peserta Pelatihan Kantor Sendiri yang anda masukkan sudah ada!']);
                     }
-                    return redirect()->back()->with('msg','Data '.$return_moderator_workshop_succ.' dan Peserta WORKSHOP berhasil diinputkan!');
-                }else{
-                    return redirect()->back()->withErrors(['Maaf '.$return_moderator_workshop_fail.' dan data peserta WORKSHOP yang anda masukkan sudah ada!']);
                 }
             }
             /*alasan di bedakan foreachnya karena sudah berbeda index / data arraynya antara moderator dengan peserta*/
