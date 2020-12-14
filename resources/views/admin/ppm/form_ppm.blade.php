@@ -173,7 +173,7 @@
                         @foreach($users as $i=>$user)
                             <div class="col-md-2" id="name-user-{{$user->id}}">{{ $user->full_name_gelar }}</div>
                                 <div class="col-md-1">
-                                <input class="form-check-input" name="id_anggota_ppm[]" multiple="multiple" id="id-anggota-{{$user->id}}" type="checkbox" value="{{$user->id}}"></div>
+                                <input class="form-check-input" name="id_anggota_ppm[]" multiple="multiple" id="id-anggota-{{$user->id}}" type="checkbox" value="{{$user->id}}" ></div>
                                 <?php $i++ ?>
                                 @if($i%4 == 0)
                                     </div><div class="row">
@@ -182,6 +182,9 @@
                     </div>
                     <!-- <input type="hidden" name="id_anggota_ppm" id="anggota_ppm"> -->
                 </div>
+                <script type="text/javascript">
+                    $(".form-check-input").prop('checked', true);
+                </script>
                 <!-- <div class="col">
                     <table id="tabel-anggota-ppm" class="col"></table>
                     <button id="add-anggota-ppm" class="btn btn-outline-primary btn-sm" type="button" data-toggle="modal" data-target="#anggotaPpmModal"> <i class="fa fa-plus"></i> <span>Tambah Anggota</span></button>
@@ -480,7 +483,7 @@ $("#form-ppm").validate({
             processData: false,
             contentType: false,
             success: function(data){
-                console.log('success:',data);
+                // console.log('success:',data);
                 // $("#form-ppm")[0].reset();
                 // $('#tabel-ppm').DataTable().ajax.reload();
                 // $('#form-session-anggota-ppm')[0].reset();
