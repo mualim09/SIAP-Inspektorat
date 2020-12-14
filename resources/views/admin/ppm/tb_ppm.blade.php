@@ -1,6 +1,6 @@
 @section('nav_ppm')
 @foreach(auth()->user()->menuPpm() as $ppm)
-@if((auth()->user()->id == $ppm->id) ? true : false === true)
+@if(auth()->user()->id == $ppm->id)
 @hasanyrole('Auditor')
 <li class="nav-item">
   <a class="nav-link" id="ppm-nav" href="#ppm-tab" role="tab" aria-controls="ppm-tab" aria-selected="false">SATGAS PPM</a>
