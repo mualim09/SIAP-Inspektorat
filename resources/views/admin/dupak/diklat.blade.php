@@ -11,12 +11,9 @@
     data: {user_id: user_id, semester: semester, tahun: tahun},
     success: function (response) {
       //console.log(response[0].irban_kepala.pejabat);
-      if(response.length > 0) {
-        var year = new Date().getFullYear();
-        var header = generate_header(response, 'pendidikan dan pelatihan');
-        var footer = generate_footer(response);
-        var table = '<table class="table table-sm table-bordered ajax-table col-print-12 table-print-border" id="dupak-diklat-table">';
-       
+      var header = generate_header(response.user, response.pejabat, 'Pendidikan dan Pelatihan');
+      var footer = generate_footer(response.user, response.pejabat);
+      var table = '<table class="table table-sm table-bordered ajax-table col-print-12 table-print-border" id="dupak-diklat-table">';       
         table += '<tr style="background: #ccc; text-align: center">'
                 +'<th rowspan="2">No.</th>'
                 +'<th colspan="2">Uraian Kegiatan</th>'
@@ -41,8 +38,9 @@
                   +'<th>7</th>'
                   +'<th>8</th>'
               +'</tr>';
-
-        $.each(response, function (i, item) {
+      if(response.ak.length > 0) {
+        var year = new Date().getFullYear();
+        $.each(response.ak, function (i, item) {
           var n = i+1;            
               table += '<tr>'
               +'<td>' + n + '</td>'
@@ -55,14 +53,24 @@
               +'<td style="text-align: center">'+ item.info_dupak.dupak +'</td>'
               +'<td>SPT No.700/'+ item.spt_umum.nomor +'/438.4/'+year+'<br/><br/></td>'
               +'</tr>';
-        });
+        });       
         
-        table += '</table>';
-        $( "#dupak-diklat-wrapper" ).html(header+table+footer);
-      }else {
-          $( "#dupak-diklat-wrapper" ).html('<div class="col-md-12 empty-data text-center">Data DUPAK user Tidak ditemukan. </div>');
-          $('#dupak-diklat-wrapper').addClass('no-print');
+        //$( "#dupak-diklat-wrapper" ).html(header+table+footer);
+      }else {       
+        table += '<tr style="height:300px;">'
+              +'<td></td>'
+              +'<td></td>'
+              +'<td></td>'
+              //+'<td>' + item.spt.periode + '<br />' + item.spt.lama + '</td>'
+              +'<td style="text-align: center;"></td>'
+              +'<td style="text-align: center"></td>'
+              +'<td style="text-align: center"></td>' 
+              +'<td style="text-align: center"></td>'
+              +'<td></td>'
+              +'</tr>';
       }
+      table += '</table>';
+      $( "#dupak-diklat-wrapper" ).html(header+table+footer);
     }
   });
   }

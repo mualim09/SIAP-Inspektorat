@@ -891,13 +891,8 @@ class SptController extends Controller
     }
 
     public function sptDocx($id){
-        //https://alfinchandra4.medium.com/catatan-laravel-pass-dynamic-values-when-export-to-docx-using-phpword-32e2746b0bfa
-        //dd(storage_path('spt\template-spt.docx'));
         $spt = Spt::findOrFail($id);
-        $sort_detail = implode(",",$this->list_peran);
-        //dd($spt->info['dasar']);
-        //$info = json_decode($spt->info);
-        //$dasar = ($spt->jenisSpt->dasar != '' || !is_null($spt->jenisSpt->dasar)) ? $spt->jenisSpt->dasar : ($spt->info['dasar'] != null) ? $spt->info['dasar'] : 'Tidak ada dasar SPT.';
+        $sort_detail = implode(",",$this->list_peran);        
         $detail_spt = DetailSpt::where('spt_id','=',$id)->with(['spt','user'])
             ->orderByRaw(DB::raw("FIELD(peran,'Penanggungjawab', 'Pembantu Penanggungjawab', 'Pengendali Mutu', 'Pengendali Teknis', 'Ketua Tim', 'Anggota')"))->get();
         $template_name = (File::exists(storage_path("spt/template-spt.docx"))) ? storage_path('spt/template-spt.docx') : 'tidak ada'; // default template name        
@@ -917,8 +912,7 @@ class SptController extends Controller
         }else{
             $dasar = 'Tidak ada dasar SPT.';
         }
-        $dasar_spt = array_filter(explode("\n",strip_tags($dasar))); //explode by new line (ENTER)
-        //dd(count($dasar_spt));
+        $dasar_spt = array_filter(explode("\n",strip_tags($dasar))); //explode by new line (ENTER)        
         $lanjutan = ($spt->info_lanjutan !== 'undefined') ? 'lanjutan' : '';
         $lokasi = ($spt->jenisSpt->input_lokasi == true) ? 'di '.$spt->lokasi_spt.' Kabupaten Sidoarjo.' : '';
         $tambahan = ($spt->jenisSpt->inputTambahan == true) ? $spt->tambahan : '';
@@ -998,10 +992,7 @@ class SptController extends Controller
         header('Content-Transfer-Encoding: binary');
         header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
         header('Expires: 0');
-        $templateProcessor->saveAs('php://output'); //direct download
-       // $xmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($templateProcessor, 'Word2007');
-        //ob_clean();
-        //$xmlWriter->save("php://output");
+        $templateProcessor->saveAs('php://output'); //direct download       
         exit;
     }
 

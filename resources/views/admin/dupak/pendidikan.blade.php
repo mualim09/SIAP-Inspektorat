@@ -12,11 +12,9 @@
     type: 'GET',
     data: {user_id: user_id, semester: semester, tahun: tahun},
     success: function (response) {
-      if(response.length>0){
-	    
-	    var header = generate_header(response,'pendidikan');
-      var footer = generate_footer(response);
-
+      var header = generate_header(response.user, response.pejabat, 'Pendidikan');
+      var footer = generate_footer(response.user, response.pejabat);
+      if(response.ak.length>0){   
       //No	Uraian Sub Unsur  class="col-print-th"
       var table = '<table class="table table-sm table-bordered ajax-table col-print-12 table-print-border" id="dupak-pendidikan-table">';
 
@@ -28,7 +26,7 @@
               +'<th>Keterangan</th>'
             +'</tr>';
             //response[0].user_dupak.pendidikan.tingkat
-        $.each(response, function (i, item) {
+        $.each(response.ak, function (i, item) {
           var n = i+1;
             table += '<tr>'
               +'<td>' + n + '</td>'

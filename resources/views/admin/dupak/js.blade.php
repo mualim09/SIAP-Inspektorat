@@ -134,6 +134,7 @@
         tab = '<li class="nav-item"><a data-toggle="tab" class="nav-link active" href="#dupak-pengawasan">Pengawasan</a></li>'
               +'<li class="nav-item"><a data-toggle="tab" class="nav-link" href="#dupak-pendidikan">Pendidikan</a></li>'
               +'<li class="nav-item"><a data-toggle="tab" class="nav-link" href="#dupak-penunjang">Penunjang</a></li>'
+              +'<li class="nav-item"><a data-toggle="tab" class="nav-link" href="#dupak-pengembangan">Pengembangan</a></li>'
               +'<li class="nav-item"><a data-toggle="tab" class="nav-link" href="#dupak-diklat">Diklat</a></li>'
               +'<li class="nav-item"><a data-toggle="tab" class="nav-link" href="#dupak-lak">LAK</a></li>'
               +'<li class="nav-item"><a data-toggle="tab" class="nav-link" href="#dupak-dupak">DUPAK</a></li>'
@@ -144,6 +145,7 @@
         generate_tabel_pengawasan();
         generate_tabel_pendidikan();
         generate_tabel_penunjang();
+        generate_tabel_pengembangan();
         generate_tabel_diklat();
         generate_tabel_lak();
         //generate_tabel_pak();
@@ -186,6 +188,7 @@ function printDiv(divName){
 @include('admin.dupak.pendidikan')
 @include('admin.dupak.diklat')
 @include('admin.dupak.penunjang')
+@include('admin.dupak.pengembangan')
 @include('admin.dupak.lak')
 @include('admin.dupak.dupak')
 @include('admin.dupak.pak')

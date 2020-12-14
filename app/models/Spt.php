@@ -43,8 +43,8 @@ class Spt extends Model
     }
 
     public function getPeriodeAttribute(){
-        $start = Carbon::parse($this->tgl_mulai)->formatLocalized('%d %B');
-        $end = Carbon::parse($this->tgl_akhir)->formatLocalized('%d %B %Y');
+        $start = Carbon::parse($this->tgl_mulai)->formatLocalized('%d %b');
+        $end = Carbon::parse($this->tgl_akhir)->formatLocalized('%d %b %Y');
         return $start . ' s.d ' . $end;
     }
 

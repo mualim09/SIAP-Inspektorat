@@ -59,12 +59,21 @@ function add_cell_to_sheet(worksheet, address, value) {
 }
 
 //set generate header function
-function generate_header(response, jenis=''){
-  var irban_kepala_name = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.full_name_gelar ;
-  var irban_kepala_nip = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.nip;
-  var irban_kepala_pangkat = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.formatted_pangkat;
-  var irban_kepala_jabatan = ( response[0].irban_kepala === null ) ? '' : (typeof response[0].irban_kepala.pejabat === 'undefined') ? response[0].irban_kepala.jabatan : 'Plt. '+response[0].irban_kepala.pejabat.name;
+function generate_header(user,pejabat, jenis=''){
+  //console.log(user);
+  //console.log(pejabat.user.full_name_gelar);
+  var irban_kepala_name = ( 'undefined' !== typeof pejabat.user.full_name_gelar ) ? pejabat.user.full_name_gelar : '' ;
+  var irban_kepala_nip = ( 'undefined' !== typeof pejabat.user.nip ) ? pejabat.user.nip : '';
+  var irban_kepala_pangkat = ( 'undefined' !== typeof pejabat.user.formatted_pangkat ) ? pejabat.user.formatted_pangkat : '';
+  var irban_kepala_jabatan = ( pejabat.user === null ) ? '' : (pejabat.status === null ) ? pejabat.name : 'Plt. '+pejabat.name;
   //status_pejabat = (response[0].irban_kepala.pejabat !== null) ? 'PLT ' : '';
+
+   /*var irban_kepala_name = ( response.length>0 && 'undefined' !== typeof response[0].irban_kepala ) ? response[0].irban_kepala.full_name_gelar : '';
+  var irban_kepala_nip =( response.length>0 && 'undefined' !== typeof response[0].irban_kepala ) ? response[0].irban_kepala.nip : '';
+  var irban_kepala_pangkat = ( response.length>0 && 'undefined' !== typeof response[0].irban_kepala ) ? response[0].irban_kepala.formatted_pangkat : '';
+  //var irban_kepala_jabatan = ( response[0].irban_kepala === null ) ? '' : (typeof response[0].irban_kepala.pejabat === 'undefined') ? response[0].irban_kepala.jabatan : 'Plt. '+response[0].irban_kepala.pejabat.name;
+  //status_pejabat = (response[0].irban_kepala.pejabat !== null) ? 'PLT ' : '';
+  var irban_kepala_jabatan = ( response.length<1 || 'undefined' === typeof response[0].irban_kepala ) ? '' : (typeof response[0].irban_kepala.pejabat === 'undefined') ? response[0].irban_kepala.jabatan : 'Plt. '+response[0].irban_kepala.pejabat.name;*/
   
   var header = '<div class="d-none">'
         +'<div class="col-print-12 col-md-12"><h3 class="print-center text-center">SURAT PERNYATAAN<br/>MELAKUKAN KEGIATAN '+jenis.toUpperCase()+'</h3></div>'           
@@ -94,19 +103,19 @@ function generate_header(response, jenis=''){
         +'<div class="row"><div class="col-print-12 col-md-12">Menyatakan bahwa :</div></div>'
         +'<div class="row">'
           +'<div class="col-print-4 col-md-4">Nama</div>'
-          +'<div class="col-print-8 col-md-8">: <strong>'+response[0].user_dupak.full_name_gelar+'</strong></div>'
+          +'<div class="col-print-8 col-md-8">: <strong>'+user.full_name_gelar+'</strong></div>'
         +'</div>'
         +'<div class="row">'
           +'<div class="col-print-4 col-md-4">NIP</div>'
-          +'<div class="col-print-8 col-md-8">: '+response[0].user_dupak.nip+'</div>'
+          +'<div class="col-print-8 col-md-8">: '+user.nip+'</div>'
         +'</div>'
         +'<div class="row">'
           +'<div class="col-print-4 col-md-4">Pangkat / golongan ruang</div>'
-          +'<div class="col-print-8 col-md-8">: '+response[0].user_dupak.formatted_pangkat+'</div>'
+          +'<div class="col-print-8 col-md-8">: '+user.formatted_pangkat+'</div>'
         +'</div>'
         +'<div class="row">'
           +'<div class="col-print-4 col-md-4">Jabatan</div>'
-          +'<div class="col-print-8 col-md-8">: '+response[0].user_dupak.jabatan+'</div>'
+          +'<div class="col-print-8 col-md-8">: '+user.jabatan+'</div>'
         +'</div>'
         +'<div class="row">'
           +'<div class="col-print-4 col-md-4">Unit kerja</div>'
@@ -118,12 +127,16 @@ function generate_header(response, jenis=''){
 }
 
 //set generate_footer function
-function generate_footer(response){
-  var irban_kepala_name = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.full_name_gelar ;
+function generate_footer(user, pejabat){
+  /*var irban_kepala_name = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.full_name_gelar ;
   var irban_kepala_nip = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.nip;
   var irban_kepala_pangkat = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.formatted_pangkat;
   var irban_kepala_jabatan = ( response[0].irban_kepala === null ) ? '' : response[0].irban_kepala.jabatan;
-  var irban_kepala_atasan = ( response[0].irban_kepala === null ) ? '' : (typeof response[0].irban_kepala.pejabat === 'undefined') ? response[0].irban_kepala.jabatan : 'Plt. '+response[0].irban_kepala.pejabat.name;
+  var irban_kepala_atasan = ( response[0].irban_kepala === null ) ? '' : (typeof response[0].irban_kepala.pejabat === 'undefined') ? response[0].irban_kepala.jabatan : 'Plt. '+response[0].irban_kepala.pejabat.name;*/
+  var irban_kepala_name = ( pejabat.user === null ) ? '' : pejabat.user.full_name_gelar ;
+  var irban_kepala_nip = ( pejabat.user === null ) ? '' : pejabat.user.nip;
+  var irban_kepala_pangkat = ( pejabat.user === null ) ? '' : pejabat.user.formatted_pangkat;
+  var irban_kepala_atasan = ( pejabat.user === null ) ? '' : (pejabat.status === null ) ? pejabat.name : 'Plt. '+pejabat.name;
   var footer = '<div class="d-none">'
             +'<div class="row"><div class="col-md-12 col-print-12">Demikian pernyataan ini dibuat untuk dapat dipergunakan sebagaimana mestinya.</div></div>'
             +'<div class="h-20"></div>'
@@ -150,6 +163,14 @@ function generate_footer(response){
             +'</div>'
             +'</div>';
   return footer;
+}
+
+function empty_table(columns_count){
+  var table = '<tr style="min-height: 200px;">';
+              for(let i = 1; i<= columns_count; i++){
+                table += '<td></td>';
+              }
+      table += '</tr>';
 }
 
 </script>

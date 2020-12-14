@@ -3,7 +3,7 @@ namespace App;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use DateTime;
-use App\Event;
+use App\Event, App\User;
 use Code16\CarbonBusiness\BusinessDays;
 class Common
 {
@@ -180,6 +180,40 @@ class Common
             .'</div>';
 
         return $html;
+    }
+
+    static function irban($nama_ruang){
+      if($nama_ruang) :
+        $ruang = self::translateRuang($nama_ruang);
+        //$irban = User::where('ruang->jabatan','kepala')->where('ruang->nama', $ruang->nama_ruang)->first();
+        $irban_default = User::where('jabatan',$ruang)->first();
+        $irban_pengganti = User::whereHas('pejabat', function($q) use ($ruang){
+          $q->where('name', $ruang)->where('status', 'PLT');
+        })->with('pejabat')->first();
+        return (!is_null($irban_pengganti)) ? $irban_pengganti : $irban_default;
+      endif;
+    }
+
+    static function translateRuang($nama_ruang){
+      if($nama_ruang){
+        switch($nama_ruang){
+          case 'IRBAN I':
+            return 'Inspektur Pembantu Wilayah I';
+            break;
+          case 'IRBAN II':
+            return 'Inspektur Pembantu Wilayah II';
+            break;
+          case 'IRBAN III':
+            return 'Inspektur Pembantu Wilayah III';
+            break;
+          case 'IRBAN IV':
+            return 'Inspektur Pembantu Wilayah IV';
+            break;
+          default :
+            return;
+        }
+      }
+      return;
     }
     
 }

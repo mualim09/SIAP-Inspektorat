@@ -4,7 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\models\Spt, App\models\DetailSpt, App\models\Dupak, App\models\Pejabat, App\User;
+use App\models\Spt, App\models\DetailSpt, App\models\Dupak, App\models\Pejabat, App\User, App\Common;
 use App\models\Ppm, App\models\DetailPpm;
 use DB, Yajra\DataTables\DataTables, PDF;
 use Redirect,Response;
@@ -67,10 +67,14 @@ class DupakController extends Controller
         ->whereBetween('tgl_mulai',[$start,$end])->with(['detailSpt','jenisSpt'])->get();*/
 
         //query dari model DetailSpt
-        $data = DetailSpt::whereHas('spt', function($q) use ($start, $end){
+        $data['ak'] = DetailSpt::whereHas('spt', function($q) use ($start, $end){
             $q->whereBetween('tgl_mulai',[$start,$end])->whereNotNull('nomor');
         })->with('spt')
         ->where('unsur_dupak','=','pengawasan')->where('user_id','=',$user_id)->get();
+        $data['user'] = User::where('id',$user_id)->first();
+        $data['pejabat'] = Pejabat::where('name',Common::translateRuang($data['user']->ruang['nama']))->with(['user'=>function($q){
+                    $q->select(['id', 'nip', 'first_name', 'last_name', 'gelar', 'jabatan', 'pangkat']);
+                }])->first();
 
         return $data;
     }
@@ -290,8 +294,11 @@ class DupakController extends Controller
       }else{
           $dupak = $q;
       }
-      $data = $dupak->get();
-
+      $data['ak'] = $dupak->get();
+      $data['user'] = User::where('id',$user_id)->first();
+      $data['pejabat'] = Pejabat::where('name',Common::translateRuang($data['user']->ruang['nama']))->with(['user'=>function($q){
+                    $q->select(['id', 'nip', 'first_name', 'last_name', 'gelar', 'jabatan', 'pangkat']);
+                }])->first();
       return $data;
 
     }
@@ -316,10 +323,14 @@ class DupakController extends Controller
         }
 
         //query dari model DetailSpt
-        $data = DetailSpt::whereHas('sptUmum', function($q) use ($start, $end){
+        $data['ak'] = DetailSpt::whereHas('sptUmum', function($q) use ($start, $end){
             $q->whereBetween('tgl_mulai',[$start,$end])->whereNotNull('nomor');
         })->with('sptUmum')
         ->where('unsur_dupak','=','diklat')->where('user_id','=',$user_id)->get();
+        $data['user'] = User::where('id',$user_id)->first();
+        $data['pejabat'] = Pejabat::where('name',Common::translateRuang($data['user']->ruang['nama']))->with(['user'=>function($q){
+                    $q->select(['id', 'nip', 'first_name', 'last_name', 'gelar', 'jabatan', 'pangkat']);
+                }])->first();
 
         return $data;
         //getDupakPenunjang
@@ -345,13 +356,53 @@ class DupakController extends Controller
         }
 
         //query dari model DetailSpt
-        $data = DetailSpt::whereHas('sptUmum', function($q) use ($start, $end){
+        $data['ak'] = DetailSpt::whereHas('sptUmum', function($q) use ($start, $end){
             $q->whereBetween('tgl_mulai',[$start,$end])->whereNotNull('nomor');
         })->with('sptUmum')
         ->where('unsur_dupak','=','penunjang')->where('user_id','=',$user_id)->get();
+        $data['user'] = User::where('id',$user_id)->first();
+        $data['pejabat'] = Pejabat::where('name',Common::translateRuang($data['user']->ruang['nama']))->with(['user'=>function($q){
+                    $q->select(['id', 'nip', 'first_name', 'last_name', 'gelar', 'jabatan', 'pangkat']);
+                }])->first();
 
         return $data;
-        //getDupakPenunjang
+    }
+
+    public function getDupakPengembangan(Request $request){
+        $user_id = ($request->user_id) ? $request->user_id : auth()->user()->id;
+        $year = ($request->tahun) ? $request->tahun : date('Y');
+        if(isset($request->semester)) {
+            if($request->semester == 1) {
+                $start = date("Y-m-d H:i:s", strtotime("$year-01-01"));
+                $end = date("Y-m-d H:i:s", strtotime("$year-06-30"));
+            }
+            elseif ($request->semester == 2) {
+                $start = date("Y-m-d H:i:s", strtotime("$year-07-01"));
+                $end = date("Y-m-d H:i:s", strtotime("$year-12-31"));
+            }else{
+                return response('Pilih periode semester terlebih dahulu.', 401);
+            }
+        }else{
+            $start = ( date('n')<=6 ) ? date("Y-m-d H:i:s", strtotime("$year-01-01")) : date("Y-m-d H:i:s", strtotime("$year-07-01"));
+            $end = ( date('n')<=6 ) ? date("Y-m-d H:i:s", strtotime("$year-06-30")) : date("Y-m-d H:i:s", strtotime("$year-12-31"));
+        }
+
+        //dupak pengembangan profesi
+        $pengembangan = DetailSpt::whereHas('sptUmum', function($q) use ($start, $end){
+            $q->whereBetween('tgl_mulai',[$start,$end])->whereNotNull('nomor');
+        })->with('sptUmum')
+        ->where('unsur_dupak','=','pengembangan profesi')->where('user_id','=',$user_id)->get();
+        $ppm = DetailPpm::whereHas('ppm', function($q) use ($start, $end){
+            $q->whereBetween('tgl_mulai',[$start,$end]);
+        })->with('ppm')
+        ->where('unsur_dupak','=','pengembangan profesi')->where('user_id','=',$user_id)->get();
+        $pengembangan->concat($ppm);
+        $data['ak'] = $pengembangan;
+        $data['user'] = User::where('id',$user_id)->first();
+        $data['pejabat'] = Pejabat::where('name',Common::translateRuang($data['user']->ruang['nama']))->with(['user'=>function($q){
+                    $q->select(['id', 'nip', 'first_name', 'last_name', 'gelar', 'jabatan', 'pangkat']);
+                }])->first();
+        return $data;
     }
 
     public function getLak(Request $request){

@@ -300,6 +300,7 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
     	Route::get('pendidikan', 'DupakController@getDupakPendidikan')->name('data_dupak_pendidikan');
     	Route::get('diklat', 'DupakController@getDupakDiklat')->name('data_dupak_diklat');
     	Route::get('penunjang', 'DupakController@getDupakPenunjang')->name('data_dupak_penunjang');
+    	Route::get('pengembangan', 'DupakController@getDupakPengembangan')->name('data_dupak_pengembangan');
     	Route::get('lak', 'DupakController@getLak')->name('data_dupak_lak');
     	Route::get('pak', 'DupakController@userPak')->name('user_pak');
     	Route::get('lama', 'DupakController@dupakLama')->name('dupak_lama');
