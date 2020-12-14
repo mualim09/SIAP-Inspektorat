@@ -119,6 +119,11 @@ class User extends Authenticatable implements HasMedia
     public function scopeActive($q){
         return $q->where('user_status', 'aktif');
     }
+    public function scopeAuditor($query){
+        return $query->whereHas('roles', function($q){
+                $q->where('name','Auditor');
+        });
+    }
 
     //relasi ke pejabat
     public function pejabat(){
@@ -133,7 +138,7 @@ class User extends Authenticatable implements HasMedia
 
         $query = DB::table('pejabat')
                     ->join('users','pejabat.user_id','=','users.id')
-                    ->whereNotNull('status')
+                    ->where('name','PPM')
                     ->get()
         ;
         // dd(!is_null($query));
