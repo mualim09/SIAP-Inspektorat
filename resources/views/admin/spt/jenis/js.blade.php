@@ -113,8 +113,7 @@
     }
     $("#jenis-spt-form").validate({
         ignore: ":hidden, [contenteditable='true']:not([name])",
-        rules: {
-            name : {required: true, minlength: 3},
+        rules: {            
             kode_kelompok: {required: true, minlength: 1}
         },
         submitHandler: function(form){

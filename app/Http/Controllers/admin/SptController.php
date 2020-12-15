@@ -736,7 +736,9 @@ class SptController extends Controller
                         //$return .= $this->buildControl('cetakPdf',$col->id);
                         $return .= $this->buildControl('docx',$col->id);
                         $return .= $this->buildControl('editForm',$col->id);
-                        $return .= $this->buildControl('deleteData',$col->id);
+                        if( auth()->user()->hasAnyRole(['Super Admin']) ){
+                            $return .= $this->buildControl('deleteData',$col->id);
+                        }
                     }
                     return $return;
                 })

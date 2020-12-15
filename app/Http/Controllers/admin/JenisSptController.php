@@ -56,7 +56,7 @@ class JenisSptController extends Controller
     {
         $this->validate($request,[
             'sebutan' => 'string|min:3|max:191',
-            'name' => 'required|string|max:191|min:3',
+            'name' => 'string|nullable',
             'dasar' => 'string|nullable',
             //'isi' => 'required|string|min:10',
             //'kategori' => 'required|string|min:5',
@@ -119,7 +119,7 @@ class JenisSptController extends Controller
     {
         $jenis_spt = JenisSpt::findOrFail($id);
         $this->validate($request,[
-            'name' => 'required|string|max:255|min:3',
+            'name' => 'string|nullable',
             'sebutan' => 'string|min:3|max:191',
             'dasar' => 'string|nullable',
             'kode_kelompok' => 'required|string|min:3',
@@ -202,7 +202,9 @@ class JenisSptController extends Controller
         $user = auth()->user();
         $control = '';
         if($user->hasAnyRole(['TU Perencanaan','Super Admin'])){
-            $control .= '<a href="javascript:void(0);" onclick="editForm('. $id .')" data-toggle="tooltip" title="Edit Jenis SPT" class="btn btn-outline-primary btn-sm"><i class="ni ni-single-copy-04"></i></a>';
+            $control .= '<a href="javascript:void(0);" onclick="editForm('. $id .')" data-toggle="tooltip" title="Edit Jenis SPT" class="btn btn-outline-primary btn-sm"><i class="ni ni-single-copy-04"></i></a>';            
+        }
+        if($user->hasAnyRole(['Super Admin'])){
             $control .= '<a href="javascript:void(0);" onclick="deleteData('. $id .')" data-toggle="tooltip" title="Hapus Jenis SPT" class="btn btn-outline-danger btn-sm"><i class="fa fa-times"></i></a>';
         }
         if ($user->can('View SPT')) {
