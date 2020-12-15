@@ -71,8 +71,7 @@ class SptController extends Controller
         $pms = User::whereIn('jabatan', ['Auditor Utama', 'Auditor Madya'])->get(); 
         $pts = User::whereIn('jabatan', ['Auditor Utama', 'Auditor Madya', 'Auditor Muda'])->get(); 
         $kets = User::whereIn('jabatan', ['Auditor Madya', 'Auditor Muda','Auditor Pertama'])->get();
-        $anggotas = User::whereNotIn('jabatan', ['Auditor Utama'])->doesntHave('pejabat')
-                ->where('email','!=','admin@local.host')
+        $anggotas = User::whereNotIn('jabatan', ['Inspektur Kabupaten','Inspektur Pembantu Wilayah I','Inspektur Pembantu Wilayah II','Inspektur Pembantu Wilayah III','Inspektur Pembantu Wilayah IV','Auditor Utama'])
                 ->orderBy('ruang->nama','asc')
                 ->get();
                 
@@ -684,7 +683,7 @@ class SptController extends Controller
 
         $user = auth()->user();
        /* $cols = Spt::orderBy('created_at', 'desc')->get();*/
-        $cols = $spt->orderBy('created_at', 'desc')->get();
+        $cols = $spt->orderBy('tgl_mulai', 'desc')->get();
         $dt = Datatables::of($cols)
                 ->addIndexColumn()
                 ->addColumn('jenis_spt', function($col){
@@ -711,7 +710,7 @@ class SptController extends Controller
                 ->addColumn('ringkasan', function($col){
                     $tambahan = (!is_null($col->tambahan) ) ? '<br /> <small class="text-muted"> ' . Common::cutText($col->tambahan, 2, 70) . '</small>' : '';
                     $lokasi = (!is_null($col->lokasi_id) ) ? '<small class="text-muted">di ' . $col->lokasi_spt . '</small>' : '';
-                    return $col->jenisSpt->name . $tambahan . $lokasi;
+                    return "<div class='text-wrap'>" . $col->jenisSpt->name . $tambahan . $lokasi ."</div>";
                     /*$tambahan = (!is_null($col->tambahan) ) ? Common::cutText($col->tambahan, 2) : '';
                     $ringkasan = [
                         'jenis' => $col->jenisSpt->nama_sebutan,
@@ -734,7 +733,7 @@ class SptController extends Controller
                     }
                     if($col->nomor == null){
                         $return .= $this->buildControl('penomoran', $col->id);
-                        $return .= $this->buildControl('cetakPdf',$col->id);
+                        //$return .= $this->buildControl('cetakPdf',$col->id);
                         $return .= $this->buildControl('docx',$col->id);
                         $return .= $this->buildControl('editForm',$col->id);
                         $return .= $this->buildControl('deleteData',$col->id);
