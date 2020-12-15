@@ -1343,6 +1343,8 @@ class SptController extends Controller
             //perhitungan kumulatif lama_jam per detail_spt (sesuai user_id dan data detail kuota per tanggal kalender spt)
             $lama_jam = array_sum($detail_kuota[$i][$detail->user_id]);
 
+            //jika melakukan cek di ppm, kurangi $lama_jam 2 jam per ppm per tanggal kalender, jika ada 2 ppm di tanggal yang sama, kurangi 4
+
             //perhitungan dupak berdasarkan lama_jam kuota kalender dan fungsi peran spt
             $dupak = $this->hitungDupak($detail->user_id,$detail->peran,$lama_jam);
 

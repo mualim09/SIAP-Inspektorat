@@ -396,8 +396,10 @@ class DupakController extends Controller
             $q->whereBetween('tgl_mulai',[$start,$end]);
         })->with('ppm')
         ->where('unsur_dupak','=','pengembangan profesi')->where('user_id','=',$user_id)->get();
-        $pengembangan->concat($ppm);
-        $data['ak'] = $pengembangan;
+        //$pengembangan->concat($ppm);$entries->toBase()->merge($posts);
+        //$pengembangan->toBase()->merge($ppm);
+        $data['ak']['spt'] = $pengembangan;
+        $data['ak']['ppm']= $ppm;
         $data['user'] = User::where('id',$user_id)->first();
         $data['pejabat'] = Pejabat::where('name',Common::translateRuang($data['user']->ruang['nama']))->with(['user'=>function($q){
                     $q->select(['id', 'nip', 'first_name', 'last_name', 'gelar', 'jabatan', 'pangkat']);

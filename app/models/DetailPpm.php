@@ -10,6 +10,9 @@ class DetailPpm extends Model
     protected $table = 'detail_ppm';
     protected $appends = [];
   	public $timestamps = false;
+    protected $casts = [
+        'info_dupak' => 'array'
+    ];
 
   	public function users(){
     	return $this->hasMany('App\User');
@@ -17,5 +20,18 @@ class DetailPpm extends Model
 
     public function ppm(){
         return $this->belongsTo('App\models\Ppm','id_ppm');
+    }
+
+    public function setInfoDupakAttribute($value)
+    {
+        $info_dupak = [];
+
+        foreach ($value as $array_item) {
+            if (!is_null($array_item['info_dupak'])) {
+                $info_dupak[] = $array_item;
+            }
+        }
+
+        $this->attributes['info_dupak'] = json_encode($info_dupak);
     }
 }
