@@ -56,7 +56,7 @@ function generate_tabel_pengembangan(){
            +'<td style="text-align: center;">' + item.spt_umum.periode + '</td>'
            +'<td style="text-align: center">'+ item.info_dupak.koefisien +'</td>'
            +'<td style="text-align: center">'+ item.info_dupak.lama_jam +'</td>' 
-           +'<td style="text-align: center">'+ item.info_dupak.dupak +'</td>'
+           +'<td style="text-align: center">'+ parseFloat(item.info_dupak.dupak).toFixed(3) +'</td>'
            +'<td>'+ item.peran+'<br/><br/></td>'
            +'</tr>';
            sumPengembangan += parseFloat(item.info_dupak.dupak);
@@ -76,7 +76,7 @@ function generate_tabel_pengembangan(){
                +'<td style="text-align: center;">' + item.ppm.periode + '</td>'
                +'<td style="text-align: center">'+ item.info_dupak.koefisien +'</td>'
                +'<td style="text-align: center">'+ item.info_dupak.lama_jam +'</td>' 
-               +'<td style="text-align: center">'+ item.info_dupak.dupak +'</td>'
+               +'<td style="text-align: center">'+ parseFloat(item.info_dupak.dupak).toFixed(3) +'</td>'
                +'<td>'+ item.peran+'<br/><br/></td>'
                +'</tr>';
            sumPengembangan += parseFloat(item.info_dupak.dupak);

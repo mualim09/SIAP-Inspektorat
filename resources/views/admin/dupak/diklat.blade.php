@@ -51,7 +51,7 @@
               +'<td style="text-align: center;">' + item.spt_umum.periode + '</td>'
               +'<td style="text-align: center">'+ item.info_dupak.koefisien +'</td>'
               +'<td style="text-align: center">'+ item.info_dupak.lama_jam +'</td>' 
-              +'<td style="text-align: center">'+ item.info_dupak.dupak +'</td>'
+              +'<td style="text-align: center">'+ parseFloat(item.info_dupak.dupak).toFixed(3) +'</td>'
               +'<td>SPT No.700/'+ item.spt_umum.nomor +'/438.4/'+year+'<br/><br/></td>'
               +'</tr>';
            sumDiklat += parseFloat(item.info_dupak.dupak);

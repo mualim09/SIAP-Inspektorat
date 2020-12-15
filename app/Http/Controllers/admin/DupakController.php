@@ -69,8 +69,11 @@ class DupakController extends Controller
         //query dari model DetailSpt
         $data['ak'] = DetailSpt::whereHas('spt', function($q) use ($start, $end){
             $q->whereBetween('tgl_mulai',[$start,$end])->whereNotNull('nomor');
-        })->with('spt')
-        ->where('unsur_dupak','=','pengawasan')->where('user_id','=',$user_id)->get();
+        })->with(['spt'=>function($q){
+            $q->orderBy('tgl_mulai', 'asc');
+        }])
+        ->join('spt', 'spt.id', '=', 'detail_spt.spt_id')
+        ->where('unsur_dupak','=','pengawasan')->where('user_id','=',$user_id)->orderBy('tgl_mulai', 'asc')->get();
         $data['user'] = User::where('id',$user_id)->first();
         $data['pejabat'] = Pejabat::where('name',Common::translateRuang($data['user']->ruang['nama']))->with(['user'=>function($q){
                     $q->select(['id', 'nip', 'first_name', 'last_name', 'gelar', 'jabatan', 'pangkat']);
@@ -326,7 +329,8 @@ class DupakController extends Controller
         $data['ak'] = DetailSpt::whereHas('sptUmum', function($q) use ($start, $end){
             $q->whereBetween('tgl_mulai',[$start,$end])->whereNotNull('nomor');
         })->with('sptUmum')
-        ->where('unsur_dupak','=','diklat')->where('user_id','=',$user_id)->get();
+        ->join('spt_umum', 'spt_umum.id', '=', 'detail_spt.spt_id')
+        ->where('unsur_dupak','=','diklat')->where('user_id','=',$user_id)->orderBy('tgl_mulai','asc')->get();
         $data['user'] = User::where('id',$user_id)->first();
         $data['pejabat'] = Pejabat::where('name',Common::translateRuang($data['user']->ruang['nama']))->with(['user'=>function($q){
                     $q->select(['id', 'nip', 'first_name', 'last_name', 'gelar', 'jabatan', 'pangkat']);
@@ -359,7 +363,8 @@ class DupakController extends Controller
         $data['ak'] = DetailSpt::whereHas('sptUmum', function($q) use ($start, $end){
             $q->whereBetween('tgl_mulai',[$start,$end])->whereNotNull('nomor');
         })->with('sptUmum')
-        ->where('unsur_dupak','=','penunjang')->where('user_id','=',$user_id)->get();
+        ->join('spt_umum', 'spt_umum.id', '=', 'detail_spt.spt_id')
+        ->where('unsur_dupak','=','penunjang')->where('user_id','=',$user_id)->orderBy('tgl_mulai','asc')->get();
         $data['user'] = User::where('id',$user_id)->first();
         $data['pejabat'] = Pejabat::where('name',Common::translateRuang($data['user']->ruang['nama']))->with(['user'=>function($q){
                     $q->select(['id', 'nip', 'first_name', 'last_name', 'gelar', 'jabatan', 'pangkat']);
@@ -391,11 +396,13 @@ class DupakController extends Controller
         $pengembangan = DetailSpt::whereHas('sptUmum', function($q) use ($start, $end){
             $q->whereBetween('tgl_mulai',[$start,$end])->whereNotNull('nomor');
         })->with('sptUmum')
-        ->where('unsur_dupak','=','pengembangan profesi')->where('user_id','=',$user_id)->get();
+        ->join('spt_umum', 'spt_umum.id', '=', 'detail_spt.spt_id')
+        ->where('unsur_dupak','=','pengembangan profesi')->where('user_id','=',$user_id)->orderBy('tgl_mulai','asc')->get();
         $ppm = DetailPpm::whereHas('ppm', function($q) use ($start, $end){
             $q->whereBetween('tgl_mulai',[$start,$end]);
         })->with('ppm')
-        ->where('unsur_dupak','=','pengembangan profesi')->where('user_id','=',$user_id)->get();
+        ->join('ppm', 'ppm.id', '=', 'detail_ppm.id_ppm')
+        ->where('unsur_dupak','=','pengembangan profesi')->where('user_id','=',$user_id)->orderBy('tgl_mulai','asc')->get();
         //$pengembangan->concat($ppm);$entries->toBase()->merge($posts);
         //$pengembangan->toBase()->merge($ppm);
         $data['ak']['spt'] = $pengembangan;
