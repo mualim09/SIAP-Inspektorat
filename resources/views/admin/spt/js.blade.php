@@ -25,7 +25,7 @@
             {'defaultContent' : '', 'data' : 'DT_RowIndex', 'name' : 'DT_RowIndex', 'title' : 'No', 'orderable' : false, 'searchable' : false, 'exportable' : true, 'printable' : true
             },
             {data: 'nomor', name: 'nomor', 'title': "{{ __('No SPT') }}"},
-            {data: 'jenis_spt', name: 'jenis_spt', 'title': "{{ __('Jenis SPT') }}", width: '300px'},
+            /*{data: 'jenis_spt', name: 'jenis_spt', 'title': "{{ __('Jenis SPT') }}", width: '300px'},*/
             {data: 'ringkasan', name: 'ringkasan', 'title': "{{ __('Ringkasan') }}", width: '300px'},
             {data: 'tanggal_mulai', name: 'tanggal_mulai', 'title': "{{ __('Tanggal Mulai') }}", width: '150px'},
             {data: 'tanggal_akhir', name: 'tanggal_akhir', 'title': "{{ __('Tanggal Akhir') }}", width: '150px'},

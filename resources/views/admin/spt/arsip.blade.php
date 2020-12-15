@@ -5,13 +5,13 @@
 @endsection
 
 @section('tab_content_arsip')
-<div class="tab-pane" id="arsip-tab" role="tabpanel" aria-labelledby="arsip-tab">
+<!-- <div class="tab-pane" id="arsip-tab" role="tabpanel" aria-labelledby="arsip-tab">
   <h4 class="text-center"> Arsip SPT Pengawasan </h4>
 <div class="modal-body">
   <div class="card">
     <div class="card-body table-responsive">
       <div class="table-responsive">
-          <table id="arsip-spt" class="table table-striped table-sm ajax-table" style="border-collapse: collapse;margin: 0;padding: 0;width: 100%;">
+          <table id="arsip-spt" class="table table-striped table-sm ajax-table" style="border-collapse: collapse;margin: 0;padding: 0;width: 100%;table-layout: fixed;">
               <thead></thead>
               <tbody></tbody>
           </table>
@@ -19,6 +19,14 @@
     </div>
   </div>
 </div>
+</div> -->
+
+<div class="tab-pane" id="arsip-tab" role="tabpanel">
+  <h4 class="text-center"> Arsip SPT Pengawasan </h4>
+  <table id="arsip-spt" class="table table-striped table-sm ajax-table" style="border-collapse: collapse;margin: 0;padding: 0;width: 100%;table-layout: fixed;">
+      <thead></thead>
+      <tbody></tbody>
+  </table>
 </div>
 @endsection
 
@@ -41,6 +49,9 @@
         "opts": {
           "theme": "bootstrap",
         },
+        fixedColumns:   {
+            heightMatch: 'auto'
+        },
         processing: true,
         serverSide: true,
         ajax: '{{ route("get_data_spt","arsip") }}',
@@ -48,7 +59,7 @@
         columns: [
           {'defaultContent' : '', 'data' : 'DT_RowIndex', 'name' : 'DT_RowIndex', 'title' : 'No', 'orderable' : false, 'searchable' : false, 'exportable' : true, 'printable' : true},
           {data: 'nomor', name: 'nomor', 'title': "{{ __('Nomor') }}"},
-          {data: 'jenis_spt', name: 'jenis_spt', 'title': "{{ __('Jenis SPT') }}"},
+          /*{data: 'jenis_spt', name: 'jenis_spt', 'title': "{{ __('Jenis SPT') }}"},*/
           {data: 'ringkasan', name: 'ringkasan', 'title': "{{ __('Ringkasan') }}", 'allowHTML': true},
           /*{data: 'tanggal_mulai', name: 'tanggal_mulai', 'title': "{{ __('Tanggal Mulai') }}"},
           {data: 'tanggal_akhir', name: 'tanggal_akhir', 'title': "{{ __('Tanggal Akhir') }}"},*/
@@ -59,19 +70,19 @@
         columnDefs : [
           {"width": '2%', "targets": 0},
           {"width": '5%', "targets": 1},
-          {"width": '10%', "targets": 2},
+          /*{"width": '10%', "targets": 2},*/
           {
-            "width": '45%', 
-            "targets": 3,
+            "width": '53%', 
+            "targets": 2,
             //"data" : null,
             /*"render": function ( data, type, row, meta ) {
               tambahan = (data.tambahan.length > 0 ) ? '<br/><small class="text-muted">'+data.tambahan+'</small>' : ''
               return data.jenis+tambahan;
             }*/
           },
-          {"width": '20%', "targets": 4},
-          {"width": '5%', "targets": 5},
-          {"width": '15%', "targets": 6},
+          {"width": '20%', "targets": 3},
+          {"width": '5%', "targets": 4},
+          {"width": '15%', "targets": 5},
         ]
     });
 </script>

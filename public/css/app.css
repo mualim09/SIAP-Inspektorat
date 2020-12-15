@@ -241,3 +241,12 @@ div.data-user{
 div.selectize-input{
   z-index: 0 !important;
 }
+.dataTables tbody tr {
+min-height: 35px; /* or whatever height you need to make them all consistent */
+}
+.text-wrap{
+    white-space:normal;
+}
+.width-300{
+    width:300px;
+}

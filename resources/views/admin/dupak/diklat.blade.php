@@ -38,6 +38,7 @@
                   +'<th>7</th>'
                   +'<th>8</th>'
               +'</tr>';
+      var sumDiklat = 0, sumLamaDiklat=0, sumLamaJamDiklat=0;
       if(response.ak.length > 0) {
         var year = new Date().getFullYear();
         $.each(response.ak, function (i, item) {
@@ -48,11 +49,14 @@
               +'<td>'+ item.spt_umum.info_untuk_umum+'</td>'
               //+'<td>' + item.spt.periode + '<br />' + item.spt.lama + '</td>'
               +'<td style="text-align: center;">' + item.spt_umum.periode + '</td>'
-              +'<td style="text-align: center">'+ item.info_dupak.dupak +'</td>'
-              +'<td style="text-align: center">'+ item.info_dupak.lama +'</td>' 
+              +'<td style="text-align: center">'+ item.info_dupak.koefisien +'</td>'
+              +'<td style="text-align: center">'+ item.info_dupak.lama_jam +'</td>' 
               +'<td style="text-align: center">'+ item.info_dupak.dupak +'</td>'
               +'<td>SPT No.700/'+ item.spt_umum.nomor +'/438.4/'+year+'<br/><br/></td>'
               +'</tr>';
+           sumDiklat += parseFloat(item.info_dupak.dupak);
+           sumLamaDiklat += parseInt(item.spt_umum.lama);
+           sumLamaJamDiklat += parseInt(item.info_dupak.lama_jam);
         });       
         
         //$( "#dupak-diklat-wrapper" ).html(header+table+footer);
@@ -69,6 +73,16 @@
               +'<td></td>'
               +'</tr>';
       }
+       table += '<tr style="text-align:center; font-weight: bold;">'
+              +'<td ></td>'
+              +'<td></td>'
+              +'<td>JUMLAH</td>'
+              +'<td>'+sumLamaDiklat+'</td>'
+              +'<td></td>'
+              +'<td>'+sumLamaJamDiklat+'</td>' 
+              +'<td>'+sumDiklat.toFixed(3)+'</td>'
+              +'<td></td>'
+              +'</tr>';
       table += '</table>';
       $( "#dupak-diklat-wrapper" ).html(header+table+footer);
     }
