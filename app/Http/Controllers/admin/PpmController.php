@@ -184,7 +184,7 @@ class PpmController extends Controller
                                 'koefisien' => $koefisien_workshop_m
                             ];
                             // dd($dupak_workshop_m);
-                            $save_detail_ppm_m = DetailPpm::insert(['id_ppm' => $ppm_id->id,'user_id' => $request->moderator_narasumber[$index_m_pelatihan],'peran' => $peran,'lama' => $lama,'info_dupak'=>json_encode($dupak_workshop_m),'unsur_dupak' => $request->unsur_ppm]);
+                            $save_detail_ppm_m = DetailPpm::insert(['id_ppm' => $ppm_id->id,'user_id' => $request->moderator_narasumber[$index_m_pelatihan],'peran' => $peran,'lama' => $lama,'info_dupak'=>json_encode($dupak_workshop_m),'unsur_dupak' => 'pengembangan profesi']);
                             /*end set moderator ppm*/
                             
 
@@ -235,7 +235,7 @@ class PpmController extends Controller
                         'koefisien' => $koefisien_workshop_m
                     ];
                     // dd($dupak_workshop_m);
-                    $save_detail_ppm_m = DetailPpm::insert(['id_ppm' => $ppm_id->id,'user_id' => $request->moderator_narasumber[$index_m_pelatihan],'peran' => $peran,'lama' => $lama,'info_dupak'=>json_encode($dupak_workshop_m),'unsur_dupak' => $request->unsur_ppm]);
+                    $save_detail_ppm_m = DetailPpm::insert(['id_ppm' => $ppm_id->id,'user_id' => $request->moderator_narasumber[$index_m_pelatihan],'peran' => $peran,'lama' => $lama,'info_dupak'=>json_encode($dupak_workshop_m),'unsur_dupak' => 'pengembangan profesi']);
                 }
 
 
@@ -266,7 +266,7 @@ class PpmController extends Controller
 
                             $hari_efektif_workshop_p = 1;
                             $lama_jam_workshop_p = 3;
-                            $koefisien_workshop_p = 0.01;
+                            $koefisien_workshop_p = 0.1;
                             $nilai_dupak_workshop_p = $koefisien_workshop_p * $lama_jam_workshop_p;
                             $peran_p = 'Peserta';
 
@@ -278,7 +278,7 @@ class PpmController extends Controller
                                 'koefisien' => $koefisien_workshop_p
                             ];
                             // dd($dupak_pelatihan_p);
-                            $save_detail_ppm = DetailPpm::insert(['id_ppm' => $ppm_id->id,'user_id' => $request->id_anggota_ppm[$index_p_pelatihan],'peran' => $peran_p,'lama' => $lama,'info_dupak'=>json_encode($dupak_pelatihan_p),'unsur_dupak' => $request->unsur_ppm]);
+                            $save_detail_ppm = DetailPpm::insert(['id_ppm' => $ppm_id->id,'user_id' => $request->id_anggota_ppm[$index_p_pelatihan],'peran' => $peran_p,'lama' => $lama,'info_dupak'=>json_encode($dupak_pelatihan_p),'unsur_dupak' => 'pengembangan profesi']);
                             
                             /*peserta dupak terimbas */
                             foreach ($getdate_peserta_pelatihan as $i => $v) {
@@ -314,7 +314,7 @@ class PpmController extends Controller
 
                     $hari_efektif_workshop_p = 1;
                     $lama_jam_workshop_p = 3;
-                    $koefisien_workshop_p = 0.01;
+                    $koefisien_workshop_p = 0.1;
                     $nilai_dupak_workshop_p = $koefisien_workshop_p * $lama_jam_workshop_p;
                     $peran_p = 'Peserta';
 
@@ -326,7 +326,7 @@ class PpmController extends Controller
                         'koefisien' => $koefisien_workshop_p
                     ];
                     // dd($dupak_pelatihan_p);
-                    $save_detail_ppm = DetailPpm::insert(['id_ppm' => $ppm_id->id,'user_id' => $request->id_anggota_ppm[$index_p_pelatihan],'peran' => $peran_p,'lama' => $lama,'info_dupak'=>json_encode($dupak_pelatihan_p),'unsur_dupak' => $request->unsur_ppm]);
+                    $save_detail_ppm = DetailPpm::insert(['id_ppm' => $ppm_id->id,'user_id' => $request->id_anggota_ppm[$index_p_pelatihan],'peran' => $peran_p,'lama' => $lama,'info_dupak'=>json_encode($dupak_pelatihan_p),'unsur_dupak' => 'pengembangan profesi']);
                 }
 
                 

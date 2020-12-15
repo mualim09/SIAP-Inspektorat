@@ -484,12 +484,12 @@ $("#form-ppm").validate({
             contentType: false,
             success: function(data){
                 // console.log('success:',data);
-                // $("#form-ppm")[0].reset();
-                // $('#tabel-ppm').DataTable().ajax.reload();
+                $("#form-ppm")[0].reset();
+                $('#tabel-ppm').DataTable().ajax.reload();
                 // $('#form-session-anggota-ppm')[0].reset();
                 // // location.reload();
                 // // $('#tabel-anggota-ppm-wrapper').html(data);
-                // $('#formPpm').modal('hide');                   
+                $('#formPpm').modal('hide');                   
             },
             error: function(request, status, error){                      
               console.log(request);
