@@ -201,6 +201,7 @@
                 <label for="nota-dinas-ppm" class="col-md-2 col-form-label">{{ __('Upload Nota Dinas') }}</label>
                 <div class="col-md-8">
                      <input type="file" id="file-nota-dinas" name="file_nota_dinas" accept=".pdf">
+                     <small id="infoKegiatanHelp" class="form-text text-muted">File format pdf, max 2MB</small>
                 </div>                  
             </div>
             <!-- end upload note dinas ppm -->

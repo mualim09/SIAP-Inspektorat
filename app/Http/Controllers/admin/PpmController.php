@@ -67,8 +67,10 @@ class PpmController extends Controller
               })
               ->addColumn('action', function($col){
                     $return = '';
-                    $return .= '<a href="#" onclick="showModalListPpm('.$col->id.')" class="btn btn-success">Lihat Anggota</a>';
-                    $return .= '<a href="#" onclick="hapus_ppm('.$col->id.')" data-toggle="tooltip" title="Hapus" class="btn btn-danger"><i class="ni ni-fat-remove"></i></a>';
+                    $return .= '<a href="#" onclick="showModalListPpm('.$col->id.')" title="Lihat anggota ppm" class="btn btn-success">Lihat Anggota</a>';
+                    // dd($col->nama_file);
+                    $return .= '<a href="'.url('/storage/ppm/'.$col->nama_file).'" onclick="#" title="Lihat nota dinas" class="btn btn-info"><i class="ni ni-folder-17"></i></a>';
+                    $return .= '<a href="#" onclick="hapus_ppm('.$col->id.')" data-toggle="tooltip" title="Hapus ppm" class="btn btn-danger"><i class="ni ni-fat-remove"></i></a>';
                     return $return;
               })
               ->rawColumns(['ringkasan', 'action'])
@@ -262,7 +264,7 @@ class PpmController extends Controller
                         /*BELUM ada*/
                         if (count($check_same_ppm_p) < 2) {
                             
-                            $this->storeNotaDinas($ppm->id, $request->file_nota_dinas);
+                            // $this->storeNotaDinas($ppm->id, $request->file_nota_dinas);
 
                             $hari_efektif_workshop_p = 1;
                             $lama_jam_workshop_p = 3;
@@ -310,7 +312,6 @@ class PpmController extends Controller
                         }
                     }
                 }else{
-                    $this->storeNotaDinas($ppm->id, $request->file_nota_dinas);
 
                     $hari_efektif_workshop_p = 1;
                     $lama_jam_workshop_p = 3;
@@ -331,6 +332,7 @@ class PpmController extends Controller
 
                 
             }
+            $this->storeNotaDinas($ppm->id, $request->file_nota_dinas);
             return redirect()->back()->with('msg','Data Moderator dan Peserta Pelatihan Kantor Sendiri berhasil diinputkan!');
             /*alasan di bedakan foreachnya karena sudah berbeda index / data arraynya antara moderator dengan peserta*/
         }
@@ -339,6 +341,7 @@ class PpmController extends Controller
     // fungsi upload file nota dinas 
     public function storeNotaDinas($ppm_id,$file)
     {
+
         if (isset($ppm_id,$file)){
             $ppm = Ppm::find($ppm_id);
 
