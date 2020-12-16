@@ -11,10 +11,40 @@
           <breadcrumb-item>/ Dokumen</breadcrumb-item> 
           <breadcrumb-item active>/ Kalender</a></breadcrumb-item>
         </breadcrumb>
-      </div>        
+      </div>
+    </div>
+
+      <form id="goto-calendar">
+        <div class="form-group row">  
+          <label for="tahun" class="col-form-label col-md-1 text-right">{{ __('Tahun') }}</label>
+          <div class="col-md-2">
+            <input type="text" name="tahun" value="" id="tahun" class="form-control" placeholder="{{ date('Y') }}">
+          </div>
+          <div class="col-md-1">
+            <button type="submit" class="btn btn-primary">Cari</button>
+          </div>       
+        </div>
+       </form>
+       <script type="text/javascript">
+         $("#goto-calendar").on('submit', function(){
+          var tahun = $('#tahun').val();
+          var url = "{{ route('calendar')}}";
+          $.ajax({
+            url: url,
+            type: "GET",
+            data: {tahun: tahun},
+            success: function(response){
+              console.log('success');
+            },
+            error: function(error){
+              console.log(error);
+            }
+          });
+         });
+       </script>
       <div class="col d-flex justify-content-end text-right">
-        <button class="btn btn-sm btn-secondary" id="btn-smt-1"><span>Januari - Juni {{date('Y')}}</span></button>
-        <button class="btn btn-sm btn-secondary" id="btn-smt-2"><span>Juli - Desember {{date('Y')}}</span></button>
+        <button class="btn btn-sm btn-secondary" id="btn-smt-1"><span>Januari - Juni </span></button>
+        <button class="btn btn-sm btn-secondary" id="btn-smt-2"><span>Juli - Desember </span></button>
         <button class="btn btn-sm btn-secondary" id="print-btn"><i class="fas fa-print"></i><span>Print Calendar</span></button>
       </div>
       <script type="text/javascript">

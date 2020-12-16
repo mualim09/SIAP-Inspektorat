@@ -1,7 +1,10 @@
 <script>
  
          
-    var SITEURL = "{{url('/admin')}}";    
+    var SITEURL = "{{url('/admin')}}"; 
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const tahun = (urlParams.get('tahun') !== null) ? urlParams.get('tahun') : "{{ date('Y')}}";
     var contentBuatEvent = '' +
                 '<form id="addEvent">' +
                 '<div class="form-group">' +
@@ -28,11 +31,12 @@
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
     });
+
 for (i = 0; i <= 11; i++) {
     
     var x = new Date();   
    x.setMonth(0 + i);
-   
+   x.setYear(tahun);
    if(i%2 == 1 ){
         right = 'prev,next';
     }else{
