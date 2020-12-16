@@ -27,7 +27,7 @@
 @endif
 @endforeach
 
-@hasanyrole('Super Admin|TU Umum')
+@hasanyrole('Super Admin|Administrasi Umum')
 <!-- <li class="nav-item">
   <a class="nav-link"  href="#ppm-tab" role="tab" aria-controls="ppm-tab" aria-selected="false">Data PPM</a>
 </li> -->
