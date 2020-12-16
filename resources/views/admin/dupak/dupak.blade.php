@@ -233,7 +233,7 @@ function generate_tabel_dupak(dupak_pendidikan, sumDiklat, sumLamaDiklat, sumPen
                         +'<td style="text-align: right">B.</td>'
                         +'<td>UNSUR PENUNJANG</td>'
                         +'<td>'+input_penunjang_lama+'</td>' //input form
-                        +'<td>'+sumPenunjang+'</td>'
+                        +'<td>'+sumPenunjang.toFixed(3)+'</td>'
                         +'<td>'+sumUpdatePenunjang.toFixed(3)+'</td>' //jumlah lama+baru
                         +'<td></td>' 
                         +'<td></td>'
@@ -242,9 +242,9 @@ function generate_tabel_dupak(dupak_pendidikan, sumDiklat, sumLamaDiklat, sumPen
                       +'<tr style="font-weight: bold;">'
                         +'<td></td>'
                         +'<td style="text-align:right">JUMLAH AK. PENJENJANGAN</td>'
-                        +'<td>'+sum_penjenjangan_lama+'</td>' 
-                        +'<td>'+sum_penjenjangan_baru+'</td>'
-                        +'<td>'+sum_penjenjangan+'</td>' //jumlah lama+baru
+                        +'<td>'+sum_penjenjangan_lama.toFixed(3)+'</td>' 
+                        +'<td>'+sum_penjenjangan_baru.toFixed(3)+'</td>'
+                        +'<td>'+sum_penjenjangan.toFixed(3)+'</td>' //jumlah lama+baru
                         +'<td></td>' 
                         +'<td></td>'
                         +'<td></td>'
@@ -252,9 +252,9 @@ function generate_tabel_dupak(dupak_pendidikan, sumDiklat, sumLamaDiklat, sumPen
                       +'<tr style="font-weight: bold;">'
                         +'<td></td>'
                         +'<td style="text-align:right">JUMLAH (I + II)</td>'
-                        +'<td>'+sum_total_lama+'</td>' //input form
-                        +'<td>'+sum_total_baru+'</td>'
-                        +'<td>'+sum_total_jumlah+'</td>' //jumlah lama+baru
+                        +'<td>'+sum_total_lama.toFixed(3)+'</td>' //input form
+                        +'<td>'+sum_total_baru.toFixed(3)+'</td>'
+                        +'<td>'+sum_total_jumlah.toFixed(3)+'</td>' //jumlah lama+baru
                         +'<td></td>' 
                         +'<td></td>'
                         +'<td></td>'

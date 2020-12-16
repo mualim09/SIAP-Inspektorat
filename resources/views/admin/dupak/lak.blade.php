@@ -127,13 +127,13 @@
                 +'<td style="padding-left:50px;">'+n+'. '+item.spt_umum.info_untuk_umum+'</td>'
                 +'<td style="text-align: center">'+item.info_dupak.dupak+'</td>'
                 +'<td></td>'
-                +'<td style="text-align: center">'+item.info_dupak.lama+'</td>'
+                +'<td style="text-align: center">'+item.spt_umum.lama+'</td>'
                 +'<td></td>'
                 +'<td></td>'
                 +'<td></td>'
                 +'</tr>';
               sumDiklat += parseFloat(item.info_dupak.dupak);
-              sumLamaDiklat += parseFloat(item.info_dupak.lama);
+              sumLamaDiklat += parseInt(item.spt_umum.lama);
             });          
           }
           table += '<tr style="background: #ccc; text-align: center">'
@@ -176,7 +176,7 @@
                 +'<td></td>'
                 +'</tr>';
               sumPengawasan += parseFloat(item.info_dupak.dupak);
-              sumLamaPengawasan += parseFloat(item.spt.lama);
+              sumLamaPengawasan += parseInt(item.spt.lama);
             });            
           }
           table += '<tr style="background: #ccc; text-align: center">'
@@ -212,13 +212,13 @@
                 +'<td style="padding-left:50px;">'+n+'. '+item.spt_umum.info_untuk_umum+'</td>'
                 +'<td style="text-align: center">'+item.info_dupak.dupak+'</td>'
                 +'<td></td>'
-                +'<td style="text-align: center">'+item.info_dupak.lama+'</td>'
+                +'<td style="text-align: center">'+item.spt_umum.lama+'</td>'
                 +'<td></td>'
                 +'<td></td>'
                 +'<td></td>'
                 +'</tr>';
               sumPengembangan += parseFloat(item.info_dupak.dupak);
-              sumLamaPengembangan += parseFloat(item.info_dupak.lama);
+              sumLamaPengembangan += parseFloat(item.spt_umum.lama);
             });            
           }
           table += '<tr style="background: #ccc; text-align: center">'
@@ -267,13 +267,13 @@
                 +'<td style="padding-left:50px;">'+n+'. '+item.spt_umum.info_untuk_umum+'</td>'
                 +'<td style="text-align: center">'+item.info_dupak.dupak+'</td>'
                 +'<td></td>'
-                +'<td style="text-align: center">'+item.info_dupak.lama+'</td>'
+                +'<td style="text-align: center">'+item.spt_umum.lama+'</td>'
                 +'<td></td>'
                 +'<td></td>'
                 +'<td></td>'
                 +'</tr>';
               sumPenunjang += parseFloat(item.info_dupak.dupak);
-              sumLamaPenunjang += parseFloat(item.info_dupak.lama);
+              sumLamaPenunjang += parseInt(item.spt_umum.lama);
             });            
           }
           table += '<tr style="background: #ccc; text-align: center">'

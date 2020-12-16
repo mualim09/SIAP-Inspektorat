@@ -12,7 +12,7 @@ function generate_tabel_penunjang(){
     data: {user_id: user_id, semester: semester, tahun: tahun},
     success: function (response) { 
 	    //console.log(response);
-      var header = generate_header(response.user, response.pejabat, 'Penunjang');
+      var header = generate_header(response.user, response.pejabat, 'Penunjang Pengawasan');
       var footer = generate_footer(response.user, response.pejabat);
       var table = '<table class="table table-sm table-bordered ajax-table col-print-12 table-print-border" id="dupak-penunjang-table">';
       table += '<tr style="background: #ccc; text-align: center">'
@@ -39,7 +39,7 @@ function generate_tabel_penunjang(){
                   +'<th>7</th>'
                   +'<th>8</th>'
               +'</tr>';
-
+      var sumPenunjang=0, sumLamaPenunjang=0, sumLamaJamPenunjang=0;
       //if response ak has data
       if(response.ak.length>0){
       var year = new Date().getFullYear();
@@ -51,11 +51,14 @@ function generate_tabel_penunjang(){
               +'<td>'+ item.spt_umum.info_untuk_umum+'</td>'
               //+'<td>' + item.spt.periode + '<br />' + item.spt.lama + '</td>'
               +'<td style="text-align: center;">' + item.spt_umum.periode + '</td>'
+              +'<td style="text-align: center">'+ item.info_dupak.koefisien +'</td>'
+              +'<td style="text-align: center">'+ item.info_dupak.lama_jam +'</td>' 
               +'<td style="text-align: center">'+ item.info_dupak.dupak +'</td>'
-              +'<td style="text-align: center">'+ item.info_dupak.lama +'</td>' 
-              +'<td style="text-align: center">'+ item.info_dupak.dupak +'</td>'
-              +'<td>SPT No.700/'+ item.spt_umum.nomor +'/438.4/'+year+'<br/><br/></td>'
+              +'<td>'+ item.peran +'<br/><br/></td>'
               +'</tr>';
+          sumPenunjang += parseFloat(item.info_dupak.dupak);
+          sumLamaPenunjang += parseInt(item.spt_umum.lama);
+          sumLamaJamPenunjang += parseFloat(item.info_dupak.lama_jam)
         });
       }else{
         table += '<tr style="height:300px;">'
@@ -69,6 +72,16 @@ function generate_tabel_penunjang(){
               +'<td></td>'
               +'</tr>';
       }
+      table += '<tr style="text-align:center; font-weight: bold;">'
+              +'<td ></td>'
+              +'<td></td>'
+              +'<td>JUMLAH</td>'
+              +'<td>'+sumLamaPenunjang+'</td>'
+              +'<td></td>'
+              +'<td>'+sumLamaJamPenunjang+'</td>' 
+              +'<td>'+sumPenunjang.toFixed(3)+'</td>'
+              +'<td></td>'
+              +'</tr>';
        table += '</table>';
        $( "#dupak-penunjang-wrapper" ).html(header+table+footer);
     }

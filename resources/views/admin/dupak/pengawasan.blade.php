@@ -98,7 +98,7 @@ end table dupak pengawasan -->
           +'<td colspan="2" style="text-align: center;">' + item.spt.periode + '</td>'
           +'<td rowspan="2" style="text-align: center">'+ item.info_dupak.koefisien +'</td>'
           +'<td rowspan="2" style="text-align: center">'+ item.info_dupak.lama_jam +'</td>'
-          +'<td rowspan="2" style="text-align: center">'+ item.info_dupak.dupak +'</td>'
+          +'<td rowspan="2" style="text-align: center">'+ item.info_dupak.dupak.toFixed(3) +'</td>'
           //+'<td rowspan="2"><a href="'+file+'" target="'+target+'" >SPT No.700/'+ item.spt.nomor +'/438.4/'+year+'</a><br/><br/></td>'
           +link
           +'</tr>';
@@ -107,7 +107,7 @@ end table dupak pengawasan -->
                 +'<td style="width:50%">'+ item.peran +'</td>'
                 +'</tr>';
         });
-        table += '<tr style="background: #ccc; text-align: center">'
+        /*table += '<tr style="background: #ccc; text-align: center">'
               +'<td></td>'
               +'<td></td>'
               +'<td>JUMLAH</td>'
@@ -116,7 +116,7 @@ end table dupak pengawasan -->
               +'<td>'+sumLamaJam+'</td>'
               +'<td>'+sumPengawasan+'</td>'
               +'<td></td>'
-              +'</tr>';
+              +'</tr>';*/
         //var footer = generate_footer(response);
         
         //$( "#dupak-pengawasan-wrapper" ).html(header+table+footer);
@@ -131,7 +131,7 @@ end table dupak pengawasan -->
           +'<td></td>'
           +'<td></td>'
           +'</tr>';
-          table += '<tr style="background: #ccc; text-align: center">'
+        /*table += '<tr style="background: #ccc; text-align: center">'
           +'<td></td>'
           +'<td></td>'
           +'<td>JUMLAH</td>'
@@ -140,11 +140,21 @@ end table dupak pengawasan -->
           +'<td>'+sumLamaJam+'</td>'
           +'<td>'+sumPengawasan+'</td>'
           +'<td></td>'
-          +'</tr>';
+          +'</tr>';*/
         
         //$( "#dupak-pengawasan-wrapper" ).html('<div class="col-md-12 empty-data text-center">Data DUPAK user Tidak ditemukan. </div>');
         //$('#dupak-pengawasan-wrapper').addClass('no-print');
       }
+      table += '<tr style="background: #ccc; text-align: center">'
+              +'<td></td>'
+              +'<td></td>'
+              +'<td>JUMLAH</td>'
+              +'<td colspan="2">'+sumLamaHari+'</td>'
+              +'<td></td>'
+              +'<td>'+sumLamaJam+'</td>'
+              +'<td>'+sumPengawasan.toFixed(3)+'</td>'
+              +'<td></td>'
+              +'</tr>';
       table += '</table>';
       $( "#dupak-pengawasan-wrapper" ).html(header+table+footer);
     }
