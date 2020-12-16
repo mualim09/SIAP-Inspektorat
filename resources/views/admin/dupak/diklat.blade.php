@@ -52,11 +52,11 @@
               +'<td style="text-align: center">'+ item.info_dupak.koefisien +'</td>'
               +'<td style="text-align: center">'+ item.info_dupak.lama_jam +'</td>' 
               +'<td style="text-align: center">'+ parseFloat(item.info_dupak.dupak).toFixed(3) +'</td>'
-              +'<td>SPT No.700/'+ item.spt_umum.nomor +'/438.4/'+year+'<br/><br/></td>'
+              +'<td>'+item.peran+'</td>'
               +'</tr>';
            sumDiklat += parseFloat(item.info_dupak.dupak);
            sumLamaDiklat += parseInt(item.spt_umum.lama);
-           sumLamaJamDiklat += parseInt(item.info_dupak.lama_jam);
+           sumLamaJamDiklat += parseFloat(item.info_dupak.lama_jam);
         });       
         
         //$( "#dupak-diklat-wrapper" ).html(header+table+footer);
