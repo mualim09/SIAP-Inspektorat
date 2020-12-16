@@ -18,7 +18,7 @@
         <div class="form-group row">  
           <label for="tahun" class="col-form-label col-md-1 text-right">{{ __('Tahun') }}</label>
           <div class="col-md-2">
-            <input type="text" name="tahun" value="" id="tahun" class="form-control" placeholder="{{ date('Y') }}">
+            <input type="text" name="tahun" value="" id="tahun" class="form-control" placeholder="{{ __('Tahun') }}">
           </div>
           <div class="col-md-1">
             <button type="submit" class="btn btn-primary">Cari</button>

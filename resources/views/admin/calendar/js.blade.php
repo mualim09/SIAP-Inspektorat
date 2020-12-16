@@ -5,6 +5,7 @@
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const tahun = (urlParams.get('tahun') !== null) ? urlParams.get('tahun') : "{{ date('Y')}}";
+    $('#tahun').val(tahun);
     var contentBuatEvent = '' +
                 '<form id="addEvent">' +
                 '<div class="form-group">' +
@@ -111,7 +112,7 @@ for (i = 0; i <= 11; i++) {
                                     //$('#calendar'+i).fullCalendar('refetchEvents');                                    i
                                       setTimeout(function(){// wait for 5 secs(2)
                                            location.reload(); // then reload the page.(3)
-                                      }, 5000); 
+                                      }, 2000); 
                                 },
                                 error: function(error){                                    
                                     $.alert({
