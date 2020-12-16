@@ -1,4 +1,4 @@
- @hasanyrole('Super Admin|TU Perencanaan|TU Umum')
+ @hasanyrole('Super Admin|TU Perencanaan|Administrasi Umum')
   @include('admin.spt.penomoran')
   @include('admin.spt.arsip')
 @endhasrole

@@ -26,7 +26,7 @@
                                     @role('Auditor')
                                       {{ Auth::user()->full_name }}
                                     @endrole
-                                    @hasanyrole('TU Umum|Super Admin|Tim Dupak|TU Perencanaan')
+                                    @hasanyrole('Administrasi Umum|Super Admin|Tim Dupak|TU Perencanaan')
                                         {{ __('<< Nama auditor dari process request >>') }}
                                     @endhasanyrole
                                </span>
@@ -36,7 +36,7 @@
                        <!-- dibawah ini adalah form pencariandupak berdasarkan nama auditor, semester dan tahun -->
                        <div class="col-md-6 mb-3">
                             <form id="form-cari-dupak">
-                              @hasanyrole('Super Admin|TU Perencanaan|TU Umum')
+                              @hasanyrole('Super Admin|TU Perencanaan|Administrasi Umum')
                               <!-- hanya ditampilkan kepada user yang memiliki role super admin, perencanaan, dan umum. -->
                               <div class="form-row mb-2">
                                   <div class="col-md-9">

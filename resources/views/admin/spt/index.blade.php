@@ -6,7 +6,7 @@
   @include('admin.spt.penomoran')
 @endhasrole
 
-@hasanyrole('Super Admin|TU Umum')
+@hasanyrole('Super Admin|Administrasi Umum')
   @include('admin.spt.umum')
 @endhasrole
 
@@ -48,7 +48,7 @@
             @hasanyrole('Super Admin|TU Perencanaan')            
                 <button id="btn-new-spt" type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#formModal">{{ __('Tambah SPT') }}</button>             
             @endhasrole
-            @hasanyrole('Super Admin|TU Umum')
+            @hasanyrole('Super Admin|Administrasi Umum')
                 <button id="btn-new-spt-umum" type="button" class="btn btn-outline-success btn-sm" data-toggle="modal" data-target="#formSptUmum">{{ __('Tambah SPT Umum') }}</button>
             @endhasrole
             @hasanyrole('Auditor')

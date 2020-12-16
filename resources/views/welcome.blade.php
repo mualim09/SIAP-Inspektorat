@@ -31,14 +31,14 @@
               </div>
             </div>
             @else
-                @hasanyrole('TU Umum')
-                <!-- halaman tu umum ini  -->
+                @hasanyrole('Administrasi Umum')
+                <!-- halaman Administrasi Umum ini  -->
                 <div class="header bg-gradient-primary py-7 py-lg-8 default-color">
                   <div class="container">
                     <div class="header-body text-center mt-7 mb-7">
                         <div class="row justify-content-center">
                             <div class="col-lg-5 col-md-6">
-                                <h1 class="text-white">{{ __('Welcome to Argon Dashboard FREE Laravel Live Previews login tu umum.') }}</h1>
+                                <h1 class="text-white">{{ __('Welcome to Argon Dashboard FREE Laravel Live Previews login Administrasi Umum.') }}</h1>
                             </div>
                         </div>
                     </div>

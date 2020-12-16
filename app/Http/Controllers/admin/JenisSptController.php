@@ -67,7 +67,7 @@ class JenisSptController extends Controller
         ]);
 
         $user = auth()->user();
-        //$kategori = ( $user->hasAnyRole(['TU Perencanaan','Super Admin']) ) ? 'pengawasan' : ( $user->hasAnyRole(['TU Umum']) ) ? 'umum' : null; //aktifkan jika ingin menggunakan fitur spt bag umum
+        //$kategori = ( $user->hasAnyRole(['TU Perencanaan','Super Admin']) ) ? 'pengawasan' : ( $user->hasAnyRole(['Administrasi Umum']) ) ? 'umum' : null; //aktifkan jika ingin menggunakan fitur spt bag umum
         $kategori = ( $user->hasAnyRole(['TU Perencanaan','Super Admin']) ) ? 'pengawasan' : null;
 
         $data = [

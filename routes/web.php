@@ -199,13 +199,13 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 			Route::delete('session/anggota/delete/{user_id}', 'SptController@deleteSessionAnggotaItem')->name('delete_session_anggota_by_id');
 		});
 
-		Route::group(['middleware'=>['auth', 'role:Super Admin|TU Perencanaan|TU Umum']], function(){
+		Route::group(['middleware'=>['auth', 'role:Super Admin|TU Perencanaan|Administrasi Umum']], function(){
 			Route::post('update-nomor/{id}','SptController@updateNomorSpt')->name('update_nomor_spt');
 			Route::post('upload-spt','SptController@ajaxUpload')->name('ajax_upload_spt');
 		});
 
-		//role TU Umum
-		Route::group(['middleware'=>['auth', 'role:Super Admin|TU Umum']], function(){
+		//role Administrasi Umum
+		Route::group(['middleware'=>['auth', 'role:Super Admin|Administrasi Umum']], function(){
 			Route::get('last-data-umum/{jenis_data}', 'SptController@getLastDataUmum')->name('last_data_umum');
 			Route::get('cetak-pdf-umum/{id}','SptController@sptPdfUmum')->name('spt_pdf_umum');
 

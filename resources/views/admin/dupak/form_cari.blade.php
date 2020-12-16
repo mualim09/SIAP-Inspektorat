@@ -1,5 +1,5 @@
 <form id="form-cari-dupak">
-  @hasanyrole('Super Admin|TU Perencanaan|TU Umum')
+  @hasanyrole('Super Admin|TU Perencanaan|Administrasi Umum')
   <!-- hanya ditampilkan kepada user yang memiliki role super admin, perencanaan, dan umum. -->
   <div class="form-row mb-2">
       <div class="col-md-9">

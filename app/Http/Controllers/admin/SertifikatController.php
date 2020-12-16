@@ -16,7 +16,7 @@ class SertifikatController extends Controller
 {
 
     public function __construct() {
-        $this->middleware(['auth', 'role:Super Admin|TU Umum|Auditor'])->except(['search','show','getData','getSertifikatUsers','deleteSertifikat']); //isAdmin middleware lets only users with a //specific permission permission to access these resources
+        $this->middleware(['auth', 'role:Super Admin|Administrasi Umum|Auditor'])->except(['search','show','getData','getSertifikatUsers','deleteSertifikat']); //isAdmin middleware lets only users with a //specific permission permission to access these resources
     }
 
     /**

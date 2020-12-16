@@ -1,4 +1,4 @@
-@hasanyrole('Super Admin|TU Umum')
+@hasanyrole('Super Admin|Administrasi Umum')
 	@include('admin.spt.form_umum')
 @endhasanyrole
 @hasanyrole('Super Admin|TU Perencanaan')

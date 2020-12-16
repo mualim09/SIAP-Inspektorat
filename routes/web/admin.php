@@ -17,7 +17,7 @@ Route::group(['middleware' => ['role:Super Admin']], function () {
     //
 });
 
-Route::group(['middleware' => ['role:TU Umum']], function () {
+Route::group(['middleware' => ['role:Administrasi Umum']], function () {
     //
 });
 

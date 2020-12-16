@@ -200,7 +200,7 @@ class SptController extends Controller
             $info['user_id'] = $user->id;
             $info['type'] = 'spt';
 
-            //role perencanaan jika membuat spt maka otomatis menjadi spt pengawasan, jika role TU umum: spt umum, selain itu set NULL.
+            //role perencanaan jika membuat spt maka otomatis menjadi spt pengawasan, jika role Administrasi Umum: spt umum, selain itu set NULL.
             $info['jenis'] = 'pengawasan';
 
             $info['spt_id'] = $spt->id;
@@ -254,8 +254,8 @@ class SptController extends Controller
             // $info['user_id'] = $user->id;
             // $info['type'] = 'spt';
 
-            // //role perencanaan jika membuat spt maka otomatis menjadi spt pengawasan, jika role TU umum: spt umum, selain itu set NULL.
-            // $info['jenis'] = ( $user->hasRole('TU Perencanaan') ) ? 'pengawasan' : (($user->hasRole('TU Umum')) ? 'umum' : NULL);
+            // //role perencanaan jika membuat spt maka otomatis menjadi spt pengawasan, jika role Administrasi Umum: spt umum, selain itu set NULL.
+            // $info['jenis'] = ( $user->hasRole('TU Perencanaan') ) ? 'pengawasan' : (($user->hasRole('Administrasi Umum')) ? 'umum' : NULL);
 
             // $info['spt_id'] = $spt->id;
             // $insertArr = [
@@ -654,7 +654,7 @@ class SptController extends Controller
     }
 
     public function getData($jenis_data){
-        $user = auth()->user();
+        $user = auth()->user();        
         if($user->hasRole('Auditor')){
             return $this->mySpt();
         }else{
@@ -665,7 +665,8 @@ class SptController extends Controller
 
     public function getDataSpt($jenis_data)
     {
-        $spt = Spt::select('*');
+        $spt = Spt::select('*');        
+        
         switch($jenis_data){
             case 'penomoran':
                 $spt = $spt->where('nomor',null);
@@ -683,6 +684,9 @@ class SptController extends Controller
 
         $user = auth()->user();
        /* $cols = Spt::orderBy('created_at', 'desc')->get();*/
+       $spt = ($user->hasAnyRole(['Super Admin','TU Perencanaan','Administrasi Umum'])) ? $spt : $spt->join('detail_spt', function($join) use ($user){
+            $join->on('spt.id', '=', 'detail_spt.spt_id')->where('detail_spt.user_id', $user->id);
+        });
         $cols = $spt->orderBy('tgl_mulai', 'desc')->get();
         $dt = Datatables::of($cols)
                 ->addIndexColumn()
@@ -709,7 +713,7 @@ class SptController extends Controller
                 })
                 ->addColumn('ringkasan', function($col){
                     $tambahan = (!is_null($col->tambahan) ) ? '<br /> <small class="text-muted"> ' . Common::cutText($col->tambahan, 2, 70) . '</small>' : '';
-                    $lokasi = (!is_null($col->lokasi_id) ) ? '<small class="text-muted">di ' . $col->lokasi_spt . '</small>' : '';
+                    $lokasi = (!is_null($col->lokasi_id) ) ? '<small class="text-muted"> di ' . $col->lokasi_spt . '</small>' : '';
                     return "<div class='text-wrap'>" . $col->jenisSpt->name . $tambahan . $lokasi ."</div>";
                     /*$tambahan = (!is_null($col->tambahan) ) ? Common::cutText($col->tambahan, 2) : '';
                     $ringkasan = [
@@ -726,7 +730,7 @@ class SptController extends Controller
                             $return .= '<a href="'.url('/storage/spt/'.$col->file).'" data-toggle="tooltip" title="Scan SPT" class="btn btn-outline-primary btn-sm" target="__blank"><i class="ni ni-paper-diploma"></i><span>Download</span></a>';
                         }else{
                             $return .= '<a href="#" data-toggle="tooltip" title="Scan SPT" class="btn btn-outline-danger btn-sm disabled" ><i class="ni ni-paper-diploma"></i><span>Download</span></a>';
-                            if( auth()->user()->hasAnyRole(['TU Umum', 'Super Admin']) ){
+                            if( auth()->user()->hasAnyRole(['Administrasi Umum', 'Super Admin']) ){
                                 $return .= '<a href="#" data-toggle="tooltip" title="Upload File Scan SPT" class="btn btn-outline-primary btn-sm" onclick="uploadSpt('.$col->id.')"><i class="fa fa-file-pdf"></i><span>Upload</span></a>';
                             }
                         }
@@ -785,7 +789,7 @@ class SptController extends Controller
                 })
                 ->addColumn('action', function($col){
                     $return = "";
-                    if( !is_null($col->nomor) && auth()->user()->hasAnyRole(['TU Umum', 'Super Admin'])){
+                    if( !is_null($col->nomor) && auth()->user()->hasAnyRole(['Administrasi Umum', 'Super Admin'])){
                         if(!is_null($col->file) || $col->file != ""){
                             $return .= '<a href="'.url('/storage/spt/'.$col->file).'" data-toggle="tooltip" title="Scan SPT" class="btn btn-outline-primary btn-sm" target="__blank"><i class="ni ni-paper-diploma"></i><span>Download</span></a>';
                             // $return .= 'button download';
@@ -794,7 +798,7 @@ class SptController extends Controller
                             // $return .= 'button download disable karena blm upload';
                             $return .= '<a href="#" data-toggle="tooltip" title="Upload File Scan SPT" class="btn btn-outline-primary btn-sm" onclick="PopUpFunctionUploadScan('.$col->id.')"><i class="fa fa-file-pdf"></i><span>Upload</span></a>';
                             // $return .= 'button upload';
-                            // if( auth()->user()->hasAnyRole(['TU Umum', 'Super Admin']) ){
+                            // if( auth()->user()->hasAnyRole(['Administrasi Umum', 'Super Admin']) ){
                             // }
                         }
                     }
@@ -841,18 +845,18 @@ class SptController extends Controller
                     <a href="#" onclick="sign('.$id.')" class="btn btn-outline-success btn-sm">Setuju</a> ';
         }
 
-        if ( $user->hasAnyRole(['TU Perencanaan', 'Super Admin','TU Umum']) && $method == 'penomoran') {
+        if ( $user->hasAnyRole(['TU Perencanaan', 'Super Admin','Administrasi Umum']) && $method == 'penomoran') {
                     $control = '<a href="#" onclick="showFormModal('.$id.')" class="btn btn-outline-primary btn-sm" title="Teruskan"><i class="fa fa-share"></i></a>';
                     return $control;
         }
-        if ( $user->hasAnyRole(['TU Umum', 'Super Admin']) && $method == 'showFormModalUmum') {            
+        if ( $user->hasAnyRole(['Administrasi Umum', 'Super Admin']) && $method == 'showFormModalUmum') {            
             $control = '<a href="#" onclick="showFormModalUmum('.$id.')" class="btn btn-outline-primary btn-sm" title="Teruskan"><i class="fa fa-share"></i></a>';
             return $control;
         }
-        if( $user->hasAnyRole(['TU Umum', 'Super Admin']) && $method == 'editSptUmum' ){
+        if( $user->hasAnyRole(['Administrasi Umum', 'Super Admin']) && $method == 'editSptUmum' ){
             $control = '<a href="#" data="'.$id.'" onclick="editSptUmum('.$id.')" data-toggle="tooltip" title="Edit SPT" class="btn btn-outline-primary btn-sm edit-spt"><i class="fa fa-edit"></i></a>';
         }
-        if($user->hasAnyRole(['TU Umum', 'Super Admin']) && $method == 'deleteAnggotaUmum'){
+        if($user->hasAnyRole(['Administrasi Umum', 'Super Admin']) && $method == 'deleteAnggotaUmum'){
             $control = '<a href="javascript:void(0);" onclick="deleteAnggotaUmum('. $id .')" class="btn btn-outline-danger btn-sm"><i class="fa fa-times"></i></a>';
         }
         if($user->hasAnyRole(['TU Perencanaan', 'Super Admin']) && $method == 'docx'){
@@ -1208,7 +1212,7 @@ class SptController extends Controller
                             $return .= '<a href="'.url('/storage/spt/'.$col->file).'" data-toggle="tooltip" title="Scan SPT" class="btn btn-outline-primary btn-sm" target="__blank"><i class="ni ni-paper-diploma"></i><span>Download</span></a>';
                         }else{
                             $return .= '<a href="#" data-toggle="tooltip" title="Scan SPT" class="btn btn-outline-danger btn-sm disabled" ><i class="ni ni-paper-diploma"></i><span>Download</span></a>';
-                            if( auth()->user()->hasAnyRole(['TU Umum', 'Super Admin']) ){
+                            if( auth()->user()->hasAnyRole(['Administrasi Umum', 'Super Admin']) ){
                                 $return .= '<a href="#" data-toggle="tooltip" title="Upload File Scan SPT" class="btn btn-outline-primary btn-sm" onclick="uploadSpt('.$col->id.')"><i class="fa fa-file-pdf"></i><span>Upload</span></a>';
                             }
                         }

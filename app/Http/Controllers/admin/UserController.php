@@ -34,7 +34,7 @@ class UserController extends Controller
 
 
     public function __construct() {
-        $this->middleware(['auth', 'role:Super Admin|TU Umum'])->except(['search','show','getData']); //isAdmin middleware lets only users with a //specific permission permission to access these resources
+        $this->middleware(['auth', 'role:Super Admin|Administrasi Umum'])->except(['search','show','getData']); //isAdmin middleware lets only users with a //specific permission permission to access these resources
     }
 
    /* public function init(){
@@ -316,7 +316,7 @@ class UserController extends Controller
     public function buildControl($id){
         $user = auth()->user();
         $control = '';
-        if($user->hasAnyRole(['TU Umum','Super Admin'])){
+        if($user->hasAnyRole(['Administrasi Umum','Super Admin'])){
             $control .= '<a href="javascript:void(0);" onclick="editForm('. $id .')" data-toggle="tooltip" title="Edit Pegawai" class="btn btn-outline-primary btn-sm"><i class="ni ni-single-copy-04"></i></a>';
             $control .= '<a href="javascript:void(0);" onclick="deleteData('. $id .')" data-toggle="tooltip" title="Nonaktifkan Pegawai" class="btn btn-outline-danger btn-sm"><i class="fa fa-times"></i></a>';
             $control .= '<a href="#" onclick="showModalLihatSertifikat('.$id.')" data-toggle="tooltip" title="Lihat Sertifikat" class="btn btn-outline-success btn-sm"><i class="ni ni-paper-diploma"></i></a>';

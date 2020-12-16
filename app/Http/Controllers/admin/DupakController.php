@@ -15,7 +15,7 @@ use Config, File;
 class DupakController extends Controller
 {
     public function __construct() {
-        $this->middleware(['auth','role:Super Admin|TU Umum|TU Perencanaan|Auditor']);
+        $this->middleware(['auth','role:Super Admin|Administrasi Umum|TU Perencanaan|Auditor']);
     }
 
     /**
@@ -27,7 +27,7 @@ class DupakController extends Controller
     {
         /*$user = auth()->user();
         //pisahkan index dupak sesuai role masing-masing fungsi
-        if($user->hasAnyRole(['Super Admin', 'TU Umum', 'TU Perencanaan'])){
+        if($user->hasAnyRole(['Super Admin', 'Administrasi Umum', 'TU Perencanaan'])){
             return view('admin.dupak.form');
         }elseif ($user->hasAnyRole(['Auditor'])) {
             //fitur sementara disable by server, masih develop
@@ -199,7 +199,7 @@ class DupakController extends Controller
         $user = auth()->user();
         $user_dupak = User::find($id);
         $control = '';
-        if($user->hasAnyRole(['Super Admin', 'TU Umum', 'Auditor']) && $method === 'detail'){
+        if($user->hasAnyRole(['Super Admin', 'Administrasi Umum', 'Auditor']) && $method === 'detail'){
             $control = '<a href="'.route('get_dupak_user',$id).'" data-toggle="tooltip" title="Lihat detail dupak" class="btn btn-outline-primary btn-sm" target="__blank"<i class="ni ni-paper-diploma"></i><span>Lihat</span></a>';
         }
         if($method === 'add' ){

@@ -1,7 +1,7 @@
 @extends('layouts.backend')
 
 @section('content')
-	@role('TU Umum')
+	@role('Administrasi Umum')
 		@include('layouts.headers.cards')
 	@endrole
 	@role('TU Perencanaan')
@@ -20,7 +20,7 @@
 		@include('layouts.headers.cards')
 	@endrole
 	<div style="margin-top: 20px !important;">
-		@role('TU Umum')
+		@role('Administrasi Umum')
 		<breadcrumb list-classes="breadcrumb-links" style="padding-left: 18px;">
 		  <breadcrumb-item active>Beranda</breadcrumb-item>
 		</breadcrumb>

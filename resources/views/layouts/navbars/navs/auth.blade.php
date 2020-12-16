@@ -48,7 +48,7 @@
                         <a class="dropdown-item" href="{{ url('/admin/kode') }}"><i class="ikon ni ni-ruler-pencil"></i><span id="menu_id">{{ __('Informasi Kode Temuan') }}</span></a>
                         <a class="dropdown-item" href="{{ route('calendar')}}"><i class="ikon ni ni-calendar-grid-58"></i><span id="menu_id" class="nav-link-inner--text">{{ __('Calendar') }}</span></a>
                         @endhasanyrole
-                        @hasanyrole('Super Admin|TU Umum')
+                        @hasanyrole('Super Admin|Administrasi Umum')
                         <a class="dropdown-item" href="{{ route('satgas_ppm')}}"><i class="ikon fa fa-hand-point-right"></i><span id="menu_id" class="nav-link-inner--text">{{ __('Penunjukan Pejabat') }}</span></a>
                         @endhasanyrole
 
@@ -58,7 +58,7 @@
                     </div>
                 </li>
 
-                @hasanyrole('Super Admin|TU Umum')
+                @hasanyrole('Super Admin|Administrasi Umum')
                 <li class="nav-item dropdown">                    
                     <a class="nav-link nav-link-icon dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-expanded="false">
                         <i class="ikon ni ni-single-02"></i>
@@ -79,7 +79,7 @@
                 </li>
                 @endhasanyrole
 
-                @hasanyrole('Super Admin|TU Umum|Auditor')
+                @hasanyrole('Super Admin|Administrasi Umum|Auditor')
                 <li class="nav-item dropdown">                    
                     <a class="nav-link nav-link-icon dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-expanded="false">
                         <i class="ikon ni ni-bullet-list-67"></i>
@@ -87,7 +87,7 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-right">                        
                         <a  class="dropdown-item" href="{{ route('list_dupak') }}"><i class="ikon ni ni-bullet-list-67"></i><span id="menu_id">{{ __('Data Dupak') }}</span></a>
-                        @hasanyrole('Super Admin|TU Umum')
+                        @hasanyrole('Super Admin|Administrasi Umum')
                         <!-- <a class="dropdown-item" href="{{ route('reviu_dupak') }}"><i class="ni ni-book-bookmark"></i><span>{{ __('Reviu Dupak') }}</span></a> -->
                         @endhasanyrole
                     </div>
