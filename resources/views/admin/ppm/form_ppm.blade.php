@@ -65,16 +65,16 @@
 
             <!-- start tanggal mulai & akhir ppm -->
             <div class="form-group row">                    
-                <label for="tgl-mulai-ppm" class="col-md-2 col-form-label">{{ __('Mulai') }}</label>
-                <div class="col-md-4">                      
-                    <input type="text" class="form-control datepicker" name="tgl_mulai_ppm" id="tgl-mulai-ppm" autocomplete="off" placeholder="{{ __('Tanggal Mulai')}}">
+                <label for="tgl-mulai-ppm" class="col-md-2 col-form-label">{{ __('Tanggal') }}</label>
+                <div class="col-md-6">                      
+                    <input type="text" class="form-control datepicker" name="tgl_mulai_ppm" id="tgl-mulai-ppm" autocomplete="off" placeholder="{{ __('Pilih Tanggal')}}">
                 </div>
                 <!-- <label for="tgl-akhir-ppm" class="col-md-2 col-form-label">{{ __('Berakhir') }}</label>
                 <div class="col-md-4">
                     <input type="text" class="form-control datepicker" name="tgl_akhir_ppm" id="tgl-akhir-ppm" autocomplete="off" placeholder="{{ __('Tanggal Akhir')}}" disabled="true">
                 </div> -->
-                <label for="lama-ppm" class="col-md-1 col-form-label">{{ __('Lama') }}</label>
-                <div class="col-md-4">                      
+                <!-- <label for="lama-ppm" class="col-md-1 col-form-label">{{ __('Lama') }}</label> -->
+                <div class="col-md-4" style="display: none;">                      
                     <input type="text" class="form-control" autocomplete="off" placeholder="{{ __('1')}}" disabled=""> 
                     <input type="hidden" name="hari_ppm" id="hari-ppm" value="{{'1'}}">                     
                 </div>
@@ -150,49 +150,46 @@
                         $("#name-user-"+item).css({ 'color': '#525f7f'});
                        },
                     });
-                    // di hide
-                    // console.log($('#formPpm').modal('hide') == true);
-                    /*if(){   
-                        $('#morator-narasumber-id').selectize({
-                            onChange(item){
-                                console.log(item);
-                                $('#id-anggota-'+item).prop('disabled', false);
-                                $("#name-user-"+item).css({ 'color': '#525f7f'});
-                            }
-                        });
-                    }*/
                 </script>
             </div>
             <!-- end narasumber/moderator -->
 
             <!-- start anggota session -->
-            <div class="form-group" style="margin-left: -13px;">
-                <div class="col-md-2 col-form-label">{{ __('Peserta') }} </div><br>
+            <div class="form-group row">
+                <label for="dasar" class="col-md-1 col-form-label">{{ __('Peserta') }}</label>
+                <div class="col-md-10 col-form-label">
+                    <input type="checkbox" name="select-all" id="select-all" /> <span style="color:red;"><b>pilih semua anggota</b></span>
+                </div>
+                <script type="text/javascript">
+                    $('#select-all').click(function(event) {   
+                        if(this.checked) {
+                            // Iterate each checkbox
+                            $(':checkbox').each(function() {
+                                this.checked = true;                        
+                            });
+                        } else {
+                            $(':checkbox').each(function() {
+                                this.checked = false;                       
+                            });
+                        }
+                    });
+                </script>
+            </div>
+
+            <div class="form-group row">
                 <div class="col-md-12">
                     <div class="row">
                         @foreach($users as $i=>$user)
-                            <div class="col-md-2" id="name-user-{{$user->id}}">{{ $user->full_name_gelar }}</div>
-                                <div class="col-md-1">
+                        <div class="col-md-2" id="name-user-{{$user->id}}">{{ $user->full_name_gelar }}</div>
+                            <div class="col-md-1">
                                 <input class="form-check-input" name="id_anggota_ppm[]" multiple="multiple" id="id-anggota-{{$user->id}}" type="checkbox" value="{{$user->id}}" ></div>
-                                <?php $i++ ?>
-                                @if($i%4 == 0)
-                                    </div><div class="row">
-                                @endif
+                            <?php $i++ ?>
+                            @if($i%4 == 0)
+                                </div><div class="row">
+                            @endif
                         @endforeach
                     </div>
-                    <!-- <input type="hidden" name="id_anggota_ppm" id="anggota_ppm"> -->
                 </div>
-                <script type="text/javascript">
-                    $(".form-check-input").prop('checked', true);
-                </script>
-                <!-- <div class="col">
-                    <table id="tabel-anggota-ppm" class="col"></table>
-                    <button id="add-anggota-ppm" class="btn btn-outline-primary btn-sm" type="button" data-toggle="modal" data-target="#anggotaPpmModal"> <i class="fa fa-plus"></i> <span>Tambah Anggota</span></button>
-                    <small id="infoanggota" class="form-text text-muted">Anggota pertama dipilih akan automatis menjadi yang ditugaskan</small>
-                </div>
-                <div class="col table-responsive" id="tabel-anggota-ppm-wrapper">
-                    
-                </div> -->
             </div>
             <!-- end anggota session -->
 
@@ -207,16 +204,16 @@
             <!-- end upload note dinas ppm -->
 
             <!-- start submit ppm -->
+            <!-- end submit ppm -->
+
+        </form>
             <div class="form-group">
                  <div class="col">
-                     <button type="submit" class="btn btn-primary offset-md-2 submit-ppm">
+                     <button id="id-btn-submit" class="btn btn-primary offset-md-5 submit-ppm">
                          {{ __('Submit') }}
                      </button>
                  </div>
              </div>
-            <!-- end submit ppm -->
-
-        </form>
 
         </div>
     </div>
@@ -372,6 +369,16 @@ $('.datepicker').each(function() {
     });
 });
 
+$('#btn-input-ppm').on('click', function(){
+    if( !$('#morator-narasumber-id').val() ) { 
+        $(".form-check-input").removeAttr("disabled");
+        $(".form-check-input").css({ 'color': '#525f7f'});
+        $(".form-check-input").prop('checked', true);
+        $("#form-ppm")[0].reset();
+        // console.log('jalan');
+    }
+});
+
 $('#formPpm').on('hidden.bs.modal', function(){
     // $('#tgl-akhir-ppm').prop('disabled',true);
     $("#form-ppm")[0].reset();
@@ -398,7 +405,7 @@ $('#formPpm').on('hidden.bs.modal', function(){
 //     });
 // }
 
-function function_ppm(user_id){
+/*function function_ppm(user_id){
     save_method_ppm = 'delete';
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
         var tgl_mulai_ppm = $('#tgl-mulai-ppm').val();
@@ -431,17 +438,89 @@ function function_ppm(user_id){
                 }
             }
     });
-}
+}*/
 
 /*start destroy data pada datatable lihat anggota*/
 $(document).on('hide.bs.modal','#modalListAnggotaPpm', function () {
     $('#tabel-list-anggota-ppm').dataTable().fnDestroy();
+    $("#form-ppm")[0].reset();
 });
 /*end*/
 
-// // $(document).ready(function () {
-    
-// // });
+/*function edit_ppm(id){
+    $("#form-ppm")[0].reset();
+    $('#id-ppm').val(id);
+    $('#formPpm').modal('show');
+    var id_ppm = $('#id-ppm').val();
+    // get-valueData-ppm/{id}
+    save_method = 'edit';
+        url = "{{ url('admin/ppm/get-valueData-ppm/') }}/" +id_ppm;
+        
+        $.ajax({
+            url: url,
+            type: "GET",
+            dataType: "JSON",
+            success: function(data){
+                
+                // set value kegiatan
+                $('#kegiatan-ppm').val(data[0].ppm.kegiatan);
+                
+                $('#tgl-mulai-ppm').val(data[0].ppm.tgl_mulai);
+                // $('#tgl-mulai').val(data.tgl_mulai);
+
+                var moderator = [];
+
+                $.each(data, function(i,item){
+                    if(data[i].peran == 'Moderator'){
+                        moderator.push(item.user_id);
+                        $('#id-anggota-'+item.user_id).prop('checked', false);
+                        // $('#id-anggota-'+item.user_id).attr("disabled", true);
+                        $('#id-anggota-'+item.user_id).prop('disabled', true);
+                    }
+                    if(item.peran == 'Peserta'){
+                        $('#id-anggota-'+item.user_id).prop('checked', true);
+                    }
+                });
+                $('#morator-narasumber-id')[0].selectize.setValue(moderator);
+
+            },
+            error: function(err){
+                
+            }
+        });
+};*/
+
+
+$('#id-btn-submit').click(function(){
+    $.confirm({
+        title: "{{ __('Perhatian!') }}",
+        content: "{{ __('Silahkan review kembali data PPM sebelum anda menyimpannya, karena PPM tidak dapat dirubah') }}",
+        autoClose: 'Tidak|5000',
+        buttons: {
+            Ya: {
+                btnClass: 'btn-primary simpan-ppm',
+                action: function(){                       
+                    $('#form-ppm').submit();
+                },
+            },
+            Tidak: function(){
+                $.alert('Silahkan review kembali!');
+            }
+        }
+    });
+});
+
+function confirm_file_id_null(id){
+    $.confirm({
+        title: 'Perhatian!',
+        content: 'Maaf PPM tersebut tidak memiliki nota dinas',
+        buttons: {
+            keluar: function () {
+                // $.alert('Keluar');
+            },
+        }
+    });
+}
 
 
 $("#form-ppm").validate({
@@ -449,9 +528,7 @@ $("#form-ppm").validate({
         jenis_ppm : {required: true},
         tgl_mulai_ppm : {required: true},
         tgl_akhir_ppm : {required: true},
-
     },*/
-
     submitHandler: function(form){        
         var anggota_id = []; //array user id
         $("input:checkbox[type=checkbox]:checked").each(function(){
@@ -460,14 +537,12 @@ $("#form-ppm").validate({
         var anggota_array = JSON.stringify(anggota_id);
         // console.log('anggota isinya ' +anggota_array);
         $('#anggota_ppm').val(anggota_array);
-
         // var jenis_ppm = $("#unsur-ppm").val();
         // var kegiatan_ppm = $('#kegiatan-ppm').val();
         // var tgl_mulai_ppm = $("#tgl-mulai-ppm").val();
         // var tgl_akhir_ppm = $("#tgl-akhir-ppm").val();
         // var lama_ppm = $('#hari-ppm').val();
         // var file_nota_dinas = /*$('#file-nota-dinas').val();*/document.getElementById('file-nota-dinas').value;
-
         var id = $('#id-ppm').val();
         save_method_ppm = (id == '') ? 'new' : save_method_ppm;
         var url_prefix = (window.location.pathname == '/admin' || window.location.pathname == '/public/admin') ? 'admin/ppm/' : 'ppm/';
@@ -476,7 +551,6 @@ $("#form-ppm").validate({
         method = (save_method_ppm == 'new') ? "POST" : "PUT";
         type = "POST";
         var formData = new FormData($(form)[0]);
-
         $.ajax({
             url: url,
             type: type,
@@ -499,40 +573,40 @@ $("#form-ppm").validate({
     }
 });
 
-function hapus_ppm(id){   /*modal belum bisa menghapus cache pada modal*/
-    // console.log(id); /*parameter id ada isinya */
-    save_method = 'delete';
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    $.confirm({
-        title: "{{ __('Hapus data PPM') }}",
-        content: "{{ __('Apakah anda yakin ingin menghilangkan data PPM ini?') }}",
-        buttons: {
-            delete: {
-                btnClass: 'btn-danger',
-                action: function(){  /*button action confirm*/
-                    // console.log('jalan');
-                    url = (window.location.pathname == '/admin' || window.location.pathname == '/public/admin') ? 'admin/delete/data-ppm/'+id : 'delete/data-ppm/'+id;
+// function hapus_ppm(id){   /*modal belum bisa menghapus cache pada modal*/    
+//     save_method = 'delete';
+//     var csrf_token = $('meta[name="csrf-token"]').attr('content');
+//     $.confirm({
+//         title: "{{ __('Hapus data PPM') }}",
+//         content: "{{ __('Apakah anda yakin ingin menghilangkan data PPM ini?') }}",
+//         buttons: {
+//             delete: {
+//                 btnClass: 'btn-danger',
+//                 action: function(){  /*button action confirm*/
+//                     // console.log('jalan');
+//                     url = (window.location.pathname == '/admin' || window.location.pathname == '/public/admin') ? 'admin/delete/data-ppm/'+id : 'delete/data-ppm/'+id;
 
-                    $.ajax({
-                        url: url,
-                        type: "delete",
-                        data: {_method: 'delete', '_token' : csrf_token },
-                        success: function(data){
-                            // table.ajax.reload();
-                            $('#tabel-ppm').DataTable().ajax.reload();
-                            $('#form-session-anggota-ppm')[0].reset();
-                            // location.reload();
-                        }
-                    });
+//                     $.ajax({
+//                         url: url,
+//                         type: "delete",
+//                         data: {_method: 'delete', '_token' : csrf_token },
+//                         success: function(data){
+//                             // table.ajax.reload();
+//                             $('#tabel-ppm').DataTable().ajax.reload();
+//                             $('#form-session-anggota-ppm')[0].reset();
+//                             // location.reload();
+//                         }
+//                     });
 
-                },
-            },
-                cancel: function(){ /*button cancel confirm*/
-                    $.alert('Dibatalkan!');
-                }
-        }
-    });
-};
+//                 },
+//             },
+//                 cancel: function(){ 
+//                     /*button cancel confirm*/
+//                     $.alert('Dibatalkan!');
+//                 }
+//         }
+//     });
+// };
 
 </script>
 <!-- end javascript -->

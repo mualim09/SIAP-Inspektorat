@@ -48,7 +48,7 @@
             <div class="form-group row">
                 <label for="kegiatan" class="col-md-2 col-form-label ">{{ __('Kegiatan') }}</label>
                 <div class="col-md-10">
-                     <textarea rows="5" id="kegiatan-ppm" class="form-control form-control-alternative @error('kegiatan') is-invalid @enderror" name="kegiatan_ppm" ></textarea>
+                     <textarea rows="5" id="kegiatan-ppm" class="form-control form-control-alternative @error('kegiatan') is-invalid @enderror" name="kegiatan_ppm" required></textarea>
                      <small id="infoKegiatanHelp" class="form-text text-muted">Masukkan nama <span style="color:red;">Kegiatan</span> yang sedang dilaksanakan. !</small>
                 </div>
             </div>
@@ -56,17 +56,17 @@
 
             <!-- start tanggal mulai & akhir ppm -->
             <div class="form-group row">                    
-                <label for="tgl-mulai-ppm" class="col-md-2 col-form-label">{{ __('Mulai') }}</label>
-                <div class="col-md-4">                      
-                    <input type="text" class="form-control datepicker" name="tgl_mulai_ppm" id="tgl-mulai-ppm" autocomplete="off" placeholder="{{ __('Tanggal Mulai')}}">
+                <label for="tgl-mulai-ppm" class="col-md-2 col-form-label">{{ __('Tanggal') }}</label>
+                <div class="col-md-6">                      
+                    <input type="text" class="form-control datepicker" name="tgl_mulai_ppm" id="tgl-mulai-ppm" autocomplete="off" placeholder="{{ __('Pilih Tanggal')}}" required="">
                 </div>
 
                 <!-- <label for="tgl-akhir-ppm" class="col-md-2 col-form-label">{{ __('Berakhir') }}</label>
                 <div class="col-md-4">
                     <input type="text" class="form-control datepicker" name="tgl_akhir_ppm" id="tgl-akhir-ppm" autocomplete="off" placeholder="{{ __('Tanggal Akhir')}}" disabled="true">
                 </div> -->
-                <label for="lama-ppm" class="col-md-1 col-form-label">{{ __('Lama') }}</label>
-                <div class="col-md-4">                      
+                <!-- <label for="lama-ppm" class="col-md-1 col-form-label">{{ __('Lama') }}</label> -->
+                <div class="col-md-4" style="display:none;">                      
                     <input type="text" class="form-control" autocomplete="off" placeholder="{{ __('1')}}" disabled=""> 
                     <input type="hidden" name="hari_ppm" id="hari-ppm" value="{{'1'}}">                     
                 </div>
@@ -144,24 +144,19 @@
                         $("#name-user-"+item).css({ 'color': '#525f7f'});
                        },
                     });
-                    // di hide
-                    // console.log($('#formPpm').modal('hide') == true);
-                    /*if(){   
-                        $('#morator-narasumber-id').selectize({
-                            onChange(item){
-                                console.log(item);
-                                $('#id-anggota-'+item).prop('disabled', false);
-                                $("#name-user-"+item).css({ 'color': '#525f7f'});
-                            }
-                        });
-                    }*/
                 </script>
             </div>
             <!-- end narasumber/moderator -->
 
             <!-- start anggota session -->
-            <div class="form-group" style="margin-left: -13px;">
-                <div class="col-md-2 col-form-label">{{ __('Peserta') }} </div><br>
+            <div class="form-group row">
+                <label class="col-md-1 col-form-label">{{ __('Peserta') }}</label>
+                <div class="col-md-10 col-form-label">
+                    <input type="checkbox" name="select-all" id="select-all" /> <span style="color:red;"><b>pilih semua anggota</b></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
                 <div class="col-md-12">
                     <div class="row">
                         @foreach($user_ppm as $i=>$user)
@@ -174,20 +169,26 @@
                                 @endif
                         @endforeach
                     </div>
-                    <!-- <input type="hidden" name="id_anggota_ppm" id="anggota_ppm"> -->
                 </div>
-                <script type="text/javascript">
-                    $(".form-check-input").prop('checked', true);
-                </script>
-                <!-- <div class="col">
-                    <table id="tabel-anggota-ppm" class="col"></table>
-                    <button id="add-anggota-ppm" class="btn btn-outline-primary btn-sm" type="button" data-toggle="modal" data-target="#anggotaPpmModal"> <i class="fa fa-plus"></i> <span>Tambah Anggota</span></button>
-                    <small id="infoanggota" class="form-text text-muted">Anggota pertama dipilih akan automatis menjadi yang ditugaskan</small>
-                </div>
-                <div class="col table-responsive" id="tabel-anggota-ppm-wrapper">
-                    
-                </div> -->
             </div>
+            <script type="text/javascript">
+                
+                $('#select-all').click(function(event) {   
+                        if(this.checked) {
+                            // Iterate each checkbox
+                            $(':checkbox').each(function() {
+                                this.checked = true;                        
+                            });
+                        } else {
+                            $(':checkbox').each(function() {
+                                this.checked = false;                       
+                            });
+                        }
+                    });
+
+                $(".form-check-input").prop('checked', true);
+                $("#select-all").prop('checked', true);
+            </script>
             <!-- end anggota session -->
 
             <!-- start upload note dinas ppm -->
@@ -199,17 +200,17 @@
             </div>
             <!-- end upload note dinas ppm -->
 
+
+        </form>
             <!-- start submit ppm -->
             <div class="form-group">
                  <div class="col">
-                     <button type="submit" class="btn btn-primary offset-md-2 submit-ppm">
+                     <button id="id-satgas-btn" class="btn btn-primary offset-md-5 submit-ppm">
                          {{ __('Submit') }}
                      </button>
                  </div>
              </div>
             <!-- end submit ppm -->
-
-        </form>
 
         </div>
     </div>
@@ -218,9 +219,30 @@
 
 
 <script type="text/javascript">
+
+$('#id-satgas-btn').click(function(){
+    $.confirm({
+        title: "{{ __('Perhatian!') }}",
+        content: "{{ __('Silahkan review kembali data PPM sebelum anda menyimpannya, karena PPM tidak dapat dirubah') }}",
+        autoClose: 'Tidak|5000',
+        buttons: {
+            Ya: {
+                btnClass: 'btn-primary simpan-ppm',
+                action: function(){                       
+                    $('#form-ppm').submit();
+                },
+            },
+            Tidak: function(){
+                $.alert('Silahkan review kembali data PPM!');
+            }
+        }
+    });
+});
+
     /*start destroy data pada datatable lihat anggota*/
 $(document).on('hide.bs.modal','#modalListAnggotaPpm', function () {
     $('#tabel-list-anggota-ppm').dataTable().fnDestroy();
+    $("#form-ppm")[0].reset();
 });
 /*end*/
 
