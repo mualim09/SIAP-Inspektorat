@@ -175,11 +175,13 @@ $('.datepicker').each(function() {
 function printDiv(divName){
  //printJS(divName, 'html');
  //$( "div.no-print" ).parents().css( 'display','none' );
+ //css = (divName === 'calendar-user') ? "{{ asset('assets/vendor/fullcalendar/fullcalendar.print.min.css') }}" : "{{ asset('css/print.css') }}";
+ css = ["{{ asset('assets/vendor/fullcalendar/fullcalendar.print.min.css') }}", "{{ asset('css/print.css') }}"];
   printJS({
     printable : divName,
     type: 'html',
-    css: "{{ asset('css/print.css') }}",
-    scanStyles: false
+    css: css,
+    scanStyles: true
   });
   //return false;
 }

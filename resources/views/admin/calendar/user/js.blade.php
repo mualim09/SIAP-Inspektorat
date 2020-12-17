@@ -71,7 +71,12 @@ function generate_calendar(tahun=''){
               url: "{{ route('holiday_calendar') }}",
               color: 'transparent',
               textColor: '#fff',
-          }
+          },
+          {
+            
+            color: 'transparent',
+            textColor: '#fff',
+          },
           ],
           defaultDate: x,
           /*fixedWeekCount: false,

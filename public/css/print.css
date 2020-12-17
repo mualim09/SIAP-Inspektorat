@@ -49,6 +49,16 @@ table > tr > td, table > tr > th{
 	padding-left: 5px;
 	vertical-align: top;
 }
+
+
+th.fc-day-header, td.fc-day{
+	width: 100px !important;
+	border: 1px solid #000;	
+    border-spacing: 0;
+    font-size: 11pt;
+}
+
+table > tbody > tr > td.fc-day{height:100px !important;}
 a{color:#000; text-decoration: none;}
 .table-print-border th, .table-print-border td{
 	border: 1px solid #000;	
@@ -77,6 +87,10 @@ div.no-print, .no-print{
 */
 .page-break{
 	page-break-after: always !important;
+}
+:last-of-type div.page-break{
+	page-break-after: avoid !important;
+	page-break-before: avoid;
 }
 tr.avoid-after { page-break-inside:avoid; page-break-after:avoid; page-break-before: auto;}
 /*table{

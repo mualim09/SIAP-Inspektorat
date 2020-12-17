@@ -41,8 +41,35 @@ class CalendarController extends Controller
         
     }
 
-    public function getSptAuditor(){
+    public function getSptAuditor(Request $request){
+        $user_id = ($request->user_id) ? $request->user_id : auth()->user()->id;        
         //processed only on ajax request
+        if(request()->ajax()) 
+        {
+         $user = auth()->user()->id;
+
+         $start = (!empty($_GET["start"])) ? ($_GET["start"]) : ('');
+         $end = (!empty($_GET["end"])) ? ($_GET["end"]) : ('');
+         //$user_id = ($user->hasRole(['Super Admin', 'Administrasi Umum'])) ? auth()->user()->id; 
+         
+        $data = DB::table('spt')
+            ->join('jenis_spt', 'spt.jenis_spt_id' , '=', 'jenis_spt.id')
+            ->join('detail_spt', 'spt.id', '=', 'detail_spt.spt_id')
+            ->select('jenis_spt.sebutan as title', 'jenis_spt.name as deskripsi', 'jenis_spt.kategori as kategori','spt.tgl_mulai as start', 'spt.tgl_akhir as end', 'detail_spt.dupak as dupak')
+            ->where('detail_spt.user_id', '=', $user_id)
+            ->where('spt.nomor','!=', NULL)
+            ->get();
+         
+         return Response::json($data);
+        }
+        //return view('admin.calendar.user.index');
+    }
+
+    public function getLembur(){
+        //get data from kuota kalender
+    }
+
+    public function getLemburPengawasan(){
         if(request()->ajax()) 
         {
  
@@ -57,12 +84,9 @@ class CalendarController extends Controller
             ->where('detail_spt.user_id', '=', $user_id)
             ->where('spt.nomor','!=', NULL)
             ->get();
-            //dd($data);
-            //$data['title'] = ' ';
          
          return Response::json($data);
         }
-        //return view('admin.calendar.user.index');
     }
 
     public function calendarPdf(){

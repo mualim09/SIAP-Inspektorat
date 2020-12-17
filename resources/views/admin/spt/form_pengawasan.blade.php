@@ -368,8 +368,7 @@ $( "#formModal" ).on('shown.bs.modal', function(){
 	//tambahan end
 
 	//dasar
-	if(dasar != '' && save_method == 'edit'){
-		//$('#tambahan').text(tambahan);
+	if('undefined' !== typeof dasar && save_method == 'edit'){
 		$('#input-dasar-container').show('fast');
 		if(typeof dasar !== 'undefined')
 		{setDasar(dasar);}

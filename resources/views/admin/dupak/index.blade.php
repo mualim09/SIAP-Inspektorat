@@ -23,14 +23,15 @@
                        </div>
                     </div>
                     
-                    <div id="btn-show-dupak" class="col-md-12 row justify-content-end" style="margin-bottom: 30px;">                      
-                      <button onclick="printDiv('print-dupak')" class="btn btn-default" >Print</button>
-                    </div>
+                    <div id="btn-show-dupak" class="col-md-12 row justify-content-end" style="margin-bottom: 30px;">
+                      <button onclick="printDiv('calendar-user')" class="btn btn-default" >Print Calendar</button>
+                      <!-- <button onclick="printJS('calendar-user', 'html')" class="btn btn-default" >Print Calendar</button> -->
+                      <button onclick="printDiv('print-dupak')" class="btn btn-default" >Print AK</button>
+                    </div>                    
 
                     <ul class="nav nav-tabs justify-content-end" id="dupak-tab" >
                      <!-- generated tab content -->
                     </ul>
-                    
 
                     <div class="tab-content" id="print-dupak">
                       <div id="dupak-pengawasan" class="tab-pane fade show active" role="tabpanel" style="margin-bottom: 30px; page-break-after: always;">
@@ -79,10 +80,9 @@
                       <div id="dupak-pak" class="tab-pane fade" role="tabpanel" style="margin-bottom: 30px; page-break-after: always;">
                         <div class="table-responsive " id="dupak-pak-wrapper">                            
                         </div>
-                      </div>
-                      <div class="clearfix page-break"></div>
+                      </div>                      
 
-                      @hasanyrole('Super Admin|Auditor')
+                      @hasanyrole('Auditor')
                       <div id="dupak-calendar" class="tab-pane fade no-print" role="tabpanel" style="margin-bottom: 30px; page-break-after: always;">
                         @include('admin.calendar.user.index')
                       </div>
