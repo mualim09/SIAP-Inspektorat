@@ -130,7 +130,8 @@
   $('#form-cari-dupak').on('submit', function(e) {
         //dupak_pengawasan_table.draw();//versi datatable
         //dupak_pendidikan_table.draw();//versi datatable
-        //e.preventDefault();
+        //e.preventDefault();        
+        var tahun = $('#tahun').val();
         tab = '<li class="nav-item"><a data-toggle="tab" class="nav-link active" href="#dupak-pengawasan">Pengawasan</a></li>'
               +'<li class="nav-item"><a data-toggle="tab" class="nav-link" href="#dupak-pendidikan">Pendidikan</a></li>'
               +'<li class="nav-item"><a data-toggle="tab" class="nav-link" href="#dupak-penunjang">Penunjang</a></li>'
@@ -138,7 +139,8 @@
               +'<li class="nav-item"><a data-toggle="tab" class="nav-link" href="#dupak-diklat">Diklat</a></li>'
               +'<li class="nav-item"><a data-toggle="tab" class="nav-link" href="#dupak-lak">LAK</a></li>'
               +'<li class="nav-item"><a data-toggle="tab" class="nav-link" href="#dupak-dupak">DUPAK</a></li>'
-              +'<li class="nav-item"><a data-toggle="tab" class="nav-link" href="#dupak-pak">PAK</a></li>';
+              +'<li class="nav-item"><a data-toggle="tab" class="nav-link" href="#dupak-pak">PAK</a></li>'
+              +'<li class="nav-item"><a data-toggle="tab" class="nav-link" href="#dupak-calendar">Calendar</a></li>';
         $('#dupak-tab').html(tab);
 
         //coba versi html biasa
@@ -148,6 +150,7 @@
         generate_tabel_pengembangan();
         generate_tabel_diklat();
         generate_tabel_lak();
+        generate_calendar(tahun);
         //generate_tabel_pak();
         e.preventDefault();
     });

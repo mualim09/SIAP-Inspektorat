@@ -22,248 +22,152 @@
                     '</div>' +
                 '</div>' +
                 '</form>';
+
        
     $.ajaxSetup({
       headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
     });
-for (i = 0; i <= 11; i++) {
-    
-    var x = new Date();   
-   x.setMonth(0 + i);
+
+function generate_calendar(tahun=''){
+  tahun = (tahun !== '') ? tahun : moment().year();
+  $('div.calendar').fullCalendar('destroy');
+  for (i = 0; i <= 11; i++) {
+      
+      var x = new Date();   
+     x.setMonth(0 + i);
+     x.setYear(tahun);
+     
+     if(i%2 == 1 ){
+          right = 'prev,next';
+      }else{
+          right = '';
+      }
    
-   if(i%2 == 1 ){
-        right = 'prev,next';
-    }else{
-        right = '';
-    }
- 
-    $('#calendar'+i).fullCalendar({
-       
-        header: {
-            left: 'title',
-            center: '',
-            right: ''
+      $('#calendar'+i).fullCalendar({
+         
+          header: {
+              left: 'title',
+              center: '',
+              right: ''
+            },
+          plugins: [ 'dayGrid' ],
+          editable: true,
+          /*events: 
+          {
+              url: SITEURL + "/dupak-auditor",
+              color: '#f4511e',
+              textColor: '#fff',            
+          },*/
+          eventSources: [
+          {
+              /*url: SITEURL + "/dupak-auditor",*/
+              url: "{{ route('calendar_auditor') }}",
+              color: 'transparent',
+              textColor: '#fff',
           },
-        plugins: [ 'dayGrid' ],
-        editable: true,
-        /*events: 
-        {
-            url: SITEURL + "/dupak-auditor",
-            color: '#f4511e',
-            textColor: '#fff',            
-        },*/
-        eventSources: [
-        {
-            /*url: SITEURL + "/dupak-auditor",*/
-            url: "{{ route('calendar_auditor') }}",
-            color: 'transparent',
-            textColor: '#fff',
-        },
-        {
-            url: "{{ route('holiday_calendar') }}",
-            color: 'transparent',
-            textColor: '#fff',
-        }
-        ],
-        defaultDate: x,
-        /*fixedWeekCount: false,
-        showNonCurrentDates: false,*/
-        displayEventTime: false,
-        editable: true,
-        locale: 'id',           
-        selectable: true,
-        selectHelper: true,
-       /* visibleRange: {
-          start: moment(x).startOf('month').format('YYYY-MM-DD'),
-          end: moment(x).endOf('month').format('YYYY-MM-DD')
-        },*/
-        //start onevent click function
-        eventClick:  function(event, jsEvent, view) {
-            console.log(event);
-            var start = moment(event.start, 'Y-MM-DD').format('LL');
-            var end = moment(event.end, 'Y-MM-DD').format('LL');
+          {
+              url: "{{ route('holiday_calendar') }}",
+              color: 'transparent',
+              textColor: '#fff',
+          }
+          ],
+          defaultDate: x,
+          /*fixedWeekCount: false,
+          showNonCurrentDates: false,*/
+          displayEventTime: false,
+          editable: true,
+          locale: 'id',           
+          selectable: true,
+          selectHelper: true,
+         /* visibleRange: {
+            start: moment(x).startOf('month').format('YYYY-MM-DD'),
+            end: moment(x).endOf('month').format('YYYY-MM-DD')
+          },*/       
+           eventRender: function (event, element, view) {
+             var startDate = moment(event.start).format('YYYY-MM-DD');
+             var stopDate = moment(event.end).format('YYYY-MM-DD');
+             var calMonth = moment(view.start).format('YYYY-MM-DD');
+             var eventMonth = moment(event.start).format('MM');
+             var dates = getDates(startDate, stopDate);
+             //console.log(event);event.end = moment(event.end).add(1, 'days').format('Y-MM-DD HH:mm:ss');
+             //console.log(event.title);
+             var newTitle = {'title': ''};
+             Object.assign(event, newTitle);
+             element.find('.fc-title').html('');
 
-            //jika kalender berhubungan dengan spt (ditandai dengan kategori)
-            if(event.kategori){
-              var start_label = "Mulai";
-              var end_label = "Selesai";
-              var desc_content = (typeof event.deskripsi !== 'undefined') ? 
-                  '<div class="row">'+
-                    '<div class="col-md-3 text-right">Deskripsi</div>'+
-                    '<div class="col text-left">'+event.deskripsi+'</div>'+
-                  '</div>' : '';
-              $.confirm({
-                theme: 'modern',
-                title: event.title,
-                columnClass: 'l',
-                type: 'blue',
-                content: ''+
-                '<div class="col-md-12">'+
-                  '<div class="row">'+
-                    '<div class="col-md-3 text-right">'+start_label+'</div>'+
-                    '<div class="col text-left">'+start+'</div>'+
-                  '</div>'+
-                  '<div class="row">'+
-                    '<div class="col-md-3 text-right">'+start_label+'</div>'+
-                    '<div class="col text-left">'+end+'</div>'+
-                  '</div>'+
-                  desc_content+                  
-                '</div>'
-              });
-            }            
-            
-        },
-        //end
-        dayClick: function (date,jsEvent,view){
-            allDay:true;            
-            
-            var start = moment(date).format('Y-MM-DD HH:mm:ss');
-            var end = moment(date).add(1, 'days').format('Y-MM-DD HH:mm:ss');
-            $.confirm({
-                theme: 'modern',
-                title: 'Buat acara',
-                columnClass: 'l',
-                type: 'blue',
-                content: '' +
-                '<form id="addEvent">' +
-                    '<div class="form-group">' +
-                        '<input type="text" placeholder="Nama acara dalam kalender" class="name form-control" required  id="event-title"/>' +
-                    '</div>' +
-                '</form>',
-                buttons: {
-                    formSubmit: {
-                        text: 'Submit',
-                        btnClass: 'btn-blue',
-                        action: function () {
-                            var csrf_token = $('meta[name="csrf-token"]').attr('content');
-                            var title = $('#event-title').val();
-                            var jenis = $('input[name="jenis"]:checked').val();
-                            $.ajax({
-                                url: SITEURL + "/calendar/create",
-                                type: "POST",
-                                data: { '_token' : csrf_token, title: title, start: start, end: end, jenis: jenis},
-                                success: function(data){
-                                    $.alert({
-                                        content:'Event '+data.title+' created Successfully!' ,
-                                        title: 'Success',
-                                        theme: 'modern',
-                                        type: 'blue'
-                                    });
-                                    //$('#calendar'+i).fullCalendar('refetchEvents');
-                                      setTimeout(function(){// wait for 5 secs(2)
-                                           location.reload(); // then reload the page.(3)
-                                      }, 5000); 
-                                },
-                                error: function(error){                                    
-                                    $.alert({
-                                        content:'Event error! ' +error.responseJSON.message , 
-                                        title: 'Error',
-                                        theme: 'modern',
-                                        type: 'red'
-                                    });
-                                }
-                            });
-                            //refetch event
-                            
-                        }
-                    },
-                    cancel: function () {
-                        //close
-                    },
-                },
-                onContentReady: function () {
-                    // bind to events
-                    var jc = this;
-                    this.$content.find('form').on('submit', function (e) {
-                        // if the user submits the form by pressing enter in the field.
-                        e.preventDefault();
-                        jc.$$formSubmit.trigger('click'); // reference the button and click it
-                    });
-                }
-            });
-        },
-
-        //end select function
-         eventRender: function (event, element, view) {
-           var startDate = moment(event.start).format('YYYY-MM-DD');
-           var stopDate = moment(event.end).format('YYYY-MM-DD');
-           var calMonth = moment(view.start).format('YYYY-MM-DD');
-           var eventMonth = moment(event.start).format('MM');
-           var dates = getDates(startDate, stopDate);
-           //console.log(event);event.end = moment(event.end).add(1, 'days').format('Y-MM-DD HH:mm:ss');
-
-           if (event.kategori) {
-               //info = spt
-               //console.log(event.info);
-              /*var obj = JSON.parse(event.info);
-              console.log(obj.unsur_dupak);*/
-               if(event.kategori == 'pengawasan'){
-                 last_date = dates[dates.length -1];
-                 first_date = dates[0];
-                 //console.log(first_date+'='+last_date);
-                 dates.forEach(function (dataToFind){
-                     if (!$("td[data-date='"+dataToFind+"']").is(".fc-sat, .fc-sun") ){
-                          $("td[data-date='"+dataToFind+"']").addClass('spt-pengawasan-day');
-                          if(dataToFind == last_date){
-                              $("td[data-date='"+dataToFind+"']").addClass('last');
-                          }
-                          if(dataToFind == first_date){
-                              $("td[data-date='"+dataToFind+"']").addClass('first');
-                          }
-                     }
-                     
-                });
-               }else{
-                /*dates.forEach(function (dataToFind){
-                 if (!$("td[data-date='"+dataToFind+"']").is(".fc-sat, .fc-sun")){
-                     $("td[data-date='"+dataToFind+"']").addClass('spt-umum-day');
-                 }
-                });*/
-               }
-               
-            }else{                
-               
-                dataToFind = dates[0];
-                if (!$("td[data-date='"+dataToFind+"']").is(".fc-sat, .fc-sun")){
-                        $("td[data-date='"+dataToFind+"']").addClass('holiday');
-                    }
-            }
-
-            if (event.allDay === 'true') {
-                event.allDay = true;
-            } else {
-                event.allDay = false;
-            }
-        },
-        eventAfterRender: function(event, element, view){
-           //console.log(event);
-           var startDate = moment(event.start).format('YYYY-MM-DD');
-           var stopDate = moment(event.end).format('YYYY-MM-DD');           
-           var dates = getDates(startDate, stopDate);
-           if (event.kategori) {
-            if(event.kategori == 'pengawasan'){
-                dates.forEach(function (dataToFind){
-                   if ($("td[data-date='"+dataToFind+"']").is(".last.first") ){
-                        $("td[data-date='"+dataToFind+"']").addClass('spt-multi-pengawasan-day');
+             if (event.kategori) {
+                 //info = spt
+                 //console.log(event.info);
+                /*var obj = JSON.parse(event.info);
+                console.log(obj.unsur_dupak);*/
+                 if(event.kategori == 'pengawasan'){
+                   last_date = dates[dates.length -1];
+                   first_date = dates[0];
+                   //console.log(first_date+'='+last_date);
+                   dates.forEach(function (dataToFind){
+                       if (!$("td[data-date='"+dataToFind+"']").is(".fc-sat, .fc-sun") ){
+                            $("td[data-date='"+dataToFind+"']").addClass('spt-pengawasan-day');
+                            if(dataToFind == last_date){
+                                $("td[data-date='"+dataToFind+"']").addClass('last');
+                            }
+                            if(dataToFind == first_date){
+                                $("td[data-date='"+dataToFind+"']").addClass('first');
+                            }
+                       }
+                       
+                  });
+                 }else{
+                  /*dates.forEach(function (dataToFind){
+                   if (!$("td[data-date='"+dataToFind+"']").is(".fc-sat, .fc-sun")){
+                       $("td[data-date='"+dataToFind+"']").addClass('spt-umum-day');
                    }
-              });
-            }
-           }
-           /*
-           $('td.fc-other-month .fc-day-number').attr('style','background-color:#ccc !important; color: #ccc;');
-           $('div.fc-bg table tbody tr td.fc-other-month').attr('style','background-color:#ccc !important; color: #ccc;');
-           //hide event other month
-            var col=element.closest('td').index()+1;
-            var $cellh=element.closest('table').find('thead td:nth-child('+col+')');
-            if ($cellh.hasClass('fc-other-month') == true)
-                    element.css('visibility','hidden')
+                  });*/
+                 }
+                 
+              }else{                
+                 
+                  dataToFind = dates[0];
+                  if (!$("td[data-date='"+dataToFind+"']").is(".fc-sat, .fc-sun")){
+                          $("td[data-date='"+dataToFind+"']").addClass('holiday');
+                      }
+              }
 
-           //finish
-           */
-        },
-    });
+              if (event.allDay === 'true') {
+                  event.allDay = true;
+              } else {
+                  event.allDay = false;
+              }
+          },
+          eventAfterRender: function(event, element, view){
+             //console.log(event);
+             var startDate = moment(event.start).format('YYYY-MM-DD');
+             var stopDate = moment(event.end).format('YYYY-MM-DD');           
+             var dates = getDates(startDate, stopDate);
+             if (event.kategori) {
+              if(event.kategori == 'pengawasan'){
+                  dates.forEach(function (dataToFind){
+                     if ($("td[data-date='"+dataToFind+"']").is(".last.first") ){
+                          $("td[data-date='"+dataToFind+"']").addClass('spt-multi-pengawasan-day');
+                     }
+                });
+              }
+             }
+             /*
+             $('td.fc-other-month .fc-day-number').attr('style','background-color:#ccc !important; color: #ccc;');
+             $('div.fc-bg table tbody tr td.fc-other-month').attr('style','background-color:#ccc !important; color: #ccc;');
+             //hide event other month
+              var col=element.closest('td').index()+1;
+              var $cellh=element.closest('table').find('thead td:nth-child('+col+')');
+              if ($cellh.hasClass('fc-other-month') == true)
+                      element.css('visibility','hidden')
+
+             //finish
+             */
+          },
+      });
+  }
 }
 
 function getDates(startDate, stopDate) {

@@ -34,5 +34,9 @@ class Event extends Model
     	return;
     }
 
+    public function getTitleAttribute(){
+        return '';
+    }
+
    
 }

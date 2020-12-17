@@ -48,8 +48,7 @@ class CalendarController extends Controller
  
          $start = (!empty($_GET["start"])) ? ($_GET["start"]) : ('');
          $end = (!empty($_GET["end"])) ? ($_GET["end"]) : ('');
-         $user_id = auth()->user()->id;
- 
+         $user_id = auth()->user()->id; 
          
         $data = DB::table('spt')
             ->join('jenis_spt', 'spt.jenis_spt_id' , '=', 'jenis_spt.id')
@@ -58,10 +57,12 @@ class CalendarController extends Controller
             ->where('detail_spt.user_id', '=', $user_id)
             ->where('spt.nomor','!=', NULL)
             ->get();
+            //dd($data);
+            //$data['title'] = ' ';
          
          return Response::json($data);
         }
-        return view('admin.calendar.user.index');
+        //return view('admin.calendar.user.index');
     }
 
     public function calendarPdf(){
@@ -214,5 +215,9 @@ class CalendarController extends Controller
         }else{
             return 'Not authorized to perform this action.';
         }        
+    }
+
+    public function getUserEvent(){
+        $user = auth()->user();
     }
 }

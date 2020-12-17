@@ -80,6 +80,13 @@
                         <div class="table-responsive " id="dupak-pak-wrapper">                            
                         </div>
                       </div>
+                      <div class="clearfix page-break"></div>
+
+                      @hasanyrole('Super Admin|Auditor')
+                      <div id="dupak-calendar" class="tab-pane fade no-print" role="tabpanel" style="margin-bottom: 30px; page-break-after: always;">
+                        @include('admin.calendar.user.index')
+                      </div>
+                      @endhasanyrole
                       
                     </div>
 

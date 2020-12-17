@@ -150,6 +150,7 @@ for (i = 0; i <= 11; i++) {
            var calMonth = moment(view.start).format('YYYY-MM-DD');
            var eventMonth = moment(event.start).format('MM');
            var dates = getDates(startDate, stopDate);
+           element.find('.fc-title').html(''); //replace all event title with blank text
 
            //start test
            /*var eventDate = event.start;

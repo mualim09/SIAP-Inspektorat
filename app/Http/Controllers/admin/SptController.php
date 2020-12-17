@@ -655,15 +655,16 @@ class SptController extends Controller
 
     public function getData($jenis_data){
         $user = auth()->user();        
-        if($user->hasRole('Auditor')){
+        /*if($user->hasRole('Auditor')){
             return $this->mySpt();
         }else{
             return $this->getDataSpt($jenis_data);
-        }
+        }*/
+        return $this->getDataSpt($jenis_data);
 
     }
 
-    public function getDataSpt($jenis_data)
+    public function getDataSpt($jenis_data='arsip')
     {
         $spt = Spt::select('*');        
         
@@ -1823,6 +1824,9 @@ class SptController extends Controller
                         'jenis' => $col->jenis_spt,
                         'tambahan' => $tambahan];
                     return $ringkasan;*/
+                    /*$tambahan = (!is_null($col->tambahan) ) ? '<br /> <small class="text-muted"> ' . Common::cutText($col->tambahan, 2, 70) . '</small>' : '';
+                    $lokasi = (!is_null($col->lokasi_id) ) ? '<small class="text-muted"> di ' . $col->lokasi_spt . '</small>' : '';
+                    return "<div class='text-wrap'>" . $col->jenisSpt->name . $tambahan . $lokasi ."</div>";*/
 
                 })
                 ->addColumn('dupak', function($col){
