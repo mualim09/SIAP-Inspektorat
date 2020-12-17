@@ -313,6 +313,7 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 		Route::get('lokasi','LokasiController@index')->name('index_lokasi');
 		Route::post('save-lokasi','LokasiController@store')->name('store_lokasi');
 		Route::get('getdata-lokasi','LokasiController@getLokasiPemeriksaan')->name('get_data_lokasi');
+		Route::get('getDataLokasi/{id}','LokasiController@getdataLokasi')->name('upload_scan_spt');
 	});
 
 
@@ -343,7 +344,7 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
     });
 
     // route ppm
-    Route::group(['prefix' => 'ppm'], function(){\
+    Route::group(['prefix' => 'ppm'], function(){
     	Route::get('index','PpmController@index')->name('ppm_index');
     	Route::get('getdata-ppm','PpmController@getdataPpm')->name('getdata_ppm');
     	// ppm
@@ -351,11 +352,16 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
     	Route::post('session-anggota/store/ppm','PpmController@storePpmSessionAnggotaPpm')->name('store_session_anggota_ppm'); /*store session anggota ppm*/
     	// Route::post('ppm/store-detail-anggota','SptController@storePpmDetailAnggota')->name('store_detail_anggota_umum');
     	Route::delete('session/anggota/delete/{user_id}','PpmController@deleteSessionAnggotaPpm')->name('delete_session_anggota_ppm_by_id'); /*delete anggota session by user_id*/
-    	Route::get('/get-ppm-byid/{id}','PpmController@getPpmByid')->name('getPpmById');
+    	// Route::get('/get-ppm-byid/{id}','PpmController@getPpmByid')->name('getPpmById');
+    	/*edit ppm*/
+    	// Route::get('get-valueData-ppm/{id}','PpmController@getValueEdit')->name('get_value_edit');
+    	// Route::post('update-ppm','PpmController@updatePpm')->name('update_ppm');
+
     	// percobaan ppm tanpa datatable
     	// Route::get('ppm/get-data/anggota', 'PpmController@drawTableAnggotaPpm')->name('tabel_anggota_ppm');
     	Route::post('ppm/get-data/anggota', 'PpmController@TableAnggotaPpm')->name('tabel_anggota_ppm'); /*getdata user yang terkait ppm tsb*/
     	Route::delete('delete/data-ppm/{id}','PpmController@deletePpm')->name('delete_data_PPM_by_id');
+
     });
 
     Route::group(['prefix' => 'roles'], function(){
