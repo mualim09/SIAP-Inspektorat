@@ -176,12 +176,12 @@ function printDiv(divName){
  //printJS(divName, 'html');
  //$( "div.no-print" ).parents().css( 'display','none' );
  //css = (divName === 'calendar-user') ? "{{ asset('assets/vendor/fullcalendar/fullcalendar.print.min.css') }}" : "{{ asset('css/print.css') }}";
- css = ["{{ asset('assets/vendor/fullcalendar/fullcalendar.print.min.css') }}", "{{ asset('css/print.css') }}"];
+ //css = ["{{ asset('assets/vendor/fullcalendar/fullcalendar.print.min.css') }}", "{{ asset('css/print.css') }}"];
   printJS({
     printable : divName,
     type: 'html',
-    css: css,
-    scanStyles: true
+    css: "{{ asset('css/print.css') }}",
+    scanStyles: false
   });
   //return false;
 }

@@ -24,7 +24,7 @@
                     </div>
                     
                     <div id="btn-show-dupak" class="col-md-12 row justify-content-end" style="margin-bottom: 30px;">
-                      <button onclick="printDiv('calendar-user')" class="btn btn-default" >Print Calendar</button>
+                      <!-- <button onclick="printDiv('calendar-user')" class="btn btn-default" >Print Calendar</button> -->
                       <!-- <button onclick="printJS('calendar-user', 'html')" class="btn btn-default" >Print Calendar</button> -->
                       <button onclick="printDiv('print-dupak')" class="btn btn-default" >Print AK</button>
                     </div>                    
@@ -82,7 +82,7 @@
                         </div>
                       </div>                      
 
-                      @hasanyrole('Auditor')
+                      @hasanyrole('Auditor|Super Admin')
                       <div id="dupak-calendar" class="tab-pane fade no-print" role="tabpanel" style="margin-bottom: 30px; page-break-after: always;">
                         @include('admin.calendar.user.index')
                       </div>

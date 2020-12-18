@@ -73,7 +73,7 @@ function generate_calendar(tahun=''){
               textColor: '#fff',
           },
           {
-            
+            // route ke kuota kalender, jika ada jumlah_spt>= 2 maka dinyatakan lembur
             color: 'transparent',
             textColor: '#fff',
           },

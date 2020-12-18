@@ -250,3 +250,7 @@ min-height: 35px; /* or whatever height you need to make them all consistent */
 .width-300{
     width:300px;
 }
+
+#dupak-pengawasan-table.table td, #dupak-pengawasan-table.table th, #dupak-lak-table.table td{
+  white-space: normal !important;
+}

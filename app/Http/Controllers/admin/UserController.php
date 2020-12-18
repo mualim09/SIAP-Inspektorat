@@ -331,7 +331,7 @@ class UserController extends Controller
     }
 
     public function getAuditor(Request $request){
-        $user = User::select('id', DB::raw('CONCAT(first_name, " ", last_name, " ", gelar) AS name'))->whereNotNull('jenis_auditor');
+        $user = User::select('id', DB::raw('CONCAT(first_name, " ", last_name, " ", gelar) AS name'))->where('jabatan', 'like', 'Auditor%');
         return $user->get()->toJson();
     }
 
