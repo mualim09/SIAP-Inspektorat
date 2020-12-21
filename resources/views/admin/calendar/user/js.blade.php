@@ -74,10 +74,20 @@ function generate_calendar(tahun=''){
           },
           {
             // route ke kuota kalender, jika ada jumlah_spt>= 2 maka dinyatakan lembur
+            url : "{{ route('calendar_lembur') }}",            
             color: 'transparent',
-            textColor: '#fff',
+            textColor: 'yellow',
           },
           ],
+          /*addEventSource: function(){
+            $.ajax({
+              url: "{{ route('calendar_lembur') }}",
+              type: 'GET',
+              success: function(response){
+                console.log(response);
+              }
+            });
+          },*/
           defaultDate: x,
           /*fixedWeekCount: false,
           showNonCurrentDates: false,*/
@@ -107,7 +117,9 @@ function generate_calendar(tahun=''){
                  //console.log(event.info);
                 /*var obj = JSON.parse(event.info);
                 console.log(obj.unsur_dupak);*/
+                console.log(event.kategori);
                  if(event.kategori == 'pengawasan'){
+                  //console.log(event.start);
                    last_date = dates[dates.length -1];
                    first_date = dates[0];
                    //console.log(first_date+'='+last_date);
@@ -123,12 +135,6 @@ function generate_calendar(tahun=''){
                        }
                        
                   });
-                 }else{
-                  /*dates.forEach(function (dataToFind){
-                   if (!$("td[data-date='"+dataToFind+"']").is(".fc-sat, .fc-sun")){
-                       $("td[data-date='"+dataToFind+"']").addClass('spt-umum-day');
-                   }
-                  });*/
                  }
                  
               }else{                
@@ -148,9 +154,15 @@ function generate_calendar(tahun=''){
           eventAfterRender: function(event, element, view){
              //console.log(event);
              var startDate = moment(event.start).format('YYYY-MM-DD');
-             var stopDate = moment(event.end).format('YYYY-MM-DD');           
+             var stopDate = moment(event.start).add(1, 'days').format('YYYY-MM-DD');           
              var dates = getDates(startDate, stopDate);
-             if (event.kategori) {
+             if(event.kategori == 'lembur'){
+                  console.log(event);
+                    dates.forEach(function (dataToFind){
+                      $("td[data-date='"+dataToFind+"']").addClass('lembur');
+                    });
+                 }
+             /*if (event.kategori) {
               if(event.kategori == 'pengawasan'){
                   dates.forEach(function (dataToFind){
                      if ($("td[data-date='"+dataToFind+"']").is(".last.first") ){
@@ -158,7 +170,7 @@ function generate_calendar(tahun=''){
                      }
                 });
               }
-             }
+             }*/
              /*
              $('td.fc-other-month .fc-day-number').attr('style','background-color:#ccc !important; color: #ccc;');
              $('div.fc-bg table tbody tr td.fc-other-month').attr('style','background-color:#ccc !important; color: #ccc;');

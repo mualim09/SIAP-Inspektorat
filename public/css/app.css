@@ -179,6 +179,10 @@ td.spt-pengawasan-day, .fc-unthemed td.fc-today.spt-pengawasan-day{
   background-color: #5385c8;
   z-index:-2;
 }
+td.lembur, .fc-unthemed td.lembur{
+   background-color: #1f3882;
+   z-index:-1 !important;
+}
 /*td.spt-umum-day.spt-pengawasan-day{
   background-color: #5e72e4 !important;
   z-index:-1;

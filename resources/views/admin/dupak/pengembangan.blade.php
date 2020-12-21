@@ -45,7 +45,7 @@ function generate_tabel_pengembangan(){
       if(response.ak.spt.length>0 || response.ak.ppm.length>0){
       var year = new Date().getFullYear();
       if(response.ak.spt.length>0){
-        console.log(response.ak.spt);
+        //console.log(response.ak.spt);
         $.each(response.ak.spt, function (i, item) {
         
            table += '<tr>'
