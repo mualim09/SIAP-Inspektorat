@@ -54,15 +54,8 @@ function generate_calendar(tahun=''){
             },
           plugins: [ 'dayGrid' ],
           editable: true,
-          /*events: 
-          {
-              url: SITEURL + "/dupak-auditor",
-              color: '#f4511e',
-              textColor: '#fff',            
-          },*/
           eventSources: [
           {
-              /*url: SITEURL + "/dupak-auditor",*/
               url: "{{ route('calendar_auditor') }}",
               color: 'transparent',
               textColor: '#fff',
@@ -73,56 +66,32 @@ function generate_calendar(tahun=''){
               textColor: '#fff',
           },
           {
-            // route ke kuota kalender, jika ada jumlah_spt>= 2 maka dinyatakan lembur
             url : "{{ route('calendar_lembur') }}",            
             color: 'transparent',
             textColor: 'yellow',
           },
           ],
-          /*addEventSource: function(){
-            $.ajax({
-              url: "{{ route('calendar_lembur') }}",
-              type: 'GET',
-              success: function(response){
-                console.log(response);
-              }
-            });
-          },*/
           defaultDate: x,
-          /*fixedWeekCount: false,
-          showNonCurrentDates: false,*/
           displayEventTime: false,
           editable: true,
           locale: 'id',           
           selectable: true,
-          selectHelper: true,
-         /* visibleRange: {
-            start: moment(x).startOf('month').format('YYYY-MM-DD'),
-            end: moment(x).endOf('month').format('YYYY-MM-DD')
-          },*/       
+          selectHelper: true,     
            eventRender: function (event, element, view) {
              var startDate = moment(event.start).format('YYYY-MM-DD');
              var stopDate = moment(event.end).format('YYYY-MM-DD');
              var calMonth = moment(view.start).format('YYYY-MM-DD');
              var eventMonth = moment(event.start).format('MM');
              var dates = getDates(startDate, stopDate);
-             //console.log(event);event.end = moment(event.end).add(1, 'days').format('Y-MM-DD HH:mm:ss');
-             //console.log(event.title);
              var newTitle = {'title': ''};
              Object.assign(event, newTitle);
              element.find('.fc-title').html('');
 
              if (event.kategori) {
-                 //info = spt
-                 //console.log(event.info);
-                /*var obj = JSON.parse(event.info);
-                console.log(obj.unsur_dupak);*/
-                console.log(event.kategori);
+                
                  if(event.kategori == 'pengawasan'){
-                  //console.log(event.start);
                    last_date = dates[dates.length -1];
                    first_date = dates[0];
-                   //console.log(first_date+'='+last_date);
                    dates.forEach(function (dataToFind){
                        if (!$("td[data-date='"+dataToFind+"']").is(".fc-sat, .fc-sun") ){
                             $("td[data-date='"+dataToFind+"']").addClass('spt-pengawasan-day');
@@ -152,36 +121,14 @@ function generate_calendar(tahun=''){
               }
           },
           eventAfterRender: function(event, element, view){
-             //console.log(event);
              var startDate = moment(event.start).format('YYYY-MM-DD');
              var stopDate = moment(event.start).add(1, 'days').format('YYYY-MM-DD');           
              var dates = getDates(startDate, stopDate);
              if(event.kategori == 'lembur'){
-                  console.log(event);
                     dates.forEach(function (dataToFind){
                       $("td[data-date='"+dataToFind+"']").addClass('lembur');
                     });
-                 }
-             /*if (event.kategori) {
-              if(event.kategori == 'pengawasan'){
-                  dates.forEach(function (dataToFind){
-                     if ($("td[data-date='"+dataToFind+"']").is(".last.first") ){
-                          $("td[data-date='"+dataToFind+"']").addClass('spt-multi-pengawasan-day');
-                     }
-                });
-              }
-             }*/
-             /*
-             $('td.fc-other-month .fc-day-number').attr('style','background-color:#ccc !important; color: #ccc;');
-             $('div.fc-bg table tbody tr td.fc-other-month').attr('style','background-color:#ccc !important; color: #ccc;');
-             //hide event other month
-              var col=element.closest('td').index()+1;
-              var $cellh=element.closest('table').find('thead td:nth-child('+col+')');
-              if ($cellh.hasClass('fc-other-month') == true)
-                      element.css('visibility','hidden')
-
-             //finish
-             */
+                 }             
           },
       });
   }
@@ -293,7 +240,6 @@ function getDates(startDate, stopDate) {
                                     type: "POST",
                                     data: { '_token' : csrf_token, event_id: event_id, title: title, start: start, end: end, jenis: jenis},
                                     success: function(data){
-                                        console.log(data);
                                         $.alert({
                                             content:'Event '+data.title+' updated Successfully!' , 
                                             title: 'Success',
