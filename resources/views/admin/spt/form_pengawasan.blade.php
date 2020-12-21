@@ -60,7 +60,7 @@
 				<div class="form-group row">
 				    <label for="tgl-mulai" class="col-md-2 col-form-label text-right">{{ __('Lama') }}</label>
 				    <div class="col-md-4">
-						<input type="text" class="form-control" name="lama" id="lama" autocomplete="off" placeholder="{{ __('Lama')}}">
+						<input type="text" class="form-control" name="lama" id="lama" autocomplete="off" placeholder="{{ __('Lama')}}" disabled="disabled">
 					</div>
 				</div>
 
