@@ -251,6 +251,8 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 		Route::post('/input/sertifikat-auditor','SertifikatController@storeSertifikat')->name('input_sertifikat');
 		Route::post('/edit/sertifikatAuditor','SertifikatController@editSertifikat')->name('save_edit_sertifikat');
 		Route::get('/delete/sertifikatAuditor/{id}','SertifikatController@deleteSertifikat')->name('delete_sertifikat');
+
+		Route::put('profile/{id}','UserController@updateDataProfileUser');
 	});
 
 	//kka
@@ -342,6 +344,8 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 		Route::get('penunjukan/pejabat', 'PejabatController@index')->name('satgas_ppm');
 		Route::post('submit/pejabat', 'PejabatController@submit')->name('submit_pejabat');
 
+
+
     });
 
     // route ppm
@@ -355,7 +359,7 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
     	Route::delete('session/anggota/delete/{user_id}','PpmController@deleteSessionAnggotaPpm')->name('delete_session_anggota_ppm_by_id'); /*delete anggota session by user_id*/
     	// Route::get('/get-ppm-byid/{id}','PpmController@getPpmByid')->name('getPpmById');
     	/*edit ppm*/
-    	// Route::get('get-valueData-ppm/{id}','PpmController@getValueEdit')->name('get_value_edit');
+    	Route::get('get-valueData-ppm/{id}','PpmController@getValueEdit')->name('get_value_edit');
     	// Route::post('update-ppm','PpmController@updatePpm')->name('update_ppm');
 
     	// percobaan ppm tanpa datatable
