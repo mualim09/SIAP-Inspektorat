@@ -220,6 +220,94 @@
 
 <script type="text/javascript">
 
+$('#btn-input-ppm').on('click', function(){
+    if( !$('#morator-narasumber-id').val() ) { 
+        $(".form-check-input").removeAttr("disabled");
+        $("#select-all").removeAttr("disabled");
+        $(".form-check-input").css({ 'color': '#525f7f'});
+        $(".form-check-input").prop('checked', true);
+        $("#form-ppm")[0].reset();
+        $('#kegiatan-ppm').prop('disabled', false);
+        $('#tgl-mulai-ppm').prop('disabled', false);
+        $('#id-btn-submit').show();
+        $('div .col-md-2').attr('style', 'rgb(82 95 127)');
+        // console.log('jalan');
+        $('#id-satgas-btn').show();
+        $('#file-nota-dinas').show();
+        $('#infoKegiatanHelp').show();
+    }
+});
+
+$('#close-modal-form-input-PPM').on('click', function(){
+    $(".form-check-input").removeAttr("disabled");
+    $("#form-ppm")[0].reset();
+    var $select = $('#morator-narasumber-id').selectize();
+    var control = $select[0].selectize;
+    control.clear();
+});
+
+function show_ppm(id){
+    $("#form-ppm")[0].reset();
+    $('#id-ppm').val(id);
+    $('#formPpmSatgas').modal('show');
+    var id_ppm = $('#id-ppm').val();
+    if (id_ppm != null) {
+        $('#id-satgas-btn').hide();
+        $('#file-nota-dinas').hide();
+        $('#infoKegiatanHelp').hide();
+        $('#id-btn-note-dinas').show();
+        $('#kegiatan-ppm').prop('disabled', true);
+        $('#tgl-mulai-ppm').prop('disabled', true);
+        $('#select-all').prop('disabled', true);
+        $("#morator-narasumber-id").prop('disabled', true);
+    }
+    // $('')
+    // get-valueData-ppm/{id}
+    save_method = 'edit';
+        url = "{{ url('admin/ppm/get-valueData-ppm/') }}/" +id_ppm;
+        
+        $.ajax({
+            url: url,
+            type: "GET",
+            dataType: "JSON",
+            success: function(data){
+                
+                // set value kegiatan
+                $('#kegiatan-ppm').val(data[0].ppm.kegiatan);
+                
+                $('#tgl-mulai-ppm').val(data[0].ppm.tgl_mulai);
+                // $('#tgl-mulai').val(data.tgl_mulai);
+                if (data[0].nama_file == null) {
+                    $('#id-btn-note-dinas').val(data[0].nama_file);
+                }else{
+                    $('#id-btn-note-dinas').hide();
+                }
+
+
+                var moderator = [];
+
+                $.each(data, function(i,item){
+                    if(data[i].peran == 'Moderator'){
+                        moderator.push(item.user_id);
+                        $('#id-anggota-'+item.user_id).prop('checked', false);
+                        // $('#id-anggota-'+item.user_id).attr("disabled", true);
+                        $('#id-anggota-'+item.user_id).prop('disabled', true);
+                    }
+                    if(item.peran == 'Peserta'){
+                        $('#id-anggota-'+item.user_id).prop('checked', true);
+                        $('#id-anggota-'+item.user_id).prop('disabled', true);
+                    }
+                });
+                $('#morator-narasumber-id')[0].selectize.setValue(moderator);
+
+            },
+            error: function(err){
+                
+            }
+        });
+};
+
+
 $('#id-satgas-btn').click(function(){
     $.confirm({
         title: "{{ __('Perhatian!') }}",

@@ -230,11 +230,11 @@ class PpmController extends Controller
                                     }
                                     $nilai_dupak_terimbas_pelatihan = json_decode($nilai_dupak_pelatihan)->koefisien * $lama_jam_terimbas_pelatihan;
                                     $koefisien_terimbas_pelatihan = json_decode($nilai_dupak_pelatihan)->koefisien;
-                                    if (json_decode($nilai_dupak_pelatihan)->lembur <= 0) {
-                                       $nilai_lembur = json_decode($nilai_dupak_pelatihan)->lembur + 1;
-                                    }else{
-                                        $nilai_lembur = json_decode($nilai_dupak_pelatihan)->lembur;
-                                    }
+                                    // if (json_decode($nilai_dupak_pelatihan)->lembur <= 0) {
+                                    //    $nilai_lembur = json_decode($nilai_dupak_pelatihan)->lembur + 1;
+                                    // }else{
+                                    //     $nilai_lembur = json_decode($nilai_dupak_pelatihan)->lembur;
+                                    // }
                                      
 
                                     /*{#1790
@@ -251,7 +251,7 @@ class PpmController extends Controller
                                     $dupak_terimbas_pelatihan_p = [
                                         'lama_jam' => $lama_jam_terimbas_pelatihan,
                                         'efektif' => $hari_efektif_terimbas_pelatihan,
-                                        'lembur' => $nilai_lembur,
+                                        'lembur' => /*$nilai_lembur*/0,
                                         'dupak' => $nilai_dupak_terimbas_pelatihan,
                                         'koefisien' => $koefisien_terimbas_pelatihan
 
@@ -353,11 +353,11 @@ class PpmController extends Controller
                                         $lama_jam_terimbas_workshop = json_decode($nilai_dupak_workshop)->lama_jam - 2;
                                     }
                                     $nilai_dupak_terimbas_workshop = json_decode($nilai_dupak_workshop)->koefisien * $lama_jam_terimbas_workshop;
-                                    if (json_decode($nilai_dupak_terimbas_workshop)->lembur <= 0) {
-                                       $nilai_lembur_m = json_decode($nilai_dupak_terimbas_workshop)->lembur + 1;
-                                    }else{
-                                        $nilai_lembur_m = json_decode($nilai_dupak_terimbas_workshop)->lembur;
-                                    }
+                                    // if (json_decode($nilai_dupak_terimbas_workshop)->lembur <= 0) {
+                                    //    $nilai_lembur_m = json_decode($nilai_dupak_terimbas_workshop)->lembur + 1;
+                                    // }else{
+                                    //     $nilai_lembur_m = json_decode($nilai_dupak_terimbas_workshop)->lembur;
+                                    // }
                                     /*{#1790
                                 //       +"lama_jam": 5 // lama jam -2
                                 //       +"efektif": 0 //if efektif>0 maka dikurangi 1
@@ -370,7 +370,7 @@ class PpmController extends Controller
                                     $dupak_moderator_terimbas_p = [
                                         'lama_jam' => $lama_jam_terimbas_workshop,
                                         'efektif' => $hari_efektif_terimbas_workshop,
-                                        'lembur' => $nilai_lembur_m,
+                                        'lembur' => /*$nilai_lembur_m*/0,
                                         'dupak' => $nilai_dupak_terimbas_workshop,
                                         'koefisien' => json_decode($nilai_dupak_workshop)->koefisien
                                     ];
@@ -465,11 +465,11 @@ class PpmController extends Controller
                                     }
                                     $nilai_dupak_terimbas_pelatihan = json_decode($nilai_dupak_pelatihan)->koefisien * $lama_jam_terimbas_pelatihan;
                                     $koefisien_terimbas_pelatihan = json_decode($nilai_dupak_pelatihan)->koefisien;
-                                    if (json_decode($nilai_dupak_pelatihan)->lembur <= 0) {
-                                       $nilai_lembur_p = json_decode($nilai_dupak_pelatihan)->lembur + 1;
-                                    }else{
-                                        $nilai_lembur_p = json_decode($nilai_dupak_pelatihan)->lembur;
-                                    }
+                                    // if (json_decode($nilai_dupak_pelatihan)->lembur <= 0) {
+                                    //    $nilai_lembur_p = json_decode($nilai_dupak_pelatihan)->lembur + 1;
+                                    // }else{
+                                    //     $nilai_lembur_p = json_decode($nilai_dupak_pelatihan)->lembur;
+                                    // }
                                     /*{#1790
                                 //       +"lama_jam": 5 // lama jam -2
                                 //       +"efektif": 0 //if efektif>0 maka dikurangi 1
@@ -482,7 +482,7 @@ class PpmController extends Controller
                                     $dupak_terimbas_pelatihan_p = [
                                         'lama_jam' => $lama_jam_terimbas_pelatihan,
                                         'efektif' => $hari_efektif_terimbas_pelatihan,
-                                        'lembur' => $nilai_lembur_p,
+                                        'lembur' => /*$nilai_lembur_p*/0,
                                         'dupak' => $nilai_dupak_terimbas_pelatihan,
                                         'koefisien' => $koefisien_terimbas_pelatihan
                                     ];
