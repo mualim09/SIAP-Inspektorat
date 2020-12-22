@@ -28,7 +28,8 @@
             </div>
 
             <!-- Navbar items -->
-            <ul class="navbar-nav align-items-center d-flex d-md-flex menu-nav-kiri">
+            <!-- <ul class="navbar-nav align-items-center d-flex d-md-flex menu-nav-kiri"> -->
+            <ul class="navbar-nav mr-auto ml-4 d-none d-md-flex">
                 <!-- <li class="nav-item">                    
                     <a class="nav-link nav-link-icon" href="{{ route('admin') }}">
                         <i class="ikon ni ni-istanbul"></i>
@@ -40,7 +41,7 @@
                         <i class="ikon ni ni-single-copy-04"></i>
                         <span id="menu_id" class="nav-link-inner--text">{{ __('Dokumen') }}</span>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-right">                        
+                    <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-left">                        
                         <a  class="dropdown-item" href="{{ url('/admin/spt') }}"><i class="ikon ni ni-bullet-list-67"></i><span id="menu_id">{{ __('Data SPT') }}</span></a>
                         @hasanyrole('Super Admin|TU Perencanaan')
                         <a class="dropdown-item" href="{{ url('/admin/jenis-spt') }}"><i class="ikon ni ni-book-bookmark"></i><span id="menu_id">{{ __('Data Jenis SPT') }}</span></a>
@@ -81,16 +82,10 @@
 
                 @hasanyrole('Super Admin|Administrasi Umum|Auditor')
                 <li class="nav-item dropdown">                    
-                    <a class="nav-link nav-link-icon dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-expanded="false">
+                    <a class="nav-link nav-link-icon" href="{{ route('list_dupak') }}" role="button">
                         <i class="ikon ni ni-bullet-list-67"></i>
                         <span id="menu_id" class="nav-link-inner--text">{{ __('Dupak') }}</span>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-right">                        
-                        <a  class="dropdown-item" href="{{ route('list_dupak') }}"><i class="ikon ni ni-bullet-list-67"></i><span id="menu_id">{{ __('Data Dupak') }}</span></a>
-                        @hasanyrole('Super Admin|Administrasi Umum')
-                        <!-- <a class="dropdown-item" href="{{ route('reviu_dupak') }}"><i class="ni ni-book-bookmark"></i><span>{{ __('Reviu Dupak') }}</span></a> -->
-                        @endhasanyrole
-                    </div>
                 </li>
                 @endhasanyrole   
 
