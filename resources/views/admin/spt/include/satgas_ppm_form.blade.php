@@ -221,6 +221,8 @@
 <script type="text/javascript">
 
 $('#btn-input-ppm').on('click', function(){
+    $("#form-ppm")[0].reset();
+    $('#id-ppm').val('');
     if( !$('#morator-narasumber-id').val() ) { 
         $(".form-check-input").removeAttr("disabled");
         $("#select-all").removeAttr("disabled");
@@ -235,6 +237,7 @@ $('#btn-input-ppm').on('click', function(){
         $('#id-satgas-btn').show();
         $('#file-nota-dinas').show();
         $('#infoKegiatanHelp').show();
+        $("#morator-narasumber-id")[0].selectize.enable();
     }
 });
 
@@ -259,7 +262,7 @@ function show_ppm(id){
         $('#kegiatan-ppm').prop('disabled', true);
         $('#tgl-mulai-ppm').prop('disabled', true);
         $('#select-all').prop('disabled', true);
-        $("#morator-narasumber-id").prop('disabled', true);
+        $("#morator-narasumber-id")[0].selectize.disable();
     }
     // $('')
     // get-valueData-ppm/{id}

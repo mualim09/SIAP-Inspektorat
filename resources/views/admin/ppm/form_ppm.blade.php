@@ -374,17 +374,19 @@ $('.datepicker').each(function() {
 });
 
 $('#btn-input-ppm').on('click', function(){
+    $("#form-ppm")[0].reset();
+    $('#id-ppm').val('');
     if( !$('#morator-narasumber-id').val() ) { 
         $(".form-check-input").removeAttr("disabled");
         $("#select-all").removeAttr("disabled");
         $(".form-check-input").css({ 'color': '#525f7f'});
         $(".form-check-input").prop('checked', true);
-        $("#form-ppm")[0].reset();
         $('#kegiatan-ppm').prop('disabled', false);
         $('#tgl-mulai-ppm').prop('disabled', false);
         $('#id-btn-submit').show();
         $('div .col-md-2').attr('style', 'rgb(82 95 127)');
         // console.log('jalan');
+        $("#morator-narasumber-id")[0].selectize.enable();
     }
 });
 
@@ -483,7 +485,7 @@ function show_ppm(id){
         $('#kegiatan-ppm').prop('disabled', true);
         $('#tgl-mulai-ppm').prop('disabled', true);
         $('#select-all').prop('disabled', true);
-        $("#morator-narasumber-id").prop('disabled', true);
+        $("#morator-narasumber-id")[0].selectize.disable();
     }
     // $('')
     // get-valueData-ppm/{id}
