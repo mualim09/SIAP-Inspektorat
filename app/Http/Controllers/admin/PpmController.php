@@ -257,7 +257,7 @@ class PpmController extends Controller
 
                                     ];
                                     // dd($koefisien_terimbas_pelatihan);
-                                    $update_pengawasan_terimbas = DetailSpt::where('user_id','=',$request->id_anggota_ppm[$index_p_pelatihan])->where('spt_id',$getdate_peserta_pelatihan[$i]->spt_id)->update(['info_dupak'=>json_encode($dupak_terimbas_pelatihan_p)]);
+                                    // $update_pengawasan_terimbas = DetailSpt::where('user_id','=',$request->id_anggota_ppm[$index_p_pelatihan])->where('spt_id',$getdate_peserta_pelatihan[$i]->spt_id)->update(['info_dupak'=>json_encode($dupak_terimbas_pelatihan_p)]);
                                 }
                                 
                             }else{
@@ -376,7 +376,7 @@ class PpmController extends Controller
                                     ];
                                     // dd($dupak_moderator_terimbas_p);
                                 }
-                                    $update_pengawasan_terimbas_m = DetailSpt::where('user_id','=',$request->moderator_narasumber[$index_m_pelatihan])->where('spt_id',$getdate_spt_pelatihan[$i]->spt_id)->update(['info_dupak'=>json_encode($dupak_moderator_terimbas_p)]);
+                                    // $update_pengawasan_terimbas_m = DetailSpt::where('user_id','=',$request->moderator_narasumber[$index_m_pelatihan])->where('spt_id',$getdate_spt_pelatihan[$i]->spt_id)->update(['info_dupak'=>json_encode($dupak_moderator_terimbas_p)]);
 
                                 /*end nilai dupak workshop yg terimbas*/
 
@@ -487,7 +487,7 @@ class PpmController extends Controller
                                         'koefisien' => $koefisien_terimbas_pelatihan
                                     ];
                                     // dd($koefisien_terimbas_pelatihan);
-                                    $update_pengawasan_terimbas = DetailSpt::where('user_id','=',$request->id_anggota_ppm[$index_p_pelatihan])->where('spt_id',$getdate_peserta_pelatihan[$i]->spt_id)->update(['info_dupak'=>json_encode($dupak_terimbas_pelatihan_p)]);
+                                    // $update_pengawasan_terimbas = DetailSpt::where('user_id','=',$request->id_anggota_ppm[$index_p_pelatihan])->where('spt_id',$getdate_peserta_pelatihan[$i]->spt_id)->update(['info_dupak'=>json_encode($dupak_terimbas_pelatihan_p)]);
                                 }
                                 
                             }else{
