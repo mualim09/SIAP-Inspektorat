@@ -82,9 +82,6 @@
 
 div.selectize-input{padding:11px 12px !important;}
 #list-dupak-table.table-bordered.dataTable th,#list-dupak-table.table-bordered.dataTable td{border-left-width: 1px;}
-.fc-day.fc-sat, .fc-day.fc-sun {
-    background-color: red !important;
-}
 
 .datepicker{
   padding: .625rem .75rem !important;
@@ -182,6 +179,22 @@ td.spt-pengawasan-day, .fc-unthemed td.fc-today.spt-pengawasan-day{
 td.lembur, .fc-unthemed td.lembur{
    background-color: #1f3882;
    z-index:-1 !important;
+}
+td.ppm, .fc-unthemed td.ppm{
+   background-color: #37a63e;
+   z-index:0 !important;
+}
+span.fc-day-number{
+  /*font-weight: bold;*/
+  color: #000;
+}
+.fc-day.fc-sat, .fc-day.fc-sun {
+    background-color: red !important;
+    z-index:0;
+}
+td.fc-day.fc-other-month{
+  background-color: #fff !important ;
+  z-index: 1;
 }
 /*td.spt-umum-day.spt-pengawasan-day{
   background-color: #5e72e4 !important;

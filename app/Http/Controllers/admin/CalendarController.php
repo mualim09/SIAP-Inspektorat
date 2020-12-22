@@ -4,7 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Event, App\models\Spt, App\models\DetailSpt, App\models\DetailKuota;
+use App\Event, App\models\Spt, App\models\DetailSpt, App\models\Ppm, App\models\DetailKuota;
 use Redirect, Response, DB, App\Common;
 
 class CalendarController extends Controller
@@ -42,7 +42,7 @@ class CalendarController extends Controller
     }
 
     public function getSptAuditor(Request $request){
-        $user_id = ($request->user_id) ? $request->user_id : auth()->user()->id;        
+        $user_id = ($request->has('user_id')) ? $request->user_id : auth()->user()->id;        
         //processed only on ajax request
         if(request()->ajax()) 
         {
@@ -65,9 +65,10 @@ class CalendarController extends Controller
         //return view('admin.calendar.user.index');
     }
 
+    //kalender lembur masih belum bisa ditampilkan di super admin, possibility variabel user_id di variable detail_kuota tidak terpanggil
     public function getLembur(Request $request){
         //get data from kuota kalender
-        $user_id = ($request->user_id) ? $request->user_id : auth()->user()->id;        
+        $user_id = ($request->has('user_id')) ? intval($request->user_id) : auth()->user()->id;        
         //processed only on ajax request
         if(request()->ajax()) 
         {
@@ -75,7 +76,8 @@ class CalendarController extends Controller
          $start = (!empty($_GET["start"])) ? ($_GET["start"]) : ('');
          $end = (!empty($_GET["end"])) ? ($_GET["end"]) : ('');
          
-        $details = DetailKuota::whereJsonContains('detail_kuota', ['user_id' => $user_id])->get();
+        //$details = DetailKuota::whereJsonContains('detail_kuota', ['user_id' => $user_id])->get();
+        $details = DetailKuota::whereJsonContains('detail_kuota',[['user_id'=>$user_id]])->get();
         $data = [];
         foreach($details as $detail){
             $detail_kuota = json_decode($detail->detail_kuota, true);
@@ -101,15 +103,22 @@ class CalendarController extends Controller
         }
     }
 
-    public function getLemburPengawasan(){
+    public function getPpm(Request $request){
+        $user_id = ($request->has('user_id')) ? $request->user_id : auth()->user()->id; 
         if(request()->ajax()) 
         {
  
          $start = (!empty($_GET["start"])) ? ($_GET["start"]) : ('');
          $end = (!empty($_GET["end"])) ? ($_GET["end"]) : ('');
-         $user_id = auth()->user()->id;          
-         
-         return Response::json($data);
+         /*$data = DetailPpm::where('user_id', $user_id)->with([
+            'ppm'=> function($q){
+                $q->select('tgl_mulai as start', 'kegiatan as deskripsi');
+            }
+        ])->get();*/
+        $data = Ppm::whereHas('detailPpm', function($q) use ($user_id){
+            $q->where('user_id', $user_id);
+        })->select('tgl_mulai as start', 'kegiatan as deskripsi')->addSelect(DB::raw("'ppm' as kategori"))->get();
+        return Response::json($data);
         }
     }
 

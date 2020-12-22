@@ -14,7 +14,7 @@ class Ppm extends Model
   	public $timestamps = false;
 
   	public function detailPpm(){
-        return $this->hasMany('App\models\DetailPpm');
+        return $this->hasMany('App\models\DetailPpm', 'id_ppm');
     }
 
     public function getPeriodeAttribute(){
