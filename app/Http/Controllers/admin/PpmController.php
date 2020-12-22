@@ -36,11 +36,7 @@ class PpmController extends Controller
                 $q->where('name', 'Auditor');
             }
         )->get();
-        $moderator_ppm = User::whereHas(
-            'roles', function($q){
-                $q->where('name', 'Auditor')->where('name','Inspektur')->where('name','TU Perencanaan')->where('name','Evaluasi dan Pelaporan');
-            }
-        )->get();
+        // $moderator_ppm = User::all();
         // dd($moderator_ppm);
         // dd(auth()->user()->hasAnyRole(['Super Admin']));
         return view('admin.ppm.index',['listAnggota'=>$listAnggota,'users'=>$users]);
@@ -74,7 +70,7 @@ class PpmController extends Controller
               ->addColumn('action', function($col){
                     $return = '';
                     // $return .= '<a href="#" onclick="showModalListPpm('.$col->id.')" title="Lihat anggota ppm" class="btn btn-success">Lihat Anggota</a>';
-                    // $return .= '<a href="#" onclick="edit_ppm('.$col->id.')" title="edit ppm" class="btn btn-outline-primary"><i class="ni ni-ruler-pencil"></i></a>';
+                    $return .= '<a href="#" onclick="show_ppm('.$col->id.')" title="Lohat ppm" class="class="btn btn-outline-success btn-sm"><i class="ni ni-ruler-pencil"></i></a>';
                     // dd($col->nama_file);
                     if($col->nama_file != null){
                         $return .= '<a href="'.url('/storage/ppm/'.$col->nama_file).'" onclick="#" title="Lihat nota dinas" class="btn btn-outline-warnig btn-sm" target="__blank"><i class="ni ni-folder-17"></i></a>';
@@ -201,13 +197,19 @@ class PpmController extends Controller
                                 $koefisien_workshop_p = 0.1;
                                 $nilai_dupak_workshop_p = $koefisien_workshop_p;
                                 $peran_p = 'Peserta';
+                                if (count($check_same_ppm_p) > 0) {
+                                    $total_ppm = 2;
+                                }else{
+                                    $total_ppm = 1;
+                                }
 
                                 $dupak_pelatihan_p = [
                                     'lama_jam' => $lama_jam_workshop_p,
                                     'efektif' => $hari_efektif_workshop_p,
                                     'lembur' => 0,
                                     'dupak' => $nilai_dupak_workshop_p,
-                                    'koefisien' => $koefisien_workshop_p
+                                    'koefisien' => $koefisien_workshop_p,
+                                    'ppm' => $total_ppm
                                 ];
                                 // dd($dupak_pelatihan_p);
                                 $save_detail_ppm = DetailPpm::insert(['id_ppm' => $ppm_id->id,'user_id' => $request->id_anggota_ppm[$index_p_pelatihan],'peran' => $peran_p,'lama' => $lama,'info_dupak'=>json_encode($dupak_pelatihan_p),'unsur_dupak' => 'pengembangan profesi']);
@@ -216,7 +218,11 @@ class PpmController extends Controller
                                 foreach ($getdate_peserta_pelatihan as $i => $v) {
                                     $nilai_dupak_pelatihan = $getdate_peserta_pelatihan[$i]->info_dupak;
                                     // // nilai_dupak_pengawasan
-                                    $hari_efektif_terimbas_pelatihan = json_decode($nilai_dupak_pelatihan)->efektif;
+                                    if (json_decode($nilai_dupak_pelatihan)->efektif > 0) {
+                                        $hari_efektif_terimbas_pelatihan = json_decode($nilai_dupak_pelatihan)->efektif - 1;
+                                    }else{
+                                        $hari_efektif_terimbas_pelatihan = json_decode($nilai_dupak_pelatihan)->efektif
+                                    }
                                     if (count($check_same_ppm_p) > 1) {
                                        $lama_jam_terimbas_pelatihan = json_decode($nilai_dupak_pelatihan)->lama_jam - 4;
                                     }else{
@@ -224,6 +230,23 @@ class PpmController extends Controller
                                     }
                                     $nilai_dupak_terimbas_pelatihan = json_decode($nilai_dupak_pelatihan)->koefisien * $lama_jam_terimbas_pelatihan;
                                     $koefisien_terimbas_pelatihan = json_decode($nilai_dupak_pelatihan)->koefisien;
+                                    if (json_decode($nilai_dupak_pelatihan)->lembur <= 0) {
+                                       $nilai_lembur = json_decode($nilai_dupak_pelatihan)->lembur + 1;
+                                    }else{
+                                        $nilai_lembur = json_decode($nilai_dupak_pelatihan)->lembur
+                                    }
+                                     
+
+                                    /*{#1790
+                                    }
+                                //       +"lama_jam": 5 // lama jam -2
+                                //       +"efektif": 0 //if efektif>0 maka dikurangi 1
+                                //       +"lembur": 5 //if lembur<=0 maka ditambah 1
+                                //       +"dupak": 0,16 // lama_jam_baru * koefisien
+                                //       +"koefisien": 0,032
+                                //       +"ppm": 1 // hasil penambahan ppm
+                                //     }*/
+
 
                                     $dupak_terimbas_pelatihan_p = [
                                         'lama_jam' => $lama_jam_terimbas_pelatihan,
@@ -231,6 +254,7 @@ class PpmController extends Controller
                                         'lembur' => 0,
                                         'dupak' => $nilai_dupak_terimbas_pelatihan,
                                         'koefisien' => $koefisien_terimbas_pelatihan
+
                                     ];
                                     // dd($koefisien_terimbas_pelatihan);
                                     $update_pengawasan_terimbas = DetailSpt::where('user_id','=',$request->id_anggota_ppm[$index_p_pelatihan])->where('spt_id',$getdate_peserta_pelatihan[$i]->spt_id)->update(['info_dupak'=>json_encode($dupak_terimbas_pelatihan_p)]);
@@ -254,7 +278,8 @@ class PpmController extends Controller
                             'efektif' => $hari_efektif_workshop_p,
                             'lembur' => 0,
                             'dupak' => $nilai_dupak_workshop_p,
-                            'koefisien' => $koefisien_workshop_p
+                            'koefisien' => $koefisien_workshop_p,
+                            'ppm' => '1'
                         ];
                         // dd($dupak_pelatihan_p);
                         $save_detail_ppm = DetailPpm::insert(['id_ppm' => $ppm_id->id,'user_id' => $request->id_anggota_ppm[$index_p_pelatihan],'peran' => $peran_p,'lama' => $lama,'info_dupak'=>json_encode($dupak_pelatihan_p),'unsur_dupak' => 'pengembangan profesi']);
@@ -293,13 +318,19 @@ class PpmController extends Controller
                                 // $nilai_dupak_workshop = $koefisien_workshop_m * $lama_jam_workshop;
                                 $nilai_dupak_workshop = $koefisien_workshop_m;
                                 $peran = 'Moderator';
+                                if (count($check_same_ppm_m) > 0) {
+                                    $total_ppm_m = 2;
+                                }else{
+                                    $total_ppm_m = 1;
+                                }
 
                                 $dupak_workshop_m = [
                                     'lama_jam' => $lama_jam_workshop,
                                     'efektif' => $hari_efektif_workshop,
                                     'lembur' => 0,
                                     'dupak' => $nilai_dupak_workshop,
-                                    'koefisien' => $koefisien_workshop_m
+                                    'koefisien' => $koefisien_workshop_m,
+                                    'ppm' => $total_ppm_m
                                 ];
                                 // dd($dupak_workshop_m);
                                 $save_detail_ppm_m = DetailPpm::insert(['id_ppm' => $ppm_id->id,'user_id' => $request->moderator_narasumber[$index_m_pelatihan],'peran' => $peran,'lama' => $lama,'info_dupak'=>json_encode($dupak_workshop_m),'unsur_dupak' => 'pengembangan profesi']);
@@ -311,18 +342,35 @@ class PpmController extends Controller
                                     
                                     $nilai_dupak_workshop = $getdate_spt_pelatihan[$i]->info_dupak;
                                     // nilai_dupak_pengawasan
-                                    $hari_efektif_terimbas_workshop = json_decode($nilai_dupak_workshop)->efektif;
+                                    if (json_decode($nilai_dupak_workshop)->efektif > 0) {
+                                        $hari_efektif_terimbas_workshop = json_decode($nilai_dupak_workshop)->efektif - 1;
+                                    }else{
+                                        $hari_efektif_terimbas_workshop = json_decode($nilai_dupak_workshop)->efektif
+                                    }
                                     if (count($check_same_ppm_m) > 1) {
                                         $lama_jam_terimbas_workshop = json_decode($nilai_dupak_workshop)->lama_jam - 4;
                                     }else{
                                         $lama_jam_terimbas_workshop = json_decode($nilai_dupak_workshop)->lama_jam - 2;
                                     }
                                     $nilai_dupak_terimbas_workshop = json_decode($nilai_dupak_workshop)->koefisien * $lama_jam_terimbas_workshop;
-                                    
+                                    if (json_decode($nilai_dupak_terimbas_workshop)->lembur <= 0) {
+                                       $nilai_lembur_m = json_decode($nilai_dupak_terimbas_workshop)->lembur + 1;
+                                    }else{
+                                        $nilai_lembur_m = json_decode($nilai_dupak_terimbas_workshop)->lembur
+                                    }
+                                    /*{#1790
+                                //       +"lama_jam": 5 // lama jam -2
+                                //       +"efektif": 0 //if efektif>0 maka dikurangi 1
+                                //       +"lembur": 5 //if lembur<=0 maka ditambah 1
+                                //       +"dupak": 0,16 // lama_jam_baru * koefisien
+                                //       +"koefisien": 0,032
+                                //       +"ppm": 1 // hasil penambahan ppm
+                                //     }*/
+
                                     $dupak_moderator_terimbas_p = [
                                         'lama_jam' => $lama_jam_terimbas_workshop,
                                         'efektif' => $hari_efektif_terimbas_workshop,
-                                        'lembur' => 0,
+                                        'lembur' => $nilai_lembur_m,
                                         'dupak' => $nilai_dupak_terimbas_workshop,
                                         'koefisien' => json_decode($nilai_dupak_workshop)->koefisien
                                     ];
@@ -350,7 +398,8 @@ class PpmController extends Controller
                             'efektif' => $hari_efektif_workshop,
                             'lembur' => 0,
                             'dupak' => $nilai_dupak_workshop,
-                            'koefisien' => $koefisien_workshop_m
+                            'koefisien' => $koefisien_workshop_m,
+                            'ppm' => '1'
                         ];
                         // dd($dupak_workshop_m);
                         $save_detail_ppm_m = DetailPpm::insert(['id_ppm' => $ppm_id->id,'user_id' => $request->moderator_narasumber[$index_m_pelatihan],'peran' => $peran,'lama' => $lama,'info_dupak'=>json_encode($dupak_workshop_m),'unsur_dupak' => 'pengembangan profesi']);
@@ -383,13 +432,19 @@ class PpmController extends Controller
                                 $koefisien_workshop_p = 0.1;
                                 $nilai_dupak_workshop_p = $koefisien_workshop_p;
                                 $peran_p = 'Peserta';
+                                if (count($check_same_ppm_p) < 2) {
+                                    $total_ppm_p= 2;
+                                }else{
+                                    $total_ppm_p = 1;
+                                }
 
                                 $dupak_pelatihan_p = [
                                     'lama_jam' => $lama_jam_workshop_p,
                                     'efektif' => $hari_efektif_workshop_p,
                                     'lembur' => 0,
                                     'dupak' => $nilai_dupak_workshop_p,
-                                    'koefisien' => $koefisien_workshop_p
+                                    'koefisien' => $koefisien_workshop_p,
+                                    'ppm' => $total_ppm_p
                                 ];
                                 // dd($dupak_pelatihan_p);
                                 $save_detail_ppm = DetailPpm::insert(['id_ppm' => $ppm_id->id,'user_id' => $request->id_anggota_ppm[$index_p_pelatihan],'peran' => $peran_p,'lama' => $lama,'info_dupak'=>json_encode($dupak_pelatihan_p),'unsur_dupak' => 'pengembangan profesi']);
@@ -398,7 +453,11 @@ class PpmController extends Controller
                                 foreach ($getdate_peserta_pelatihan as $i => $v) {
                                     $nilai_dupak_pelatihan = $getdate_peserta_pelatihan[$i]->info_dupak;
                                     // // nilai_dupak_pengawasan
-                                    $hari_efektif_terimbas_pelatihan = json_decode($nilai_dupak_pelatihan)->efektif;
+                                    if (json_decode($nilai_dupak_pelatihan)->efektif > 0) {
+                                        $hari_efektif_terimbas_pelatihan = json_decode($nilai_dupak_pelatihan)->efektif - 1;
+                                    }else{
+                                        $hari_efektif_terimbas_pelatihan = json_decode($nilai_dupak_pelatihan)->efektif
+                                    }
                                     if (count($check_same_ppm_p) > 1) {
                                        $lama_jam_terimbas_pelatihan = json_decode($nilai_dupak_pelatihan)->lama_jam - 4;
                                     }else{
@@ -406,11 +465,24 @@ class PpmController extends Controller
                                     }
                                     $nilai_dupak_terimbas_pelatihan = json_decode($nilai_dupak_pelatihan)->koefisien * $lama_jam_terimbas_pelatihan;
                                     $koefisien_terimbas_pelatihan = json_decode($nilai_dupak_pelatihan)->koefisien;
+                                    if (json_decode($nilai_dupak_pelatihan)->lembur <= 0) {
+                                       $nilai_lembur_p = json_decode($nilai_dupak_pelatihan)->lembur + 1;
+                                    }else{
+                                        $nilai_lembur_p = json_decode($nilai_dupak_pelatihan)->lembur
+                                    }
+                                    /*{#1790
+                                //       +"lama_jam": 5 // lama jam -2
+                                //       +"efektif": 0 //if efektif>0 maka dikurangi 1
+                                //       +"lembur": 5 //if lembur<=0 maka ditambah 1
+                                //       +"dupak": 0,16 // lama_jam_baru * koefisien
+                                //       +"koefisien": 0,032
+                                //       +"ppm": 1 // hasil penambahan ppm
+                                //     }*/
 
                                     $dupak_terimbas_pelatihan_p = [
                                         'lama_jam' => $lama_jam_terimbas_pelatihan,
                                         'efektif' => $hari_efektif_terimbas_pelatihan,
-                                        'lembur' => 0,
+                                        'lembur' => $nilai_lembur_p,
                                         'dupak' => $nilai_dupak_terimbas_pelatihan,
                                         'koefisien' => $koefisien_terimbas_pelatihan
                                     ];
@@ -436,7 +508,8 @@ class PpmController extends Controller
                             'efektif' => $hari_efektif_workshop_p,
                             'lembur' => 0,
                             'dupak' => $nilai_dupak_workshop_p,
-                            'koefisien' => $koefisien_workshop_p
+                            'koefisien' => $koefisien_workshop_p,
+                            'ppm' => '1'
                         ];
                         // dd($dupak_pelatihan_p);
                         $save_detail_ppm = DetailPpm::insert(['id_ppm' => $ppm_id->id,'user_id' => $request->id_anggota_ppm[$index_p_pelatihan],'peran' => $peran_p,'lama' => $lama,'info_dupak'=>json_encode($dupak_pelatihan_p),'unsur_dupak' => 'pengembangan profesi']);
@@ -449,6 +522,30 @@ class PpmController extends Controller
             /*alasan di bedakan foreachnya karena sudah berbeda index / data arraynya antara moderator dengan peserta*/
         }
     }
+
+    // fungsi upload file nota dinas 
+    public function storeNotaDinas($ppm_id,$file)
+    {
+
+        if (isset($ppm_id,$file)){
+            $ppm = Ppm::find($ppm_id);
+
+            $filename = ($file) ? 'Nota Dinas-' . $ppm->id . '-' . $file->getClientOriginalName() : null ;
+
+            if($filename !== null ){
+                if (! File::exists(public_path()."/storage/ppm")) {
+                    File::makeDirectory(public_path()."/storage/ppm", 0755, true);
+                }
+                $file->move(public_path()."/storage/ppm" , $filename);
+            }
+            $ppm->nota_dinas = ($filename !== null ) ? url('/storage/spt/'.$filename) : null;
+            $ppm->nama_file = ($filename !== null ) ? $filename : null;
+            $ppm->save();
+            return 'Updated file';
+        }
+        return 'tidak ada file yang diupload';
+    }
+    // end fungsi
 
     public function updatePpm(Request $request)
     {
@@ -561,30 +658,6 @@ class PpmController extends Controller
 
         // return ($delete_detail_ppm == true) ? 'data has been deleted' : 'data cant deleted cause u got a problem !';
     }
-
-    // fungsi upload file nota dinas 
-    public function storeNotaDinas($ppm_id,$file)
-    {
-
-        if (isset($ppm_id,$file)){
-            $ppm = Ppm::find($ppm_id);
-
-            $filename = ($file) ? 'Nota Dinas-' . $ppm->id . '-' . $file->getClientOriginalName() : null ;
-
-            if($filename !== null ){
-                if (! File::exists(public_path()."/storage/ppm")) {
-                    File::makeDirectory(public_path()."/storage/ppm", 0755, true);
-                }
-                $file->move(public_path()."/storage/ppm" , $filename);
-            }
-            $ppm->nota_dinas = ($filename !== null ) ? url('/storage/spt/'.$filename) : null;
-            $ppm->nama_file = ($filename !== null ) ? $filename : null;
-            $ppm->save();
-            return 'Updated file';
-        }
-        return 'tidak ada file yang diupload';
-    }
-    // end fungsi
 
     public function clearSessionAnggotaPpm(){
         Session::forget('anggota_ppm');

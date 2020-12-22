@@ -121,6 +121,9 @@
             <!-- start select narasumber/moderator  -->
             <div class="form-group row" id="moderator_id">
                 <label for="kegiatan" class="col-md-2 col-form-label ">{{ __('Narasumber/Moderator') }}</label>
+                <div class="col-md-6" style="display:none;">
+                    <input type="text" id="data-moderator">
+                </div>
                 <div class="col-md-6">
                         <select class="selectize" name="moderator_narasumber[]" multiple="multiple" id="morator-narasumber-id">
                             @foreach($users as $i=>$user)
@@ -198,6 +201,7 @@
                 <label for="nota-dinas-ppm" class="col-md-2 col-form-label">{{ __('Upload Nota Dinas') }}</label>
                 <div class="col-md-8">
                      <input type="file" id="file-nota-dinas" name="file_nota_dinas" accept=".pdf">
+                     <div id="id-btn-note-dinas"></div>
                      <small id="infoKegiatanHelp" class="form-text text-muted">File format pdf, max 2MB</small>
                 </div>                  
             </div>
@@ -372,11 +376,30 @@ $('.datepicker').each(function() {
 $('#btn-input-ppm').on('click', function(){
     if( !$('#morator-narasumber-id').val() ) { 
         $(".form-check-input").removeAttr("disabled");
+        $("#select-all").removeAttr("disabled");
         $(".form-check-input").css({ 'color': '#525f7f'});
         $(".form-check-input").prop('checked', true);
         $("#form-ppm")[0].reset();
+        $('#kegiatan-ppm').prop('disabled', false);
+        $('#tgl-mulai-ppm').prop('disabled', false);
+        $('#id-btn-submit').show();
+        $('div .col-md-2').attr('style', 'rgb(82 95 127)');
         // console.log('jalan');
     }
+});
+
+// rgb(82 95 127);
+
+$('#close-modal-form-input-PPM').on('click', function(){
+    $(".form-check-input").removeAttr("disabled");
+    $("#form-ppm")[0].reset();
+    var $select = $('#morator-narasumber-id').selectize();
+    var control = $select[0].selectize;
+    control.clear();
+});
+
+$('.btn-sm').on('click', function(){
+    $(".form-check-input").removeAttr("disabled");
 });
 
 $('#formPpm').on('hidden.bs.modal', function(){
@@ -447,11 +470,22 @@ $(document).on('hide.bs.modal','#modalListAnggotaPpm', function () {
 });
 /*end*/
 
-/*function edit_ppm(id){
+function show_ppm(id){
     $("#form-ppm")[0].reset();
     $('#id-ppm').val(id);
     $('#formPpm').modal('show');
     var id_ppm = $('#id-ppm').val();
+    if (id_ppm != null) {
+        $('#id-btn-submit').hide();
+        $('#file-nota-dinas').hide();
+        $('#infoKegiatanHelp').hide();
+        $('#id-btn-note-dinas').show();
+        $('#kegiatan-ppm').prop('disabled', true);
+        $('#tgl-mulai-ppm').prop('disabled', true);
+        $('#select-all').prop('disabled', true);
+        $("#morator-narasumber-id").prop('disabled', true);
+    }
+    // $('')
     // get-valueData-ppm/{id}
     save_method = 'edit';
         url = "{{ url('admin/ppm/get-valueData-ppm/') }}/" +id_ppm;
@@ -467,6 +501,12 @@ $(document).on('hide.bs.modal','#modalListAnggotaPpm', function () {
                 
                 $('#tgl-mulai-ppm').val(data[0].ppm.tgl_mulai);
                 // $('#tgl-mulai').val(data.tgl_mulai);
+                if (data[0].nama_file == null) {
+                    $('#id-btn-note-dinas').val(data[0].nama_file);
+                }else{
+                    $('#id-btn-note-dinas').hide();
+                }
+
 
                 var moderator = [];
 
@@ -479,6 +519,7 @@ $(document).on('hide.bs.modal','#modalListAnggotaPpm', function () {
                     }
                     if(item.peran == 'Peserta'){
                         $('#id-anggota-'+item.user_id).prop('checked', true);
+                        $('#id-anggota-'+item.user_id).prop('disabled', true);
                     }
                 });
                 $('#morator-narasumber-id')[0].selectize.setValue(moderator);
@@ -488,7 +529,7 @@ $(document).on('hide.bs.modal','#modalListAnggotaPpm', function () {
                 
             }
         });
-};*/
+};
 
 
 $('#id-btn-submit').click(function(){
