@@ -64,9 +64,10 @@
   <script type="text/javascript">
     $('#print-btn').on('click', function(){
     var elem = document.getElementById("print-cal");
-    var printable = ($('#semester-2').hasClass( "show" )) ? "#semester-2" : "#semester-1" ;
+    //var printable = ($('#semester-2').hasClass( "show" )) ? "#semester-2" : "#semester-1" ;
+    var printable = document.getElementById("calendar-user");
     var HTML_Width = $(printable).width();
-    var HTML_Height = $(printable).height();
+    var HTML_Height = $(printable).height()+10;
     var top_left_margin = 5;
     var PDF_Width = HTML_Width + (top_left_margin * 2);
     var PDF_Height = (PDF_Width * 1.6) + (top_left_margin * 2);

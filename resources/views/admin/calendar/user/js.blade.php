@@ -32,6 +32,7 @@
 
 function generate_calendar(tahun=''){
   tahun = (tahun !== '') ? tahun : moment().year();
+  var user_id =( $('#user-id').length>0 ) ? $('#user-id').val() : "{{ auth()->user()->id }}";
   $('div.calendar').fullCalendar('destroy');
   for (i = 0; i <= 11; i++) {
       
@@ -57,6 +58,7 @@ function generate_calendar(tahun=''){
           eventSources: [
           {
               url: "{{ route('calendar_auditor') }}",
+              data: {user_id: parseInt(user_id)},
               color: 'transparent',
               textColor: '#fff',
           },
@@ -66,9 +68,16 @@ function generate_calendar(tahun=''){
               textColor: '#fff',
           },
           {
-            url : "{{ route('calendar_lembur') }}",            
+            url : "{{ route('calendar_lembur') }}",
+            data: {user_id: parseInt(user_id)},
             color: 'transparent',
-            textColor: 'yellow',
+            textColor: '#fff',
+          },
+          {
+            url : "{{ route('calendar_ppm') }}", 
+            data: {user_id: parseInt(user_id)},
+            color: 'transparent',
+            textColor: '#fff',
           },
           ],
           defaultDate: x,
@@ -125,10 +134,17 @@ function generate_calendar(tahun=''){
              var stopDate = moment(event.start).add(1, 'days').format('YYYY-MM-DD');           
              var dates = getDates(startDate, stopDate);
              if(event.kategori == 'lembur'){
-                    dates.forEach(function (dataToFind){
-                      $("td[data-date='"+dataToFind+"']").addClass('lembur');
-                    });
-                 }             
+
+                dates.forEach(function (dataToFind){
+                  $("td[data-date='"+dataToFind+"']").addClass('lembur');
+                });
+             }
+             if(event.kategori == 'ppm'){
+                dates.forEach(function (dataToFind){
+                  $("td[data-date='"+dataToFind+"']").addClass('ppm');
+                });
+             }
+
           },
       });
   }
