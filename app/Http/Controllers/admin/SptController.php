@@ -1354,14 +1354,12 @@ class SptController extends Controller
             //perhitungan dupak berdasarkan lama_jam kuota kalender dan fungsi peran spt
             $dupak = $this->hitungDupak($detail->user_id,$detail->peran,$lama_jam);
 
-            $jam_efektif = intval($lama_jam/6.5);
-            //$jam_lembur = (($lama_jam % 6.5) == 1) ? 0 : $lama_jam % 6.5;
-            $jam_lembur = fmod($lama_jam, 6.5);
-
+            $hari_efektif = intval($lama_jam/6.5);
+            $hari_lembur = $detail->spt->lama - $hari_efektif;
             $info = [
                 'lama_jam' => $lama_jam,
-                'efektif' => $jam_efektif,
-                'lembur' => $jam_lembur,
+                'efektif' => $hari_efektif,
+                'lembur' => $hari_lembur,
                 'dupak' => $dupak['nilai'],
                 'koefisien' => $dupak['koef']
             ];
