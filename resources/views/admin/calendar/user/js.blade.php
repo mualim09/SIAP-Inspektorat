@@ -130,7 +130,7 @@ function generate_calendar(tahun=''){
               }
           },
           eventAfterRender: function(event, element, view){
-             var startDate = moment(event.start).format('YYYY-MM-DD');
+             /*var startDate = moment(event.start).format('YYYY-MM-DD');
              var stopDate = moment(event.start).add(1, 'days').format('YYYY-MM-DD');           
              var dates = getDates(startDate, stopDate);
              if(event.kategori == 'lembur'){
@@ -143,6 +143,13 @@ function generate_calendar(tahun=''){
                 dates.forEach(function (dataToFind){
                   $("td[data-date='"+dataToFind+"']").addClass('ppm');
                 });
+             }*/
+             var date = moment(event.start).format('YYYY-MM-DD');
+             if(event.kategori == 'lembur'){
+              $("td[data-date='"+date+"']").addClass('lembur');
+             }
+             if(event.kategori == 'ppm'){
+              $("td[data-date='"+date+"']").addClass('ppm');
              }
 
           },
