@@ -50,6 +50,24 @@
         </div>
         
       </div>
+      <div class="row col-md-12">
+        <div class="col-md-2">
+          <i class="fas fa-square kotak pengembangan"></i><span class="info-cal">Pengembangan</span>
+        </div>
+        <div class="col-md-2">
+          <i class="fas fa-square kotak penunjang"></i><span class="info-cal">Penunjang</span>
+        </div>
+        <div class="col-md-2">
+          <i class="fas fa-square kotak ppm"></i><span class="info-cal">PPM</span>
+        </div>
+        <div class="col-md-2">
+          <i class="fas fa-square kotak lembur"></i><span class="info-cal">Lembur</span>
+        </div>
+        <div class="col-md-2">
+          <i class="fas fa-square kotak pengawasan"></i><span class="info-cal">Pengawasan</span>
+        </div>
+        <div class="col"></div>
+      </div>
   </div>     
 </div>
   <script type="text/javascript">    

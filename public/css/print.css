@@ -1,4 +1,6 @@
-
+* {
+	font-family: arial;
+}
 .row {
     display: flex;    
     flex-wrap: wrap;

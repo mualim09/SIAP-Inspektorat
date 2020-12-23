@@ -295,6 +295,7 @@ Route::group(['prefix'=>'admin', 'namespace' => 'admin', 'middleware' => ['auth'
 		Route::get('/admin/calendar/auditor','CalendarController@getSptAuditor')->name('calendar_auditor');
 		Route::get('lembur', 'CalendarController@getLembur')->name('calendar_lembur');
 		Route::get('ppm', 'CalendarController@getPpm')->name('calendar_ppm');
+		Route::get('umum', 'CalendarController@getCalendarUmum')->name('calendar_umum');
 	});
 
 	Route::group(['prefix'=>'dupak'],function(){

@@ -79,6 +79,12 @@ function generate_calendar(tahun=''){
             color: 'transparent',
             textColor: '#fff',
           },
+          {
+            url : "{{ route('calendar_umum') }}",
+            data: {user_id: parseInt(user_id)},
+            color: 'transparent',
+            textColor: '#fff',
+          },
           ],
           defaultDate: x,
           displayEventTime: false,
@@ -97,7 +103,7 @@ function generate_calendar(tahun=''){
              element.find('.fc-title').html('');
 
              if (event.kategori) {
-                
+                //console.log(event);
                  if(event.kategori == 'pengawasan'){
                    last_date = dates[dates.length -1];
                    first_date = dates[0];
@@ -114,6 +120,25 @@ function generate_calendar(tahun=''){
                        
                   });
                  }
+
+             if(event.kategori == 'lembur'){
+              $("td[data-date='"+startDate+"']").addClass('lembur');
+             }
+             if(event.kategori == 'ppm'){
+              $("td[data-date='"+startDate+"']").addClass('ppm');
+             }
+             if(event.kategori == 'pengembangan profesi'){
+              console.log(event);
+              dates.forEach(function (dataToFind){
+                $("td[data-date='"+dataToFind+"']").addClass('pengembangan');
+              });
+             }
+             if(event.kategori == 'penunjang'){
+              console.log(event);
+              dates.forEach(function (dataToFind){
+                $("td[data-date='"+dataToFind+"']").addClass('penunjang');
+              });
+             }
                  
               }else{                
                  
@@ -144,13 +169,13 @@ function generate_calendar(tahun=''){
                   $("td[data-date='"+dataToFind+"']").addClass('ppm');
                 });
              }*/
-             var date = moment(event.start).format('YYYY-MM-DD');
+             /*var date = moment(event.start).format('YYYY-MM-DD');
              if(event.kategori == 'lembur'){
               $("td[data-date='"+date+"']").addClass('lembur');
              }
              if(event.kategori == 'ppm'){
               $("td[data-date='"+date+"']").addClass('ppm');
-             }
+             }*/
 
           },
       });

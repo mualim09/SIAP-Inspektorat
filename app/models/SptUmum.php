@@ -54,7 +54,7 @@ class SptUmum extends Model
     }
 
     public function detailSpt(){
-        return $this->hasMany('App\models\DetailSpt');
+        return $this->hasMany('App\models\DetailSpt','spt_id');
     }
 
 }

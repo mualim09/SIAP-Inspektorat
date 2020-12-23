@@ -4,7 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Event, App\models\Spt, App\models\DetailSpt, App\models\Ppm, App\models\DetailKuota;
+use App\Event, App\models\Spt, App\models\SptUmum, App\models\DetailSpt, App\models\Ppm, App\models\DetailKuota;
 use Redirect, Response, DB, App\Common;
 
 class CalendarController extends Controller
@@ -58,7 +58,7 @@ class CalendarController extends Controller
             ->select('jenis_spt.sebutan as title', 'jenis_spt.name as deskripsi', 'jenis_spt.kategori as kategori','spt.tgl_mulai as start', 'spt.tgl_akhir as end', 'detail_spt.dupak as dupak')
             ->where('detail_spt.user_id', '=', $user_id)
             ->where('spt.nomor','!=', NULL)
-            ->get();       
+            ->get();
          
          return Response::json($data);
         }
@@ -97,10 +97,38 @@ class CalendarController extends Controller
                 }
             }            
         }
-        //$data = json_encode($data);
-        
          return Response::json($data);
         }
+    }
+
+    public function getCalendarUmum(Request $request){
+        $user_id = ($request->has('user_id')) ? $request->user_id : auth()->user()->id;        
+        //processed only on ajax request
+        if(request()->ajax()) 
+        {
+         $user = auth()->user()->id;
+
+         $start = (!empty($_GET["start"])) ? ($_GET["start"]) : ('');
+         $end = (!empty($_GET["end"])) ? ($_GET["end"]) : ('');
+         //$user_id = ($user->hasRole(['Super Admin', 'Administrasi Umum'])) ? auth()->user()->id; 
+         
+        /*$data = SptUmum::whereHas('detailSpt', function($q) use ($user_id){
+            $q->where('user_id', $user_id)->whereNotIn('unsur_dupak', ['pengawasan']);
+        })
+        ->select('jenis_spt_umum as title', 'tgl_mulai as start', 'tgl_akhir as end')
+        ->with(['detailSpt' => function($q){
+            $q->select('id','unsur_dupak as kategori');
+        }])->get();  */     
+        $data = DB::table('spt_umum')
+            ->join('detail_spt', 'spt_umum.id', '=', 'detail_spt.spt_id')
+            ->select('spt_umum.jenis_spt_umum as title', 'detail_spt.unsur_dupak as kategori','spt_umum.tgl_mulai as start', 'spt_umum.tgl_akhir as end')
+            ->where('detail_spt.user_id', '=', $user_id)
+            ->whereNotIn('detail_spt.unsur_dupak', ['pengawasan'])
+            ->get();
+         
+         return Response::json($data);
+        }
+        //return view('admin.calendar.user.index');
     }
 
     public function getPpm(Request $request){
