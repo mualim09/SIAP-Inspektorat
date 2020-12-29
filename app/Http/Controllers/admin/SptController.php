@@ -217,26 +217,134 @@ class SptController extends Controller
 
     }
 
-    public function storeUmum(Request $request){
-        //masukkan kode store SPT bagian umum
+    // public function storeUmum(Request $request){
+    //     dd($request);
+    //     die();
+    //     //masukkan kode store SPT bagian umum
+    //     $user = auth()->user();
+    //     $this->validate($request, [
+    //         'jenis_spt_umum' => 'required',
+    //         // 'lokasi_umum_id' => 'nullable',
+    //         'tgl_mulai_umum'=>'required|date_format:"d-m-Y"',
+    //         'tgl_akhir_umum' =>'required|date_format:"d-m-Y"|after_or_equal:tgl_mulai_umum',
+    //         'lama_umum' => 'required|integer',
+    //         'info_untuk_umum'=> 'required',
+    //         'info_dasar_umum'=> 'required'
+    //         ]
+    //     );
+    //      $data = [
+    //         'jenis_spt_umum' => Common::cleanInput($request['jenis_spt_umum']),
+    //         'tgl_mulai' => date('Y-m-d H:i:s',strtotime($request['tgl_mulai_umum'])),
+    //         'tgl_akhir' => date('Y-m-d H:i:s',strtotime($request['tgl_akhir_umum'])),
+    //         // 'lokasi_id' => $request['lokasi_umum_id'],
+    //         'lama' => $request['lama_umum'],
+    //         'info_untuk_umum' => Common::cleanInput($request['info_untuk_umum']),
+    //         'info_dasar_umum' => Common::cleanInput($request['info_dasar_umum']),
+    //     ];
 
+    //     // dd($data);
+    //     // die();
+
+    //     $spt = SptUmum::create($data);
+    //     if($spt) {
+    //         // dd($spt->lama);
+    //         $this->storeDetailUmum($spt->id, $spt->lama);
+    //         // $this->storeDetailKepadaUmum($spt->id, $spt->lama);
+
+    //         //user id pembuat spt
+    //         // $info['user_id'] = $user->id;
+    //         // $info['type'] = 'spt';
+
+    //         // //role perencanaan jika membuat spt maka otomatis menjadi spt pengawasan, jika role Administrasi Umum: spt umum, selain itu set NULL.
+    //         // $info['jenis'] = ( $user->hasRole('TU Perencanaan') ) ? 'pengawasan' : (($user->hasRole('Administrasi Umum')) ? 'umum' : NULL);
+
+    //         // $info['spt_id'] = $spt->id;
+    //         // $insertArr = [
+    //         //    'title' => $request['jenis_spt_umum'],
+    //         //    'start' => $spt->tgl_mulai,
+    //         //    'end' => $spt->tgl_akhir,
+    //         //    'info' => $info
+    //         // ];
+    //         // $event = Event::create($insertArr);
+    //         // dd($event);
+
+    //         return $spt;
+    //     }
+    // }
+
+    // //dibawah ini function storeDetailAnggotaUmum punya mas tegar, di nonaktifkan / di comment
+    // public function storeDetailUmum($spt_id,$lama){
+    //     //dd($request);
+    //     $spt = SptUmum::find($spt_id);
+    //     //dd($spt);
+    //     $unsur_dupak = $spt->jenis_spt_umum;
+    //     $start =$spt->tgl_mulai;
+    //     $end = $spt->tgl_akhir;
+    //     $lama = $spt->lama;
+    //     $counter = array();
+
+    //     if(Session::has('anggota_umum'))
+    //     {
+    //         $session_anggota = Session::get('anggota_umum');
+    //         // dd($session_anggota);
+    //         foreach($session_anggota as $k=>$anggota){
+    //             //cek lembur, set lembur to true jika tgl mulai spt ada di tgl akhir spt
+    //             //$lembur = Spt::where('tgl_akhir','=', $start)->where('user_id','=', $anggota['user_id'])->join('detail_spt','detail_spt.spt_id','=','spt.id')->get();
+    //             //$isLembur = ( $lembur->count() > 0) ? true : false;
+    //             if($k === 0){
+    //                 $peran = 'pejabat_utama';
+    //             }else{
+    //                 $peran = 'anggota';
+    //             }
+    //             $dupak = [
+    //                 'lama' => $anggota['lama'],
+    //                 'dupak' => $anggota['dupak']
+    //             ];
+
+    //             if($spt->jenis_spt_umum == 'SPT Pengembangan Profesi'){
+    //                 $unsur_dupak = 'pengembangan profesi';
+    //             }if($spt->jenis_spt_umum == 'SPT Penunjang'){
+    //                 $unsur_dupak = 'penunjang';
+    //             }if($spt->jenis_spt_umum == 'SPT Diklat'){
+    //                 $unsur_dupak = 'diklat';
+    //             }
+
+    //             DB::table('detail_spt')->insertGetId([
+    //             'spt_id' => $spt_id,
+    //             'user_id' => $anggota['user_id'],
+    //             'peran' => $peran,
+    //             'lama' => $lama,
+    //             'info_dupak' => json_encode($dupak),
+    //             'unsur_dupak' => $unsur_dupak
+    //             //'dupak' => $this->hitungDupak($anggota['user_id'],$anggota['peran'],$lama,$isLembur)
+    //         ]);
+    //         }
+    //         $this->clearSessionAnggotaUmum();
+    //     }
+    //     return;
+    // }
+
+    public function storeUmum(Request $request){
+        // dd($request);
+        // die();
+        //masukkan kode store SPT bagian umum
         $user = auth()->user();
         $this->validate($request, [
-            'jenis_spt_umum' => 'required',
+            'sub_jenis_spt_umum' => 'required',
             // 'lokasi_umum_id' => 'nullable',
             'tgl_mulai_umum'=>'required|date_format:"d-m-Y"',
             'tgl_akhir_umum' =>'required|date_format:"d-m-Y"|after_or_equal:tgl_mulai_umum',
-            'lama_umum' => 'required|integer',
+            'lama_spt_umum' => 'required|integer',
             'info_untuk_umum'=> 'required',
             'info_dasar_umum'=> 'required'
             ]
         );
          $data = [
-            'jenis_spt_umum' => Common::cleanInput($request['jenis_spt_umum']),
+            'jenis_spt_umum' => Common::cleanInput($request['sub_jenis_spt_umum']),
             'tgl_mulai' => date('Y-m-d H:i:s',strtotime($request['tgl_mulai_umum'])),
             'tgl_akhir' => date('Y-m-d H:i:s',strtotime($request['tgl_akhir_umum'])),
             // 'lokasi_id' => $request['lokasi_umum_id'],
-            'lama' => $request['lama_umum'],
+            'lama' => $request['lama_spt_umum'],
             'info_untuk_umum' => Common::cleanInput($request['info_untuk_umum']),
             'info_dasar_umum' => Common::cleanInput($request['info_dasar_umum']),
         ];
@@ -244,83 +352,170 @@ class SptController extends Controller
         // dd($data);
         // die();
 
-        $spt = SptUmum::create($data);
-        if($spt) {
-            // dd($spt->lama);
-            $this->storeDetailUmum($spt->id, $spt->lama);
-            // $this->storeDetailKepadaUmum($spt->id, $spt->lama);
+        $spt_umum = SptUmum::create($data);
+        if($spt_umum) {
+            $spt_id = $spt_umum->id;
+            $unsur_dupak = $spt_umum->jenis_spt_umum;
+            $start =$spt_umum->tgl_mulai;
+            $end = $spt_umum->tgl_akhir;
+            $lama = $spt_umum->lama;
+            
+            /*sb = studi banding*/
+            if ($spt_umum->jenis_spt_umum == 'Studi Banding') {
+                $unsur_dupak = 'pengembangan profesi';
+                $peserta_sb = $request->anggota_spt_umum;
+                foreach ($peserta_sb as $i => $k) {
+                    
+                    $lama_jam_sb = 0;
+                    // $efektif_sb = $lama;
+                    $lembur = 0;
+                    $koefisien_sb = 0.5;
+                    $dupak = $koefisien_sb;
 
-            //user id pembuat spt
-            // $info['user_id'] = $user->id;
-            // $info['type'] = 'spt';
+                    $dupak_sb = [
+                        'lama_jam' => $lama_jam_sb,
+                        'efektif' => /*$efektif_sb*/0,
+                        'lembur' => $lembur,
+                        'dupak' => $dupak,
+                        'koefisien' => $koefisien_sb
+                    ];
 
-            // //role perencanaan jika membuat spt maka otomatis menjadi spt pengawasan, jika role Administrasi Umum: spt umum, selain itu set NULL.
-            // $info['jenis'] = ( $user->hasRole('TU Perencanaan') ) ? 'pengawasan' : (($user->hasRole('Administrasi Umum')) ? 'umum' : NULL);
-
-            // $info['spt_id'] = $spt->id;
-            // $insertArr = [
-            //    'title' => $request['jenis_spt_umum'],
-            //    'start' => $spt->tgl_mulai,
-            //    'end' => $spt->tgl_akhir,
-            //    'info' => $info
-            // ];
-            // $event = Event::create($insertArr);
-            // dd($event);
-
-            return $spt;
-        }
-    }
-
-    //dibawah ini function storeDetailAnggotaUmum punya mas tegar, di nonaktifkan / di comment
-    public function storeDetailUmum($spt_id,$lama){
-        //dd($request);
-        $spt = SptUmum::find($spt_id);
-        //dd($spt);
-        $unsur_dupak = $spt->jenis_spt_umum;
-        $start =$spt->tgl_mulai;
-        $end = $spt->tgl_akhir;
-        $lama = $spt->lama;
-        $counter = array();
-
-        if(Session::has('anggota_umum'))
-        {
-            $session_anggota = Session::get('anggota_umum');
-            // dd($session_anggota);
-            foreach($session_anggota as $k=>$anggota){
-                //cek lembur, set lembur to true jika tgl mulai spt ada di tgl akhir spt
-                //$lembur = Spt::where('tgl_akhir','=', $start)->where('user_id','=', $anggota['user_id'])->join('detail_spt','detail_spt.spt_id','=','spt.id')->get();
-                //$isLembur = ( $lembur->count() > 0) ? true : false;
-                if($k === 0){
-                    $peran = 'pejabat_utama';
-                }else{
-                    $peran = 'anggota';
-                }
-                $dupak = [
-                    'lama' => $anggota['lama'],
-                    'dupak' => $anggota['dupak']
-                ];
-
-                if($spt->jenis_spt_umum == 'SPT Pengembangan Profesi'){
-                    $unsur_dupak = 'pengembangan profesi';
-                }if($spt->jenis_spt_umum == 'SPT Penunjang'){
-                    $unsur_dupak = 'penunjang';
-                }if($spt->jenis_spt_umum == 'SPT Diklat'){
-                    $unsur_dupak = 'diklat';
+                    $store = DB::table('detail_spt')->insertGetId([
+                        'spt_id' => $spt_id,
+                        'user_id' => $peserta_sb[$i],
+                        'peran' => 'peserta',
+                        'unsur_dupak' => $unsur_dupak,
+                        'info_dupak' => json_encode($dupak_sb)
+                    ]);
                 }
 
-                DB::table('detail_spt')->insertGetId([
-                'spt_id' => $spt_id,
-                'user_id' => $anggota['user_id'],
-                'peran' => $peran,
-                'lama' => $lama,
-                'info_dupak' => json_encode($dupak),
-                'unsur_dupak' => $unsur_dupak
-                //'dupak' => $this->hitungDupak($anggota['user_id'],$anggota['peran'],$lama,$isLembur)
-            ]);
             }
-            $this->clearSessionAnggotaUmum();
+            /*kgr = kongres*/
+            if ($spt_umum->jenis_spt_umum == 'Konverensi/Kongres') {
+                $unsur_dupak = 'pengembangan profesi';
+                // dd($unsur_dupak);
+                // die();
+                $moderator_kgr = $request->anggota_moderator_spt_umum;
+                foreach ($moderator_kgr as $i_m_kgr => $v_m_kgr) {
+                    $lama_jam_m_kgr = 0;
+                    // $efektif_sb = $lama;
+                    $lembur_m_kgr = 0;
+                    $koefisien_m_kgr = 1;
+                    $dupak_m_kgr = $koefisien_m_kgr;
+
+                    $nilai_m_dupak_kgr = [
+                        'lama_jam' => $lama_jam_m_kgr,
+                        'efektif' => /*$efektif_sb*/0,
+                        'lembur' => $lembur_m_kgr,
+                        'dupak' => $dupak_m_kgr,
+                        'koefisien' => $koefisien_m_kgr
+                    ];
+
+                    $store = DB::table('detail_spt')->insertGetId([
+                        'spt_id' => $spt_id,
+                        'user_id' => $moderator_kgr[$i_m_kgr],
+                        'peran' => 'moderator',
+                        'unsur_dupak' => $unsur_dupak,
+                        'info_dupak' => json_encode($nilai_m_dupak_kgr)
+                    ]);
+                }
+
+                $peserta_kgr = $request->anggota_spt_umum;
+                foreach ($peserta_kgr as $i_p_kgr => $v_p_kgr) {
+                    $lama_jam_p_kgr = 0;
+                    // $efektif_sb = $lama;
+                    $lembur_p_kgr = 0;
+                    $koefisien_p_kgr = 0.5;
+                    $dupak_p_kgr = $koefisien_p_kgr;
+
+                    $nilai_p_dupak_kgr = [
+                        'lama_jam' => $lama_jam_p_kgr,
+                        'efektif' => /*$efektif_sb*/0,
+                        'lembur' => $lembur_p_kgr,
+                        'dupak' => $dupak_p_kgr,
+                        'koefisien' => $koefisien_p_kgr
+                    ];
+
+                    $store = DB::table('detail_spt')->insertGetId([
+                        'spt_id' => $spt_id,
+                        'user_id' => $peserta_kgr[$i_p_kgr],
+                        'peran' => 'peserta',
+                        'unsur_dupak' => $unsur_dupak,
+                        'info_dupak' => json_encode($nilai_p_dupak_kgr)
+                    ]);
+                }
+
+            }
+            /*wsp = workshop*/
+            if ($spt_umum->jenis_spt_umum == 'Workshop') {
+                $unsur_dupak = 'pengembangan profesi';
+                // dd($unsur_dupak);
+                // die();
+                $moderator_wsp = $request->anggota_moderator_spt_umum;
+                foreach ($moderator_wsp as $i_m_wsp => $v_m_wsp) {
+                    $lama_jam_m_wsp = 0;
+                    // $efektif_sb = $lama;
+                    $lembur_m_wsp = 0;
+                    $koefisien_m_wsp = 0.75;
+                    $dupak_m_wsp = $koefisien_m_wsp;
+
+                    $nilai_m_dupak_wsp = [
+                        'lama_jam' => $lama_jam_m_wsp,
+                        'efektif' => /*$efektif_sb*/0,
+                        'lembur' => $lembur_m_wsp,
+                        'dupak' => $dupak_m_wsp,
+                        'koefisien' => $koefisien_m_wsp
+                    ];
+
+                    $store = DB::table('detail_spt')->insertGetId([
+                        'spt_id' => $spt_id,
+                        'user_id' => $moderator_wsp[$i_m_wsp],
+                        'peran' => 'moderator',
+                        'unsur_dupak' => $unsur_dupak,
+                        'info_dupak' => json_encode($nilai_m_dupak_wsp)
+                    ]);
+                }
+
+                $peserta_wsp = $request->anggota_spt_umum;
+                foreach ($peserta_wsp as $i_p_wsp => $v_p_wsp) {
+                    $lama_jam_p_wsp = 0;
+                    // $efektif_sb = $lama;
+                    $lembur_p_wsp = 0;
+                    $koefisien_p_wsp = 0.25;
+                    $dupak_p_wsp = $koefisien_p_wsp;
+
+                    $nilai_p_dupak_wsp = [
+                        'lama_jam' => $lama_jam_p_wsp,
+                        'efektif' => /*$efektif_sb*/0,
+                        'lembur' => $lembur_p_wsp,
+                        'dupak' => $dupak_p_wsp,
+                        'koefisien' => $koefisien_p_wsp
+                    ];
+
+                    $store = DB::table('detail_spt')->insertGetId([
+                        'spt_id' => $spt_id,
+                        'user_id' => $peserta_wsp[$i_p_wsp],
+                        'peran' => 'peserta',
+                        'unsur_dupak' => $unsur_dupak,
+                        'info_dupak' => json_encode($nilai_p_dupak_wsp)
+                    ]);
+                }
+            }
+            // if ($spt_umum->jenis_spt_umum == 'Diklat Penjenjangan') {
+            //     $unsur_dupak = 'pengembangan profesi';
+            // }
+            // if ($spt_umum->jenis_spt_umum == 'Seminar/Lokakarya') {
+            //     $unsur_dupak = 'penunjang';
+            // }
+            // if ($spt_umum->jenis_spt_umum == 'Diklat Teknis Substantif penunjang pengawasan') {
+            //     $unsur_dupak = 'penunjang';
+            // }
+
+            // dd($spt_umum);
+            // die();
+
+            return $spt_umum;
         }
-        return;
     }
 
     public function storeDetailAnggotaUmum(Request $request){
@@ -1238,10 +1433,10 @@ class SptController extends Controller
     {
         if(auth()->user()->hasPermissionTo('Delete SPT')){
             $spt = SptUmum::findOrFail($id);
-            $delete = DetailSpt::where('spt_id',$id)->where('jenis_laporan',$spt->jenis_spt_umum)->delete();
+            $delete = DetailSpt::where('spt_id',$spt->id)->delete();
             // dd($delete);
             SptUmum::destroy($id);
-            return 'SPT deleted!';
+            return 'SPT Umum deleted!';
         }
     }
     

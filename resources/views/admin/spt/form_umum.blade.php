@@ -29,46 +29,14 @@
 						<label for="dasar" class="col-md-2 col-form-label ">{{ __('Jenis Spt') }}</label>
 						<div class="col-md-10">
 							<div class="custom-control custom-radio custom-control-inline">
-								<input type="radio" class="custom-control-input" id="jenis-spt-umum-SPT1" name="unsur_dupak_umum" value="pengembangan profesi">
+								<input type="radio" class="custom-control-input" id="jenis-spt-umum-SPT1" name="unsur_dupak_umum" value="pengembangan profesi" required="">
 		                        <label class="custom-control-label" for="jenis-spt-umum-SPT1">PENGEMBANGAN PROFESI</label>
-		                        <!-- <div class="col-md-10"> -->
-								  <div class="box box-primary profesi" style="display : none;">
-								    <div class="box-body" style="margin-left: 15px;">
-								      <div class="form-check">
-								        <input type="radio" class="form-check-input" name="sub_jenis_spt_umum" id="option1" value="Studi Banding">
-								        <label class="form-check-label" for="option1">Studi Banding</label>
-								      </div>
-								      <div class="form-check">
-								        <input type="radio" class="form-check-input" name="sub_jenis_spt_umum" id="option2" value="Konverensi/Kongres">
-								        <label class="form-check-label" for="option2">Konverensi/Kongres</label>
-								      </div>
-								      <div class="form-check">
-								        <input type="radio" name="sub_jenis_spt_umum" id="option3" class="form-check-input" value="Workshop">
-								        <label class="form-check-label" for="option3">Workshop</label>
-								      </div>
-								      <div class="form-check">
-								        <input type="radio" name="sub_jenis_spt_umum" id="option4" class="form-check-input" value="Diklat Penjenjangan">
-								        <label class="form-check-label" for="option4">Diklat Penjenjangan</label>
-								      </div>
-								    </div>
-								  </div>
-								<!-- </div> -->
+		                        <!-- style="display : none;" -->
+		                        
 							</div>
 							<div class="custom-control custom-radio custom-control-inline">
-								<input type="radio" class="custom-control-input" id="jenis-spt-umum-SPT2" name="unsur_dupak_umum" value="penunjang">
+								<input type="radio" class="custom-control-input" id="jenis-spt-umum-SPT2" name="unsur_dupak_umum" value="penunjang" required="">
 		                        <label class="custom-control-label" for="jenis-spt-umum-SPT2">PENUNJANG</label>
-		                        <div class="box box-primary penunjang" style="display : none;">
-								    <div class="box-body" style="margin-left: 15px;">
-								      <div class="form-check">
-								        <input type="radio" class="form-check-input" name="sub_jenis_spt_umum" id="option5" value="Seminar/Lokakarya">
-								        <label class="form-check-label" for="option5">Seminar/Lokakarya</label>
-								      </div>
-								      <div class="form-check">
-								        <input type="radio" class="form-check-input" name="sub_jenis_spt_umum" id="option6" value="Diklat Teknis Substantif penunjang pengawasan">
-								        <label class="form-check-label" for="option6">Diklat Teknis Substantif penunjang pengawasan</label>
-								      </div>
-								    </div>
-								  </div>
 							</div>
 							<!-- <div class="custom-control custom-radio custom-control-inline">
 								<input type="radio" class="custom-control-input" id="jenis-spt-umum-SPT3" name="jenis_spt_umum" value="Workshop">
@@ -80,17 +48,97 @@
 		                	</div> -->
 		                	<small id="infoDasarHelp" class="form-text text-muted">Silahkan pilih Jenis Spt yang akan dibuat.</small>
 		                </div>
+
+		                <div class="col-md-10 offset-2">
+						  <div class="box box-primary profesi" >
+						    <div class="box-body">
+						      <div class="form-check">
+						        <input type="radio" id="id-studi-banding" class="form-check-input" name="sub_jenis_spt_umum" id="option1" value="Studi Banding">
+						        <label class="form-check-label" for="option1">Studi Banding</label>
+						      </div>
+						      <div class="form-check">
+						        <input type="radio" id="id-konverensi" class="form-check-input" name="sub_jenis_spt_umum" id="option2" value="Konverensi/Kongres">
+						        <label class="form-check-label" for="option2">Konverensi/Kongres</label>
+						      </div>
+						      <div class="form-check">
+						        <input type="radio" id="id-workshop" name="sub_jenis_spt_umum" id="option3" class="form-check-input" value="Workshop">
+						        <label class="form-check-label" for="option3">Workshop</label>
+						      </div>
+						      <div class="form-check">
+						        <input type="radio" id="id-diklat-penjenjangan" name="sub_jenis_spt_umum" id="option4" class="form-check-input" value="Diklat Penjenjangan">
+						        <label class="form-check-label" for="option4">Diklat Penjenjangan</label>
+						      </div>
+						    </div>
+						  </div>
+						</div>
+
+						<div class="col-md-10 offset-2">
+						  <div class="box-body penunjang">
+						    <div class="form-check">
+						      <input type="radio" id="id-seminar" class="form-check-input" name="sub_jenis_spt_umum" id="option5" value="Seminar/Lokakarya">
+						      <label class="form-check-label" for="option5">Seminar/Lokakarya</label>
+						    </div>
+						    <div class="form-check">
+						      <input type="radio" id="id-diklat-penunjangan-pengawasan" class="form-check-input" name="sub_jenis_spt_umum" id="option6" value="Diklat Teknis Substantif penunjang pengawasan">
+						      <label class="form-check-label" for="option6">Diklat Teknis Substantif penunjang pengawasan</label>
+						    </div>
+						  </div>
+						</div>
+
 		                <script type="text/javascript">
 		                	$('#jenis-spt-umum-SPT1').on("click", function(){ 
 							  // console.log('a');
 							  $('.profesi').show('fast');
 							  $('.penunjang').hide('fast');
+							  $('#infoDasarHelp').hide('fast');
+							  $('#pemrasaran-id').hide('fast');
 							});
 							$('#jenis-spt-umum-SPT2').on("click", function(){ 
 							  // console.log('b');
 							  $('.profesi').hide('fast');
 							  $('.penunjang').show('fast');
+							  $('#infoDasarHelp').hide('fast');
+							  $('#pemrasaran-id').hide('fast');
 							});
+
+							$('#btn-new-spt-umum').on("click", function(){
+								$('#pemrasaran-id').hide('fast');
+								$('#spt-umum-form')[0].reset();
+							});
+							$('#id-studi-banding').on("click", function(){
+							  $('#moderator-narasumber-id').hide('fast');
+							});
+
+							$('#id-konverensi').on("click", function(){
+							  $('#moderator-narasumber-id').show('fast');
+							});
+
+							$('#id-workshop').on("click", function(){
+							  $('#moderator-narasumber-id').show('fast');
+							});
+
+							$('#id-diklat-penjenjangan').on("click", function(){
+							  $('#moderator-narasumber-id').hide('fast');
+							});
+
+							$('#id-seminar').on("click", function(){
+							  $('#moderator-narasumber-id').show('fast');
+							  $('#pemrasaran-id').show('fast');
+							});
+
+							$('#id-diklat-penunjangan-pengawasan').on("click", function(){
+							  $('#moderator-narasumber-id').show('fast');
+							  $('#pemrasaran-id').hide('fast');
+							});
+
+
+							
+							// $('#jenis-spt-umum-SPT2').on("click", function(){ 
+							//   // console.log('b');
+							//   $('.profesi').hide('fast');
+							//   $('.penunjang').show('fast');
+							//   $('#infoDasarHelp').hide('fast');
+							// });
 		                </script>
 	                </div>
 
@@ -172,25 +220,40 @@
 							<input type="text" class="form-control" name="lama_spt_umum" id="lama-spt-umum" autocomplete="off" placeholder="{{ __('Lama')}}">						    
 						</div>					
 					</div>
-					<!-- anggota spt -->
-					<!-- <button id="add-anggota-umum" class="btn btn-outline-primary btn-sm offset-md-2" type="button" data-toggle="modal" data-target="#anggotaSptUmumModal"> <i class="fa fa-plus"></i> <span>Tambah Anggota</span></button>
-					<small id="infoanggota" class="form-text text-muted offset-md-2">Anggota pertama dipilih akan automatis menjadi yang ditugaskan</small>	
-					<div class="form-group row" id="input-anggota-umum" >
-					    <div class="col-md-2 col-form-label">{{ __('Anggota') }} </div>
-						<div class="col table-responsive" id="tabel-anggota-umum-wrapper">											
-						</div>
-					</div> -->
-					<!-- <script type="text/javascript">
-						$('#add-anggota-umum').on('click', function(){
-							if ( typeof $('#formSptUmum').attr('data-id-spt-umum') !== 'undefined' ) {
-								id_spt_umum = $('#formSptUmum').attr('data-id-spt-umum');
-								$('#anggotaSptUmumModal').attr('id-spt-umum-anggota', id_spt_umum);
-							}
 
-						});
-					</script> -->
+					<div class="form-group row" id="pemrasaran-id">
+		                <label for="ppm" class="col-md-2 col-form-label ">{{ __('Pemrasaran') }}</label>
+		                <div class="col-md-5">
+		                        <select class="selectize" name="pemrasaran_spt_umum[]" multiple="multiple" id="pemrasaran-spt-umum-id">
+		                            @foreach($user_ppm as $i=>$user)
+		                                <option value="{{$user->id}}">{{ $user->full_name_gelar }}</option>
+		                            @endforeach
+		                        </select>
+		                </div>
+		                <script type="text/javascript">
+		                    $('#pemrasaran-spt-umum-id').selectize({       
+		                       /*sortField: 'text',*/
+		                       // allowEmptyOption: false,
+		                       placeholder: 'Pilih Pemrasaran',
+		                       // closeAfterSelect: true,
+		                       // create: false,
+		                       // maxItems:10,
+		                       onItemAdd: function(item){
+		                        $('#id-anggota-spt-umum-'+item).prop('checked', false);
+		                        $('#id-anggota-spt-umum-'+item).prop('disabled', true);
+		                        $("#name-user-"+item).css({ 'color': '#A9A9A9'});
+		                       },
+		                       onItemRemove: function(item){
+		                        // $('#id-anggota-'+item).prop('checked', true);
+		                        $('#id-anggota-spt-umum-'+item).prop('disabled', false);
+		                        $("#name-user-"+item).css({ 'color': '#525f7f'});
+		                       },
+		                    });
+		                    
+		                </script>
+		            </div>
 
-					<div class="form-group row">
+					<div class="form-group row" id="moderator-narasumber-id">
 		                <label for="ppm" class="col-md-2 col-form-label ">{{ __('Narasumber/Moderator') }}</label>
 		                    
 
@@ -314,17 +377,13 @@
 <!-- end form pengajuan spt umum -->
 <script type="text/javascript">
 
-		// var current = null;
-	 //    function showresponddiv(messagedivid){
-	 //        var id = messagedivid.replace("jenis-spt-umum-", ""),
-	 //            div = document.getElementById(id);
-	 //        // hide previous one
-	 //    }
+
 	 $('#btn-new-spt-umum').on('click', function(){
         save_method_umum = 'new';
         $('#spt-umum-form')[0].reset();
         $('.profesi').hide('fast');
 		$('.penunjang').hide('fast');
+		$('#infoDasarHelp').show('fast');
 		$("#anggota-moderator-spt-umum-id")[0].selectize.clear();
         $('#new-anggota-spt-form-umum')[0].reset();
         clearSessionAnggotaUmum();
@@ -572,19 +631,4 @@
 	        controlPeran.clear();
 	        controlAnggota.clear();
 	    }
-	
-
-	/*jquery hide selectize moderator for ppm Studi Banding & Diklat Penjenjangan*/
-	// $(function() {
-	//     $('#moderator_id').hide(); 
-	//     $('input[type="radio"]').click(function(){
-	//         var inputValue = $(this).attr("value");
-	//         // console.log(inputValue != 'Studi Banding' && inputValue != 'Diklat Penjenjangan');
-	//         if(inputValue != 'Workshop' && inputValue != 'Konverensi/Kongres') {
-	//             $('#moderator_id').show('fast'); 
-	//         } else {
-	//             $('#moderator_id').hide('fast'); 
-	//         } 
-	//     });
-	// });
 </script>
