@@ -244,8 +244,7 @@
           ajax: '{{ route("get_data_spt","penomoran") }}',
           deferRender: true,
           columns: [
-            {'defaultContent' : '', 'data' : 'DT_RowIndex', 'name' : 'DT_RowIndex', 'title' : 'No', 'orderable' : false, 'searchable' : false, 'exportable' : true, 'printable' : true},              
-            {data: 'jenis_spt', name: 'jenis_spt', 'title': "{{ __('Jenis SPT') }}"},
+            {'defaultContent' : '', 'data' : 'DT_RowIndex', 'name' : 'DT_RowIndex', 'title' : 'No', 'orderable' : false, 'searchable' : false, 'exportable' : true, 'printable' : true},
             {data: 'ringkasan', name: 'ringkasan', 'title': "{{ __('Ringkasan') }}"},
             /*{data: 'tanggal_mulai', name: 'tanggal_mulai', 'title': "{{ __('Tanggal Mulai') }}"},
             {data: 'tanggal_akhir', name: 'tanggal_akhir', 'title': "{{ __('Tanggal Akhir') }}"},*/
@@ -255,24 +254,21 @@
           ],
           columnDefs : [
             {"width": '2%', "targets": 0},
-            {"width": '20%', "targets": 1},
-            {"width": '45%', "targets": 2},
-            //{"width": '20%', "targets": 3},
-           /* {"width": '10%', "targets": 3},
-            {"width": '10%', "targets": 4},*/
-            {
-              "width": '20%', 
-              "targets": 3,
-              //"data" : null,
-              /*"render": function ( data, type, row, meta ) {
-                tambahan = (data.tambahan.length > 0 ) ? '<br/><small class="text-muted">'+data.tambahan+'</small>' : ''
-                return data.jenis+tambahan;
-              }*/
-            },
-            {"width": '10%', "targets": 4, "tooltip" : "Lama hari"},
-            {"width": '13%', "targets": 5},
+          /*{"width": '10%', "targets": 2},*/
+          {
+            "width": '58%', 
+            "targets": 1,
+            //"data" : null,
+            /*"render": function ( data, type, row, meta ) {
+              tambahan = (data.tambahan.length > 0 ) ? '<br/><small class="text-muted">'+data.tambahan+'</small>' : ''
+              return data.jenis+tambahan;
+            }*/
+          },
+          {"width": '20%', "targets": 2},
+          {"width": '5%', "targets": 3},
+          {"width": '15%', "targets": 4},
           ]
       });
 
-  </script>
+  </script> 
   @endsection

@@ -205,22 +205,35 @@ span.fc-day-number{
   color: #000;
 }
 .kotak{
+  margin-top: 10px;
   display: inline-block;
+  width: 15px;
+  height:15px;
+  padding: 5px;
 }
 i.pengawasan{
   color: #5385c8;
+  background-color:#5385c8;
 }
 i.penunjang{
   color: #de8a0b;
+  background-color:#de8a0b;
 }
 i.ppm{
   color: #37a63e;
+  background-color:#37a63e;
 }
 i.pengembangan{
   color: #1a6932;
+  background-color:#1a6932;
 }
 i.lembur{
   color: #1f3882;
+  background-color:#1f3882;
+}
+i.libur{
+  color: red;
+  background-color: red;
 }
 span.info-cal{padding-left:5px;}
 
@@ -228,7 +241,6 @@ span.info-cal{padding-left:5px;}
   background-color: #5e72e4 !important;
   z-index:-1;
 }*/
-
 
 
 
