@@ -29,7 +29,7 @@
 
             <!-- Navbar items -->
             <!-- <ul class="navbar-nav align-items-center d-flex d-md-flex menu-nav-kiri"> -->
-            <ul class="navbar-nav mr-auto ml-4 d-none d-md-flex">
+            <ul class="navbar-nav mr-auto ml-4 d-md-flex">
                 <!-- <li class="nav-item">                    
                     <a class="nav-link nav-link-icon" href="{{ route('admin') }}">
                         <i class="ikon ni ni-istanbul"></i>

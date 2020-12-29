@@ -34,7 +34,7 @@ class UserController extends Controller
 
 
     public function __construct() {
-        $this->middleware(['auth', 'role:Super Admin|Administrasi Umum'])->except(['search','show','getData']); //isAdmin middleware lets only users with a //specific permission permission to access these resources
+        $this->middleware(['auth', 'role:Super Admin|Administrasi Umum|Auditor'])->except(['search','show','getData']); //isAdmin middleware lets only users with a //specific permission permission to access these resources
     }
 
    /* public function init(){
@@ -364,5 +364,18 @@ class UserController extends Controller
         
     }
 
-    
+    public function updateDataProfileUser(Request $request, $id)
+    {
+        // dd($id);
+        $user = User::find($id);
+        
+        // $post->fill($request->input())->save();
+        $user->phone->fill = Common::cleanInput($request['phone'])->save();
+        // $user->last_name = Common::cleanInput($request['last_name']);
+        // $user->email = Common::cleanInput($request['email']);
+        // $user->phone = Common::cleanInput($request['phone']);
+        // dd($user);
+        // dd($request);
+    }
+
 }

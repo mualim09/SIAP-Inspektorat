@@ -44,10 +44,10 @@
         <form class="ajax-form" id="form-penomoran-umum" enctype="multipart/form-data">
             <input type="hidden" name="spt_id_umum" id="penomoran-spt-id-umum">
             <input type="hidden" name="jenis_spt_umum" id="jenis-spt-umum">
-            <!-- <div class="form-group row">
+            <div class="form-group row">
                 <label for="nomor" class="col-md-3 col-form-label text-md-right">{{ __('Nomor')}} </label>
                 <input type="text" name="nomor_umum" class="form-control col-md-8" required placeholder="Nomor SPT" id="nomor-spt-umum">                    
-            </div> -->
+            </div>
 
             <div class="form-group row">                
                 <label for="tgl-register" class="col-md-3 col-form-label text-md-right">{{ __('Tanggal') }}</label>
@@ -67,7 +67,7 @@
             <div class="row">
               <div class="col-md-3 text-md-right">Scan</div>
               <div class="custom-file col-md-8">
-                <input type="file" class="custom-file-input" id="customFileUmum" name="file_spt_umum" accept="image/x-eps,application/pdf">
+                <input type="file" class="custom-file-input" id="customFileUmum" name="file_spt_umum" accept=".doc, .docx">
                 <label class="custom-file-label" for="customFileUmum">Pilih Scan File SPT</label>                    
               </div>
               <div class="offset-md-3">File format pdf, max 2MB</div>
@@ -146,6 +146,23 @@
           },
           error: function(error) {
               console.log(error);
+          }
+      });
+
+      url = "{{ url('admin/spt/get-previous-sptUmum/') }}/" +id_spt_umum;
+      $.ajax({
+          url: url,
+          type: "GET",
+          dataType: "JSON",
+          success: function(data){
+              // console.log(data);
+              if (data[0].nomor != null) {
+                $('.nomor_umum').val(data[0].nomor);
+              }
+
+          },
+          error: function(err){
+              
           }
       });
   }
@@ -263,18 +280,18 @@
         deferRender: true,
         columns: [
           {'defaultContent' : '', 'data' : 'DT_RowIndex', 'name' : 'DT_RowIndex', 'title' : 'No', 'orderable' : false, 'searchable' : false, 'exportable' : true, 'printable' : true},
-          {data: 'jenis_spt', name: 'jenis_spt', 'title': "{{ __('Jenis SPT') }}", 'searchable': true},
+          // {data: 'jenis_spt', name: 'jenis_spt', 'title': "{{ __('Jenis SPT') }}", 'searchable': true},
           {data: 'ringkasan', name: 'ringkasan', 'title': "{{ __('Ringkasan') }}", 'allowHTML': true, 'searchable': true},
           {data: 'periode', name: 'periode', 'title': "{{ __('Tanggal') }}", 'searchable': true},
           {data: 'lama', name: 'lama', 'title': "{{ __('Lama') }}", 'searchable': false},
           {data: 'action', name: 'action', 'orderable': false, 'searchable': false, 'title': "{{ __('') }}", 'exportable' : false,'printable': false},
         ],
         columnDefs : [
-          {"width": '2%', "targets": 0},
+          {"width": '5%', "targets": 0},
           // {"width": '5%', "targets": 2},
-          {"width": '19%', "targets": 1},
+          {"width": '45%', "targets": 1},
           {
-            "width": '45%', 
+            "width": '25%', 
             "targets": 2,
             //"data" : null,
             /*"render": function ( data, type, row, meta ) {
@@ -282,8 +299,8 @@
               return data.jenis+tambahan;
             }*/
           },
-          {"width": '20%', "targets": 3},
-          {"width": '5%', "targets": 4},
+          {"width": '15%', "targets": 3},
+          // {"width": '5%', "targets": 4},
           // {"width": '15%', "targets": 6},
         ]
     });
@@ -309,14 +326,14 @@
         columns: [
           {'defaultContent' : '', 'data' : 'DT_RowIndex', 'name' : 'DT_RowIndex', 'title' : 'No', 'orderable' : false, 'searchable' : false, 'exportable' : true, 'printable' : true},
           {data: 'nomor', name: 'nomor', 'title': "{{ __('Nomor') }}"},
-          {data: 'jenis_spt', name: 'jenis_spt', 'title': "{{ __('Jenis SPT') }}"},
+          // {data: 'jenis_spt', name: 'jenis_spt', 'title': "{{ __('Jenis SPT') }}"},
           {data: 'ringkasan', name: 'ringkasan', 'title': "{{ __('Ringkasan') }}", 'allowHTML': true},
           {data: 'periode', name: 'periode', 'title': "{{ __('Tanggal') }}"},
           {data: 'lama', name: 'lama', 'title': "{{ __('Lama ') }}"},
           {data: 'action', name: 'action', 'orderable': false, 'searchable': false, 'title': "{{ __('') }}", 'exportable' : false,'printable': false},
         ],
         columnDefs : [
-          {"width": '2%', "targets": 0},
+          {"width": '10%', "targets": 0},
           {"width": '5%', "targets": 1},
           {"width": '10%', "targets": 2},
           {
@@ -330,7 +347,7 @@
           },
           {"width": '20%', "targets": 4},
           {"width": '5%', "targets": 5},
-          {"width": '15%', "targets": 6},
+          // {"width": '15%', "targets": 6},
         ]
     });
     //butuh revisi
@@ -365,37 +382,164 @@
         });
     }
     function editSptUmum(id){
-        save_method = 'edit';
-        id_spt_umum = id;
-        //avoid false ajax url. read url first, then add it to te prefixed url
-        //alert(window.location.pathname);
-        //inputan : id_modal :#formSptUmum; input :jenis_spt_id:radio, info_dasar_umum:text_area, lokasi_id_umum:select, tgl_mulai_umum:text, tgl_akhir_umum:text, lama_spt_umum:text, info_untuk_umum:text_area
-        var url_prefix = (window.location.pathname == '/admin' || window.location.pathname == '/public/admin') ? 'admin/spt/umum/' : 'spt/umum/';
-        url = url_prefix+id+"/edit";
+        // save_method = 'edit';
+        // id_spt_umum = id;
+        // //avoid false ajax url. read url first, then add it to te prefixed url
+        // //alert(window.location.pathname);
+        // //inputan : id_modal :#formSptUmum; input :jenis_spt_id:radio, info_dasar_umum:text_area, lokasi_id_umum:select, tgl_mulai_umum:text, tgl_akhir_umum:text, lama_spt_umum:text, info_untuk_umum:text_area
+        // var url_prefix = (window.location.pathname == '/admin' || window.location.pathname == '/public/admin') ? 'admin/spt/umum/' : 'spt/umum/';
+        // url = url_prefix+id+"/edit";
         
-        $.ajax({
-            url: url,
-            type: "GET",
-            dataType: "JSON",
-            success: function(data){                
-                $('#spt-umum-form')[0].reset();
-                $("input:radio[value='"+data.jenis_spt_umum+"']").prop("checked",true);
-                //$('input[name="jenis_spt_umum"]').val(data.jenis_spt_umum).prop('checked', true);
-                $('#info-dasar-umum').val(data.info_dasar_umum);
-                $('input[name="lokasi_id_umum"]').val(data.lokasi_id);
-                $('input[name="tgl_mulai_umum"]').val(data.tgl_mulai);
-                $('input[name="tgl_akhir_umum"]').val(data.tgl_akhir);
-                $('input[name="lama_spt_umum"]').val(data.lama);
-                $('#info-untuk-kegiatan-umum').val(data.info_untuk_umum);
-                $('#formSptUmum').modal('show');
-                $('#formSptUmum').attr('data-id-spt-umum', data.id);
-                //console.log(data);
+        // $.ajax({
+        //     url: url,
+        //     type: "GET",
+        //     dataType: "JSON",
+        //     success: function(data){
+        //         // console.log(data);
+        //         $('#spt-umum-form')[0].reset();
+        //         if (data.jenis_spt_umum == "Seminar/Lokakarya" || "Diklat Teknis Substantif penunjang pengawasan") {
+        //           // $('#jenis-spt-umum-SPT2').prop("checked",true);
+        //           $("#jenis-spt-umum-SPT2 input[type='radio']:checked").val(data.jenis_spt_umum).prop('checked', true);
+        //         }else{
+        //           $("#jenis-spt-umum-SPT1 input[type='radio']:checked").val(data.jenis_spt_umum).prop('checked', true);
+        //         }
+        //         $('#id-spt-umum').val(data.id);
+        //         $("input:radio[value='"+data.jenis_spt_umum+"']").prop("checked",true);
+        //         //$('input[name="jenis_spt_umum"]').val(data.jenis_spt_umum).prop('checked', true);
+        //         $('#info-dasar-umum').val(data.info_dasar_umum);
+        //         $('input[name="lokasi_id_umum"]').val(data.lokasi_id);
+        //         $('input[name="tgl_mulai_umum"]').val(data.tgl_mulai);
+        //         $('input[name="tgl_akhir_umum"]').val(data.tgl_akhir);
+        //         $('input[name="lama_spt_umum"]').val(data.lama);
+        //         $('#info-untuk-kegiatan-umum').val(data.info_untuk_umum);
+        //         $('#formSptUmum').modal('show');
+        //         $('#formSptUmum').attr('data-id-spt-umum', data.id);
+        //         //console.log(data);
                
-            },
-            error: function(err){
-                console.log(err);
-            }
-        });
+        //     },
+        //     error: function(err){
+        //         console.log(err);
+        //     }
+        // });
+
+      $("#spt-umum-form")[0].reset();
+      $('#id-spt-umum').val(id);
+      $('#formSptUmum').modal('show');
+      var id_form_spt_umum = $('#id-spt-umum').val();
+      if (id_form_spt_umum != null) {
+        $('.profesi').hide('fast');
+        // if ($('#id-seminar').val() == "Seminar/Lokakarya") {
+          // $('#pemrasaran-id').show('fast');
+        // }else{
+          $('#pemrasaran-id').hide('fast');
+        // }
+        $('.penunjang').hide('fast');
+        $('#infoDasarHelp').show('fast');
+          // $('#id-btn-submit').hide();
+          // $('#file-nota-dinas').hide();
+          // $('#infoKegiatanHelp').hide();
+          // $('#id-btn-note-dinas').show();
+          // $('#kegiatan-ppm').prop('disabled', true);
+          // $('#tgl-mulai-ppm').prop('disabled', true);
+          // $('#select-all').prop('disabled', true);
+          // $("#morator-narasumber-id")[0].selectize.disable();
+      }
+      
+      url = "{{ url('admin/spt/get-valueData-spt-umum/') }}/" +id;
+      // console.log('jalan jquery');
+      $.ajax({
+          url: url,
+          type: "GET",
+          dataType: "JSON",
+          success: function(data){
+              console.log(data);
+              // set value kegiatan
+              if (data[0].jenis_spt_umum == "Seminar/Lokakarya" || data[0].jenis_spt_umum == "Diklat Teknis Substantif penunjang pengawasan") {
+                $("#jenis-spt-umum-SPT2").prop('checked',true);
+                if ($("#jenis-spt-umum-SPT2").prop('checked',true)) {
+                  $('.penunjang').show('fast');
+                  $("input:radio[value='"+data[0].jenis_spt_umum+"']").prop("checked",true);
+                }
+                // console.log(true);
+              }else{
+                $("#jenis-spt-umum-SPT1").prop('checked',true);
+                if ($("#jenis-spt-umum-SPT1").prop('checked',true)) {
+                  $('.profesi').show('fast');
+                  $("input:radio[value='"+data[0].jenis_spt_umum+"']").prop("checked",true);
+                }
+                // console.log(false);
+              }
+
+              $('#info-dasar-umum').val(data[0].info_dasar_umum);
+              $('#info-untuk-kegiatan-umum').val(data[0].info_untuk_umum);
+              // $("#tgl-mulai-umum").val(data[0].tgl_mulai { dateFormat: 'dd-mm-yyyy' });
+              $('#tgl-mulai-umum').val(data[0].tgl_mulai);
+              $('#tgl-akhir-umum').val(data[0].tgl_akhir);
+              $('#lama-spt-umum').val(data[0].lama);
+              // if (data[0].nama_file == null) {
+              //     $('#id-btn-note-dinas').val(data[0].nama_file);
+              // }else{
+              //     $('#id-btn-note-dinas').hide();
+              // }
+
+
+              
+              if (data[0].jenis_spt_umum == "Workshop") {
+                $.each(data, function(i,item){
+                  if(data[i].peran == 'Moderator' == false){
+                      $('#id-anggota-spt-umum-'+item.user_id).prop('checked', true);
+                      // $('#id-anggota-spt-umum-'+item.user_id).prop('disabled', true);
+                  }
+                  // console.log('jalan');
+                  // var moderator = [];
+                  // $.each(data, function(i,item){
+                  //     // console.log(data[i].peran == 'Moderator');
+                  //       if(data[i].peran == 'Moderator'){
+                  //           moderator.push(item.user_id);
+                  //           $('#id-anggota-spt-umum-'+item.user_id).prop('checked', false);
+                  //           // $('#id-anggota-'+item.user_id).attr("disabled", true);
+                  //           $('#id-anggota-spt-umum-'+item.user_id).prop('disabled', true);
+                  //       }
+                  //       if(item.peran == 'Peserta'){
+                  //           $('#id-anggota-spt-umum-'+item.user_id).prop('checked', true);
+                  //           $('#id-anggota-spt-umum-'+item.user_id).prop('disabled', true);
+                  //       }
+                  //   });
+                  // $('#anggota-moderator-spt-umum-id')[0].selectize.setValue(moderator);
+                });
+              }
+              if (data[0].jenis_spt_umum == "Seminar/Lokakarya") {
+                var pemrasaran = [];
+                var moderator = [];
+                $.each(data, function(i,item){
+                    if (data[i].peran == 'pemrasaran') {
+                        pemrasaran.push(item.user_id);
+                        $('#id-anggota-'+item.user_id).prop('checked', false);
+                        // $('#id-anggota-'+item.user_id).attr("disabled", true);
+                        $('#id-anggota-'+item.user_id).prop('disabled', true);
+                    }
+                    if(data[i].peran == 'Moderator'){
+                        moderator.push(item.user_id);
+                        $('#id-anggota-'+item.user_id).prop('checked', false);
+                        // $('#id-anggota-'+item.user_id).attr("disabled", true);
+                        $('#id-anggota-'+item.user_id).prop('disabled', true);
+                    }
+                    if(item.peran == 'Peserta'){
+                        $('#id-anggota-'+item.user_id).prop('checked', true);
+                        $('#id-anggota-'+item.user_id).prop('disabled', true);
+                    }
+                });
+                $('#anggota-moderator-spt-umum-id')[0].selectize.setValue(moderator);
+                $('#pemrasaran-spt-umum-id')[0].selectize.setValue(moderator);
+              }
+              
+
+          },
+          error: function(err){
+              
+          }
+      });
+
     }
 </script>
 @endsection
