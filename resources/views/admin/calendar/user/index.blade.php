@@ -29,6 +29,27 @@
                <div id='calendar4' class="col-md-6 col-print-6 calendar"></div>
                <div id='calendar5' class="col-md-6 col-print-6 calendar"></div>
              </div>
+             <!-- keterangan -->
+             <div class="row col-md-12">
+              <div class="col-md-2">
+                <i class="kotak pengawasan"></i><span class="info-cal">Pengawasan</span>
+              </div>
+              <div class="col-md-2">
+                <i class="kotak lembur"></i><span class="info-cal">Lembur</span>
+              </div>
+              <div class="col-md-2">
+                <i class="kotak ppm"></i><span class="info-cal">PPM</span>
+              </div>
+              <div class="col-md-2">
+                <i class="kotak pengembangan"></i><span class="info-cal">Pgm. Profesi</span>
+              </div>
+              <div class="col-md-2">
+                <i class="kotak penunjang"></i><span class="info-cal">Penunjang</span>
+              </div>
+              <div class="col-md-2">
+                <i class="kotak libur"></i><span class="info-cal">Libur/Cuti</span>
+              </div>
+            </div>
           </div>
 
           <!-- Content untuk semester 2 -->
@@ -46,28 +67,32 @@
                <div id='calendar10' class="col-md-6 col-print-6 calendar"></div>
                <div id='calendar11' class="col-md-6 col-print-6 calendar"></div>
              </div>
+             
+             <!-- keterangan -->
+             <div class="row col-md-12">
+              <div class="col-md-2">
+                <i class="kotak pengawasan"></i><span class="info-cal">Pengawasan</span>
+              </div>
+              <div class="col-md-2">
+                <i class="kotak lembur"></i><span class="info-cal">Lembur</span>
+              </div>
+              <div class="col-md-2">
+                <i class="kotak ppm"></i><span class="info-cal">PPM</span>
+              </div>
+              <div class="col-md-2">
+                <i class="kotak pengembangan"></i><span class="info-cal">Pgm. Profesi</span>
+              </div>
+              <div class="col-md-2">
+                <i class="kotak penunjang"></i><span class="info-cal">Penunjang</span>
+              </div>
+              <div class="col-md-2">
+                <i class="kotak libur"></i><span class="info-cal">Libur/Cuti</span>
+              </div>
+            </div>
           </div>
-        </div>
+        </div><!-- div content tab -->
         
-      </div>
-      <div class="row col-md-12">
-        <div class="col-md-2">
-          <i class="fas fa-square kotak pengembangan"></i><span class="info-cal">Pengembangan</span>
-        </div>
-        <div class="col-md-2">
-          <i class="fas fa-square kotak penunjang"></i><span class="info-cal">Penunjang</span>
-        </div>
-        <div class="col-md-2">
-          <i class="fas fa-square kotak ppm"></i><span class="info-cal">PPM</span>
-        </div>
-        <div class="col-md-2">
-          <i class="fas fa-square kotak lembur"></i><span class="info-cal">Lembur</span>
-        </div>
-        <div class="col-md-2">
-          <i class="fas fa-square kotak pengawasan"></i><span class="info-cal">Pengawasan</span>
-        </div>
-        <div class="col"></div>
-      </div>
+      </div>      
   </div>     
 </div>
   <script type="text/javascript">    
