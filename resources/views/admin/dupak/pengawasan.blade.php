@@ -70,8 +70,7 @@ end table dupak pengawasan -->
     sumPengawasan = 0, sumLamaJam = 0, sumLamaHari = 0;
     //if response has data
       if(response.ak.length>0){    
-        $.each(response.ak, function (i, item) {
-          //console.log(item);
+        $.each(response.ak, function (i, item) {          
           //file_url = (window.location.pathname == '/admin' || window.location.pathname == '/public/admin') ? 'storage/spt/'
           var year = new Date().getFullYear();
           var n = i+1;
@@ -89,11 +88,12 @@ end table dupak pengawasan -->
           sumPengawasan += parseFloat(item.info_dupak.dupak);
           sumLamaJam += parseFloat(item.info_dupak.lama_jam);
           sumLamaHari += parseInt(item.spt.lama);
+          keg = (lokasi_spt != '') ? item.spt.kegiatan.name +lokasi_spt : ('undefined' !== typeof item.spt.tambahan ) ? item.spt.kegiatan.name+' '+item.spt.tambahan : item.spt.kegiatan.name ;
           
           table += '<tr>'
           +'<td rowspan="2">' + n + '</td>'
           +'<td rowspan="2"></td>'
-          +'<td rowspan="2">'+ item.spt.kegiatan.name +lokasi_spt+'</td>'
+          +'<td rowspan="2">'+ keg+'</td>'
           //+'<td>' + item.spt.periode + '<br />' + item.spt.lama + '</td>'
           +'<td colspan="2" style="text-align: center;">' + item.spt.periode + '</td>'
           +'<td rowspan="2" style="text-align: center">'+ item.info_dupak.koefisien +'</td>'
