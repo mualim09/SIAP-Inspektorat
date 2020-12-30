@@ -38,11 +38,11 @@
 								<input type="radio" class="custom-control-input" id="jenis-spt-umum-SPT2" name="unsur_dupak_umum" value="penunjang" required="">
 		                        <label class="custom-control-label" for="jenis-spt-umum-SPT2">PENUNJANG</label>
 							</div>
-							<!-- <div class="custom-control custom-radio custom-control-inline">
-								<input type="radio" class="custom-control-input" id="jenis-spt-umum-SPT3" name="jenis_spt_umum" value="Workshop">
-		                    	<label class="custom-control-label" for="jenis-spt-umum-SPT3"></label>
+							<div class="custom-control custom-radio custom-control-inline">
+								<input type="radio" class="custom-control-input" id="jenis-spt-umum-SPT3" name="jenis_spt_umum" value="" disabled="">
+		                    	<label class="custom-control-label" for="jenis-spt-umum-SPT3">PENGAWASAN</label>
 		                	</div>
-		                	<div class="custom-control custom-radio custom-control-inline">
+		                	<!-- <div class="custom-control custom-radio custom-control-inline">
 								<input type="radio" class="custom-control-input" id="jenis-spt-umum-SPT4" name="jenis_spt_umum" value="Diklat Penjenjangan" disabled="">
 		                    	<label class="custom-control-label" for="jenis-spt-umum-SPT4"></label>
 		                	</div> -->
@@ -124,6 +124,7 @@
 							$('#id-seminar').on("click", function(){
 							  $('#moderator-narasumber-id').show('fast');
 							  $('#pemrasaran-id').show('fast');
+							  // $('#tgl-akhir-umum').hide('fast');
 							});
 
 							$('#id-diklat-penunjangan-pengawasan').on("click", function(){
@@ -148,6 +149,15 @@
 			            <div class="col-md-10">
 			                 <textarea rows="5" id="info-dasar-umum" class="form-control form-control-alternative @error('dasar') is-invalid @enderror" name="info_dasar_umum" ></textarea>
 			                 <small id="infoDasarHelp" class="form-text text-muted">Masukkan dasar-dasar jenis SPT. Tekan <span style="color:red;">ENTER</span> untuk ganti baris.</small>
+			            </div>
+			        </div>
+
+			        <!-- untuk melaksanakan -->
+					<div class="form-group row">
+			            <label for="dasar" class="col-md-2 col-form-label ">{{ __('Untuk') }}</label>
+			            <div class="col-md-10">
+			                 <textarea rows="5" id="info-untuk-kegiatan-umum" class="form-control form-control-alternative @error('dasar') is-invalid @enderror" name="info_untuk_umum" ></textarea>
+			                 <small id="infoKegiatanHelp" class="form-text text-muted">Tujuan kegiatan terkait SPT.</small>
 			            </div>
 			        </div>
 
@@ -348,15 +358,6 @@
 			            </div>
 		            </div>
 
-					<!-- untuk melaksanakan -->
-					<div class="form-group row">
-			            <label for="dasar" class="col-md-2 col-form-label ">{{ __('Untuk') }}</label>
-			            <div class="col-md-10">
-			                 <textarea rows="5" id="info-untuk-kegiatan-umum" class="form-control form-control-alternative @error('dasar') is-invalid @enderror" name="info_untuk_umum" ></textarea>
-			                 <small id="infoKegiatanHelp" class="form-text text-muted">Tujuan kegiatan terkait SPT.</small>
-			            </div>
-			        </div>
-
 			        <!-- submit button -->
 			        <div class="form-group">
 						<div class="col">
@@ -428,39 +429,6 @@
 			url = (window.location.pathname == '/admin' || window.location.pathname == '/public/admin') ? 'admin/spt/anggota/umum' : 'spt/anggota/umum';
 	 		id_spt = ( typeof $('#formSptUmum').attr('data-id-spt-umum') !== 'undefined' ) ? $('#formSptUmum').attr('data-id-spt-umum') : '';
 	 		drawTableAnggotaUmum(id_spt);
-
-			/*$('#list-anggota-umum-session').DataTable({        
-			    "language": {
-			        "emptyTable":  "Data Anggota Belum dimasukkan"
-			    },
-			    dom: 'rt',
-			    "pageLength": 50,
-			    fixedColumns:   {
-			        heightMatch: 'auto'
-			    },
-			    language: {
-			        paginate: {
-			          next: '&gt;', 
-			          previous: '&lt;' 
-			        }
-			    },
-			    "opts": {
-			      "theme": "bootstrap",
-			    },
-			    retrieve: true,
-			    processing: true,
-			    aDataSort:true,
-			    serverSide: true,
-			    ajax: url,
-			    deferRender: true,
-			    columns: [
-			        {'defaultContent' : '', 'data' : 'DT_RowIndex', 'name' : 'DT_RowIndex', 'title' : 'No', 'orderable' : false, 'searchable' : false, 'exportable' : true, 'printable' : true, width: '10%'
-			        },
-			        {data: 'nama_anggota', name: 'nama_anggota', 'title': "{{ __('Nama') }}", width: '40%'},
-			        // {data: 'peran', name: 'peran', 'title': "{{ __('Peran') }}", width: '40%'},
-			        {data: 'action', name: 'action', 'orderable': false, 'searchable': false, 'title': "{{ __('Action') }}", 'exportable' : false,'printable': false, width: '10%'},
-			    ],
-			});*/
 		});
 
 	    $("#spt-umum-form").validate({
@@ -490,7 +458,8 @@
             //var url_prefix = (window.location.pathname == '/admin' || window.location.pathname == '/public/admin') ? 'admin/spt/' : 'spt/';
             //url =  (save_method == 'new') ? "{{ route('spt.store') }}" : base_url + '/' + id ;
             spt_umum_id = ( typeof $('#formSptUmum').attr('data-id-spt-umum') !== 'undefined' ) ? $('#formSptUmum').attr('data-id-spt-umum') : '';
-            url = ( spt_umum_id === '') ? "{{ route('store_spt_umum') }}" : "{{ route('update_spt_umum') }}" ;
+            // url = ( spt_umum_id === '') ? "{{ route('store_spt_umum') }}" : "{{ route('update_spt_umum') }}" ;
+            url = ( spt_umum_id == '') ? "{{ route('store_spt_umum') }}" : "{{ route('update_spt_umum') }}" ;
             // alert(url);
             method = (spt_umum_id === '') ? "POST" : "PUT";
             var formData = new FormData($(form)[0]);
@@ -503,11 +472,11 @@
             contentType: false,
                 success: function(data){
                 	// console.log(data);
-                    // $("#spt-umum-form")[0].reset();
-                    // $('#formSptUmum').modal('hide');
+                    $("#spt-umum-form")[0].reset();
+                    $('#formSptUmum').modal('hide');
                     // //if(save_method_umum == 'new') clearSessionAnggota();
                     // //table.ajax.reload();
-                    // $('#spt-umum-table').DataTable().ajax.reload();
+                    $('#spt-umum-table').DataTable().ajax.reload();
                     // clearOptionsUmum();
                     //$('#list-anggota-umum-session').DataTable().clear().destroy();
                 },
@@ -611,17 +580,17 @@
 
 	
 
-    /*$('#formSptUmum').on('hidden.bs.modal', function () {
+    $('#formSptUmum').on('hidden.bs.modal', function () {
 		$('#spt-umum-form')[0].reset();
-		$('#id-umum').val('');
-		// $('#tambahan').val('');
-		select_lokasi[0].selectize.clear();
-		save_method_umum = null;
-		$('#list-anggota-umum-session').DataTable().clear().destroy();
+		// $('#id-umum').val('');
+		// // $('#tambahan').val('');
+		// select_lokasi[0].selectize.clear();
+		// save_method_umum = null;
+		// $('#list-anggota-umum-session').DataTable().clear().destroy();
 		// $('#input-tambahan-container').hide();
 		// $('#input-lokasi-container').hide();
 
-	});*/
+	});
 
 		function clearOptionsUmum(){            
 	        var optPeran = $('#session-anggota-umum').selectize();
