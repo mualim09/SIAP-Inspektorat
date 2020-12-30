@@ -127,17 +127,13 @@ function generate_calendar(tahun=''){
              if(event.kategori == 'ppm'){
               $("td[data-date='"+startDate+"']").addClass('ppm');
              }
-             if(event.kategori == 'pengembangan profesi'){
-              console.log(event);
+             if(event.kategori == 'pengembangan profesi'){              
               dates.forEach(function (dataToFind){
                 $("td[data-date='"+dataToFind+"']").addClass('pengembangan');
               });
              }
              if(event.kategori == 'penunjang'){
-              console.log(event);
-              dates.forEach(function (dataToFind){
-                $("td[data-date='"+dataToFind+"']").addClass('penunjang');
-              });
+              $("td[data-date='"+startDate+"']").addClass('penunjang');
              }
                  
               }else{                

@@ -184,11 +184,11 @@ td.ppm, .fc-unthemed td.ppm{
    background-color: #37a63e;
    z-index:0 !important;
 }
-td.penunjang{
+td.penunjang, .fc-unthemed td.penunjang{
   background-color: #de8a0b;
   z-index: 1 !important;
 }
-td.pengembangan{
+td.pengembangan, .fc-unthemed td.pengembangan{
    background-color: #1a6932;
   z-index: 2 !important;
 }
